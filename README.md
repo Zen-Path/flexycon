@@ -1,0 +1,2 @@
+# flexycon
+Flexible programmatic configuration.
