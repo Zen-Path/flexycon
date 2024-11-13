@@ -1,0 +1,6 @@
+/* Firefox internal pages */
+@-moz-document url-prefix("about:") {
+    * {
+        font-family: monospace !important;
+    }
+}
