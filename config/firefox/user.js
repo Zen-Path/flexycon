@@ -76,8 +76,8 @@ user_pref("layout.spellcheckDefault", true);
 
 // === Downloads ===
 
-// Always ask you where to save files
-user_pref("browser.download.useDownloadDir", false);
+// Use the download directory instead of always asking where to save files
+user_pref("browser.download.useDownloadDir", true);
 
 // === Applications ===
 
