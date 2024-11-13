@@ -1,0 +1,57 @@
+:root {
+    /* From 'tabs.css' */
+
+    --tab-min-height: 32px !important; /* 36px */
+    --collapsed-tab-width: 40px;
+
+    --inline-tab-padding: 8px;
+    --tab-border-radius: 4px;
+    --tab-shadow-max-size: 6px;
+    --tab-block-margin: 4px;
+    --tab-loading-fill: #0a84ff;
+    --tab-hover-background-color: color-mix(
+        in srgb,
+        currentColor 11%,
+        transparent
+    );
+
+    --tab-selected-textcolor: var(--toolbar-color);
+    --tab-selected-bgcolor: var(--toolbar-bgcolor);
+    --tab-selected-color-scheme: var(--toolbar-color-scheme);
+
+    --tab-outline: 1px solid var(--tab-outline-color);
+    --tab-outline-color: #504945 !important; /* transparent */
+    --tab-selected-outline-color: #d65d0e !important; /* transparent */
+    --tab-hover-outline-color: var(
+        --tab-outline-color
+    ) !important; /* transparent */
+    --tab-outline-offset: var(--toolbarbutton-outline-offset);
+}
+
+* {
+    font-family: monospace !important;
+}
+
+/* = Tabs = */
+
+/* .tabbrowser-tab {} */
+
+.tabbrowser-tab[selected="true"] .tab-label {
+    font-weight: bold !important; /* normal */
+}
+
+/* .tab-stack {} */
+
+/* .tab-background {} */
+
+/* .tab-content {} */
+
+/* .tab-label-container {} */
+
+/* .tab-label {} */
+
+/* = Bookmarks = */
+
+/* #personal-bookmarks {} */
+
+/* .bookmark-item {} */
