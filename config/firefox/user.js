@@ -425,3 +425,6 @@ user_pref("keyword.enabled", true);
 
 // Enable push notifications
 user_pref("dom.push.enabled", true);
+
+// Close the window when the last tab is closed
+user_pref("browser.tabs.closeWindowWithLastTab", false);
