@@ -22,7 +22,6 @@ user_pref("browser.link.open_newwindow", true);
 // Warn you when opening multiple tabs might slow down Firefox
 user_pref("browser.tabs.warnOnOpen", true);
 
-
 // When you open a link in a new tab, load it in the background
 user_pref("browser.tabs.loadInBackground", true);
 
