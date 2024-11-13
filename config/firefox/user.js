@@ -22,8 +22,8 @@ user_pref("browser.link.open_newwindow", true);
 // Warn you when opening multiple tabs might slow down Firefox
 user_pref("browser.tabs.warnOnOpen", true);
 
-// When you open a link, image or media in a new tab, switch to it immediately
-user_pref("browser.tabs.loadInBackground", false);
+// When you open a link in a new tab, load it in the background
+user_pref("browser.tabs.loadInBackground", true);
 
 // Confirm before closing multiple tabs
 user_pref("browser.tabs.warnOnClose", false);
@@ -75,8 +75,8 @@ user_pref("layout.spellcheckDefault", true);
 
 // === Downloads ===
 
-// Always ask you where to save files
-user_pref("browser.download.useDownloadDir", false);
+// Use the download directory instead of always asking where to save files
+user_pref("browser.download.useDownloadDir", true);
 
 // === Applications ===
 
@@ -146,7 +146,7 @@ user_pref(
 // === New Windows and Tabs ===
 
 // Homepage and new windows
-user_pref("browser.startup.homepage", "about:home");
+user_pref("browser.startup.homepage", "chrome://browser/content/blanktab.html");
 
 // New tabs
 user_pref("browser.newtabpage.enabled", false);
@@ -424,3 +424,6 @@ user_pref("keyword.enabled", true);
 
 // Enable push notifications
 user_pref("dom.push.enabled", true);
+
+// Close the window when the last tab is closed
+user_pref("browser.tabs.closeWindowWithLastTab", false);
