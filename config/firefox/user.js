@@ -147,7 +147,7 @@ user_pref(
 // === New Windows and Tabs ===
 
 // Homepage and new windows
-user_pref("browser.startup.homepage", "about:home");
+user_pref("browser.startup.homepage", "chrome://browser/content/blanktab.html");
 
 // New tabs
 user_pref("browser.newtabpage.enabled", false);
