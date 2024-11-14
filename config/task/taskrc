@@ -50,4 +50,4 @@ verbose=blank,footnote,new-id,label,affected,edit,special,project,sync,unwait,re
 # context.dev.read=+dev
 # context.dev.write=+dev
 
-include contexts
+include ~/.config/task/contexts
