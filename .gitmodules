@@ -1,0 +1,3 @@
+[submodule "config/x11/themes"]
+	path = config/x11/themes
+	url = https://github.com/janoamaral/Xresources-themes
