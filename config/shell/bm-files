@@ -1,0 +1,19 @@
+# These files automatically update when edited/saved in vim:
+
+# keys    filename                                          description
+bf    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/bm-files    # This file, a list of bookmarked files
+bd    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/bm-dirs     # A list of bookmarked directories similar to this file
+cfx   "${XDG_CONFIG_HOME:-$HOME/.config}"/x11/xresources    # Colors, themes and variables for X11
+cfb    ~/.local/src/dwmblocks-async/config.c                # dwmblocks: the status bar for dwm
+cfd    ~/.local/src/dwm/config.h
+
+# These do not update automatically, but on the next new instance of a program:
+cfv    "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim/init.vim    # vim/neovim config
+cfz    "$ZDOTDIR"/.zshrc                                    # zsh (shell) config
+cfa    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/aliasrc    # aliases used by zsh (and potentially other shells)
+cfp    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/profile    # profile file for login settings for zsh
+cfn    "${XDG_CONFIG_HOME:-$HOME/.config}"/newsraft/config  # newsraft (RSS reader)
+cff    "${XDG_CONFIG_HOME:-$HOME/.config}"/newsraft/feeds   # RSS urls for newsraft
+cfl    "${XDG_CONFIG_HOME:-$HOME/.config}"/lf/lfrc          # lf (file browser) config
+cfL    "${XDG_CONFIG_HOME:-$HOME/.config}"/lf/scope         # lf's scope/preview file
+cfX    "${XDG_CONFIG_HOME:-$HOME/.config}"/sxiv/exec/key-handler    # sxiv (image viewer) key/script handler

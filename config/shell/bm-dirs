@@ -1,0 +1,28 @@
+# Use '#' to add comments.
+
+# Home
+h       "$HOME"
+doc     "$HOME/Documents"
+dwn     "$HOME/Downloads"
+arc     "$HOME/Archive"
+aud     "$HOME/Audio"
+mus     "$HOME/Music"
+img     "$HOME/Images"
+ent     "$HOME/Entertainment"
+hmr     "$HOME/Entertainment/Humor"
+nrd     "$HOME/Nerdy"
+vid     "$HOME/Videos"
+bks     "$HOME/Books"
+uni     "$HOME/University"
+jrd     "${JOURNAL_HOME:-$HOME/Documents/No_Backup/Journal}"
+cac     "${XDG_CACHE_HOME:-$HOME/.cache}"
+cf      "${XDG_CONFIG_HOME:-$HOME/.config}"
+
+# Local
+lb      "$HOME/.local/bin"
+src     "$HOME/.local/src"
+flx     "$HOME/.local/src/flexycon"
+dt      "${XDG_DATA_HOME:-$HOME/.local/share}"
+
+# Misc
+mn      "/mnt"
