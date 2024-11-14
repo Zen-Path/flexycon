@@ -1,0 +1,275 @@
+# Note on Image Previews
+# For those wanting image previews, like this system, there are four steps to
+# set it up. These are done automatically for LARBS users, but I will state
+# them here for others doing it manually.
+#
+# 1. ueberzug must be installed.
+# 2. The scope file (~/.config/lf/scope for me), must have a command similar to
+#    mine to generate ueberzug images.
+# 3. A `set cleaner` line as below is a cleaner script.
+# 4. lf should be started through a wrapper script (~/.local/bin/lfub for me)
+#    that creates the environment for ueberzug. This command can be be aliased
+#    in your shellrc (`alias lf="lfub") or if set to a binding, should be
+#    called directly instead of normal lf.
+
+# Interpreter for shell commands
+set shell sh
+
+# Otions for shell commands
+# '-e' : exit on error
+# '-u' : throw error for unset variables
+# '-f' : disable filepath expansion. Useful useful when $f, $fs, and
+#        $fx variables contain names with '*' or '?' characters.
+#
+# Docs: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
+set shellopts '-eu'
+
+# Internal field separator (IFS) for shell commands
+# Useful to automatically split file names in $fs and $fx properly, since default
+# file separator used in these variables (i.e. 'filesep' option) is newline.
+# You need to consider the values of these options and create your commands accordingly.
+set ifs "\n"
+
+set scrolloff 10
+set icons
+set period 1
+# set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
+set hidden true
+set cleaner '~/.config/lf/cleaner'
+set previewer '~/.config/lf/scope'
+set autoquit true
+
+# Set borders around the columns
+set drawbox
+
+set cursorpreviewfmt "\033[7m"
+
+cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
+
+# cmds/functions
+cmd open ${{
+	case $(file --mime-type "$(readlink -f $f)" -b) in
+	    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) localc $fx ;;
+	    image/vnd.djvu | application/pdf | application/octet-stream | application/postscript) setsid -f zathura $fx > /dev/null 2>&1 ;;
+	    application/x-sc) sc-im $fx ;;
+		text/html) $BROWSER $fx ;;
+	    text/* | application/json | inode/x-empty | application/x-subrip) $EDITOR $fx ;;
+	    image/x-xcf) setsid -f gimp $f > /dev/null 2>&1 ;;
+	    image/svg+xml) display -- $f ;;
+	    image/*)
+	        rotdir $f | grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\|avif\|tif\|ico\)\(_large\)*$" \
+	            | setsid -f nsxiv -aio 2> /dev/null | while read -r file; do
+	            [ -z "$file" ] && continue
+	            lf -remote "send select \"$file\""
+	            lf -remote "send toggle"
+	        done &
+	        ;;
+	    audio/* | video/x-ms-asf) mpv --audio-display=no $f ;;
+	    video/*) setsid -f mpv $f -quiet > /dev/null 2>&1 ;;
+	    application/pdf | application/vnd.djvu | application/epub*) setsid -f zathura $fx > /dev/null 2>&1 ;;
+	    application/pgp-encrypted) $EDITOR $fx ;;
+	    application/vnd.openxmlformats-officedocument.wordprocessingml.document | application/vnd.oasis.opendocument.text | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | application/octet-stream | application/vnd.oasis.opendocument.spreadsheet | application/vnd.oasis.opendocument.spreadsheet-template | application/vnd.openxmlformats-officedocument.presentationml.presentation | application/vnd.oasis.opendocument.presentation-template | application/vnd.oasis.opendocument.presentation | application/vnd.ms-powerpoint | application/vnd.oasis.opendocument.graphics | application/vnd.oasis.opendocument.graphics-template | application/vnd.oasis.opendocument.formula | application/vnd.oasis.opendocument.database) setsid -f libreoffice $fx > /dev/null 2>&1 ;;
+	    *) for f in $fx; do setsid -f $OPENER $f > /dev/null 2>&1; done ;;
+	esac
+}}
+
+cmd extract ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+	set -f
+	printf "%s\n\t" "$fx"
+	printf "extract?[y/N]"
+	read ans
+	[ $ans = "y" ] && aunpack $fx
+}}
+
+cmd trash ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+	set -f
+	printf "%s\n\t" "$fx"
+	printf "Move to trash? [Y/n]"
+	read ans
+
+	# Wrapping '$fx' in quotes doesn't work
+	# Check if $ans is empty, equal to "y", or equal to "Y"
+	if [ -z "$ans" ] || [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then
+	    trash -- $fx
+	fi
+}}
+
+cmd delete ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+	set -f
+	printf "%s\n\t" "$fx"
+	printf "Delete? [y/N]"
+	read ans
+	[ $ans = "y" ] && rm -rf -- $fx
+}}
+
+cmd moveto ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+	set -f
+	clear; echo "Move to where?"
+	dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
+	for x in $fx; do
+		eval mv -iv \"$x\" \"$dest\"
+	done &&
+	notify-send "🚚 File(s) moved." "File(s) moved to $dest."
+}}
+
+cmd copyto ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+	set -f
+	clear; echo "Copy to where?"
+	dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
+	for x in $fx; do
+		eval cp -ivr \"$x\" \"$dest\"
+	done &&
+	notify-send "📋 File(s) copied." "File(s) copies to $dest."
+}}
+
+cmd restore ${{
+	trash-restore
+}}
+
+cmd setbg "$1"
+
+cmd edit-config ${{
+    $EDITOR ~/.config/lf/lfrc
+    lf -remote "send $id source ~/.config/lf/lfrc"
+}}
+map <c-c> edit-config
+
+cmd newfold ${{
+    set -f
+    printf "Directory name: "
+    read newd
+    mkdir -- "$newd"
+    mv -- $fx "$newd"
+}}
+map <a-n> newfold
+
+cmd select-files &{{
+    get_files() {
+        if [ "$lf_hidden" = 'false' ]; then
+            find "$PWD" -mindepth 1 -maxdepth 1 -not -name '.*' -print0
+        else
+            find "$PWD" -mindepth 1 -maxdepth 1 -print0
+        fi |
+        xargs -0 printf ' %q'
+    }
+
+    lf -remote "send $id :unselect; toggle $(get_files)"
+}}
+map a select-files
+
+# GENERAL
+
+# Unmap arrows keys
+# map <up>
+# map <down>
+
+map <c-f> $lf -remote "send $id select \"$(fzfopen)\""
+# map J $lf -remote "send $id cd $(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
+map gh
+map g top
+map E extract
+# map C copyto
+# map M moveto
+map V push :!nvim<space>
+map <c-n> push :mkdir<space>
+map <c-r> reload
+map <c-s> set hidden!
+map x $$f
+map X !$f
+map c cut
+map u restore
+map b $setbg $f
+
+map m mark-save
+
+# map <enter> shell
+map <enter> open
+map <esc> unselect
+
+map W $setsid -f $TERMINAL >/dev/null 2>&1
+map Y $printf "%s" "$fx" | xclip -selection clipboard
+
+# RENAMING
+cmd bulkrename ${{
+    vimv -- $(basename -a -- $fx)
+
+    lf -remote "send $id load"
+    lf -remote "send $id unselect"
+}}
+# cmd bulkrename $vidir
+
+# Convert filename to kebab case
+cmd kebab-case &{{
+    filename=$(basename "$f")
+    extension="${filename##*.}"
+    name="${filename%.*}"
+
+    function sanitize() {
+        echo "$1" | tr '[:upper:]' '[:lower:]' | # Convert to lowercase chars
+        sed -E '
+            s/[^a-z0-9[:space:]._-]//g;          # Remove any characters not in charset
+            s/\s+/-/g;                         # Replace consecutive spaces with '-'
+            s/-+/-/g;                            # Collapse consecutive '-' into one '-'
+            s/^-+|-+$//g;                        # Remove leading and trailing '-'
+        '
+    }
+
+    sanitized_name=$(sanitize "$name")
+
+    # Check if there is an extension
+    if [[ "$filename" == *.* ]]; then
+        sanitized_extension=$(sanitize "$extension")
+        sanitized_filename="$sanitized_name.$sanitized_extension"
+    else
+        sanitized_filename="$sanitized_name"
+    fi
+
+    lf -remote "send push $sanitized_filename"
+}}
+
+# Unmap default rename key
+map r
+
+# [R]ename from [s]cratch.
+map rs		:rename; cmd-end; cmd-delete-home
+# [R]ename [r]oot. Delete everything before extension. Place cursor at the beginning
+map rr 		:rename; cmd-delete-home
+# [R]ename [e]xtension.
+map re		:rename; cmd-right; cmd-delete-end
+# [R]ename by placing cursor before [e]xtension.
+map rx 		rename
+# [R]ename by [i]nserting at the beginning.
+map ri		:rename; cmd-home
+# [R]ename by [a]ppending to the end of the file name.
+map ra		:rename; cmd-end
+# [R]ename in [b]ulk all files in current directory using $EDITOR.
+map rb 		bulkrename
+# [R]ename using [k]ebab case.
+map rk :rename; cmd-end; cmd-delete-home; kebab-case
+
+# DELETING
+
+map d trash
+map D delete
+
+# LABS
+
+cmd delete-symlink-target ${{
+    target=$(readlink -f $f)
+    if [ -n "$target" ]; then
+        rm "$target"
+        echo "Deleted target: $target"
+    else
+        echo "Not a symlink"
+    fi
+}}
+
+map <a-d> delete-symlink-target
+
+# Source Bookmarks
+source "~/.config/lf/shortcutrc"
