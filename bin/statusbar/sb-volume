@@ -1,0 +1,19 @@
+#!/bin/sh
+
+case $BLOCK_BUTTON in
+	1) setsid -f "$TERMINAL" -e pulsemixer ;;
+	2) pamixer -t ;;
+	4) pamixer -i 1 ;;
+	5) pamixer -d 1 ;;
+	3) notify-send "📢 Volume module" "\- Shows volume ,  if muted.
+- Middle click to mute.
+- Scroll to change." ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+vol="$(pamixer --get-volume)"
+
+icon=""
+[ "$(pamixer --get-mute)" = true ] && icon=" "
+
+printf "%s%2d%%\n" "$icon" "$vol"
