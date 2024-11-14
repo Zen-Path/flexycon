@@ -45,4 +45,9 @@ nag=
 verbose=blank,footnote,new-id,label,affected,edit,special,project,sync,unwait,recur
 
 # Contexts
+
+# Create this file if it doesn't exist. Format:
+# context.dev.read=+dev
+# context.dev.write=+dev
+
 include contexts
