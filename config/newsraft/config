@@ -1,4 +1,8 @@
 # Settings
 set scrolloff "3"
 set menu-feed-sorting "alphabet-asc"
-set menu-feed-sorting "unread-desc"
+
+# Keybinds
+
+# NOTE: The URL is inserted at the position of the '%l' specifier.
+bind m exec mpv "%l"
