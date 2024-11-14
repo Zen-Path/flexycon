@@ -1,0 +1,768 @@
+Α Alpha
+Β Beta
+Γ Gamma
+Δ Delta
+Ε Epsilon
+Ζ Zeta
+Η Eta
+Θ Theta
+Ι Iota
+Κ Kappa
+Λ Lambda
+Μ Mu
+Ν Nu
+Ξ Xi
+Ο Omicron
+Π Pi
+Ρ Rho
+Σ Sigma
+Τ Tau
+Υ Upsilon
+Φ Phi
+Χ Chi
+Ψ Psi
+Ω Omega
+α alpha
+β beta
+γ gamma
+δ delta
+ε rounded epsilon
+ζ zeta
+η eta
+θ straight theta
+ι iota
+κ kappa
+λ lambda
+μ mu
+ν nu
+ξ xi
+ο omicron
+π pi
+ρ rho
+ς terminal sigma
+σ sigma
+τ tau
+υ upsilon
+φ curly phi
+χ chi
+ψ psi
+ω omega
+ϐ rounded beta
+ϑ curly theta
+ϒ greek upsilon with hook
+ϕ greek phi (straight)
+ϖ greek pi (pomega)
+Ϙ greek letter archaic koppa
+ϙ greek letter archaic koppa
+Ϛ Stigma
+ϛ greek letter stigma
+Ϝ Digamma
+ϝ greek letter digamma
+Ϟ Koppa
+ϟ greek letter koppa
+Ϡ Sampi
+ϡ greek letter sampi
+ϰ greek kappa (round)
+ϱ greek rho (round)
+ϴ greek Theta
+ϵ greek lunate epsilon
+϶ greek reversed lunate epsilon
+Ш shcy, cyrillic letter Sha
+ℂ open face c
+ℇ euler constant
+ℊ script letter g
+ℋ hamiltonian (script H)
+ℌ black-letter H
+ℍ open face H
+ℎ planck constant
+ℏ planck's h over 2pi
+ℐ script I
+ℑ imaginary part
+ℒ lagrangian (script L)
+ℓ cursive l
+ℕ open face n
+℘ weierstrass p
+ℙ open face p
+ℚ open face q
+ℛ script R
+ℜ real part
+ℝ open face r
+ℤ open face z
+℧ conductance
+ℨ black-letter Z
+℩ turned iota
+Å ångström a with Ring
+ℬ bernoulli function (script B)
+ℭ black-letter C
+ℯ script letter e
+ℰ script E
+ℱ script F
+Ⅎ turned F
+ℳ physics m-matrix (script M)
+ℴ order of (script o)
+ℵ aleph, hebrew
+ℶ beth, hebrew
+ℷ gimel, hebrew
+ℸ daleth, hebrew
+ℼ double-struck pi
+ℽ double-struck gamma
+ℾ double-struck Gamma
+ℿ double-struck Pi
+⅀ double-struck n-ary summation
+ⅅ double-struck italic D
+ⅆ double-struck italic d
+ⅇ double-struck italic e
+ⅈ double-struck italic i
+ⅉ double-struck italic j
+𝐀 bold A
+𝐁 bold B
+𝐂 bold C
+𝐃 bold D
+𝐄 bold E
+𝐅 bold F
+𝐆 bold G
+𝐇 bold H
+𝐈 bold I
+𝐉 bold J
+𝐊 bold K
+𝐋 bold L
+𝐌 bold M
+𝐍 bold N
+𝐎 bold O
+𝐏 bold P
+𝐐 bold Q
+𝐑 bold R
+𝐒 bold S
+𝐓 bold T
+𝐔 bold U
+𝐕 bold V
+𝐖 bold W
+𝐗 bold X
+𝐘 bold Y
+𝐙 bold Z
+𝐚 bold a
+𝐛 bold b
+𝐜 bold c
+𝐝 bold d
+𝐞 bold e
+𝐟 bold f
+𝐠 bold g
+𝐡 bold h
+𝐢 bold i
+𝐣 bold j
+𝐤 bold k
+𝐥 bold l
+𝐦 bold m
+𝐧 bold n
+𝐨 bold o
+𝐩 bold p
+𝐪 bold q
+𝐫 bold r
+𝐬 bold s
+𝐭 bold t
+𝐮 bold u
+𝐯 bold v
+𝐰 bold w
+𝐱 bold x
+𝐲 bold y
+𝐳 bold z
+𝐴 italic A
+𝐵 italic B
+𝐶 italic C
+𝐷 italic D
+𝐸 italic E
+𝐹 italic F
+𝐺 italic G
+𝐻 italic H
+𝐼 italic I
+𝐽 italic J
+𝐾 italic K
+𝐿 italic L
+𝑀 italic M
+𝑁 italic N
+𝑂 italic O
+𝑃 italic P
+𝑄 italic Q
+𝑅 italic R
+𝑆 italic S
+𝑇 italic T
+𝑈 italic U
+𝑉 italic V
+𝑊 italic W
+𝑋 italic X
+𝑌 italic Y
+𝑍 italic Z
+𝑎 italic a
+𝑏 italic b
+𝑐 italic c
+𝑑 italic d
+𝑒 italic e
+𝑓 italic f
+𝑔 italic g
+𝑖 italic i
+𝑗 italic j
+𝑘 italic k
+𝑙 italic l
+𝑚 italic m
+𝑛 italic n
+𝑜 italic o
+𝑝 italic p
+𝑞 italic q
+𝑟 italic r
+𝑠 italic s
+𝑡 italic t
+𝑢 italic u
+𝑣 italic v
+𝑤 italic w
+𝑥 italic x
+𝑦 italic y
+𝑧 italic z
+𝑨 bold italic A
+𝑩 bold italic B
+𝑪 bold italic C
+𝑫 bold italic D
+𝑬 bold italic E
+𝑭 bold italic F
+𝑮 bold italic G
+𝑯 bold italic H
+𝑰 bold italic I
+𝑱 bold italic J
+𝑲 bold italic K
+𝑳 bold italic L
+𝑴 bold italic M
+𝑵 bold italic N
+𝑶 bold italic O
+𝑷 bold italic P
+𝑸 bold italic Q
+𝑹 bold italic R
+𝑺 bold italic S
+𝑻 bold italic T
+𝑼 bold italic U
+𝑽 bold italic V
+𝑾 bold italic W
+𝑿 bold italic X
+𝒀 bold italic Y
+𝒁 bold italic Z
+𝒂 bold italic a
+𝒃 bold italic b
+𝒄 bold italic c
+𝒅 bold italic d
+𝒆 bold italic e
+𝒇 bold italic f
+𝒈 bold italic g
+𝒉 bold italic h
+𝒊 bold italic i
+𝒋 bold italic j
+𝒌 bold italic k
+𝒍 bold italic l
+𝒎 bold italic m
+𝒏 bold italic n
+𝒐 bold italic o
+𝒑 bold italic p
+𝒒 bold italic q
+𝒓 bold italic r
+𝒔 bold italic s
+𝒕 bold italic t
+𝒖 bold italic u
+𝒗 bold italic v
+𝒘 bold italic w
+𝒙 bold italic x
+𝒚 bold italic y
+𝒛 bold italic z
+𝒜 script A
+𝒞 script C
+𝒟 script D
+𝒢 script G
+𝒥 script J
+𝒦 script K
+𝒩 script N
+𝒪 script O
+𝒫 script P
+𝒬 script Q
+𝒮 script S
+𝒯 script T
+𝒰 script U
+𝒱 script V
+𝒲 script W
+𝒳 script X
+𝒴 script Y
+𝒵 script Z
+𝒶 script a
+𝒷 script b
+𝒸 script c
+𝒹 script d
+𝒻 script f
+𝒽 script h
+𝒾 script i
+𝒿 script j
+𝓀 script k
+𝓁 script l
+𝓂 script m
+𝓃 script n
+𝓅 script p
+𝓆 script q
+𝓇 script r
+𝓈 script s
+𝓉 script t
+𝓊 script u
+𝓋 script v
+𝓌 script w
+𝓍 script x
+𝓎 script y
+𝓏 script z
+𝓐 bold script A
+𝓑 bold script B
+𝓒 bold script C
+𝓓 bold script D
+𝓔 bold script E
+𝓕 bold script F
+𝓖 bold script G
+𝓗 bold script H
+𝓘 bold script I
+𝓙 bold script J
+𝓚 bold script K
+𝓛 bold script L
+𝓜 bold script M
+𝓝 bold script N
+𝓞 bold script O
+𝓟 bold script P
+𝓠 bold script Q
+𝓡 bold script R
+𝓢 bold script S
+𝓣 bold script T
+𝓤 bold script U
+𝓥 bold script V
+𝓦 bold script W
+𝓧 bold script X
+𝓨 bold script Y
+𝓩 bold script Z
+𝓪 bold script a
+𝓫 bold script b
+𝓬 bold script c
+𝓭 bold script d
+𝓮 bold script e
+𝓯 bold script f
+𝓰 bold script g
+𝓱 bold script h
+𝓲 bold script i
+𝓳 bold script j
+𝓴 bold script k
+𝓵 bold script l
+𝓶 bold script m
+𝓷 bold script n
+𝓸 bold script o
+𝓹 bold script p
+𝓺 bold script q
+𝓻 bold script r
+𝓼 bold script s
+𝓽 bold script t
+𝓾 bold script u
+𝓿 bold script v
+𝔀 bold script w
+𝔁 bold script x
+𝔂 bold script y
+𝔃 bold script z
+𝔄 fraktur A
+𝔅 fraktur B
+𝔇 fraktur D
+𝔈 fraktur E
+𝔉 fraktur F
+𝔊 fraktur G
+𝔍 fraktur J
+𝔎 fraktur K
+𝔏 fraktur L
+𝔐 fraktur M
+𝔑 fraktur N
+𝔒 fraktur O
+𝔓 fraktur P
+𝔔 fraktur Q
+𝔖 fraktur S
+𝔗 fraktur T
+𝔘 fraktur U
+𝔙 fraktur V
+𝔚 fraktur W
+𝔛 fraktur X
+𝔜 fraktur Y
+𝔞 fraktur a
+𝔟 fraktur b
+𝔠 fraktur c
+𝔡 fraktur d
+𝔢 fraktur e
+𝔣 fraktur f
+𝔤 fraktur g
+𝔥 fraktur h
+𝔦 fraktur i
+𝔧 fraktur j
+𝔨 fraktur k
+𝔩 fraktur l
+𝔪 fraktur m
+𝔫 fraktur n
+𝔬 fraktur o
+𝔭 fraktur p
+𝔮 fraktur q
+𝔯 fraktur r
+𝔰 fraktur s
+𝔱 fraktur t
+𝔲 fraktur u
+𝔳 fraktur v
+𝔴 fraktur w
+𝔵 fraktur x
+𝔶 fraktur y
+𝔷 fraktur z
+𝔸 double-struck A
+𝔹 double-struck B
+𝔻 double-struck D
+𝔼 double-struck E
+𝔽 double-struck F
+𝔾 double-struck G
+𝕀 double-struck I
+𝕁 double-struck J
+𝕂 double-struck K
+𝕃 double-struck L
+𝕄 double-struck M
+𝕆 double-struck O
+𝕊 double-struck S
+𝕋 double-struck T
+𝕌 double-struck U
+𝕍 double-struck V
+𝕎 double-struck W
+𝕏 double-struck X
+𝕐 double-struck Y
+𝕒 double-struck a
+𝕓 double-struck b
+𝕔 double-struck c
+𝕕 double-struck d
+𝕖 double-struck e
+𝕗 double-struck f
+𝕘 double-struck g
+𝕙 double-struck h
+𝕚 double-struck i
+𝕛 double-struck j
+𝕜 double-struck k
+𝕝 double-struck l
+𝕞 double-struck m
+𝕟 double-struck n
+𝕠 double-struck o
+𝕡 double-struck p
+𝕢 double-struck q
+𝕣 double-struck r
+𝕤 double-struck s
+𝕥 double-struck t
+𝕦 double-struck u
+𝕧 double-struck v
+𝕨 double-struck w
+𝕩 double-struck x
+𝕪 double-struck y
+𝕫 double-struck z
+𝕬 bold fraktur A
+𝕭 bold fraktur B
+𝕮 bold fraktur C
+𝕯 bold fraktur D
+𝕰 bold fraktur E
+𝕱 bold fraktur F
+𝕲 bold fraktur G
+𝕳 bold fraktur H
+𝕴 bold fraktur I
+𝕵 bold fraktur J
+𝕶 bold fraktur K
+𝕷 bold fraktur L
+𝕸 bold fraktur M
+𝕹 bold fraktur N
+𝕺 bold fraktur O
+𝕻 bold fraktur P
+𝕼 bold fraktur Q
+𝕽 bold fraktur R
+𝕾 bold fraktur S
+𝕿 bold fraktur T
+𝖀 bold fraktur U
+𝖁 bold fraktur V
+𝖂 bold fraktur W
+𝖃 bold fraktur X
+𝖄 bold fraktur Y
+𝖅 bold fraktur Z
+𝖆 bold fraktur a
+𝖇 bold fraktur b
+𝖈 bold fraktur c
+𝖉 bold fraktur d
+𝖊 bold fraktur e
+𝖋 bold fraktur f
+𝖌 bold fraktur g
+𝖍 bold fraktur h
+𝖎 bold fraktur i
+𝖏 bold fraktur j
+𝖐 bold fraktur k
+𝖑 bold fraktur l
+𝖒 bold fraktur m
+𝖓 bold fraktur n
+𝖔 bold fraktur o
+𝖕 bold fraktur p
+𝖖 bold fraktur q
+𝖗 bold fraktur r
+𝖘 bold fraktur s
+𝖙 bold fraktur t
+𝖚 bold fraktur u
+𝖛 bold fraktur v
+𝖜 bold fraktur w
+𝖝 bold fraktur x
+𝖞 bold fraktur y
+𝖟 bold fraktur z
+𝙰 mono A
+𝙱 mono B
+𝙲 mono C
+𝙳 mono D
+𝙴 mono E
+𝙵 mono F
+𝙶 mono G
+𝙷 mono H
+𝙸 mono I
+𝙹 mono J
+𝙺 mono K
+𝙻 mono L
+𝙼 mono M
+𝙽 mono N
+𝙾 mono O
+𝙿 mono P
+𝚀 mono Q
+𝚁 mono R
+𝚂 mono S
+𝚃 mono T
+𝚄 mono U
+𝚅 mono V
+𝚆 mono W
+𝚇 mono X
+𝚈 mono Y
+𝚉 mono Z
+𝚊 mono a
+𝚋 mono b
+𝚌 mono c
+𝚍 mono d
+𝚎 mono e
+𝚏 mono f
+𝚐 mono g
+𝚑 mono h
+𝚒 mono i
+𝚓 mono j
+𝚔 mono k
+𝚕 mono l
+𝚖 mono m
+𝚗 mono n
+𝚘 mono o
+𝚙 mono p
+𝚚 mono q
+𝚛 mono r
+𝚜 mono s
+𝚝 mono t
+𝚞 mono u
+𝚟 mono v
+𝚠 mono w
+𝚡 mono x
+𝚢 mono y
+𝚣 mono z
+𝚤 italic dotless i
+𝚥 italic dotless j
+𝚨 bold Alpha
+𝚩 bold Beta
+𝚪 bold Gamma
+𝚫 bold Delta
+𝚬 bold Epsilon
+𝚭 bold Zeta
+𝚮 bold Eta
+𝚯 bold Theta
+𝚰 bold Iota
+𝚱 bold Kappa
+𝚲 bold Lambda
+𝚳 bold Mu
+𝚴 bold Nu
+𝚵 bold Xi
+𝚶 bold Omicron
+𝚷 bold Pi
+𝚸 bold Rho
+𝚹 bold Theta
+𝚺 bold Sigma
+𝚻 bold Tau
+𝚼 bold Upsilon
+𝚽 bold Phi
+𝚾 bold Chi
+𝚿 bold Psi
+𝛀 bold Omega
+𝛁 bold nabla
+𝛂 bold alpha
+𝛃 bold beta
+𝛄 bold gamma
+𝛅 bold delta
+𝛆 bold epsilon
+𝛇 bold zeta
+𝛈 bold eta
+𝛉 bold theta
+𝛊 bold iota
+𝛋 bold kappa
+𝛌 bold lambda
+𝛍 bold mu
+𝛎 bold nu
+𝛏 bold xi
+𝛐 bold omicron
+𝛑 bold pi
+𝛒 bold rho
+𝛓 bold final sigma
+𝛔 bold sigma
+𝛕 bold tau
+𝛖 bold upsilon
+𝛗 bold phi
+𝛘 bold chi
+𝛙 bold psi
+𝛚 bold omega
+𝛛 bold partial differential
+𝛜 bold epsilon
+𝛝 bold theta
+𝛞 bold kappa
+𝛟 bold phi
+𝛠 bold rho
+𝛡 bold pi
+𝛢 italic Alpha
+𝛣 italic Beta
+𝛤 italic Gamma
+𝛥 italic Delta
+𝛦 italic Epsilon
+𝛧 italic Zeta
+𝛨 italic Eta
+𝛩 italic Theta
+𝛪 italic Iota
+𝛫 italic Kappa
+𝛬 italic Lambda
+𝛭 italic Mu
+𝛮 italic Nu
+𝛯 italic Xi
+𝛰 italic Omicron
+𝛱 italic Pi
+𝛲 italic Rho
+𝛳 italic Theta
+𝛴 italic Sigma
+𝛵 italic Tau
+𝛶 italic Upsilon
+𝛷 italic Phi
+𝛸 italic Chi
+𝛹 italic Psi
+𝛺 italic Omega
+𝛻 italic nabla
+𝛼 italic alpha
+𝛽 italic beta
+𝛾 italic gamma
+𝛿 italic delta
+𝜀 italic epsilon
+𝜁 italic zeta
+𝜂 italic eta
+𝜃 italic theta
+𝜄 italic iota
+𝜅 italic kappa
+𝜆 italic lambda
+𝜇 italic mu
+𝜈 italic nu
+𝜉 italic xi
+𝜊 italic omicron
+𝜋 italic pi
+𝜌 italic rho
+𝜍 italic final sigma
+𝜎 italic sigma
+𝜏 italic tau
+𝜐 italic upsilon
+𝜑 italic phi
+𝜒 italic chi
+𝜓 italic psi
+𝜔 italic omega
+𝜕 italic partial differential
+𝜖 italic epsilon
+𝜗 italic theta
+𝜘 italic kappa
+𝜙 italic phi
+𝜚 italic rho
+𝜛 italic pi
+𝜜 bold italic Alpha
+𝜝 bold italic Beta
+𝜞 bold italic Gamma
+𝜟 bold italic Delta
+𝜠 bold italic Epsilon
+𝜡 bold italic Zeta
+𝜢 bold italic Eta
+𝜣 bold italic Theta
+𝜤 bold italic Iota
+𝜥 bold italic Kappa
+𝜦 bold italic Lambda
+𝜧 bold italic Mu
+𝜨 bold italic Nu
+𝜩 bold italic Xi
+𝜪 bold italic Omicron
+𝜫 bold italic Pi
+𝜬 bold italic Rho
+𝜭 bold italic Theta
+𝜮 bold italic Sigma
+𝜯 bold italic Tau
+𝜰 bold italic Upsilon
+𝜱 bold italic Phi
+𝜲 bold italic Chi
+𝜳 bold italic Psi
+𝜴 bold italic Omega
+𝜵 bold italic nabla
+𝜶 bold italic alpha
+𝜷 bold italic beta
+𝜸 bold italic gamma
+𝜹 bold italic delta
+𝜺 bold italic epsilon
+𝜻 bold italic zeta
+𝜼 bold italic eta
+𝜽 bold italic theta
+𝜾 bold italic iota
+𝜿 bold italic kappa
+𝝀 bold italic lambda
+𝝁 bold italic mu
+𝝂 bold italic nu
+𝝃 bold italic xi
+𝝄 bold italic omicron
+𝝅 bold italic pi
+𝝆 bold italic rho
+𝝇 bold italic final sigma
+𝝈 bold italic sigma
+𝝉 bold italic tau
+𝝊 bold italic upsilon
+𝝋 bold italic phi
+𝝌 bold italic chi
+𝝍 bold italic psi
+𝝎 bold italic omega
+𝝏 bold italic partial differential
+𝝐 bold italic epsilon
+𝝑 bold italic theta
+𝝒 bold italic kappa
+𝝓 bold italic phi
+𝝔 bold italic rho
+𝝕 bold italic pi
+𝟊 bold Digamma
+𝟋 bold digamma
+𝟎 bold digit 0
+𝟏 bold digit 1
+𝟐 bold digit 2
+𝟑 bold digit 3
+𝟒 bold digit 4
+𝟓 bold digit 5
+𝟔 bold digit 6
+𝟕 bold digit 7
+𝟖 bold digit 8
+𝟗 bold digit 9
+𝟘 double-struck digit 0
+𝟙 double-struck digit 1
+𝟚 double-struck digit 2
+𝟛 double-struck digit 3
+𝟜 double-struck digit 4
+𝟝 double-struck digit 5
+𝟞 double-struck digit 6
+𝟟 double-struck digit 7
+𝟠 double-struck digit 8
+𝟡 double-struck digit 9
+𝟶 mono digit 0
+𝟷 mono digit 1
+𝟸 mono digit 2
+𝟹 mono digit 3
+𝟺 mono digit 4
+𝟻 mono digit 5
+𝟼 mono digit 6
+𝟽 mono digit 7
+𝟾 mono digit 8
+𝟿 mono digit 9
