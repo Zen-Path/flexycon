@@ -1,0 +1,71 @@
+#!/bin/zsh
+
+# Shell profile. Runs on login. Environmental variables are set here.
+
+# Add `~/.local/bin` to $PATH
+export PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
+unsetopt PROMPT_SP
+
+# Default programs:
+export EDITOR="nvim"
+export TERMINAL="alacritty"
+export BROWSER="firefox"
+
+# ~/ Clean-up:
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
+export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export HISTFILE="$XDG_DATA_HOME/history"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
+export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
+export npm_config_cache="$XDG_CACHE_HOME/npm"
+export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
+export LESSHISTFILE="/dev/null"
+export JOURNAL_HOME="$HOME/Documents/No_Backup/Journal"
+export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
+
+# Other program settings:
+export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
+export LESS=-R
+export FZF_DEFAULT_COMMAND='fd . --hidden -E .cache -E .local/lib/ -E .local/share/cargo -E .local/share/Trash -E .local/share/rustup -E .git/ -E node_modules/'
+
+# --multi : allow multiple selections
+# --height : fzf window height
+# --extended : extended-search mode
+export FZF_DEFAULT_OPTS='--multi --height=~90% --extended'
+
+export BAT_THEME='gruvbox-dark'
+export PASTEL_COLOR_MODE='24bit'
+export _JAVA_AWT_WM_NONREPARENTING='1' # Fix for Java applications in dwm
+export MOZ_USE_XINPUT2='1' # Mozilla smooth scrolling/touchpads.
+
+# === Android Studio ===
+export ANDROID_HOME="$XDG_DATA_HOME/SDKs"
+export ANDROID_AVD_HOME="$XDG_CONFIG_HOME/.android/avd"
+
+# === Appium ===
+# https://appium.io/docs/en/2.1/cli/env-vars
+
+# This is where drivers and plugins are installed
+# By default, it will create a '.appium' dir in '~'
+# export APPIUM_HOME="$XDG_DATA_HOME/appium"
+
+# Use system 'unzip' binary instead of JS lib.
+# If 'unzip' fails, it will use the lib as fallback though.
+export APPIUM_PREFER_SYSTEM_UNZIP='1'
+
+[ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/shortcutrc ] && setsid shortcuts >/dev/null 2>&1
+
+# Start graphical server on user's current tty if not already running.
+[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"
+
+# Switch escape and caps if tty and no passwd required:
+sudo -n loadkeys "${XDG_DATA_HOME:-$HOME/.local/share}"/larbs/ttymaps.kmap 2>/dev/null
