@@ -340,13 +340,13 @@ user_pref("xpinstall.whitelist.required", true);
 // == Firefox Data Collection and Use ==
 
 // Allow Firefox to send technical and interaction data to Mozilla
-// user_pref("null", false);
+user_pref("datareporting.healthreport.uploadEnabled", false);
 
 // Allow Firefox to make personalized extension recommendations
-// user_pref("null", false);
+// user_pref("browser.discovery.enabled", false);
 
 // Allow Firefox to install and run studies
-// user_pref("null", false);
+// user_pref("app.shield.optoutstudies.enabled", false);
 
 // Allow Firefox to send backlogged crash reports on your behalf
 user_pref("browser.crashReports.unsubmittedCheck.autoSubmit2", false);
