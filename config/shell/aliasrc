@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# Make some system commands not require sudo.
+for command in mount umount pacman updatedb su shutdown reboot ; do
+	alias "$command=sudo $command"
+done; unset command
+
+# Abbreviations
+alias e='$EDITOR' ## (SC2139) Expand when used, not when defined.
+alias g='git'
+alias o='xdg-open'
+alias y='yay'
+alias p='pacman'
+alias t='task'
+alias z='zathura'
+alias y='yay'
+alias ka='killall'
+alias lf='lfub'
+alias py='python'
+alias tp='trash-put --'
+alias sql='sqlite3'
+
+# Verbosity and common settings.
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -vI'
+alias bc='bc -ql'
+alias ls='ls -A -hN --color=auto --group-directories-first'
+alias rg='rg -i'
+alias rsync='rsync -vrPlu'
+alias mkd='mkdir -pv'
+alias ffmpeg='ffmpeg -hide_banner'
+alias shfmt='shfmt -w -i 4 -bn -ci -sr'
+
+# Use colored output
+alias grep='grep --color=auto'
+alias diff='diff --color=auto'
+alias ip='ip -color=auto'
+
+# Dev-oriented
+alias mci='sudo make clean install'
+alias tse='tsc --target es6'
+alias jsonfmt='prettier --stdin-filepath f.json'
+alias adbpac='adb shell cmd package list packages'
+alias penv='source venv/bin/activate 2> /dev/null || source .venv/bin/activate 2> /dev/null'
+alias pfr='pip freeze > requirements.txt'
+
+# Rclone
+alias rc='rclone --progress --exclude "No_Backup/**" --exclude ".git/" copy'
+alias rcd='rclone --dry-run --progress --exclude "No_Backup/**" --exclude ".git/" copy'
+alias rs='rclone --create-empty-src-dirs --track-renames --progress --exclude "No_Backup/**" --exclude ".git/" sync'
+alias rsd='rclone --create-empty-src-dirs --track-renames --dry-run --progress --exclude "No_Backup/**" --exclude ".git/" sync'
+
+# Taskwarrior
+# TODO: use a similar approach to 'open_journal_entry' instead of
+# only 'yesterday' and 'today'.
+alias t-done-y='task end.after:yesterday end.before:today completed'
+alias t-done-t='task end.after:today completed'
+
+# YouTube
+alias ytt='yt --skip-download --write-thumbnail'
+alias yts='mpv --slang=en --fs --ytdl-raw-options=ignore-config=,sub-lang=en,write-auto-sub='
+alias yt='yt-dlp --embed-metadata -i --no-playlist'
+alias yta='yt --extract-audio --format bestaudio/best --no-playlist'
+alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(playlist_index)02d - %(title)s [%(id)s].%(ext)s"'
+
+# General-purpose
+alias gtro='trans -pager less -t ro -join-sentence'
+alias gten='trans -pager less -t en -join-sentence'
+alias je='journal_entry'
