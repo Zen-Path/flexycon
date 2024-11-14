@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# This file runs when a DM logs you into a graphical session.
+# If you use startx/xinit like a Chad, this file will also be sourced.
+
+# Use a higher DPI for larger screens
+xrandr \
+	--output DisplayPort-2 --primary --mode 2560x1440 --pos 1920x0 --rotate normal \
+	--output HDMI-A-0 --mode 1920x1080 --pos 0x448 --rotate normal
+
+setbg  &
+dwmblocks &
+remapd &
+
+# Uncomment to use Xresources colors/settings on startup
+xrdb "${XDG_CONFIG_HOME:-$HOME/.config}"/x11/xresources & xrdbpid=$!
+
+autostart='xcompmgr dunst pipewire'
+
+for program in $autostart; do
+	pidof -sx "$program" || "$program" &
+done >/dev/null 2>&1
+
+blugon -S 4700 & # Bluelight filter
+unclutter --timeout 2 &
+
+# Ensure that xrdb has finished running before moving on to start the WM/DE.
+[ -n "$xrdbpid" ] && wait "$xrdbpid"
