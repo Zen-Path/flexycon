@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Displays number of unread news items and an loading icon if updating.
+# When clicked, brings up `newsboat`.
+
+# TODO: add reload functionality when available
+
+case $BLOCK_BUTTON in
+        1) setsid "$TERMINAL" -e newsraft ;;
+	2) true;;
+        3) notify-send "🗞️ News module" "\- Shows unread news items
+- Shows 🔃 if updating with
+- Left click opens newsraft
+- Middle click syncs RSS feeds
+<b>Note:</b> Only one instance of newsraft (including updates) may be running at a time." ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+unread_count=$(sqlite3 -line "${XDG_DATA_HOME}/newsraft/newsraft.sqlite3" 'SELECT COUNT() FROM items WHERE unread = 1')
+
+printf "%s\n" "$(echo "$unread_count" | sed 's/[^0-9]//g')"
