@@ -6,6 +6,13 @@
 
 // === Startup ===
 
+// Open previous windows and tabs
+// 0 : Blank Page
+// 1 : Home Page
+// 2 : Last Session
+// 3: Home Page or Last Session
+user_pref("browser.startup.page", 3);
+
 // Always check if Firefox is your default browser
 user_pref("browser.shell.checkDefaultBrowser", false);
 
