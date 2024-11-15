@@ -343,10 +343,10 @@ user_pref("xpinstall.whitelist.required", true);
 user_pref("datareporting.healthreport.uploadEnabled", false);
 
 // Allow Firefox to make personalized extension recommendations
-// user_pref("browser.discovery.enabled", false);
+user_pref("browser.discovery.enabled", false);
 
 // Allow Firefox to install and run studies
-// user_pref("app.shield.optoutstudies.enabled", false);
+user_pref("app.shield.optoutstudies.enabled", false);
 
 // Allow Firefox to send backlogged crash reports on your behalf
 user_pref("browser.crashReports.unsubmittedCheck.autoSubmit2", false);
@@ -354,7 +354,7 @@ user_pref("browser.crashReports.unsubmittedCheck.autoSubmit2", false);
 // == Website Advertising Preferences ==
 
 // Allow websites to perform privacy-preserving ad measurement
-// user_pref("null", false);
+user_pref("dom.private-attribution.submission.enabled", false);
 
 // == Security ==
 
