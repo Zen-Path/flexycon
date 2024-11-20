@@ -259,6 +259,8 @@ map D delete
 
 # LABS
 
+map i $aria2c -i $f --timeout=10
+
 cmd delete-symlink-target ${{
     target=$(readlink -f $f)
     if [ -n "$target" ]; then
