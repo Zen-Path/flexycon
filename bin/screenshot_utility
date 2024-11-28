@@ -155,7 +155,7 @@ def parse_args():
 
     # Create subparsers for actions
     subparsers = parser.add_subparsers(
-        dest="action", required=True, help="Screenshot action"
+        dest="action", help="Screenshot action"
     )
 
     # Area action
