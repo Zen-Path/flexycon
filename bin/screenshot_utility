@@ -221,10 +221,10 @@ def main():
 
     if not args.action:
         actions = {
-            "Area": lambda: screenshot_utility.area(copy_output=args.copy),
-            "Window": lambda: screenshot_utility.window(copy_output=args.copy),
-            "Screen": lambda: screenshot_utility.screen(copy_output=args.copy),
-            "Full Screen": lambda: screenshot_utility.full_screen(
+            "🔳 Area": lambda: screenshot_utility.area(copy_output=args.copy),
+            "🪟 Window": lambda: screenshot_utility.window(copy_output=args.copy),
+            "🖥️ Screen": lambda: screenshot_utility.screen(copy_output=args.copy),
+            "🌍 Full Screen": lambda: screenshot_utility.full_screen(
                 copy_output=args.copy
             ),
         }
