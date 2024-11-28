@@ -192,7 +192,11 @@ map <enter> open
 map <esc> unselect
 
 map W $setsid -f $TERMINAL >/dev/null 2>&1
+
+# Copy the filepath
 map Y $printf "%s" "$fx" | xclip -selection clipboard
+# Copy the filename
+map <a-y> $basename "$fx" | xclip -selection clipboard
 
 # RENAMING
 cmd bulkrename ${{
