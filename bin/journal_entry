@@ -1,11 +1,11 @@
 #!/bin/python3
 
-from datetime import datetime, timedelta
-import subprocess
 import argparse
-import sys
 import os
 import re
+import subprocess
+import sys
+from datetime import datetime, timedelta
 
 ABS_DATE_FMTS = ["%Y.%m.%d", "%m.%d"]
 

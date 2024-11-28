@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
+import shutil
 import subprocess
 import sys
-import shutil
 
 # Map of keyboard layouts with their full names
 layout_full_names = {
