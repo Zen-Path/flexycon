@@ -4,6 +4,15 @@ import subprocess
 from abc import ABC, abstractmethod
 
 
+def ensure_directories_exist(file_path):
+    """
+    Ensure all directories leading to the given file path exist.
+    """
+    directory = os.path.dirname(file_path)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+
+
 class ClipboardUtility(ABC):
     """Abstract class for clipboard utilities."""
 
