@@ -1,0 +1,12 @@
+{
+    "extractor":{
+        "filename": "{id}_{title:.150}.{extension}",
+        "--example-category--": {
+            "--subcategory--": {
+                "directory": ["path", "to", "dir"]
+            },
+            "directory": ["another", "path"],
+            "filename": "{title:.100}_tags-{tags!S:.100}.{extension}"
+        }
+    }
+}
