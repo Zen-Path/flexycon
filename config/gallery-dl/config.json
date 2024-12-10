@@ -1,4 +1,5 @@
 {
+    "extractor": {
         "filename": "{title:X150/.../}_{id}.{extension}",
         "base-directory": ".",
         "postprocessors": [
@@ -7,11 +8,31 @@
                 "directory": "./__metadata__"
             }
         ],
+        "--example--": {
             "--subcategory--": {
-                "directory": ["path", "to", "dir"]
+                "filename": "{num:03}.{extension}"
             },
-            "directory": ["another", "path"],
-            "filename": "{title:.100}_tags-{tags!S:.100}.{extension}"
+            "directory": [
+                "{category|else}",
+                "{subcategory!g}",
+                "{search['type']}_{title!g:X100/.../}"
+            ],
+            "filename": {
+                "list[:4] == list": "{num:03}_{list:S/J_/Cg/}_tg-{tags:S/J_/Cg/X80/.../}.{extension}",
+                "list[0][:80] == list[0]": "{num:03}_{list[0]:Cg/}_tg-{tags:S/J_/Cg/X80/.../}.{extension}",
+                "": "{num:03}.{extension}"
+            },
+            "postprocessors": [
+                {
+                    "name": "metadata",
+                    "directory": "./__metadata__",
+                    "mode": "modify",
+                    "fields": {
+                        "download_url": "https://www.example.com/galleries/{gallery_id!s}",
+                        "download_time": "{_now:%Y-%m-%d_%H-%M-%S}"
+                    }
+                }
+            ]
         }
     }
 }
