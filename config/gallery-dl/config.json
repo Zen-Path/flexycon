@@ -1,5 +1,6 @@
 {
         "filename": "{title:X150/.../}_{id}.{extension}",
+        "base-directory": ".",
             "--subcategory--": {
                 "directory": ["path", "to", "dir"]
             },
