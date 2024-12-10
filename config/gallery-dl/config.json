@@ -1,7 +1,5 @@
 {
-    "extractor":{
-        "filename": "{title:.150}_{id}.{extension}",
-        "--example-category--": {
+        "filename": "{title:X150/.../}_{id}.{extension}",
             "--subcategory--": {
                 "directory": ["path", "to", "dir"]
             },
