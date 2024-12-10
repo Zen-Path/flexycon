@@ -131,7 +131,13 @@ cmd restore ${{
 	trash-restore
 }}
 
-cmd setbg "$1"
+cmd set-background  ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+	set -f
+    echo "Change background to '$fx'? [y/N]"
+    read ans
+	[ $ans = "y" ] && setbg $fx
+}}
 
 cmd edit-config ${{
     $EDITOR ~/.config/lf/lfrc
@@ -183,7 +189,7 @@ map x $$f
 map X !$f
 map c cut
 map u restore
-map b $setbg $f
+map b set-background $f
 
 map m mark-save
 
