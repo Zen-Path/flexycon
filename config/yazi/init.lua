@@ -9,3 +9,5 @@ require("full-border"):setup {
 	type = ui.Border.ROUNDED,
 }
 
+-- Show the status of Git file changes as linemode in the file list.
+require("git"):setup()
