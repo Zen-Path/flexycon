@@ -66,8 +66,7 @@ alias yta='yt --extract-audio --format bestaudio/best --no-playlist'
 alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(playlist_index)02d - %(title)s [%(id)s].%(ext)s"'
 
 # General-purpose
-alias gtro='trans -pager less -t ro -join-sentence'
-alias gten='trans -pager less -t en -join-sentence'
+
 alias je='journal_entry'
 alias gld='gallery-dl'
 
