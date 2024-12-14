@@ -40,7 +40,7 @@
     width = 350
 
     # Max height of a single notification.
-    height = 500
+    height = (0, 300)
 
     # The number of notifications that can appear at one time.
     # Default: 20
