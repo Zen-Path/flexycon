@@ -10,6 +10,7 @@ unsetopt PROMPT_SP
 export EDITOR="nvim"
 export TERMINAL="alacritty"
 export BROWSER="firefox"
+export FILE_MANAGER='yazi'
 
 # ~/ Clean-up:
 export XDG_CONFIG_HOME="$HOME/.config"
