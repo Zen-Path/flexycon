@@ -2,3 +2,10 @@
 require("session"):setup {
 	sync_yanked = true,
 }
+
+-- Add a full border around the main content.
+require("full-border"):setup {
+	-- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
+	type = ui.Border.ROUNDED,
+}
+
