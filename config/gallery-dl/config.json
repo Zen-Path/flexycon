@@ -20,7 +20,7 @@
             "filename": {
                 "list[:4] == list": "{num:03}_{list:S/J_/Cg/}_tg-{tags:S/J_/Cg/X80/.../}.{extension}",
                 "list[0][:80] == list[0]": "{num:03}_{list[0]:Cg/}_tg-{tags:S/J_/Cg/X80/.../}.{extension}",
-                "": "{num:03}.{extension}"
+                "": "\fF {num:03}_{filename.split('_')[-1]}.{extension}"
             },
             "postprocessors": [
                 {
