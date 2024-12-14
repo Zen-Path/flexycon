@@ -9,11 +9,9 @@ done; unset command
 alias e='$EDITOR' ## (SC2139) Expand when used, not when defined.
 alias g='git'
 alias o='xdg-open'
-alias y='yay'
 alias p='pacman'
 alias t='task'
 alias z='zathura'
-alias y='yay'
 alias ka='killall'
 alias lf='lfub'
 alias py='python'
@@ -72,3 +70,5 @@ alias gld='gallery-dl'
 
 # File Manager
 alias fm='$FILE_MANAGER'
+# Package Manager
+alias pm='yay'
