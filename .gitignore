@@ -1,3 +1,6 @@
+# Yazi plugins - should be managed by the 'ya' manger
+/config/yazi/plugins/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
