@@ -69,3 +69,6 @@ alias gtro='trans -pager less -t ro -join-sentence'
 alias gten='trans -pager less -t en -join-sentence'
 alias je='journal_entry'
 alias gld='gallery-dl'
+
+# File Manager
+alias fm='$FILE_MANAGER'
