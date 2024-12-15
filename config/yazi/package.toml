@@ -1,10 +1,5 @@
-[[plugin.deps]]
-use = "yazi-rs/plugins:git"
-rev = "62f0789"
-
-[[plugin.deps]]
-use = "yazi-rs/plugins:full-border"
-rev = "62f0789"
+[plugin]
+deps = [{ use = "yazi-rs/plugins:mime-ext", rev = "62f0789" }, { use = "yazi-rs/plugins:git", rev = "62f0789" }, { use = "yazi-rs/plugins:full-border", rev = "62f0789" }]
 
 [flavor]
-deps = [ ]
+deps = []
