@@ -187,6 +187,15 @@ function pdftopng() {
 	magick -density 300 "$1" -quality 100 -alpha remove "$2"
 }
 
+function fm() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
 bindkey -s '^f' 'fzfopen\n'
 
 # Set up fzf key bindings and fuzzy completion

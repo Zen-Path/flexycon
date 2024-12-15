@@ -68,7 +68,7 @@ alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(play
 # General
 
 # [F]ile [M]anager
-alias fm='$FILE_MANAGER'
+# alias fm='$FILE_MANAGER'
 
 # [P]ackage [M]anager
 alias pm='yay'
