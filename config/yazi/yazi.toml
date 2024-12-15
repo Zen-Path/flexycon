@@ -47,7 +47,6 @@ id   = "git"
 name = "*/"
 run  = "git"
 
-
 [opener]
 edit = [
 	{ run = '${EDITOR:-vi} "$@"', desc = "$EDITOR", block = true, for = "unix" },
@@ -55,7 +54,7 @@ edit = [
 	{ run = 'code -w %*', block = true,  desc = "code (block)",   for = "windows" },
 ]
 open = [
-	{ run = 'xdg-open "$1"', orphan = true,                desc = "Open", for = "linux" },
+	{ run = '${TERMINAL} -e xdg-open "$1"', orphan = true, desc = "Open", for = "linux" },
 	{ run = 'open "$@"',                    desc = "Open", for = "macos" },
 	{ run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
 ]
