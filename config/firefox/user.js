@@ -434,3 +434,6 @@ user_pref("dom.push.enabled", true);
 
 // Close the window when the last tab is closed
 user_pref("browser.tabs.closeWindowWithLastTab", false);
+
+// Auto-hide the download icon from the toolbar
+user_pref("browser.download.autohideButton", false);
