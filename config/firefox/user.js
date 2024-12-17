@@ -437,3 +437,9 @@ user_pref("browser.tabs.closeWindowWithLastTab", false);
 
 // Auto-hide the download icon from the toolbar
 user_pref("browser.download.autohideButton", false);
+
+// Show the bookmarks bar
+// - always
+// - never
+// - newtab
+user_pref("browser.toolbars.bookmarks.visibility", "always");
