@@ -4,7 +4,7 @@
 
 [manager]
 
-keymap = [
+prepend_keymap = [
 	{ on = "<Esc>", run = "escape",             desc = "Exit visual mode, clear selected, or cancel search" },
 	{ on = "<C-[>", run = "escape",             desc = "Exit visual mode, clear selected, or cancel search" },
 	{ on = "q",     run = "quit",               desc = "Quit the process" },
@@ -58,6 +58,20 @@ keymap = [
 	# Spotting
 	{ on = "<Tab>", run = "spot", desc = "Spot hovered file" },
 
+    # Rename
+
+	# { on = "r", run = "rename --cursor=before_ext", desc = "Rename - bulk or put cursor before extension" },
+	{ on = "R", run = "rename --cursor=before_ext",  desc = "Rename - bulk or put cursor before extension" },
+
+    ## Place cursor
+    { on = ["r", "i"], run = "rename --hovered --cursor=start",      desc = "Rename - [i]nsert at the start" },
+    { on = ["r", "a"], run = "rename --hovered --cursor=end",        desc = "Rename - [a]ppend to the end" },
+	{ on = ["r", "x"], run = "rename --hovered --cursor=before_ext", desc = "Rename - put cursor before e[x]tension" },
+
+    ## Replace parts
+	{ on = ["r", "s"], run = "rename --hovered --cursor=start --empty=stem", desc = "Rename - replace [s]tem" },
+	{ on = ["r", "e"], run = "rename --hovered --cursor=end --empty=ext",    desc = "Rename - replace [e]xtension" },
+
 	# Operation
 	{ on = "o",         run = "open",                        desc = "Open selected files" },
 	{ on = "O",         run = "open --interactive",          desc = "Open selected files interactively" },
@@ -75,7 +89,6 @@ keymap = [
 	{ on = "d",         run = "remove",                      desc = "Trash selected files" },
 	{ on = "D",         run = "remove --permanently",        desc = "Permanently delete selected files" },
 	{ on = "a",         run = "create",                      desc = "Create a file (ends with / for directories)" },
-	{ on = "r",         run = "rename --cursor=before_ext",  desc = "Rename selected file(s)" },
 	{ on = ";",         run = "shell --interactive",         desc = "Run a shell command" },
 	{ on = ":",         run = "shell --block --interactive", desc = "Run a shell command (block until finishes)" },
 	{ on = ".",         run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
