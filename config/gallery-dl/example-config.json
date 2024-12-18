@@ -44,13 +44,13 @@
             "postprocessors": [
                 {
                     "name": "metadata",
-                    "directory": "./__metadata__",
                     "mode": "modify",
                     "fields": {
                         "download_url": "https://www.example.com/galleries/{gallery_id!s}",
                         "download_time": "{_now:%Y-%m-%d_%H-%M-%S}"
                     }
-                }
+                },
+                "central-metadata"
             ]
         },
 
@@ -433,6 +433,12 @@
             "#": "write only the values for 'content' or 'description'",
             "mode": "custom",
             "format": "{content|description}\n"
+        },
+
+        "central-metadata": {
+            "name": "metadata",
+            "base-directory": "/home/user/__metadata__",
+            "directory": ["\fF {category}"]
         },
 
         "#": "put files into a '.cbz' archive",
