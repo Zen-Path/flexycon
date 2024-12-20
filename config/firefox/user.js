@@ -446,3 +446,14 @@ user_pref("browser.toolbars.bookmarks.visibility", "always");
 
 // Theme
 user_pref("extensions.activeThemeID", "firefox-compact-dark@mozilla.org");
+
+// Devtools
+
+// Enable browser chrome and add-on debugging toolboxes
+user_pref("devtools.chrome.enabled", true);
+
+// Enable remote debugging
+user_pref("devtools.debugger.remote-enabled", true);
+
+// Tab size
+user_pref("devtools.editor.tabsize", 4);
