@@ -443,3 +443,6 @@ user_pref("browser.download.autohideButton", false);
 // - never
 // - newtab
 user_pref("browser.toolbars.bookmarks.visibility", "always");
+
+// Theme
+user_pref("extensions.activeThemeID", "firefox-compact-dark@mozilla.org");
