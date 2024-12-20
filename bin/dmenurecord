@@ -192,7 +192,7 @@ webcam (hi-def)"
 		"webcam (hi-def)") webcamhidef ;;
 	esac
 
-    dunstctl set-paused true
+    # dunstctl set-paused true
 }
 
 asktoend() {
