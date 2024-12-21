@@ -66,6 +66,12 @@ user_pref("font.name.monospace.x-western", "monospace");
 user_pref("font.name.sans-serif.x-western", "monospace");
 user_pref("font.name.serif.x-western", "monospace");
 
+// MacOS
+// user_pref("font.name.monospace.x-western", "Menlo");
+// user_pref("font.name.sans-serif.x-western", "Menlo");
+// user_pref("font.name.serif.x-western", "Menlo");
+
+
 // === Zoom ===
 
 // === Language ==
