@@ -7,12 +7,11 @@ export PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
 # MacOS. TODO: Find a better way to do same as above.
 # # Add Homebrew and ~/.local/bin to PATH
 # PATH="/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$PATH"
-
 # # Add all subdirectories of ~/.local/bin to PATH
 # PATH=$(find "$HOME/.local/bin" -type d | paste -sd ':' -):$PATH
 
-# # Export PATH
 # export PATH
+
 unsetopt PROMPT_SP
 
 # Default programs:
