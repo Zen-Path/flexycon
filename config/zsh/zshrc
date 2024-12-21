@@ -162,10 +162,6 @@ function pdfopt() {
         "$input_path"
 }
 
-function httd() {
-	httrack "$1" --path "$2" --keep-alive
-}
-
 function trim_media() {
     if [ $# -ne 3 ]; then
         echo "Usage: trim_media input_file start_time duration"
