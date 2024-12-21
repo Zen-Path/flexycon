@@ -27,7 +27,7 @@ alias rm='rm -vI'
 alias bc='bc -ql'
 alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
 # MacOS:
-# alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
+# alias ls='ls -A -h --color=auto'
 alias rg='rg -i'
 alias tp='trash-put --'
 alias rsync='rsync -vrPlu'
