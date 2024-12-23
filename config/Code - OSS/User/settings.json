@@ -1,0 +1,45 @@
+{
+    "workbench.colorTheme": "Gruvbox Dark Hard",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "window.menuBarVisibility": "toggle",
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "git.autofetch": true,
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "editor.renderWhitespace": "all",
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.startupEditor": "none",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "prettier.proseWrap": "always",
+    "editor.wordWrapColumn": 120,
+    "cSpell.enableFiletypes": ["!c"],
+    "files.autoSave": "onFocusChange",
+    "files.exclude": {
+        "**/.git": false
+    },
+    "files.trimTrailingWhitespace": true,
+    "editor.scrollbar.vertical": "hidden",
+    "editor.scrollbar.verticalScrollbarSize": 0,
+    "editor.smoothScrolling": true,
+    "editor.lineNumbers": "relative",
+    "diffEditor.hideUnchangedRegions.enabled": true,
+    "editor.wordWrap": "bounded",
+    "explorer.confirmDelete": false,
+    "glassit.alpha": 235,
+    "[python]": {
+        "editor.defaultFormatter": "mikoz.black-py"
+    },
+    "window.zoomLevel": 1,
+    "[xml]": {
+        "editor.defaultFormatter": "DotJoshJohnson.xml"
+    },
+    "editor.detectIndentation": false,
+    "diffEditor.ignoreTrimWhitespace": false
+}

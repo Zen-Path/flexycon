@@ -1,0 +1,10 @@
+[
+    {
+        "key": "alt+v",
+        "command": "vscode-neovim.restart"
+    },
+    {
+        "key": "alt+shift+v",
+        "command": "vscode-neovim.stop"
+    }
+]
