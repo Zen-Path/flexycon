@@ -1,91 +1,96 @@
 import os
-from enum import Enum
 from pathlib import Path
 
-
-class TargetAction(Enum):
-    COPY = "copy"
-    LINK = "link"
-
-
-class TargetPresentAction(Enum):
-    OVERWRITE = "overwrite"
-    PASS = "pass"
-
-
-class TargetMissingAction(Enum):
-    CREATE = "create"
-    PASS = "pass"
-
-
-class F_File:
+class F_Path:
     def __init__(
         self,
-        source_path,
-        target_path,
-        file_type="f",
-        source_base_dir=os.path.expanduser("~/.local/src/flexycon"),
-        target_base_dir=os.getenv("XDG_CONFIG_HOME", os.path.expanduser("~/.config")),
-        target_present_action=TargetPresentAction.OVERWRITE,
-        target_missing_action=TargetMissingAction.CREATE,
-        target_action=TargetAction.LINK,
+        path: str,
+        base_dir=None,
         git_branch_name=None,
-        use_contents=False
     ):
-        if source_base_dir:
-            self.source_path = os.path.join(source_base_dir, source_path)
-        else:
-            self.source_path = os.path.expanduser(source_path)
-        self.source_path = Path(self.source_path)
+        """
+        Initialize a flexycon path object.
 
-        if target_base_dir:
-            self.target_path = os.path.join(target_base_dir, target_path)
-        else:
-            self.target_path = os.path.expanduser(target_path)
-        self.target_path = Path(self.target_path)
-
-        if self.source_path == self.target_path:
-            raise ValueError(
-                f"Source and target path cannot be the same: {self.source_path}"
-            )
-
-        self.file_type = file_type
-        self.source_base_dir = source_base_dir
-        self.target_base_dir = target_base_dir
-        self.target_present_action = target_present_action
-        self.target_missing_action = target_missing_action
-        self.target_action = target_action
-
-        self.git_branch_name = git_branch_name
-        self.use_contents = use_contents
-
-    def handle(self):
-        if not self.source_path.exists():
-            print(f"Source is missing: {self.source_path}, skipping.")
-            return
-
-        match self.target_action:
-            case TargetAction.LINK:
-                pass
-            case TargetAction.COPY:
-                pass
-            case _:
-                pass
-
-
+        Args:
+            path (str): Absolute file path, or relative to 'base_dir'.
+            base_dir (str): Absolute directory path to resolve 'path'.
+            git_branch_name (str): Associated Git branch name.
+        """
+        self.path = Path(
+            os.path.join(os.path.expanduser(base_dir), path)
+            if base_dir
+            else os.path.expanduser(path)
+        )
 
     def __str__(self):
-        return "\n".join(f"{key}: {value}" for key, value in vars(self).items())
+        class_name = self.__class__.__name__
+        attributes = "\n".join(f"\t{key}: {value}" for key, value in vars(self).items())
+        return f"{class_name}:\n{attributes}"
 
 
+class F_File(F_Path):
+    """
+    Flexycon file object.
+    """
 
-Files = [
-    F_File("config/alacritty/alacritty.toml", "alacritty/alacritty.toml"),
-    F_File("config/bottom/bottom.toml", "bottom/bottom.toml"),
-    F_File("~/.local/bin/sysact", "~/.local/src/sysact", source_base_dir=None, target_base_dir=None),
-    # F_File("~/.local/bin/sysact", "~/.local/bin/sysact", source_base_dir=None, target_base_dir=None),
-]
+    def create(self):
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.path.touch()
 
-for file in Files:
-    file.handle()
-    print(file, '\n')
+
+class F_Dir(F_Path):
+    def __init__(self, path, base_dir=None, git_branch_name=None, use_contents=False):
+        """
+        Initialize a flexycon directory object.
+
+        Args:
+            use_contents (bool, optional): Whether to use directory contents. Defaults to False.
+        """
+        super().__init__(path, base_dir, git_branch_name)
+        self.use_contents = use_contents
+
+        def get_contents(self):
+            self.contents = (
+                list(self.path.iterdir()) if self.path.exists() and use_contents else []
+            )
+
+    def create(self):
+        self.path.mkdir(parents=True, exist_ok=True)
+
+
+def ensure_exist_files(files):
+    """
+    Ensure all specified files or directories exist. Create them if necessary.
+
+    Args:
+        files (list): List of F_File or F_Dir instances.
+    """
+    for file in files:
+        if not file.path.exists():
+            file.create()
+            if isinstance(file, F_File):
+                print(f"File '{file.path}' created.")
+            elif isinstance(file, F_Dir):
+                print(f"Directory '{file.path}' created.")
+        else:
+            # Check if the existing path is of the correct type
+            if isinstance(file, F_File) and not file.path.is_file():
+                print(f"WRN: Path '{file.path}' exists but is not a file.")
+                continue
+            elif isinstance(file, F_Dir) and not file.path.is_dir():
+                print(f"WRN: Path '{file.path}' exists but is not a directory.")
+                continue
+
+            print(f"'{file.path}' exists.")
+
+if __name__ == "__main__":
+    files_to_ensure = [
+        F_File("test_file.txt", base_dir="~/.local/src/test"),
+        F_File("example_directory", base_dir="~/.local/src/test"),
+        F_Dir("example_directory/new-file.txt", base_dir="~/.local/src/test"),
+    ]
+    ensure_exist_files(files_to_ensure)
+
+    # Print the objects
+    for file in files_to_ensure:
+        print(file)
