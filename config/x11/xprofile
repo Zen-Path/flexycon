@@ -12,6 +12,8 @@ setbg  &
 dwmblocks &
 remapd &
 
+xinput --set-prop 18 "libinput Accel Speed" -1
+
 # Uncomment to use Xresources colors/settings on startup
 xrdb "${XDG_CONFIG_HOME:-$HOME/.config}"/x11/xresources & xrdbpid=$!
 
