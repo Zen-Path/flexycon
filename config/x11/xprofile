@@ -8,11 +8,27 @@ xrandr \
 	--output DisplayPort-2 --primary --mode 2560x1440 --pos 1920x0 --rotate normal \
 	--output HDMI-A-0 --mode 1920x1080 --pos 0x400 --rotate normal
 
+# Apply properties for devices whose name is duplicated
+DEVICE_NAME="Razer Razer DeathAdder V2 X HyperSpeed"
+PROPERTY="libinput Accel Speed"
+VALUE=-1
+
+# Get all matching device IDs
+DEVICE_IDS=$(xinput list | grep "$DEVICE_NAME" | sed -n 's/.*id=\([0-9]\+\).*/\1/p')
+
+# Apply the configuration for each ID
+for ID in $DEVICE_IDS; do
+    xinput --set-prop "$ID" "$PROPERTY" "$VALUE"
+    if [ $? -eq 0 ]; then
+        echo "Configuration applied for device ID: $ID"
+    else
+        echo "Failed to apply configuration for device ID: $ID" >&2
+    fi
+done
+
 setbg  &
 dwmblocks &
 remapd &
-
-xinput --set-prop 18 "libinput Accel Speed" -1
 
 # Uncomment to use Xresources colors/settings on startup
 xrdb "${XDG_CONFIG_HOME:-$HOME/.config}"/x11/xresources & xrdbpid=$!
