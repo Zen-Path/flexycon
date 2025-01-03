@@ -165,6 +165,11 @@ prepend_keymap = [
 	# Tasks
 	{ on = "w", run = "tasks_show", desc = "Show task manager" },
 
+    # Restore files
+  	{ on = "u", run = '''
+shell 'trash-restore' --block
+''', desc = "Restore files" },
+
 	# Help
 	{ on = "~",    run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
