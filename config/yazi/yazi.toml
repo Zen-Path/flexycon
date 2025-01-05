@@ -201,12 +201,12 @@ shell_offset = [ 0, 2, 50, 3 ]
 
 [confirm]
 # trash
-trash_title 	= "Trash {n} selected file{s}?"
+trash_title 	= "Trash {n} file{s}?"
 trash_origin	= "center"
 trash_offset	= [ 0, 0, 70, 20 ]
 
 # delete
-delete_title 	= "Permanently delete {n} selected file{s}?"
+delete_title 	= "Permanently delete {n} file{s}?"
 delete_origin	= "center"
 delete_offset	= [ 0, 0, 70, 20 ]
 
