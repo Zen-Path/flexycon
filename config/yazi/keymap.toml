@@ -4,100 +4,248 @@
 
 [manager]
 
-prepend_keymap = [
-	{ on = "<Esc>", run = "escape",             desc = "Exit visual mode, clear selected, or cancel search" },
-	{ on = "<C-[>", run = "escape",             desc = "Exit visual mode, clear selected, or cancel search" },
-	{ on = "q",     run = "quit",               desc = "Quit the process" },
-	{ on = "Q",     run = "quit --no-cwd-file", desc = "Quit the process without outputting cwd-file" },
-	{ on = "<C-c>", run = "close",              desc = "Close the current tab, or quit if it's last" },
-	{ on = "<C-z>", run = "suspend",            desc = "Suspend the process" },
-	{ on = "!", run = 'shell --confirm "$SHELL" --block',            desc =  "Open shell here" },
+keymap = [
+    # Key order:
+    # - regular (mandatory)
+    # - shift (mandatory)
+    # - control
+    # - alt
+    # - function (mandatory if available)
+    # - multi-keys (e.g. ["r", "i"]). These are ordered logically, or alphabetically.
 
-	# Hopping
-	{ on = "k", run = "arrow -1", desc = "Move cursor up" },
-	{ on = "j", run = "arrow 1",  desc = "Move cursor down" },
+    # { on = "a", run = "shell 'notify-send \"$(date)\"'", desc = "Test keybind" },
 
-	{ on = "<Up>",    run = "arrow -1", desc = "Move cursor up" },
-	{ on = "<Down>",  run = "arrow 1",  desc = "Move cursor down" },
+    # = 'Esc' to 'Backspace' =
 
-	{ on = "<C-u>", run = "arrow -50%",  desc = "Move cursor up half page" },
-	{ on = "<C-d>", run = "arrow 50%",   desc = "Move cursor down half page" },
-	{ on = "<C-b>", run = "arrow -100%", desc = "Move cursor up one page" },
-	{ on = "<C-f>", run = "arrow 100%",  desc = "Move cursor down one page" },
+    { on = "<Esc>", run = "escape", desc = "Exit visual mode, clear selected, or cancel search" },
+    { on = "~",     run = "help", desc = "Open help" },
+    { on = "`",     run = "noop", desc = "" },
 
-	{ on = "<S-PageUp>",   run = "arrow -50%",  desc = "Move cursor up half page" },
-	{ on = "<S-PageDown>", run = "arrow 50%",   desc = "Move cursor down half page" },
-	{ on = "<PageUp>",     run = "arrow -100%", desc = "Move cursor up one page" },
-	{ on = "<PageDown>",   run = "arrow 100%",  desc = "Move cursor down one page" },
+    { on = "1",     run = "tab_switch 0", desc = "Switch to tab 1" },
+    { on = "!",     run = 'shell --confirm "$SHELL" --block', desc =  "Open shell here" },
+    { on = "<F1>",  run = "help", desc = "Open help" },
 
-	{ on = [ "g", "g" ], run = "arrow -99999999", desc = "Move cursor to the top" },
-	{ on = "G",          run = "arrow 99999999",  desc = "Move cursor to the bottom" },
+    { on = "2",     run = "tab_switch 1", desc = "Switch to tab 2" },
+    { on = "@",     run = "noop", desc = "" },
+    { on = "<F2>",  run = "noop", desc = "" },
 
-	# Navigation
-	{ on = "h", run = "leave", desc = "Go back to the parent directory" },
-	{ on = "l", run = "enter", desc = "Enter the child directory" },
+    { on = "3",     run = "tab_switch 2", desc = "Switch to tab 3" },
+    { on = "#",     run = "noop", desc = "" },
+    { on = "<F3>",  run = "noop", desc = "" },
 
-	{ on = "<Left>",  run = "leave", desc = "Go back to the parent directory" },
-	{ on = "<Right>", run = "enter", desc = "Enter the child directory" },
+    { on = "4",     run = "tab_switch 3", desc = "Switch to tab 4" },
+    { on = "$",     run = "noop", desc = "" },
+    { on = "<F4>",  run = "noop", desc = "" },
 
-	{ on = "H", run = "back",    desc = "Go back to the previous directory" },
-	{ on = "L", run = "forward", desc = "Go forward to the next directory" },
+    { on = "5",     run = "tab_switch 4", desc = "Switch to tab 5" },
+    { on = "%",     run = "noop", desc = "" },
+    { on = "<F5>",  run = "noop", desc = "" },
 
-	# Toggle
-	{ on = "<Space>", run = [ "toggle --state=none", "arrow 1" ], desc = "Toggle the current selection state" },
-	{ on = "<C-a>",   run = "toggle_all --state=true", desc = "Select all files" },
-	{ on = "<C-r>",   run = "toggle_all --state=none", desc = "Invert selection of all files" },
+    { on = "6",     run = "tab_switch 5", desc = "Switch to tab 6" },
+    { on = "^",     run = "noop", desc = "" },
+    { on = "<F6>",  run = "noop", desc = "" },
 
-	# Visual mode
-	{ on = "v", run = "visual_mode",         desc = "Enter visual mode (selection mode)" },
-	{ on = "V", run = "visual_mode --unset", desc = "Enter visual mode (unset mode)" },
+    { on = "7",     run = "tab_switch 6", desc = "Switch to tab 7" },
+    { on = "&",     run = "noop", desc = "" },
+    { on = "<F7>",  run = "noop", desc = "" },
 
-	# Seeking
-	{ on = "K", run = "seek -5", desc = "Seek up 5 units in the preview" },
-	{ on = "J", run = "seek 5",  desc = "Seek down 5 units in the preview" },
+    { on = "8",     run = "tab_switch 7", desc = "Switch to tab 8" },
+    { on = "*",     run = "noop", desc = "" },
+    { on = "<F8>",  run = "noop", desc = "" },
 
-	# Spotting
+    { on = "9",     run = "tab_switch 8", desc = "Switch to tab 9" },
+    { on = "(",     run = "noop", desc = "" },
+    { on = "<F9>",  run = "noop", desc = "" },
+
+    { on = "0",     run = "noop", desc = "" },
+    { on = ")",     run = "noop", desc = "" },
+    { on = "<F10>", run = "noop", desc = "" },
+
+	{ on = "-",     run = "link",               desc = "Symlink the absolute path of yanked files" },
+    { on = "_",     run = "link --relative",    desc = "Symlink the relative path of yanked files" },
+    { on = "<C-->", run = "hardlink",           desc = "Hardlink yanked files" },
+    { on = "<F11>", run = "noop",               desc = "" },
+
+    { on = "=",     run = "noop", desc = "" },
+    { on = "+",     run = "noop", desc = "" },
+    { on = "<F12>", run = "noop", desc = "" },
+
+    { on = "<Backspace>", run = "noop", desc = "" },
+
+    # = 'Tab' to '/' =
+
 	{ on = "<Tab>", run = "spot", desc = "Spot hovered file" },
+    { on = "<Backtab>", run = "noop", desc = "" },
 
-    # Rename
+    { on = "q",     run = "quit",               desc = "Quit the process" },
+    { on = "Q",     run = "quit --no-cwd-file", desc = "Quit the process without outputting cwd-file" },
 
-	# { on = "r", run = "rename --cursor=before_ext", desc = "Rename - bulk or put cursor before extension" },
-	{ on = "R", run = "rename --cursor=before_ext",  desc = "Rename - bulk or put cursor before extension" },
+    { on = "w",     run = "tasks_show", desc = "Show task manager" },
+    { on = "W",     run = "noop", desc = "" },
+
+    { on = "e",     run = "noop", desc = "" },
+    { on = "E",     run = "noop", desc = "" },
+
+    # { on = "r",     run = "noop", desc = "" },
+    { on = "R",     run = "rename --cursor=before_ext", desc = "Rename - bulk or put cursor before extension" },
+    { on = "<C-r>", run = "toggle_all --state=none",    desc = "Invert selection of all files" },
 
     ## Place cursor
     { on = ["r", "i"], run = "rename --hovered --cursor=start",      desc = "Rename - [i]nsert at the start" },
     { on = ["r", "a"], run = "rename --hovered --cursor=end",        desc = "Rename - [a]ppend to the end" },
-	{ on = ["r", "x"], run = "rename --hovered --cursor=before_ext", desc = "Rename - put cursor before e[x]tension" },
+    { on = ["r", "x"], run = "rename --hovered --cursor=before_ext", desc = "Rename - put cursor before e[x]tension" },
 
     ## Replace parts
-	{ on = ["r", "s"], run = "rename --hovered --cursor=start --empty=stem", desc = "Rename - replace [s]tem" },
-	{ on = ["r", "e"], run = "rename --hovered --cursor=end --empty=ext",    desc = "Rename - replace [e]xtension" },
+    { on = ["r", "r"], run = "rename --hovered --cursor=start --empty=stem", desc = "Rename - replace [r]oot" },
+    { on = ["r", "e"], run = "rename --hovered --cursor=end --empty=ext",    desc = "Rename - replace [e]xtension" },
 
-	# Operation
-	{ on = "o",         run = "open",                        desc = "Open selected files" },
-	{ on = "O",         run = "open --interactive",          desc = "Open selected files interactively" },
-	{ on = "<Enter>",   run = "open",                        desc = "Open selected files" },
-	{ on = "<S-Enter>", run = "open --interactive",          desc = "Open selected files interactively" },
-	{ on = "y",         run = "yank",                        desc = "Yank selected files (copy)" },
-	{ on = "x",         run = "yank --cut",                  desc = "Yank selected files (cut)" },
-	{ on = "p",         run = "paste",                       desc = "Paste yanked files" },
-	{ on = "P",         run = "paste --force",               desc = "Paste yanked files (overwrite if the destination exists)" },
-	{ on = "-",         run = "link",                        desc = "Symlink the absolute path of yanked files" },
-	{ on = "_",         run = "link --relative",             desc = "Symlink the relative path of yanked files" },
-	{ on = "<C-->",     run = "hardlink",                    desc = "Hardlink yanked files" },
-	{ on = "Y",         run = "unyank",                      desc = "Cancel the yank status" },
-	{ on = "X",         run = "unyank",                      desc = "Cancel the yank status" },
-	{ on = "d",         run = "remove",                      desc = "Trash selected files" },
-	{ on = "D",         run = "remove --permanently",        desc = "Permanently delete selected files" },
-	{ on = "a",         run = "create",                      desc = "Create a file (ends with / for directories)" },
-	{ on = ";",         run = "shell --interactive",         desc = "Run a shell command" },
-	{ on = ":",         run = "shell --block --interactive", desc = "Run a shell command (block until finishes)" },
-	{ on = ".",         run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
-	{ on = "s",         run = "search --via=fd",             desc = "Search files by name via fd" },
-	{ on = "S",         run = "search --via=rg",             desc = "Search files by content via ripgrep" },
-	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
-	{ on = "z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
-	{ on = "F",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
+    { on = "t",     run = "tab_create --current", desc = "Create a new tab with CWD" },
+    { on = "T",     run = "noop", desc = "" },
+
+    { on = "y",     run = "yank",   desc = "Yank selected files (copy)" },
+    { on = "Y",     run = "unyank", desc = "Cancel the yank status" },
+
+    { on = "u",     run = "shell 'trash-restore' --block", desc = "Restore files" },
+    { on = "U",     run = "noop", desc = "" },
+    { on = "<C-u>", run = "arrow -50%", desc = "Move cursor up half page" },
+
+    { on = "i",     run = "noop", desc = "" },
+    { on = "I",     run = "noop", desc = "" },
+
+    { on = "o",     run = "open",               desc = "Open selected files" },
+    { on = "O",     run = "open --interactive", desc = "Open selected files interactively" },
+    { on = "<C-o>", run = "open --hovered",     desc = "Open hovered file" },
+
+    { on = "p",     run = "paste",          desc = "Paste yanked files" },
+    { on = "P",     run = "paste --force",  desc = "Paste yanked files (overwrite if the destination exists)" },
+
+    { on = "[",     run = "tab_switch -1 --relative",   desc = "Switch to the previous tab" },
+    { on = "{",     run = "tab_swap -1",                desc = "Swap current tab with previous tab" },
+
+    { on = "}",     run = "tab_swap 1",                 desc = "Swap current tab with next tab" },
+    { on = "]",     run = "tab_switch 1 --relative",    desc = "Switch to the next tab" },
+
+    { on = "\\",    run = "noop", desc = "" },
+    { on = "|",     run = "noop", desc = "" },
+
+    # = 'a' to 'Enter'
+
+    { on = "a",     run = "create", desc = "Create a file (for directories, append a '/')" },
+    { on = "A",     run = "create --dir", desc = "Create a directory" },
+    { on = "<C-a>", run = "toggle_all --state=true", desc = "Select all files" },
+
+    { on = "s",     run = "search --via=fd", desc = "Search files by name via fd" },
+    { on = "S",     run = "search --via=rg", desc = "Search files by content via ripgrep" },
+    { on = "<C-s>", run = "escape --search", desc = "Cancel the ongoing search" },
+
+    # { on = "d",     run = "noop", desc = "" },
+    { on = "D",     run = "remove --force", desc = "Trash selected files (force)" },
+    { on = "<C-d>", run = "arrow 50%", desc = "Move cursor down half page" },
+
+    { on = ["d", "t"], run = "remove",               desc = "Trash selected files" },
+    { on = ["d", "h"], run = "remove --hovered",     desc = "Trash hovered file" },
+    { on = ["d", "d"], run = "remove --permanently", desc = "Delete selected files" },
+    { on = ["d", "H"], run = "remove --permanently --hovered", desc = "Delete hovered file" },
+
+    { on = "f",     run = "filter --smart", desc = "Filter files" },
+    { on = "F",     run = "plugin fzf", desc = "Jump to a file/directory via fzf" },
+    { on = "<C-f>", run = "arrow 100%", desc = "Move cursor down one page" },
+
+	{ on = "G",     run = "arrow 99999999",     desc = "Move cursor to the bottom" },
+
+	{ on = ["g", "g"], run = "arrow -99999999", desc = "Move cursor to the top" },
+    { on = ["g", "r"], run = '''
+shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
+''', desc = "Go to the root of the current Git repository" },
+	{ on = ["g", "<Space>"], run = "cd --interactive", desc = "Jump interactively" },
+
+	# Goto standard directories
+	{ on = ["g", "h"], run = "cd ~",               desc = "Go home" },
+	{ on = ["g", "d"], run = "cd ~/Documents",     desc = "Goto ~/Documents" },
+	{ on = ["g", "D"], run = "cd ~/Downloads",     desc = "Goto ~/Downloads" },
+	{ on = ["g", "i"], run = "cd ~/Images",        desc = "Goto ~/Images" },
+	{ on = ["g", "m"], run = "cd ~/Music",         desc = "Goto ~/Music" },
+	{ on = ["g", "v"], run = "cd ~/Videos",        desc = "Goto ~/Videos" },
+
+    # Goto custom directories
+	{ on = ["g", "a"], run = "cd ~/Archive",       desc = "Goto ~/Archive" },
+	{ on = ["g", "e"], run = "cd ~/Entertainment", desc = "Goto ~/Entertainment" },
+	{ on = ["g", "E"], run = "cd ~/Exercise",      desc = "Goto ~/Exercise" },
+	{ on = ["g", "p"], run = "cd ~/Personal",      desc = "Goto ~/Personal" },
+	{ on = ["g", "P"], run = "cd ~/Projects",      desc = "Goto ~/Projects" },
+	{ on = ["g", "u"], run = "cd ~/University",    desc = "Goto ~/University" },
+	{ on = ["g", "L"], run = "cd ~/.local",        desc = "Goto ~/.local" },
+	{ on = ["g", "l", "s"], run = "cd ~/.local/share", desc = "Goto ~/.local/share" },
+
+    # Goto config
+	{ on = ["g", "C"],      run = "cd ~/.config",           desc = "Goto config home" },
+	{ on = ["g", "c", "y"], run = "cd ~/.config/yazi",      desc = "Goto yazi config" },
+	{ on = ["g", "c", "e"], run = "cd ~/.config/nvim",      desc = "Goto editor config" },
+	{ on = ["g", "c", "w"], run = "cd ~/.mozilla/firefox",  desc = "Goto web browser config" },
+
+    # Goto source
+	{ on = ["g", "f"],      run = "cd ~/.local/src/flexycon",   desc = "Goto flexycon source" },
+	{ on = ["g", "S"],      run = "cd ~/.local/src",            desc = "Goto source home"},
+	{ on = ["g", "s", "d"], run = "cd ~/.local/src/dwm",        desc = "Goto dwm source" },
+	{ on = ["g", "s", "D"], run = "cd ~/.local/src/dwm-status", desc = "Goto dwm-status source" },
+	{ on = ["g", "s", "l"], run = "cd ~/.local/src/labs",       desc = "Goto labs source" },
+	{ on = ["g", "s", "w"], run = "cd ~/.local/src/wis",        desc = "Goto wis source" },
+
+    # Goto files
+   	{ on = [ "g", "f" ], run = "reveal ~/.config/newsraft/feeds", desc = "Reveal newsraft feeds" },
+
+	{ on = "h",     run = "leave",      desc = "Go back to the parent directory" },
+	{ on = "H",     run = "back",       desc = "Go back to the previous directory" },
+
+	{ on = "j",     run = "arrow 1",    desc = "Move cursor down" },
+	{ on = "J",     run = "seek 5",     desc = "Seek down 5 units in the preview" },
+
+	{ on = "k",     run = "arrow -1",   desc = "Move cursor up" },
+	{ on = "K",     run = "seek -5",    desc = "Seek up 5 units in the preview" },
+
+	{ on = "l",     run = "enter",      desc = "Enter the child directory" },
+	{ on = "L",     run = "forward",    desc = "Go forward to the next directory" },
+
+    { on = ";",     run = "shell --interactive",            desc = "Run a shell command" },
+	{ on = ":",     run = "shell --block --interactive",    desc = "Run a shell command (block)" },
+
+    { on = "'",     run = "noop", desc = "" },
+    { on = "\"",    run = "noop", desc = "" },
+
+    { on = "<Enter>",   run = "open",           desc = "Open selected files" },
+    { on = "<S-Enter>", run = "noop",           desc = "" },
+    # There's an issue with 'Shift+Enter' for some reason
+	{ on = "<C-Enter>", run = "open --hovered", desc = "Open selected files interactively" },
+
+    # = 'z' to '?'
+
+	{ on = "z",     run = "plugin zoxide", desc = "Jump to a directory via zoxide" },
+    { on = "Z",     run = "noop", desc = "" },
+	{ on = "<C-z>", run = "suspend", desc = "Suspend the process" },
+
+	{ on = "x",     run = "yank --cut", desc = "Yank selected files (cut)" },
+	{ on = "X",     run = "unyank",     desc = "Cancel the yank status" },
+
+    # { on = "c",     run = "noop", desc = "" },
+    # { on = "C",     run = "noop", desc = "" },
+	{ on = "<C-c>", run = "close", desc = "Close the current tab, or quit if it's last" },
+	# Copy
+	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy the file path" },
+	{ on = [ "c", "f" ], run = "copy filename",         desc = "Copy the filename" },
+	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "Copy the filename without extension" },
+	{ on = [ "c", "d" ], run = "copy dirname",          desc = "Copy the directory path" },
+
+	# Visual mode
+	{ on = "v",     run = "visual_mode",         desc = "Enter visual mode (selection mode)" },
+	{ on = "V",     run = "visual_mode --unset", desc = "Enter visual mode (unset mode)" },
+
+    { on = "b",     run = "noop", desc = "" },
+    { on = "B",     run = "noop", desc = "" },
+	{ on = "<C-b>", run = "arrow -100%", desc = "Move cursor up one page" },
+
+	# Find
+	{ on = "n",     run = "find_arrow",             desc = "Goto the next found" },
+	{ on = "N",     run = "find_arrow --previous",  desc = "Goto the previous found" },
 
 	# Linemode
 	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
@@ -107,97 +255,56 @@ prepend_keymap = [
 	{ on = [ "m", "o" ], run = "linemode owner",       desc = "Linemode: owner" },
 	{ on = [ "m", "n" ], run = "linemode none",        desc = "Linemode: none" },
 
-	# Copy
-	{ on = [ "c", "c" ], run = "copy path",             desc = "Copy the file path" },
-	{ on = [ "c", "d" ], run = "copy dirname",          desc = "Copy the directory path" },
-	{ on = [ "c", "f" ], run = "copy filename",         desc = "Copy the filename" },
-	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "Copy the filename without extension" },
-
-	# Filter
-	{ on = "f", run = "filter --smart", desc = "Filter files" },
-
-	# Find
-	{ on = "/", run = "find --smart",            desc = "Find next file" },
-	{ on = "?", run = "find --previous --smart", desc = "Find previous file" },
-	{ on = "n", run = "find_arrow",              desc = "Goto the next found" },
-	{ on = "N", run = "find_arrow --previous",   desc = "Goto the previous found" },
-
-	# Sorting
-	{ on = [ ",", "m" ], run = [ "sort mtime --reverse=no", "linemode mtime" ], desc = "Sort by modified time" },
-	{ on = [ ",", "M" ], run = [ "sort mtime --reverse", "linemode mtime" ],    desc = "Sort by modified time (reverse)" },
-	{ on = [ ",", "b" ], run = [ "sort btime --reverse=no", "linemode btime" ], desc = "Sort by birth time" },
-	{ on = [ ",", "B" ], run = [ "sort btime --reverse", "linemode btime" ],    desc = "Sort by birth time (reverse)" },
-	{ on = [ ",", "e" ], run = "sort extension --reverse=no",                   desc = "Sort by extension" },
-	{ on = [ ",", "E" ], run = "sort extension --reverse",                      desc = "Sort by extension (reverse)" },
+    { on = "<",     run = "noop", desc = "" },
+    # Sorting
 	{ on = [ ",", "a" ], run = "sort alphabetical --reverse=no",                desc = "Sort alphabetically" },
 	{ on = [ ",", "A" ], run = "sort alphabetical --reverse",                   desc = "Sort alphabetically (reverse)" },
+
 	{ on = [ ",", "n" ], run = "sort natural --reverse=no",                     desc = "Sort naturally" },
 	{ on = [ ",", "N" ], run = "sort natural --reverse",                        desc = "Sort naturally (reverse)" },
+
 	{ on = [ ",", "s" ], run = [ "sort size --reverse=no", "linemode size" ],   desc = "Sort by size" },
 	{ on = [ ",", "S" ], run = [ "sort size --reverse", "linemode size" ],      desc = "Sort by size (reverse)" },
+
+	{ on = [ ",", "e" ], run = "sort extension --reverse=no",                   desc = "Sort by extension" },
+	{ on = [ ",", "E" ], run = "sort extension --reverse",                      desc = "Sort by extension (reverse)" },
+
+	{ on = [ ",", "m" ], run = [ "sort mtime --reverse=no", "linemode mtime" ], desc = "Sort by modified time" },
+	{ on = [ ",", "M" ], run = [ "sort mtime --reverse", "linemode mtime" ],    desc = "Sort by modified time (reverse)" },
+
+	{ on = [ ",", "b" ], run = [ "sort btime --reverse=no", "linemode btime" ], desc = "Sort by birth time" },
+	{ on = [ ",", "B" ], run = [ "sort btime --reverse", "linemode btime" ],    desc = "Sort by birth time (reverse)" },
+
 	{ on = [ ",", "r" ], run = "sort random --reverse=no",                      desc = "Sort randomly" },
 
-	# Goto standard directories
-	{ on = [ "g", "h" ],       run = "cd ~",             desc = "Go home" },
-	{ on = [ "g", "d" ],       run = "cd ~/Documents",   desc = "Goto ~/Documents" },
-	{ on = [ "g", "D" ],       run = "cd ~/Downloads",   desc = "Goto ~/Downloads" },
-	{ on = [ "g", "i" ],       run = "cd ~/Images",      desc = "Goto ~/Images" },
-	{ on = [ "g", "m" ],       run = "cd ~/Music",       desc = "Goto ~/Music" },
-	{ on = [ "g", "v" ],       run = "cd ~/Videos",      desc = "Goto ~/Videos" },
+	{ on = ".",     run = "hidden toggle", desc = "Toggle the visibility of hidden files" },
+    { on = ">",     run = "noop", desc = "" },
 
-    # Goto custom directories
-	{ on = [ "g", "a" ],       run = "cd ~/Archive",        desc = "Goto ~/Archive" },
-	{ on = [ "g", "e" ],       run = "cd ~/Entertainment",  desc = "Goto ~/Entertainment" },
-	{ on = [ "g", "E" ],       run = "cd ~/Exercise",       desc = "Goto ~/Exercise" },
-	{ on = [ "g", "p" ],       run = "cd ~/Personal",       desc = "Goto ~/Personal" },
-	{ on = [ "g", "P" ],       run = "cd ~/Projects/",      desc = "Goto ~/Projects" },
-	{ on = [ "g", "u" ],       run = "cd ~/University",     desc = "Goto ~/University" },
+	{ on = "/",     run = "find --smart",               desc = "Find next file" },
+	{ on = "?",     run = "find --previous --smart",    desc = "Find previous file" },
 
-    # Goto config
-	{ on = [ "g", "C" ],       run = "cd ~/.config",            desc = "Goto ~/.config" },
-	{ on = [ "g", "c", "y" ],  run = "cd ~/.config/yazi",       desc = "Goto yazi config" },
-	{ on = [ "g", "c", "e" ],  run = "cd ~/.config/nvim",       desc = "Goto editor config" },
-	{ on = [ "g", "c", "w" ],  run = "cd ~/.mozilla/firefox",   desc = "Goto web browser config" },
+    # = Special keys =
 
-    # Goto files
-   	{ on = [ "g", "f" ],       run = "reveal ~/.config/newsraft/feeds", desc = "Reveal newsraft feeds" },
+	{ on = "<Space>",   run = [ "toggle --state=none", "arrow 1" ],     desc = "Toggle the current selection state" },
+	{ on = "<S-Space>", run = [ "toggle --state=none", "arrow -1" ],    desc = "Toggle the current selection state" },
 
-    # Goto special
-    { on = [ "g", "r" ],       run = '''
-shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
-''', desc = "Go to the root of the current Git repository" },
-	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Jump interactively" },
+    { on = "<Delete>",      run = "noop", desc = "" },
+    { on = "<S-Delete>",    run = "noop", desc = "" },
 
-	# Tabs
-	{ on = "t", run = "tab_create --current", desc = "Create a new tab with CWD" },
+    { on = "<Insert>",      run = "noop", desc = "" },
+    { on = "<S-Insert>",    run = "noop", desc = "" },
 
-	{ on = "1", run = "tab_switch 0", desc = "Switch to the first tab" },
-	{ on = "2", run = "tab_switch 1", desc = "Switch to the second tab" },
-	{ on = "3", run = "tab_switch 2", desc = "Switch to the third tab" },
-	{ on = "4", run = "tab_switch 3", desc = "Switch to the fourth tab" },
-	{ on = "5", run = "tab_switch 4", desc = "Switch to the fifth tab" },
-	{ on = "6", run = "tab_switch 5", desc = "Switch to the sixth tab" },
-	{ on = "7", run = "tab_switch 6", desc = "Switch to the seventh tab" },
-	{ on = "8", run = "tab_switch 7", desc = "Switch to the eighth tab" },
-	{ on = "9", run = "tab_switch 8", desc = "Switch to the ninth tab" },
+	{ on = "<PageUp>",      run = "arrow -100%", desc = "Move cursor up one page" },
+	{ on = "<S-PageUp>",    run = "arrow -50%",  desc = "Move cursor up half page" },
 
-	{ on = "[", run = "tab_switch -1 --relative", desc = "Switch to the previous tab" },
-	{ on = "]", run = "tab_switch 1 --relative",  desc = "Switch to the next tab" },
+	{ on = "<PageDown>",    run = "arrow 100%",  desc = "Move cursor down one page" },
+	{ on = "<S-PageDown>",  run = "arrow 50%",   desc = "Move cursor down half page" },
 
-	{ on = "{", run = "tab_swap -1", desc = "Swap current tab with previous tab" },
-	{ on = "}", run = "tab_swap 1",  desc = "Swap current tab with next tab" },
-
-	# Tasks
-	{ on = "w", run = "tasks_show", desc = "Show task manager" },
-
-    # Restore files
-  	{ on = "u", run = '''
-shell 'trash-restore' --block
-''', desc = "Restore files" },
-
-	# Help
-	{ on = "~",    run = "help", desc = "Open help" },
-	{ on = "<F1>", run = "help", desc = "Open help" },
+	# Arrow keys
+	{ on = "<Up>",    run = "arrow -1", desc = "Move cursor up" },
+	{ on = "<Down>",  run = "arrow 1",  desc = "Move cursor down" },
+	{ on = "<Left>",  run = "leave",    desc = "Go back to the parent directory" },
+	{ on = "<Right>", run = "enter",    desc = "Enter the child directory" },
 ]
 
 [tasks]
@@ -395,5 +502,5 @@ keymap = [
 	{ on = "<Down>", run = "arrow 1",  desc = "Move cursor down" },
 
 	# Filtering
-	{ on = "f", run = "filter", desc = "Apply a filter for the help items" },
+	{ on = "f", run = "filter", desc = "Filter for the help items" },
 ]
