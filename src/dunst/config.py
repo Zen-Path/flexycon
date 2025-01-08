@@ -7,7 +7,7 @@ MAX_COMMENT_LENGTH = 72
 
 configspec = {
     "global": {
-        "monitor": "integer(default=0)",
+        # "monitor": "integer(default=0)",
         "follow": "option('none', 'mouse', 'keyboard')",
         "enable_posix_regex": "boolean(default=false)",
         # "geometry": "string", # DEPRECATED
@@ -68,6 +68,8 @@ configspec = {
     }
 }
 
+configspec["global"]["monitor"] = "integer(default=0)"
+
 config = ConfigObj(
     indent_type="    ",
     configspec=configspec,
@@ -107,6 +109,7 @@ def set_option(section: str, key: str, value: str, description: list[str] = None
     # Include the spec if not already included
     if key not in config[section].comments:
         config[section].comments[key] = []
+
     config[section].comments[key] += comments_fmt + (
         [spec_fmt] if spec and not spec_included else []
     )
