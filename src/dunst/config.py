@@ -178,6 +178,10 @@ config["global"] = {
     "mouse_middle_click": "close_all",
 }
 
+for conf, item in config["global"].items():
+    print(f"Option(name='{conf}', value='{item}'),")
+
+
 set_option(
     "global",
     "monitor",
@@ -204,77 +208,34 @@ set_option(
 
 
 # Urgency
+urg_low_section = Section("urgency_low")
+urg_low_section.options = [
+Option(name="background", value="urgency_low"),
+Option(name="foreground", value="urgency_low"),
+Option(name="timeout", value="urgency_low"),
+]
 
-set_option(
-    "urgency_low",
-    "background",
-    "#1d2021",
-)
-set_option(
-    "urgency_low",
-    "foreground",
-    "#928374",
-)
-set_option(
-    "urgency_low",
-    "timeout",
-    "5",
-)
+urg_normal_section = Section("urgency_normal")
+urg_normal_section.options = [
+Option(name="foreground", value="urgency_normal"),
+Option(name="background", value="urgency_normal"),
+Option(name="timeout", value="urgency_normal"),
+]
 
-set_option(
-    "urgency_normal",
-    "foreground",
-    "#ebdbb2",
-)
-set_option(
-    "urgency_normal",
-    "background",
-    "#458588",
-)
-set_option(
-    "urgency_normal",
-    "timeout",
-    "7",
-)
+urg_critical_section = Section("urgency_critical")
+urg_critical_section.options = [
+Option(name="background", value="urgency_critical"),
+Option(name="foreground", value="urgency_critical"),
+Option(name="frame_color", value="urgency_critical"),
+Option(name="timeout", value="urgency_critical"),
+]
 
-set_option(
-    "urgency_critical",
-    "background",
-    "#1cc24d",
-)
-set_option(
-    "urgency_critical",
-    "foreground",
-    "#ebdbb2",
-)
-set_option(
-    "urgency_critical",
-    "frame_color",
-    "#fabd2f",
-)
-set_option(
-    "urgency_critical",
-    "timeout",
-    "10",
-)
-
-set_option(
-    "fullscreen_delay_everything",
-    "fullscreen",
-    "delay",
-)
-
-set_option(
-    "fullscreen_show_critical",
-    "msg_urgency",
-    "critical",
-)
-
-set_option(
-    "fullscreen_show_critical",
-    "fullscreen",
-    "show",
-)
+fullscreen_delay_everything_section = Section("fullscreen_delay_everything")
+fullscreen_delay_everything_section.options = [
+Option(name="fullscreen", value="fullscreen_delay_everything"),
+Option(name="msg_urgency", value="fullscreen_show_critical"),
+Option(name="fullscreen", value="fullscreen_show_critical"),
+]
 
 
 config.initial_comment = ["Dunst Docs: https://dunst-project.org/documentation/", ""]
