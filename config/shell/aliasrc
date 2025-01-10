@@ -33,7 +33,7 @@ alias tp='trash-put --'
 alias rsync='rsync -vrPlu'
 alias mkd='mkdir -pv'
 alias ffmpeg='ffmpeg -hide_banner'
-alias shfmt='shfmt -w -i 4 -bn -ci -sr'
+alias shfmt='shfmt --indent 4 --binary-next-line --case-indent --space-redirects --write'
 
 # Use colored output
 alias grep='grep --color=auto'
@@ -63,7 +63,7 @@ alias t-done-t='task end.after:today completed'
 # YouTube
 alias ytt='yt --skip-download --write-thumbnail'
 alias yts='mpv --slang=en --fs --ytdl-raw-options=ignore-config=,sub-lang=en,write-auto-sub='
-alias yt='yt-dlp --embed-metadata -i --no-playlist'
+alias yt='yt-dlp --embed-metadata --ignore-errors --no-playlist'
 alias yta='yt --extract-audio --format bestaudio/best --no-playlist'
 alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(playlist_index)02d - %(title)s [%(id)s].%(ext)s"'
 
