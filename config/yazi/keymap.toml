@@ -209,8 +209,8 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
     { on = ";",     run = "shell --interactive",            desc = "Run a shell command" },
 	{ on = ":",     run = "shell --block --interactive",    desc = "Run a shell command (block)" },
 
-    { on = "'",     run = "noop", desc = "" },
-    { on = "\"",    run = "noop", desc = "" },
+    { on = "'",     run = "search_do --via=fd", desc = "Display a flatten view of  directory" },
+    { on = "\"",    run = "search_do --via=fd --args='--type file'", desc = "Display a flatten view of the files from a directory" },
 
     { on = "<Enter>",   run = "open",           desc = "Open selected files" },
     { on = "<S-Enter>", run = "noop",           desc = "" },
