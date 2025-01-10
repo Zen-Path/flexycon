@@ -46,4 +46,4 @@ Show the current date and time.
         ;;
 esac
 
-date '+ %d %b (%a) %H:%M'
+date '+%d %b (%a) %H:%M'
