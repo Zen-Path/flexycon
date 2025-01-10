@@ -200,7 +200,7 @@ icon_error = ""
 
 rules = [
 	# Images
-	{ mime = "image/*", fg = "yellow" },
+	{ mime = "image/*", fg = "#d17e47" },
 
 	# Media
 	{ mime = "{audio,video}/*", fg = "magenta" },
