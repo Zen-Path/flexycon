@@ -158,7 +158,7 @@ previewers = [
 	# Empty file
 	{ mime = "inode/empty", run = "empty" },
 	# Fallback
-	{ name = "*", run = "file" },
+	{ name = "*", run = "code" },
 ]
 
 [input]
