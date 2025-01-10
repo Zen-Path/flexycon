@@ -87,8 +87,8 @@ keymap = [
     { on = "E",     run = "noop", desc = "" },
 
     # { on = "r",     run = "noop", desc = "" },
-    { on = "R",     run = "rename --cursor=before_ext", desc = "Rename - bulk or put cursor before extension" },
-    { on = "<C-r>", run = "toggle_all --state=none",    desc = "Invert selection of all files" },
+    { on = "R",     run = "noop", desc = "" },
+    { on = ["r", "b"], run = "shell 'vidir -- \"$@\"' --block", desc = "Rename - bulk" },
 
     ## Place cursor
     { on = ["r", "i"], run = "rename --hovered --cursor=start",      desc = "Rename - [i]nsert at the start" },
