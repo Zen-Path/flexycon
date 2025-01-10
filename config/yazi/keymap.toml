@@ -132,7 +132,7 @@ keymap = [
 
     { on = "a",     run = "create", desc = "Create a file (for directories, append a '/')" },
     { on = "A",     run = "create --dir", desc = "Create a directory" },
-    { on = "<C-a>", run = "toggle_all --state=true", desc = "Select all files" },
+    { on = "<C-a>", run = "toggle_all --state=on", desc = "Select all files" },
 
     { on = "s",     run = "search --via=fd", desc = "Search files by name via fd" },
     { on = "S",     run = "search --via=rg", desc = "Search files by content via ripgrep" },
