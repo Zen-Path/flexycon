@@ -224,7 +224,7 @@ rules = [
 
 	# Fallback
 	{ name = "*",   fg = "gray" },
-	{ name = "*/", fg = "blue" }
+	{ name = "*/",  fg = "blue",    bold = true }
 ]
 
 # : }}}
