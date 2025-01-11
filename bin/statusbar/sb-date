@@ -41,7 +41,7 @@ Show the current date and time.
 - Middle : Open calcurse
 - Right  : Show this message"
         ;;
-    6)
+    8)
         "$TERMINAL" -e "$EDITOR" "$0"
         ;;
 esac

@@ -24,7 +24,7 @@ case $BLOCK_BUTTON in
 🌐: ethernet working
 🔒: vpn is active
 " ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+	8) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
 if grep -xq 'up' /sys/class/net/w*/operstate 2>/dev/null ; then
