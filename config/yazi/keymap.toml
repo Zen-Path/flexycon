@@ -88,7 +88,8 @@ keymap = [
 
     # { on = "r",     run = "noop", desc = "" },
     { on = "R",     run = "noop", desc = "" },
-    { on = ["r", "b"], run = "shell 'vidir -- \"$@\"' --block", desc = "Rename - bulk" },
+    { on = ["r", "b"], run = "shell 'vidir -- $(basename -a -- \"$@\")' --block", desc = "Rename - bulk current dir" },
+    { on = ["r", "B"], run = "shell 'vidir -- \"$@\"' --block", desc = "Rename - bulk all selected" },
 
     ## Place cursor
     { on = ["r", "i"], run = "rename --hovered --cursor=start",      desc = "Rename - [i]nsert at the start" },
