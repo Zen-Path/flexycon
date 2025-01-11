@@ -111,8 +111,9 @@ keymap = [
     { on = "U",     run = "noop", desc = "" },
     { on = "<C-u>", run = "arrow -50%", desc = "Move cursor up half page" },
 
-    { on = "i",     run = "toggle_all --state=none", desc = "[I]nvert selection of all files" },
+    # { on = "i",     run = "noop", desc = "" },
     { on = "I",     run = "noop", desc = "" },
+    { on = "<C-i>", run = "toggle_all --state=none", desc = "[I]nvert selection of all files" },
 
     { on = "o",     run = "open",               desc = "Open selected files" },
     { on = "O",     run = "open --interactive", desc = "Open selected files interactively" },
