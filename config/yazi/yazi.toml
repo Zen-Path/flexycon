@@ -211,7 +211,7 @@ quit_offset     = [ 0, 0, 50, 15 ]
 [pick]
 open_title      = "Open with:"
 open_origin     = "hovered"
-open_offset     = [ 0, 1, 50, 7 ]
+open_offset     = [ 0, 1, 50, 10 ]
 
 [which]
 sort_by         = "none"
