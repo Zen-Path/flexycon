@@ -51,6 +51,9 @@ edit = [
 edit-new-win = [
 	{ run = '${TERMINAL} -e ${EDITOR:-vi} "$@"', orphan = true,  desc = "Edit in new window",  for = "linux" },
 ]
+edit-image = [
+	{ run = '${TERMINAL} -e gimp "$@"', orphan = true, desc = "Edit image",  for = "unix" },
+]
 
 # Open
 open = [
@@ -92,7 +95,7 @@ rules = [
 	# Text
 	{ mime = "text/*",          use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
 	# Image
-	{ mime = "image/*",         use = [ "open", "open-new-win", "show-exif-info", "reveal" ] },
+	{ mime = "image/*",         use = [ "open", "open-new-win", "edit-image", "show-exif-info", "reveal" ] },
 	# Media
 	{ mime = "{audio,video}/*", use = [ "play", "play-new-win", "show-media-info", "reveal" ] },
   	# PDF
