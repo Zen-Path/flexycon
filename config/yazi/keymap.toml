@@ -115,7 +115,7 @@ keymap = [
 
     { on = "o",     run = "open",               desc = "Open selected files" },
     { on = "O",     run = "open --interactive", desc = "Open selected files interactively" },
-    { on = "<C-o>", run = "open --hovered",     desc = "Open hovered file" },
+    { on = "<C-o>", run = "open --hovered --interactive", desc = "Open hovered file" },
 
     { on = "p",     run = "paste",          desc = "Paste yanked files" },
     { on = "P",     run = "paste --force",  desc = "Paste yanked files (overwrite if the destination exists)" },
