@@ -31,52 +31,82 @@ ueberzug_scale  = 1
 ueberzug_offset = [ 0, 0, 0, 0 ]
 
 [opener]
-edit = [
-	{ run = '${EDITOR:-vi} "$@"',   block = true,   desc = "$EDITOR",       for = "unix" },
-	{ run = 'code %*',              orphan = true,  desc = "code",          for = "windows" },
-	{ run = 'code -w %*',           block = true,   desc = "code (block)",  for = "windows" },
-]
-open = [
-	{ run = '${TERMINAL} -e xdg-open "$1"', orphan = true,  desc = "Open",  for = "linux" },
-	{ run = 'open "$@"',                                    desc = "Open",  for = "macos" },
-	{ run = 'start "" "%1"',                orphan = true,  desc = "Open",  for = "windows" },
+# TODO: Add commands for macos and windows where missing
+
+cd = [
+	{ run = 'ya emit cd "$1"', desc = "Enter directory"},
 ]
 reveal = [
 	{ run = 'xdg-open "$(dirname "$1")"',               desc = "Reveal",    for = "linux" },
 	{ run = 'open -R "$1"',                             desc = "Reveal",    for = "macos" },
 	{ run = 'explorer /select,"%1"',    orphan = true,  desc = "Reveal",    for = "windows" },
-	{ run = '''exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
 ]
+
+# Edit
+edit = [
+	{ run = '${EDITOR:-vi} "$@"',   block = true,   desc = "Edit",          for = "unix" },
+	{ run = 'code %*',              orphan = true,  desc = "Edit",          for = "windows" },
+	{ run = 'code -w %*',           block = true,   desc = "Edit (block)",  for = "windows" },
+]
+edit-new-win = [
+	{ run = '${TERMINAL} -e ${EDITOR:-vi} "$@"', orphan = true,  desc = "Edit in new window",  for = "linux" },
+]
+
+# Open
+open = [
+	{ run = 'xdg-open "$1"',    orphan = true,  desc = "Open",  for = "linux" },
+	{ run = 'open "$@"',                        desc = "Open",  for = "macos" },
+	{ run = 'start "" "%1"',    orphan = true,  desc = "Open",  for = "windows" },
+]
+open-new-win = [
+	{ run = '${TERMINAL} -e xdg-open "$1"', orphan = true,  desc = "Open in new window",  for = "linux" },
+]
+
+# Play
+play = [
+	{ run = 'mpv --force-window "$@"',  orphan = true,  desc = "Play",  for = "linux" },
+	{ run = 'mpv --force-window %*',    orphan = true,  desc = "Play",  for = "windows" },
+]
+play-new-win = [
+	{ run = '${TERMINAL} -e mpv --force-window "$@"',   orphan = true,  desc = "Play in new window",  for = "linux" },
+]
+
+# File info
+show-media-info = [
+	{ run = '''mediainfo "$1"; echo ":: Press enter to exit"; read _''',   block = true, desc = "Show media info", for = "unix" },
+]
+show-exif-info = [
+	{ run = '''exiftool "$1"; echo "\n:: Press enter to exit"; read _''',    block = true, desc = "Show EXIF info", for = "unix" },
+]
+
+# Misc
 extract = [
 	{ run = 'ya pub extract --list "$@"',   desc = "Extract here",  for = "unix" },
 	{ run = 'ya pub extract --list %*',     desc = "Extract here",  for = "windows" },
-]
-play = [
-	{ run = '${TERMINAL} -e mpv --force-window "$@"',   orphan = true,  for = "unix" },
-	{ run = 'mpv --force-window %*',                    orphan = true,  for = "windows" },
-	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
 
 [open]
 rules = [
 	# Folder
-	{ name = "*/",              use = [ "edit", "open", "reveal" ] },
+	{ name = "*/",              use = [ "cd", "open", "reveal" ] },
 	# Text
-	{ mime = "text/*",          use = [ "edit", "reveal" ] },
+	{ mime = "text/*",          use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
 	# Image
-	{ mime = "image/*",         use = [ "open", "reveal" ] },
+	{ mime = "image/*",         use = [ "open", "open-new-win", "show-exif-info", "reveal" ] },
 	# Media
-	{ mime = "{audio,video}/*", use = [ "play", "open", "reveal" ] },
-	# Archive
-	{ mime = "application/{,g}zip",                 use = [ "extract", "reveal" ] },
-	{ mime = "application/{tar,bzip*,7z*,xz,rar}",  use = [ "extract", "reveal" ] },
+	{ mime = "{audio,video}/*", use = [ "play", "play-new-win", "show-media-info", "reveal" ] },
+  	# PDF
+	{ mime = "application/pdf", use = [ "open", "open-new-win", "show-exif-info", "reveal" ] },
 	# JSON
-	{ mime = "application/{json,ndjson}",           use = [ "edit", "reveal" ] },
-	{ mime = "*/javascript",    use = [ "edit", "reveal" ] },
+	{ mime = "application/{json,ndjson}", use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
+	{ mime = "*/javascript",    use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
+	# Archive
+	{ mime = "application/{,g}zip",                 use = [ "extract", "show-exif-info", "reveal" ] },
+	{ mime = "application/{tar,bzip*,7z*,xz,rar}",  use = [ "extract", "show-exif-info", "reveal" ] },
 	# Empty file
-	{ mime = "inode/empty",     use = [ "edit", "reveal" ] },
+	{ mime = "inode/empty",     use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
 	# Fallback
-	{ name = "*",               use = [ "edit", "open", "reveal" ] },
+	{ name = "*",               use = [ "edit", "edit-new-win", "open", "open-new-win", "play", "play-new-win", "show-exif-info", "reveal" ] },
 ]
 
 [tasks]
