@@ -186,6 +186,40 @@ function! ToggleHiddenAll()
 endfunction
 nnoremap <leader>h :call ToggleHiddenAll()<CR>
 
+
+function! ToKebabCaseVisual()
+  " Get the selected text
+  let l:save_cursor = getpos(".")
+  let l:start_pos = getpos("'<")
+  let l:end_pos = getpos("'>")
+
+  " Extract the highlighted text
+  let l:line = getline(l:start_pos[1])
+  let l:selected_text = strpart(l:line, l:start_pos[2] - 1, l:end_pos[2] - l:start_pos[2] + 1)
+
+  " Convert to lowercase
+  let l:selected_text = tolower(l:selected_text)
+
+  " Replace non-alphanumeric characters with '-'
+  let l:selected_text = substitute(l:selected_text, '[^[:alnum:]]', '-', 'g')
+
+  " Trim leading and trailing '-'
+  let l:selected_text = substitute(l:selected_text, '^-\+', '', '')
+  let l:selected_text = substitute(l:selected_text, '-\+$', '', '')
+
+  " Replace multiple consecutive '-' with a single '-'
+  let l:selected_text = substitute(l:selected_text, '-\+', '-', 'g')
+
+  " Replace the selected text in the line
+  let l:new_line = strpart(l:line, 0, l:start_pos[2] - 1) . l:selected_text . strpart(l:line, l:end_pos[2])
+  call setline(l:start_pos[1], l:new_line)
+
+  " Restore the cursor
+  call setpos(".", l:save_cursor)
+endfunction
+
+command! -range KebabCase <line1>,<line2>call ToKebabCaseVisual()
+
 " Load command shortcuts generated from bm-dirs and bm-files via shortcuts script.
 " Here leader is ";".
 " So ":vs ;cfz" will expand into ":vs /home/<user>/.config/zsh/.zshrc"
