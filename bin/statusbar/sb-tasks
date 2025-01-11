@@ -37,7 +37,7 @@ notify_user "$overdue_tasks" "$old_overdue"
 case "$BLOCK_BUTTON" in
 	1) setsid -f "$TERMINAL" -e taskwarrior-tui ;;
 	3) notify-send " Due and overdue tasks" "\- Left click to open 'taskwarrior-tui'" ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+	8) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
 # Output task information
