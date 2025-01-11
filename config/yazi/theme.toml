@@ -223,7 +223,7 @@ rules = [
 	{ name = "*/",  is = "dummy",   bg = "red" },
 
 	# Fallback
-	# { name = "*", fg = "white" },
+	{ name = "*",   fg = "gray" },
 	{ name = "*/", fg = "blue" }
 ]
 
