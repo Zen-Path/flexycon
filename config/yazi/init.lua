@@ -11,3 +11,17 @@ require("full-border"):setup {
 
 -- Show the status of Git file changes as linemode in the file list.
 require("git"):setup()
+
+-- Docs: https://yazi-rs.github.io/docs/tips#symlink-in-status
+function Status:name()
+	local h = self._current.hovered
+	if not h then
+		return ""
+	end
+
+    local linked = ""
+    if h.link_to ~= nil then
+    	linked = " -> " .. tostring(h.link_to)
+    end
+    return ui.Line(" " .. h.name .. linked)
+end
