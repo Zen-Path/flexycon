@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
 Name=Image Viewer
-Exec=/usr/bin/nsxiv -a %f
+Exec=/usr/local/bin/nsxiv-rifle %f
