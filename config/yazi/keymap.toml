@@ -87,8 +87,10 @@ keymap = [
     { on = "E",     run = "noop", desc = "" },
 
     # { on = "r",     run = "noop", desc = "" },
-    { on = "R",     run = "noop", desc = "" },
-    { on = ["r", "b"], run = "shell 'vidir -- $(basename -a -- \"$@\")' --block", desc = "Rename - bulk current dir" },
+    { on = "R",     run = "shell 'vidir -- $(basename -a -- \"$0\")' --block", desc = "Rename the hovered file using vidir" },
+    # TODO: notify user if selection spans directories.
+    # TODO: if no file is selected, rename the current directory's contents
+    { on = ["r", "b"], run = "shell 'vidir -- $(basename -a -- \"$@\")' --block", desc = "Rename - bulk from current dir" },
     { on = ["r", "B"], run = "shell 'vidir -- \"$@\"' --block", desc = "Rename - bulk all selected" },
 
     ## Place cursor
