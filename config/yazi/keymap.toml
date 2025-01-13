@@ -503,7 +503,9 @@ keymap = [
 	{ on = "<C-c>", run = "close",  desc = "Hide the help" },
 
 	# Navigation
-	{ on = "k", run = "arrow -1", desc = "Move cursor up" },
+	{ on = "G", run = "arrow 99999999", desc = "Move cursor to the bottom" },
+	{ on = ["g", "g"], run = "arrow -99999999", desc = "Move cursor to the top" },
+
 	{ on = "j", run = "arrow 1",  desc = "Move cursor down" },
 
 	{ on = "<Up>",   run = "arrow -1", desc = "Move cursor up" },
