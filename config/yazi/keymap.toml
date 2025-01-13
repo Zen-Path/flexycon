@@ -507,9 +507,7 @@ keymap = [
 	{ on = ["g", "g"], run = "arrow -99999999", desc = "Move cursor to the top" },
 
 	{ on = "j", run = "arrow 1",  desc = "Move cursor down" },
-
-	{ on = "<Up>",   run = "arrow -1", desc = "Move cursor up" },
-	{ on = "<Down>", run = "arrow 1",  desc = "Move cursor down" },
+	{ on = "k", run = "arrow -1", desc = "Move cursor up" },
 
 	# Filtering
 	{ on = "f", run = "filter", desc = "Filter for the help items" },
