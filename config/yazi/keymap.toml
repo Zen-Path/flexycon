@@ -500,7 +500,6 @@ keymap = [
 
 keymap = [
 	{ on = "<Esc>", run = "escape", desc = "Clear the filter, or hide the help" },
-	{ on = "<C-[>", run = "escape", desc = "Clear the filter, or hide the help" },
 	{ on = "<C-c>", run = "close",  desc = "Hide the help" },
 
 	# Navigation
