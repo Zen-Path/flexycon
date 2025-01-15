@@ -87,6 +87,7 @@ keymap = [
     { on = "E",     run = "noop", desc = "" },
 
     # { on = "r",     run = "noop", desc = "" },
+    # TODO: handle systems that don't use vidir. Use basic rename --bulk
     { on = "R",     run = "shell 'vidir -- $(basename -a -- \"$0\")' --block", desc = "Rename the hovered file using vidir" },
     # TODO: notify user if selection spans directories.
     # TODO: if no file is selected, rename the current directory's contents
