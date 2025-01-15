@@ -48,10 +48,13 @@ alias penv='source venv/bin/activate 2> /dev/null || source .venv/bin/activate 2
 alias pfr='pip freeze > requirements.txt'
 
 # Rclone
-alias rc='rclone --progress --exclude "No_Backup/**" --exclude ".git/" copy'
-alias rcd='rclone --dry-run --progress --exclude "No_Backup/**" --exclude ".git/" copy'
-alias rs='rclone --create-empty-src-dirs --track-renames --progress --exclude "No_Backup/**" --exclude ".git/" sync'
-alias rsd='rclone --create-empty-src-dirs --track-renames --dry-run --progress --exclude "No_Backup/**" --exclude ".git/" sync'
+alias rc='  rclone'
+
+alias rcc=' rclone --progress --create-empty-src-dirs --track-renames --exclude ".git/" --exclude "No_Backup/**" copy'
+alias rccd='rclone --progress --create-empty-src-dirs --track-renames --exclude ".git/" --exclude "No_Backup/**" --dry-run copy'
+
+alias rcs=' rclone --progress --create-empty-src-dirs --track-renames --exclude ".git/" --exclude "No_Backup/**" sync'
+alias rcsd='rclone --progress --create-empty-src-dirs --track-renames --exclude ".git/" --exclude "No_Backup/**" --dry-run sync'
 
 # Taskwarrior
 # TODO: use a similar approach to 'open_journal_entry' instead of
