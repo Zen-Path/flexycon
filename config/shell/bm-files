@@ -14,8 +14,6 @@ cfa    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/aliasrc    # aliases used by zs
 cfp    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/profile    # profile file for login settings for zsh
 cfn    "${XDG_CONFIG_HOME:-$HOME/.config}"/newsraft/config  # newsraft (RSS reader)
 cff    "${XDG_CONFIG_HOME:-$HOME/.config}"/newsraft/feeds   # RSS urls for newsraft
-cfl    "${XDG_CONFIG_HOME:-$HOME/.config}"/lf/lfrc          # lf (file browser) config
-cfL    "${XDG_CONFIG_HOME:-$HOME/.config}"/lf/scope         # lf's scope/preview file
 cfx    "$HOME/.xprofile"
 cfX    "${XDG_CONFIG_HOME:-$HOME/.config}"/sxiv/exec/key-handler    # sxiv (image viewer) key/script handler
 cfg    "${XDG_CONFIG_HOME:-$HOME/.config}"/git/config.ini

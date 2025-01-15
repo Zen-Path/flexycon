@@ -1,4 +1,4 @@
--- Allow for lf-like ability to manage files across instances.
+-- Enable to manage files across sessions.
 require("session"):setup {
 	sync_yanked = true,
 }
