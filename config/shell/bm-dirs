@@ -16,7 +16,10 @@ bks     "$HOME/Books"
 uni     "$HOME/University"
 jrd     "${JOURNAL_HOME:-$HOME/Documents/No_Backup/Journal}"
 cac     "${XDG_CACHE_HOME:-$HOME/.cache}"
+
+# Config
 cf      "${XDG_CONFIG_HOME:-$HOME/.config}"
+cfy    "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi
 
 # Local
 lb      "$HOME/.local/bin"

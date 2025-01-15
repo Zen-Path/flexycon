@@ -7,6 +7,11 @@ cfr   "${XDG_CONFIG_HOME:-$HOME/.config}"/x11/xresources    # Colors, themes and
 cfb    ~/.local/src/dwmblocks-async/config.c                # dwmblocks: the status bar for dwm
 cfd    ~/.local/src/dwm/config.h
 
+cfyi   "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi/yazi.toml   # Yazi init file
+cfyk   "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi/keymap.toml # Yazi keymap file
+cfyk   "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi/keymap.toml # Yazi keymap file
+cfyt   "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi/theme.toml  # Yazi theme file
+
 # These do not update automatically, but on the next new instance of a program:
 cfv    "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim/init.vim    # vim/neovim config
 cfz    "$ZDOTDIR"/.zshrc                                    # zsh (shell) config
