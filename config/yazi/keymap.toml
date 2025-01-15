@@ -170,7 +170,7 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
 	{ on = ["g", "h"], run = "cd ~",               desc = "Go home" },
 	{ on = ["g", "d"], run = "cd ~/Documents",     desc = "Goto ~/Documents" },
 	{ on = ["g", "D"], run = "cd ~/Downloads",     desc = "Goto ~/Downloads" },
-	{ on = ["g", "i"], run = "cd ~/Images",        desc = "Goto ~/Images" },
+	{ on = ["g", "i"], run = "shell 'cd $XDG_PICTURES_DIR'",      desc = "Goto XDG_PICTURES_DIR" },
 	{ on = ["g", "m"], run = "cd ~/Music",         desc = "Goto ~/Music" },
 	{ on = ["g", "v"], run = "cd ~/Videos",        desc = "Goto ~/Videos" },
 
