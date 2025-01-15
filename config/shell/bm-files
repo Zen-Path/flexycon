@@ -20,5 +20,5 @@ cfp    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/profile    # profile file for l
 cfn    "${XDG_CONFIG_HOME:-$HOME/.config}"/newsraft/config  # newsraft (RSS reader)
 cff    "${XDG_CONFIG_HOME:-$HOME/.config}"/newsraft/feeds   # RSS urls for newsraft
 cfx    "$HOME/.xprofile"
-cfX    "${XDG_CONFIG_HOME:-$HOME/.config}"/sxiv/exec/key-handler    # sxiv (image viewer) key/script handler
+cfX    "${XDG_CONFIG_HOME:-$HOME/.config}"/nsxiv/exec/key-handler    # sxiv (image viewer) key/script handler
 cfg    "${XDG_CONFIG_HOME:-$HOME/.config}"/git/config.ini
