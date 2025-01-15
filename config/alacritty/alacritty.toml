@@ -1,4 +1,5 @@
 [font]
+normal = { family = "Hack Nerd Font" }
 size = 14.0
 
 [window]
