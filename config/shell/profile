@@ -3,14 +3,14 @@
 # Shell profile. Runs on login. Environmental variables are set here.
 
 # Add `~/.local/bin` to $PATH
-export PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
+# export PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
 # MacOS. TODO: Find a better way to do same as above.
-# # Add Homebrew and ~/.local/bin to PATH
-# PATH="/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$PATH"
-# # Add all subdirectories of ~/.local/bin to PATH
-# PATH=$(find "$HOME/.local/bin" -type d | paste -sd ':' -):$PATH
+# Add Homebrew and ~/.local/bin to PATH
+PATH="/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$PATH"
+# Add all subdirectories of ~/.local/bin to PATH
+PATH=$(find "$HOME/.local/bin" -type d | paste -sd ':' -):$PATH
 
-# export PATH
+export PATH
 
 unsetopt PROMPT_SP
 
@@ -54,7 +54,7 @@ export JOURNAL_HOME="$HOME/Documents/No_Backup/Journal"
 export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
 
 # Other program settings:
-export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+# export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export LESS=-R
 export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/Trash --exclude .local/share/rustup --exclude .git/ --exclude node_modules/'
