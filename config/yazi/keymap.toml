@@ -200,7 +200,7 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
 	{ on = ["g", "s", "w"], run = "cd ~/.local/src/wis",        desc = "Goto wis source" },
 
     # Open files
-   	{ on = ["g", "f"], run = ["reveal ~/.config/newsraft/feeds", "open"], desc = "Open newsraft feeds" },
+   	{ on = ["g", "c", "f"], run = ["reveal ~/.config/newsraft/feeds", "open"], desc = "Open newsraft feeds" },
 
 	{ on = "h",     run = "leave",      desc = "Go back to the parent directory" },
 	{ on = "H",     run = "back",       desc = "Go back to the previous directory. Useful when combined with bookmarks" },
