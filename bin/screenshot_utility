@@ -74,7 +74,9 @@ class ScreenshotUtility:
     ):
         self.maim = maim or MaimUtility()
         self.clipboard = clipboard or ClipboardUtility.get_instance()
-        self.output_dir = output_dir or os.path.expanduser("~/Images/Screenshots")
+        self.output_dir = os.path.expanduser(
+            output_dir or f"{os.getenv("XDG_PICTURES_DIR", "~/Pictures")}/Screenshots"
+        )
 
     def _capture(self, output_path, copy_output, select=False):
         response = self.maim.run(output_path, select)
