@@ -25,3 +25,4 @@ x-scheme-handler/http=browser.desktop
 x-scheme-handler/https=browser.desktop
 x-scheme-handler/chrome=browser.desktop
 application/xhtml+xml=browser.desktop
+x-scheme-handler/msteams=teams.desktop
