@@ -106,6 +106,8 @@ rules = [
 	# Archive
 	{ mime = "application/{,g}zip",                 use = [ "extract", "show-exif-info", "reveal" ] },
 	{ mime = "application/{tar,bzip*,7z*,xz,rar}",  use = [ "extract", "show-exif-info", "reveal" ] },
+    # Misc
+    { mime = "application/octet-stream", use = [ "open", "open-new-win", "show-exif-info", "reveal" ] },
 	# Empty file
 	{ mime = "inode/empty",     use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
 	# Fallback
