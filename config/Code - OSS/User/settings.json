@@ -41,5 +41,6 @@
         "editor.defaultFormatter": "DotJoshJohnson.xml"
     },
     "editor.detectIndentation": false,
-    "diffEditor.ignoreTrimWhitespace": false
+    "diffEditor.ignoreTrimWhitespace": false,
+    "git.openRepositoryInParentFolders": "always"
 }

@@ -16,7 +16,6 @@ alias p='pacman'
 alias t='task'
 alias z='zathura'
 alias ka='killall'
-alias lf='lfub'
 alias py='python'
 alias sql='sqlite3'
 
