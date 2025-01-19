@@ -61,7 +61,7 @@ export FZF_DEFAULT_COMMAND='fd . --hidden -E .cache -E .local/lib/ -E .local/sha
 # --multi : allow multiple selections
 # --height : fzf window height
 # --extended : extended-search mode
-export FZF_DEFAULT_OPTS='--multi --height=~90% --extended'
+export FZF_DEFAULT_OPTS='--multi --extended'
 
 export BAT_THEME='gruvbox-dark'
 export PASTEL_COLOR_MODE='24bit'
