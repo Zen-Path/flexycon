@@ -16,6 +16,7 @@ unsetopt PROMPT_SP
 
 # Default programs:
 export EDITOR="nvim"
+export GRAPHICAL_EDITOR="code"
 export TERMINAL="alacritty"
 export BROWSER="firefox"
 export FILE_MANAGER='yazi'

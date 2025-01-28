@@ -10,6 +10,7 @@ done; unset command
 
 # Abbreviations
 alias e='$EDITOR'
+alias E='$GRAPHICAL_EDITOR'
 alias g='git'
 alias o='xdg-open'
 alias p='pacman'
