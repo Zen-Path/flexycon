@@ -187,8 +187,8 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
 
     # University
 	{ on = ["g", "U"], run = "cd ~/University", desc = "Goto ~/University" },
-   	{ on = ["g", "u", "s"], run = ["reveal ~/University/No_Backup/schedule", "open"], desc = "Open university schedule" },
-   	{ on = ["g", "u", "S"], run = "cd ~/University/No_Backup/Semester", desc = "Goto university schedule" },
+   	{ on = ["g", "u", "s"], run = ["reveal ~/University/TI-Y2/Sem-2/2024-2025_orar-iarna.pdf", "open"], desc = "Open university schedule" },
+   	{ on = ["g", "u", "S"], run = "cd ~/University/TI-Y2/Sem-2", desc = "Goto university schedule" },
 
     # Goto config
 	{ on = ["g", "C"],      run = "cd ~/.config",           desc = "Goto config home" },
