@@ -471,6 +471,26 @@
         "redgifs": {
             "format": ["hd", "sd", "gif"]
         },
+        "rule34": {
+            "post": {
+                "directory": ["{category}", "{subcategory}", "{creator_id!s}"]
+            },
+            "tag": {
+                "directory": ["{category}", "{subcategory}", "{creator_id!s}"]
+            },
+            "directory": ["{category}", "{subcategory}"],
+            "filename": "{category}_id-{id!s}_tt-{tags!g:X200/../}.{extension}",
+            "postprocessors": [
+                {
+                    "name": "metadata",
+                    "mode": "modify",
+                    "fields": {
+                        "post_url": "https://rule34.xxx/index.php?page=post&s=view&id={id!s}",
+                        "download_time": "{_now:%Y-%m-%d_%H-%M-%S}"
+                    }
+                }
+            ]
+        },
         "rule34xyz": {
             "format": ["10", "40", "41", "2"]
         },
@@ -527,6 +547,30 @@
             "username": "",
             "password": "",
             "cookies": null
+        },
+        "sexcom": {
+            "search": {
+                "directory": ["{category}", "{subcategory}", "{search['type']}_{search['query']!g:X200/../}"]
+            },
+            "board": {
+                "directory": ["{category}", "{subcategory}", "{user!g:X80/../}_{board!g:X200/../}"]
+            },
+            "pin": {
+                "directory": ["{category}", "{subcategory}"]
+            },
+            "directory": ["{category}", "{subcategory}"],
+            "filename": "{category}_us-{uploader!g:X80/../}_tt-{title!g:X120/../}_id-{pin_id!s}.{extension}",
+            "postprocessors": [
+                {
+                    "name": "metadata",
+                    "mode": "modify",
+                    "fields": {
+                        "pin_url": "https://www.sex.com/pin/{pin_id!s}",
+                        "repins_url": "https://www.sex.com/pin/{pin_id!s}/repins/1",
+                        "download_time": "{_now:%Y-%m-%d_%H-%M-%S}"
+                    }
+                }
+            ]
         },
         "subscribestar": {
             "username": "",
@@ -648,6 +692,10 @@
             "videos": true
         },
         "ytdl": {
+            "XNXX": {
+                "filename": "{subcategory!g}_{fulltitle!g}.{extension}"
+            },
+
             "cmdline-args": null,
             "config-file": "~/.config/yt-dlp/config",
 
