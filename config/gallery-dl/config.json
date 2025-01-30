@@ -9,8 +9,7 @@
         "#": "====    General Extractor Options    ==========================",
         "#": "(these can be set as site-specific extractor options as well)  ",
 
-        "base-directory": "./gallery-dl/",
-        "postprocessors": null,
+        "base-directory": ".",
         "skip": true,
         "skip-filter": null,
 
