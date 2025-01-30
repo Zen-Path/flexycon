@@ -649,12 +649,18 @@
         },
         "ytdl": {
             "cmdline-args": null,
-            "config-file": null,
-            "enabled": false,
+            "config-file": "~/.config/yt-dlp/config",
+
+            "#": "invoke ytdl on all otherwise unsupported input URLs",
+            "enabled": true,
+
             "format": null,
             "generic": true,
             "logging": true,
-            "module": null,
+
+            "#": "use yt-dlp instead of youtube-dl",
+            "module": "yt_dlp",
+
             "raw-options": null
         },
         "zerochan": {
