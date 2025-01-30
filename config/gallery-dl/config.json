@@ -10,6 +10,12 @@
         "#": "(these can be set as site-specific extractor options as well)  ",
 
         "base-directory": ".",
+        "postprocessors": [
+            {
+                "name": "metadata",
+                "directory": "./__metadata__"
+            }
+        ],
         "skip": true,
         "skip-filter": null,
 
