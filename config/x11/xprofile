@@ -21,7 +21,7 @@ for program in $autostart; do
 	pidof -sx "$program" || "$program" &
 done >/dev/null 2>&1
 
-blugon -S 4700 & # Bluelight filter
+blugon -S 6000 & # Bluelight filter
 unclutter --timeout 2 &
 
 # Ensure that xrdb has finished running before moving on to start the WM/DE.
