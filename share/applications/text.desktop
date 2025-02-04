@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
 Name=Text Editor
-Exec=/usr/bin/alacritty -e nvim %u
+Exec=/usr/local/bin/env_cmd_runner $EDITOR %F
