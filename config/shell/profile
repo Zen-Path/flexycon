@@ -57,7 +57,7 @@ export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export LESS=-R
-export FZF_DEFAULT_COMMAND='fd . --hidden --exclude .cache --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/Trash --exclude .local/share/rustup --exclude .git/ --exclude node_modules/'
+export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/Trash --exclude .local/share/rustup --exclude .git/ --exclude node_modules/'
 
 # --multi : allow multiple selections
 # --height : fzf window height
