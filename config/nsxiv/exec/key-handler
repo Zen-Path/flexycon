@@ -12,6 +12,14 @@ while read -r file; do
             [ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit
             mv "$file" "$destdir" && notify-send -i "$(readlink -f "$file")" "$file moved to $destdir." &
             ;;
+        "G")
+            [ -z "$destdir" ] && destdir="$(pwd)/$(echo "$(date '+%F_%T')" | dmenu -i -p "Group file(s) where?")"
+            [ -z "$destdir" ] && notify-send "No directory entered, cancelled." && exit 1
+
+            [ ! -d "$destdir" ] && mkdir -p "$destdir" && notify-send "Directory created: $destdir"
+
+            mv "$file" "$destdir" && notify-send -i "$file" "$(basename "$file") moved to $(dirname "$destdir")." &
+            ;;
         "r")
             magick "$file" -rotate 90 "$file"
             ;;
