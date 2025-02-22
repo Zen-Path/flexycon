@@ -364,6 +364,24 @@
             "username": "",
             "password": ""
         },
+        "motherless": {
+            "gallery": {
+                "directory": ["{category}", "{subcategory}", "us-{uploader!g:X80/../}_tt-{gallery_title!g:X120/../}_id-{gallery_id!s}"]
+            },
+            "directory": ["{category}", "{subcategory}"],
+            "filename": "{category}_{num:03}_id-{id!s}.{extension}",
+            "postprocessors": [
+                {
+                    "name": "metadata",
+                    "mode": "modify",
+                    "fields": {
+                        "gallery_url": "https://www.motherless.com/G{gallery_id!s}",
+                        "pin_url": "https://www.motherless.com/G{gallery_id!s}/{id!s}",
+                        "download_time": "{_now:%Y-%m-%d_%H-%M-%S}"
+                    }
+                }
+            ]
+        },
         "newgrounds": {
             "username": "",
             "password": "",
@@ -443,6 +461,21 @@
             "sleep-request": "0.5-1.5"
         },
         "pornpics": {
+            "gallery": {
+                "directory": ["{category}", "{subcategory}", "{slug!g:X180/../}_id-{gallery_id!s}"]
+            },
+            "directory": ["{category}", "{subcategory}"],
+            "filename": "{category}_{num:03}_fn-{filename!g:[-4:]}_gid-{gallery_id!s}.{extension}",
+            "postprocessors": [
+                {
+                    "name": "metadata",
+                    "mode": "modify",
+                    "fields": {
+                        "gallery_url": "https://www.pornpics.com/galleries/{gallery_id!s}",
+                        "download_time": "{_now:%Y-%m-%d_%H-%M-%S}"
+                    }
+                }
+            ],
             "sleep-request": "0.5-1.5"
         },
         "readcomiconline": {
