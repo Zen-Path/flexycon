@@ -17,7 +17,7 @@ alias p='pacman'
 alias t='task'
 alias z='zathura'
 alias ka='killall'
-alias py='python'
+alias py='python3'
 alias sql='sqlite3'
 
 # Verbosity and common settings.
