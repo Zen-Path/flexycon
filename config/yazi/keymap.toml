@@ -158,9 +158,9 @@ keymap = [
     { on = "F",     run = "plugin fzf", desc = "Jump to a file/directory via fzf" },
     { on = "<C-f>", run = "arrow 100%", desc = "Move cursor down one page" },
 
-	{ on = "G",     run = "arrow 99999999",     desc = "Move cursor to the bottom" },
+	{ on = "G",     run = "arrow top",     desc = "Move cursor to the bottom" },
 
-	{ on = ["g", "g"], run = "arrow -99999999", desc = "Move cursor to the top" },
+	{ on = ["g", "g"], run = "arrow bot", desc = "Move cursor to the top" },
     { on = ["g", "r"], run = '''
 shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
 ''', desc = "Go to the root of the current Git repository" },
