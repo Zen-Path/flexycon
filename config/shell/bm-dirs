@@ -14,7 +14,7 @@ nrd     "$HOME/Nerdy"
 vid     "$HOME/Videos"
 bks     "$HOME/Books"
 uni     "$HOME/University"
-jrd     "${JOURNAL_HOME:-$HOME/Documents/No_Backup/Journal}"
+jrd     "${JOURNAL_HOME:-$HOME/Journal}"
 cac     "${XDG_CACHE_HOME:-$HOME/.cache}"
 
 # Config
