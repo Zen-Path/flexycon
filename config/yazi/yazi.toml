@@ -65,6 +65,10 @@ open-new-win = [
 	{ run = '${TERMINAL} -e xdg-open "$1"', orphan = true,  desc = "Open in new window",  for = "linux" },
 ]
 
+open-in-browser = [
+    { run = '${BROWSER} "$1"', orphan = true,  desc = "Open in browser",  for = "linux" },
+]
+
 # Play
 play = [
 	{ run = 'mpv --force-window "$@"',  orphan = true,  desc = "Play",  for = "linux" },
@@ -93,6 +97,7 @@ rules = [
 	# Folder
 	{ name = "*/",              use = [ "cd", "open", "reveal" ] },
 	# Text
+	{ mime = "text/html",       use = [ "edit", "edit-new-win", "open-in-browser", "show-exif-info", "reveal" ] },
 	{ mime = "text/*",          use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
 	# Image
 	{ mime = "image/*",         use = [ "open", "open-new-win", "edit-image", "show-exif-info", "reveal" ] },
