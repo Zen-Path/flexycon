@@ -1,6 +1,3 @@
-# Yazi plugins - should be managed by the 'ya' manger
-/config/yazi/plugins/*
-
 # MacOS files
 .DS_Store
 
