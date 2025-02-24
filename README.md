@@ -6,8 +6,8 @@ Flexible programmatic configuration.
 
 ### Monday as first day of the week
 
-1. Open `/etc/locale.conf`
-2. Change `LC_TIME` to `en_DK.UTF-8` (Denmark)
+1. Open `/etc/locale.conf` and change `LC_TIME` to `en_DK.UTF-8` (Denmark)
+2. Open `/etc/locale.gen` and uncomment `en_DK.UTF-8`
 3. Regenerate locales by running:
 ```sh
 sudo locale-gen
