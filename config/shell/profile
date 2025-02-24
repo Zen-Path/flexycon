@@ -50,8 +50,10 @@ export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
 export npm_config_cache="$XDG_CACHE_HOME/npm"
 export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
 export LESSHISTFILE="/dev/null"
-export JOURNAL_HOME="$HOME/Documents/No_Backup/Journal"
 export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
+
+# Other files
+export JOURNAL_HOME="$HOME/Personal/No_Backup/Journal"
 
 # Other program settings:
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
