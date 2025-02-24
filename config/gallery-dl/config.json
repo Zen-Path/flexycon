@@ -366,7 +366,11 @@
         },
         "motherless": {
             "gallery": {
-                "directory": ["{category}", "{subcategory}", "us-{uploader!g:X80/../}_tt-{gallery_title!g:X120/../}_id-{gallery_id!s}"]
+                "directory": [
+                    "{category}",
+                    "{subcategory}",
+                    "us-{uploader!g:X80/../}_tt-{gallery_title!g:X120/../}_id-{gallery_id!s}"
+                ]
             },
             "directory": ["{category}", "{subcategory}"],
             "filename": "{category}_{num:03}_id-{id!s}.{extension}",
@@ -462,7 +466,11 @@
         },
         "pornpics": {
             "gallery": {
-                "directory": ["{category}", "{subcategory}", "{slug!g:X180/../}_id-{gallery_id!s}"]
+                "directory": [
+                    "{category}",
+                    "{subcategory}",
+                    "{slug!g:X180/../}_id-{gallery_id!s}"
+                ]
             },
             "directory": ["{category}", "{subcategory}"],
             "filename": "{category}_{num:03}_fn-{filename!g:[-4:]}_gid-{gallery_id!s}.{extension}",
@@ -583,10 +591,18 @@
         },
         "sexcom": {
             "search": {
-                "directory": ["{category}", "{subcategory}", "{search['type']}_{search['query']!g:X200/../}"]
+                "directory": [
+                    "{category}",
+                    "{subcategory}",
+                    "{search['type']}_{search['query']!g:X200/../}"
+                ]
             },
             "board": {
-                "directory": ["{category}", "{subcategory}", "{user!g:X80/../}_{board!g:X200/../}"]
+                "directory": [
+                    "{category}",
+                    "{subcategory}",
+                    "{user!g:X80/../}_{board!g:X200/../}"
+                ]
             },
             "pin": {
                 "directory": ["{category}", "{subcategory}"]

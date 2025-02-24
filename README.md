@@ -9,15 +9,18 @@ Flexible programmatic configuration.
 1. Open `/etc/locale.conf` and change `LC_TIME` to `en_DK.UTF-8` (Denmark)
 2. Open `/etc/locale.gen` and uncomment `en_DK.UTF-8`
 3. Regenerate locales by running:
+
 ```sh
 sudo locale-gen
 ```
+
 4. Reboot
 5. Run `cal`. It should display 'Mon' as first day of the week.
 
 ### Check available locales
 
 Run:
+
 ```sh
 locale -a
 ```
@@ -25,6 +28,7 @@ locale -a
 ### Check current locale settings
 
 Run:
+
 ```sh
 locale
 ```
@@ -32,10 +36,7 @@ locale
 ### Extract only matches using rg
 
 Run:
+
 ```sh
 rg --only-matching 'pattern: (\d+)' --replace '$1'
 ```
-
-## TODO
-
-- [Emmet](https://www.emmet.io/) for nvim / emacs

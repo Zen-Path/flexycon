@@ -40,14 +40,16 @@
     font-weight: bold !important; /* normal */
 }
 
-#tabbrowser-tabs .tabbrowser-tab:not([pinned]){
+#tabbrowser-tabs .tabbrowser-tab:not([pinned]) {
     /* Increase the width so the close icon doesn't occupy half the available space*/
     min-width: 100px !important; /* 76px */
 }
 
-#tabbrowser-tabs[closebuttons="activetab"] .tabbrowser-tab:not([selected="true"]):not([pinned]):hover .close-icon{
-	/* Show close button when hovering even when tabs are low on width */
-	display: block !important;
+#tabbrowser-tabs[closebuttons="activetab"]
+    .tabbrowser-tab:not([selected="true"]):not([pinned]):hover
+    .close-icon {
+    /* Show close button when hovering even when tabs are low on width */
+    display: block !important;
 }
 
 /* .tab-stack {} */
