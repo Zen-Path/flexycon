@@ -195,7 +195,9 @@ function fm() {
 bindkey -s '^f' 'fzfopen\n'
 
 # Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
 
 # Load syntax highlighting; should be last.
 source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2> /dev/null
