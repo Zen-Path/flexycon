@@ -187,30 +187,35 @@ theme = "gruvbox"
 #
 # All widgets must have the type value set to one of ["cpu", "mem", "proc", "net", "temp", "disk", "empty"].
 # All layout components have a ratio value - if this is not set, then it defaults to 1.
-# The default widget layout:
+
 [[row]]
-    ratio=30
+    ratio=1
+
     [[row.child]]
-    type="cpu"
-[[row]]
-        ratio=40
-        [[row.child]]
-            ratio=4
-            type="mem"
-        [[row.child]]
-            ratio=5
-            type="proc"
-            default=true
-[[row]]
-    ratio=30
-    [[row.child]]
-        ratio=3
-        type="net"
-    [[row.child]]
-        ratio=2
-    [[row.child.child]]
         ratio=1
-        type="temp"
-    [[row.child.child]]
+        type="proc"
+        default=true
+[[row]]
+    ratio=1
+
+    [[row.child]]
+        ratio=1
+        type="mem"
+
+    [[row.child]]
+        ratio=1
+        type="cpu"
+[[row]]
+    ratio=1
+
+    [[row.child]]
         ratio=1
         type="disk"
+
+    [[row.child]]
+        ratio=1
+        type="temp"
+
+    [[row.child]]
+        ratio=1
+        type="net"
