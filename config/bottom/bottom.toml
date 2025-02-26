@@ -25,7 +25,7 @@
 # Whether to make process searching look for matching the entire word by default.
 #whole_word = false
 # Whether to make process searching use regex by default.
-#regex = false
+regex = true
 # The temperature unit. One of the following, defaults to "c" for Celsius:
 #temperature_type = "c"
 ##temperature_type = "k"
@@ -43,7 +43,7 @@
 #default_widget_type = "proc"
 #default_widget_count = 1
 # Expand selected widget upon starting the app
-#expanded = true
+expanded = false
 # Use basic mode
 #basic = false
 # Use the old network legend style
@@ -55,9 +55,9 @@
 # Disable mouse clicks
 #disable_click = false
 # Show memory values in the processes widget as values by default
-#process_memory_as_value = false
+process_memory_as_value = true
 # Show tree mode by default in the processes widget.
-#tree = false
+
 # Shows an indicator in table widgets tracking where in the list you are.
 #show_table_scroll_position = false
 # Show processes as their commands by default in the process widget.
@@ -77,20 +77,20 @@
 # How much data is stored at once in terms of time.
 #retention = "10m"
 # Where to place the legend for the memory widget. One of "none", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom", "bottom-right".
-#memory_legend = "TopRight".
+memory_legend = "top-right"
 # Where to place the legend for the network widget. One of "none", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom", "bottom-right".
-#network_legend = "TopRight".
+network_legend = "top-right"
 
 # Processes widget configuration
-#[processes]
+[processes]
 # The columns shown by the process widget. The following columns are supported:
 # PID, Name, CPU%, Mem%, R/s, W/s, T.Read, T.Write, User, State, Time, GMem%, GPU%
-#columns = ["PID", "Name", "CPU%", "Mem%", "R/s", "W/s", "T.Read", "T.Write", "User", "State", "GMem%", "GPU%"]
+columns = ["PID", "Name", "CPU%", "Mem%", "R/s", "W/s", "User", "State", "GPU%"]
 
 # CPU widget configuration
-#[cpu]
+[cpu]
 # One of "all" (default), "average"/"avg"
-# default = "average"
+default = "all"
 
 # Disk widget configuration
 #[disk]
