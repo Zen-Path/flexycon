@@ -27,6 +27,9 @@ $time\
 [ ](fg:color_bg1)\
 $line_break$character"""
 
+# Insert a blank line between shell prompts
+add_newline = true
+
 palette = 'gruvbox_dark'
 
 [palettes.gruvbox_dark]
