@@ -51,6 +51,7 @@ export npm_config_cache="$XDG_CACHE_HOME/npm"
 export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
 export LESSHISTFILE="/dev/null"
 export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
+export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 
 # Other files
 export JOURNAL_HOME="$HOME/Personal/No_Backup/Journal"
