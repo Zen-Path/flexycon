@@ -80,3 +80,5 @@ alias je='journal_entry'
 
 # [G]allery [D]ownload
 alias gld='gallery-dl'
+
+alias tess='tesseract --oem 3 --psm 6 -l eng'
