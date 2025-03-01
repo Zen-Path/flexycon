@@ -12,7 +12,7 @@ while read -r file; do
             [ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit
             mv "$file" "$destdir" && notify-send -i "$(readlink -f "$file")" "$file moved to $destdir." &
             ;;
-        "G")
+        "g")
             [ -z "$destdir" ] && destdir="$(pwd)/$(echo "$(date '+%F_%T')" | dmenu -i -p "Group file(s) where?")"
             [ -z "$destdir" ] && notify-send "No directory entered, cancelled." && exit 1
 
@@ -43,7 +43,7 @@ while read -r file; do
         "D")
             trash-put "$file"
             ;;
-        "g") ifinstalled gimp && setsid -f gimp "$file" ;;
+        "e") ifinstalled gimp && setsid -f gimp "$file" ;;
         "i") notify-send "File information" "$(mediainfo "$file" | sed "s/[ ]\+:/:/g;s/: /: <b>/;s/$/<\/b>/" | grep "<b>")" ;;
     esac
 done
