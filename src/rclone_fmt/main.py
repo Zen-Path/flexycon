@@ -101,11 +101,13 @@ def main():
         "dir mod time": Fore.BLUE,
     }
 
-    if output:
+    sorted_data = sorted(output, key=lambda x: (x[0], x[1], x[2]))
+
+    if sorted_data:
         formatted_output = []
         change_type_counter = {}
 
-        for row in output:
+        for row in sorted_data:
             formatted_row = [(action_fmt[row[0]] if row[0] in action_fmt else Fore.GRAY)
             + row[0]
             + Style.RESET_ALL,
