@@ -1,11 +1,11 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: 23.3.0  # Use a specific version; update as needed.
+    rev: 25.1.0  # Use a specific version; update as needed.
     hooks:
       - id: black
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.2.0  # Use a specific version; update as needed.
+    rev: v1.15.0  # Use a specific version; update as needed.
     hooks:
       - id: mypy
 
