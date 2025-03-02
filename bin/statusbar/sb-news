@@ -4,6 +4,7 @@ import os
 import subprocess
 from enum import Enum
 
+
 # TODO: Add more buttons
 class MouseButton(Enum):
     LEFT = 1

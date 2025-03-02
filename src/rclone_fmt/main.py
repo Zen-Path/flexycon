@@ -110,11 +110,13 @@ def main():
         change_type_counter = {}
 
         for row in sorted_data:
-            formatted_row = [(action_fmt[row[0]] if row[0] in action_fmt else Fore.GRAY)
-            + row[0]
-            + Style.RESET_ALL,
-            Fore.CYAN + row[1][:filename_max_size] + Style.RESET_ALL,
-            Fore.MAGENTA + str(row[2]) + Style.RESET_ALL]
+            formatted_row = [
+                (action_fmt[row[0]] if row[0] in action_fmt else Fore.GRAY)
+                + row[0]
+                + Style.RESET_ALL,
+                Fore.CYAN + row[1][:filename_max_size] + Style.RESET_ALL,
+                Fore.MAGENTA + str(row[2]) + Style.RESET_ALL,
+            ]
             formatted_output.append(formatted_row)
 
             change_type_counter[row[0]] = change_type_counter.setdefault(row[0], 0) + 1
