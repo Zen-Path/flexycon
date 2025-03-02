@@ -1,36 +1,42 @@
-from packages import Package, PackageManager, Yay
+from collections import defaultdict
 
-packages = [
+from packages import Package, PackageManager, PacMan, Yay
+
+install_packages = [
     Package(
-        id_map={"git": []},
+        id="git",
+        manager=Yay,
         description="a distributed version control system",
         tags=["terminal"],
     ),
     Package(
-        id_map={"alacritty": [Yay]},
+        id="alacritty",
+        manager=Yay,
         description="a cross-platform, GPU-accelerated terminal emulator",
         tags=["terminal"],
     ),
     Package(
-        id_map={"firefox": []}, description="a private & safe web browser", tags=["gui"]
+        id="firefox",
+        manager=PacMan,
+        description="a private & safe web browser",
+        tags=["gui"],
     ),
     Package(
-        id_map={"fzf": []},
+        id="fzf",
+        manager=Yay,
         description="a fuzzy finder in the terminal",
         tags=["terminal"],
     ),
 ]
 
 if __name__ == "__main__":
-    available_package_managers = PackageManager.available_managers()
+    grouped = defaultdict(list)
+    for pkg in install_packages:
+        grouped[pkg.manager].append(pkg)
 
-    print(available_package_managers)
+    for manager, pkg_list in grouped.items():
+        print(f"Installing packages using {manager.__name__}:")
+        manager.install(list(map(lambda p: p.id, pkg_list)))
 
-    for package in packages:
-        package_id, pm = PackageManager.choose_package_manager(
-            package, available_package_managers
-        )
-        print(package_id, pm)
-
-        if package_id and pm:
-            pm.install(package_id)
+    # for package in install_packages:
+    # package.manager.install(package.id)
