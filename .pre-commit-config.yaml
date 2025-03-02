@@ -8,8 +8,3 @@ repos:
     rev: v1.15.0  # Use a specific version; update as needed.
     hooks:
       - id: mypy
-
-  - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0  # Use a specific version; update as needed.
-    hooks:
-      - id: flake8
