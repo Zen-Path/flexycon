@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
-import re
-import sys
 import argparse
 import logging
-from tabulate import tabulate
-from colorama import init, Fore, Style
+import re
+import sys
 from pprint import pprint
+
+from colorama import Fore, Style, init
+from tabulate import tabulate
 
 # Initialize colorama
 init(autoreset=True)
+
 
 # Custom formatter for colorful logging
 class ColorFormatter(logging.Formatter):

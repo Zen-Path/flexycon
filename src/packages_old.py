@@ -1,23 +1,26 @@
-import platform
-import subprocess
-import shutil
 import logging
-from typing import Optional, List, Dict, Type
+import platform
+import shutil
+import subprocess
 from abc import ABC, abstractmethod
+from typing import Dict, List, Optional, Type
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def run_command(command: List[str]) -> None:
+
+def run_command(command: List[str]) -> int:
     """Execute a shell command with error handling."""
     try:
         subprocess.run(command, check=True)
-        logger.info("Command executed successfully: %s", ' '.join(command))
+        logger.info("Command executed successfully: %s", " ".join(command))
     except subprocess.CalledProcessError as e:
-        logger.error("Command failed: %s | Error: %s", ' '.join(command), e)
+        logger.error("Command failed: %s | Error: %s", " ".join(command), e)
     except Exception as e:
-        logger.exception("Unexpected error while running command: %s", ' '.join(command))
+        logger.exception(
+            "Unexpected error while running command: %s", " ".join(command)
+        )
 
 
 class PackageInstaller(ABC):
@@ -105,7 +108,7 @@ class Package:
         identifier_map: Dict[str, List[str]],
         installer: PackageInstaller,
         purpose: str = "",
-        tags: Optional[List[str]] = None
+        tags: Optional[List[str]] = None,
     ):
         """
         Parameters:
@@ -126,16 +129,26 @@ class Package:
         for identifier, managers in self.identifier_map.items():
             if not managers or self.installer.name in managers:
                 return identifier
-        raise ValueError(f"No valid identifier found for installer '{self.installer.name}'.")
+        raise ValueError(
+            f"No valid identifier found for installer '{self.installer.name}'."
+        )
 
     def install(self) -> None:
         identifier = self.get_identifier()
-        logger.info("Starting installation for '%s' with identifier '%s'...", self.name, identifier)
+        logger.info(
+            "Starting installation for '%s' with identifier '%s'...",
+            self.name,
+            identifier,
+        )
         self.installer.install(identifier)
 
     def uninstall(self) -> None:
         identifier = self.get_identifier()
-        logger.info("Starting uninstallation for '%s' with identifier '%s'...", self.name, identifier)
+        logger.info(
+            "Starting uninstallation for '%s' with identifier '%s'...",
+            self.name,
+            identifier,
+        )
         self.installer.uninstall(identifier)
 
     def __repr__(self) -> str:
@@ -158,25 +171,25 @@ if __name__ == "__main__":
                 identifier_map={
                     "python3": ["brew"],
                     "python3.14": ["apt", "chocolaty"],
-                    "python": []  # Default for other installers
+                    "python": [],  # Default for other installers
                 },
                 installer=installer,
                 purpose="Python programming language",
-                tags=["language", "development"]
+                tags=["language", "development"],
             ),
             Package(
                 name="fzf",
-                identifier_map={
-                    "fzf": []  # Same identifier for all installers
-                },
+                identifier_map={"fzf": []},  # Same identifier for all installers
                 installer=installer,
                 purpose="Fuzzy finder for terminal searching",
-                tags=["terminal", "productivity"]
-            )
+                tags=["terminal", "productivity"],
+            ),
         ]
 
         # Install all packages
         # for package in packages:
-            # package.install()
+        # package.install()
     else:
-        logger.error("No suitable installer found. Cannot proceed with package installation.")
+        logger.error(
+            "No suitable installer found. Cannot proceed with package installation."
+        )
