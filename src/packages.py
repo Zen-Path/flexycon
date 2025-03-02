@@ -4,6 +4,36 @@ from typing import Dict, List, Optional, Type
 from utils import run_command
 
 
+class Package:
+    """Represents a software package with metadata"""
+
+    def __init__(
+        self,
+        id_map: Dict[str, List[Type[PackageManager]]],
+        name: Optional[str] = None,
+        description: str = "",
+        tags: Optional[List[str]] = None,
+    ):
+        """
+        Parameters:
+            id_map: Mapping of identifiers to the list of package managers that use them.
+            name: Human-readable name of the package. Same as 'id' if not provided.
+            description: Description of the package.
+            tags: Tags for categorizing the package.
+        """
+
+        self.name = name
+        self.id_map = id_map
+        self.description = description
+        self.tags = tags or []
+
+    def __repr__(self) -> str:
+        return (
+            f"Package(id_map={self.id_map}, name='{self.name}', "
+            f"description='{self.description}', tags={self.tags})"
+        )
+
+
 class PackageManager(ABC):
     """Abstract base class for package managers."""
 
@@ -43,6 +73,46 @@ class PackageManager(ABC):
         """Return a list of available package manager classes (those for which is_available() returns True)."""
         return [pm for pm in cls.all_subclasses() if pm.is_available()]
 
+    @classmethod
+    def choose_package_manager(
+        cls, package: Package, available_pms: Optional[List[Type]] = None
+    ):
+        """
+        Given a package, choose an appropriate package manager and package id to use.
+
+        The package's id_map is expected to be a dict where:
+          - keys are the package ids to be used for installation,
+          - values are lists of package manager classes that support that id.
+
+        If the list for a given id is empty, it is assumed that the package is supported by any package manager.
+        The lower index in the list is preferred.
+
+        Parameters:
+            package: The Package to install.
+            available_pms: Optionally, a pre-computed list of available package manager classes.
+
+        Returns:
+            A tuple (package_id, package_manager_class).
+
+        Raises:
+            RuntimeError: if no suitable package manager is available.
+        """
+        if available_pms is None:
+            available_pms = cls.available_managers()
+
+        for pkg_id, pm_list in package.id_map.items():
+            if not pm_list:
+                # If the list is empty, assume this id works with any available PM.
+                if available_pms:
+                    return pkg_id, available_pms[0]
+            else:
+                # Check in order which package manager is available.
+                for pm in pm_list:
+                    if pm in available_pms:
+                        return pkg_id, pm
+
+        return None, None
+
 
 class PacMan(PackageManager):
     """PacMan package manager implementation."""
@@ -64,6 +134,10 @@ class PacMan(PackageManager):
                 package_id,
             ]
         )
+
+    @staticmethod
+    def is_available(cls):
+        return True
 
 
 class Yay(PackageManager):
@@ -87,66 +161,11 @@ class Yay(PackageManager):
             ]
         )
 
-
-class Package:
-    """Represents a software package with metadata"""
-
-    def __init__(
-        self,
-        id_map: Dict[str, List[str]],
-        name: Optional[str] = None,
-        description: str = "",
-        tags: Optional[List[str]] = None,
-    ):
-        """
-        Parameters:
-            id_map: Mapping of identifiers to the list of package managers that use them.
-            name: Human-readable name of the package. Same as 'id' if not provided.
-            description: Description of the package.
-            tags: Tags for categorizing the package.
-        """
-
-        self.name = name
-        self.id_map = id_map
-        self.description = description
-        self.tags = tags or []
-
-    def get_identifier(self) -> str:
-        """Select the correct identifier based on the installer's name."""
-        for identifier, managers in self.id_map.items():
-            if not managers or self.installer.name in managers:
-                return identifier
-        raise ValueError(
-            f"No valid identifier found for installer '{self.installer.name}'."
-        )
-
-    def install(self) -> None:
-        identifier = self.get_identifier()
-        logger.info(
-            "Starting installation for '%s' with identifier '%s'...",
-            self.name,
-            identifier,
-        )
-        self.installer.install(identifier)
-
-    def uninstall(self) -> None:
-        identifier = self.get_identifier()
-        logger.info(
-            "Starting uninstallation for '%s' with identifier '%s'...",
-            self.name,
-            identifier,
-        )
-        self.installer.uninstall(identifier)
-
-    def __repr__(self) -> str:
-        return (
-            f"Package(name='{self.name}', identifier_map={self.id_map}, "
-            f"purpose='{self.description}', tags={self.tags})"
-        )
+    @staticmethod
+    def is_available(cls):
+        return False
 
 
 if __name__ == "__main__":
     print(PackageManager.all_subclasses())
     print(Yay())
-#     PacMan.install("fzf")
-#     PacMan.uninstall("fzf")

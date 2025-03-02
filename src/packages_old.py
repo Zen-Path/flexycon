@@ -21,6 +21,7 @@ def run_command(command: List[str]) -> int:
         logger.exception(
             "Unexpected error while running command: %s", " ".join(command)
         )
+    return 0
 
 
 class PackageInstaller(ABC):
