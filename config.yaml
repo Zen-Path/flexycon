@@ -26,6 +26,9 @@ dotfiles:
     f_inputrc:
         src: config/shell/inputrc
         dst: ~/.config/shell/inputrc
+    f_zshrc:
+        src: config/zsh/.zshrc
+        dst: ~/.config/zsh/.zshrc
 profiles:
     meta_shell:
         dotfiles:
@@ -37,10 +40,12 @@ profiles:
     linux-home:
         dotfiles:
             - f_alacritty.toml
+            - f_zshrc
         include:
             - meta_shell
     mac-work:
         dotfiles:
             - f_alacritty.toml
+            - f_zshrc
         include:
             - meta_shell
