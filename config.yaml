@@ -29,9 +29,13 @@ dotfiles:
     f_zshrc:
         src: config/zsh/.zshrc.sh.j2
         dst: ~/.config/zsh/.zshrc
+    f_config.yaml:
+        src: ../config.yaml
+        dst: ~/.config/dotdrop/config.yaml
 profiles:
     meta_base:
         dotfiles:
+            - f_config.yaml
             - f_profile
             - f_inputrc
             - f_aliasrc
