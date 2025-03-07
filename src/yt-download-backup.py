@@ -40,7 +40,7 @@ for line in lines:
         command = yt_dlp_options + [
             f"https://www.youtube.com/watch?v={video_id}",
             "--output",
-            os.path.join(output_path, file_name)
+            os.path.join(output_path, file_name),
         ]
 
         print(f"Downloading: {file_name} to {output_path}")
