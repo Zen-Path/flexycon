@@ -12,16 +12,16 @@ dotfiles:
         src: config/alacritty/alacritty.toml
         dst: ~/.config/alacritty/alacritty.toml
     f_profile:
-        src: config/shell/profile
+        src: config/shell/profile.sh.j2
         dst: ~/.config/shell/profile
     f_aliasrc:
-        src: config/shell/aliasrc
+        src: config/shell/aliasrc.sh.j2
         dst: ~/.config/shell/aliasrc
     f_bm-dirs:
-        src: config/shell/bm-dirs
+        src: config/shell/bm-dirs.sh.j2
         dst: ~/.config/shell/bm-dirs
     f_bm-files:
-        src: config/shell/bm-files
+        src: config/shell/bm-files.sh.j2
         dst: ~/.config/shell/bm-files
     f_inputrc:
         src: config/shell/inputrc

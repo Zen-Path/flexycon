@@ -3,9 +3,15 @@
 # keys    filename                                          description
 bf    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/bm-files    # This file, a list of bookmarked files
 bd    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/bm-dirs     # A list of bookmarked directories similar to this file
+
+{%@@ if os == "linux" @@%}
 cfr   "${XDG_CONFIG_HOME:-$HOME/.config}"/x11/xresources    # Colors, themes and variables for X11
 cfb    ~/.local/src/dwmblocks-async/config.c                # dwmblocks: the status bar for dwm
 cfd    ~/.local/src/dwm/config.h
+
+cfX    "${XDG_CONFIG_HOME:-$HOME/.config}"/nsxiv/exec/key-handler   # nsxiv (image viewer) key/script handler
+cfx    "$HOME/.xprofile"
+{%@@ endif -@@%}
 
 cfyi   "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi/yazi.toml   # Yazi init file
 cfyk   "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi/keymap.toml # Yazi keymap file
@@ -19,6 +25,4 @@ cfa    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/aliasrc    # aliases used by zs
 cfp    "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/profile    # profile file for login settings for zsh
 cfn    "${XDG_CONFIG_HOME:-$HOME/.config}"/newsraft/config  # newsraft (RSS reader)
 cff    "${XDG_CONFIG_HOME:-$HOME/.config}"/newsraft/feeds   # RSS urls for newsraft
-cfx    "$HOME/.xprofile"
-cfX    "${XDG_CONFIG_HOME:-$HOME/.config}"/nsxiv/exec/key-handler    # sxiv (image viewer) key/script handler
-cfg    "${XDG_CONFIG_HOME:-$HOME/.config}"/git/config.ini
+cfg    "${XDG_CONFIG_HOME:-$HOME/.config}"/git/config.ini   # Git config

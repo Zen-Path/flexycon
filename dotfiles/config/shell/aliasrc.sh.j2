@@ -21,13 +21,16 @@ alias py='python'
 alias sql='sqlite3'
 
 # Verbosity and common settings.
+{%@@ if os == "linux" @@%}
+alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
+{%@@elif os == "darwin" @@%}
+alias ls='ls -A -h --color=auto'
+{%@@ endif -@@%}
+
 alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -vI'
 alias bc='bc -ql'
-alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
-# MacOS:
-# alias ls='ls -A -h --color=auto'
 alias rg='rg -i'
 alias tp='trash-put --'
 alias rsync='rsync -vrPlu'
@@ -75,8 +78,10 @@ alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(play
 # [P]ackage [M]anager
 alias pm='yay'
 
+{%@@ if "home" in profile @@%}
 # [J]ournal [E]ntry
 alias je='journal_entry'
+{%@@ endif @@%}
 
 # [G]allery [D]ownload
 alias gld='gallery-dl'
