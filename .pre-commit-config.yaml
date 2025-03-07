@@ -1,0 +1,29 @@
+repos:
+    - repo: https://github.com/psf/black
+      rev: 25.1.0
+      hooks:
+          - id: black
+            name: black (python files only)
+            # Run only on Python files.
+            files: \.py$
+
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: v1.15.0
+      hooks:
+          - id: mypy
+
+    - repo: https://github.com/pycqa/isort
+      rev: 6.0.1
+      hooks:
+          - id: isort
+            args: ["--profile", "black"]
+
+    - repo: https://github.com/pre-commit/mirrors-prettier
+      rev: v4.0.0-alpha.8
+      hooks:
+          - id: prettier
+            name: prettier (non-python files)
+            # Either list the file extensions you want prettified…
+            # files: \.(js|jsx|ts|tsx|json|css|scss|html|md)$
+            # or exclude python files:
+            exclude: \.py$
