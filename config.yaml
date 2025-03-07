@@ -27,14 +27,20 @@ dotfiles:
         src: config/shell/inputrc
         dst: ~/.config/shell/inputrc
 profiles:
-    arch-pc:
+    meta_shell:
         dotfiles:
-            - f_alacritty.toml
             - f_profile
+            - f_inputrc
             - f_aliasrc
             - f_bm-dirs
             - f_bm-files
-            - f_inputrc
+    linux-home:
+        dotfiles:
+            - f_alacritty.toml
+        include:
+            - meta_shell
     mac-work:
         dotfiles:
             - f_alacritty.toml
+        include:
+            - meta_shell
