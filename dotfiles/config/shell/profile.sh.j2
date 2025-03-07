@@ -1,23 +1,21 @@
 #!/bin/sh
 
-# Shell profile. Runs on login. Environmental variables are set here.
+{{@@ header('# ') @@}}
 
-# Add `~/.local/bin` to $PATH
-export PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
-# MacOS. TODO: Find a better way to do same as above.
-# # Add Homebrew and ~/.local/bin to PATH
-# PATH="/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$PATH"
-# # Add all subdirectories of ~/.local/bin to PATH
-# PATH=$(find "$HOME/.local/bin" -type d | paste -sd ':' -):$PATH
+{%@@ if os == "darwin" @@%}
+# Add Homebrew to $PATH
+PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
+{%@@ endif -@@%}
 
-# export PATH
+PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
+export PATH
 
 unsetopt PROMPT_SP
 
 # Default programs:
 export EDITOR="nvim"
 export GRAPHICAL_EDITOR="code"
-export TERMINAL="alacritty"
+export TERMINAL={{@@ '"kitty"' if os == "darwin" else '"alacritty"' @@}}
 export BROWSER="firefox"
 export FILE_MANAGER='yazi'
 
@@ -37,7 +35,10 @@ export XDG_DESKTOP_DIR="$HOME/"
 export XDG_TEMPLATES_DIR="$HOME/"
 
 # ~/ Clean-up:
+{%@@ if os == "linux" @@%}
 export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
+{%@@ endif -@@%}
+
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
@@ -54,10 +55,15 @@ export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 
 # Other files
+{%@@ if "work" not in profile @@%}
 export JOURNAL_HOME="$HOME/Personal/No_Backup/Journal"
+{%@@ endif @@%}
 
 # Other program settings:
+{%@@ if os == "linux" @@%}
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+{%@@ endif -@@%}
+
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export LESS=-R
 export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/Trash --exclude .local/share/rustup --exclude .git/ --exclude node_modules/'
@@ -69,14 +75,16 @@ export FZF_DEFAULT_OPTS='--multi --extended'
 
 export BAT_THEME='gruvbox-dark'
 export PASTEL_COLOR_MODE='24bit'
+
+{%@@- if os == "linux" @@%}
 export _JAVA_AWT_WM_NONREPARENTING='1' # Fix for Java applications in dwm
+{%@@ endif -@@%}
+
 export MOZ_USE_XINPUT2='1' # Mozilla smooth scrolling/touchpads.
 
+{%@@ if os == "darwin" @@%}
 # === Android Studio ===
-export ANDROID_HOME="$XDG_DATA_HOME/SDKs"
-# MacOS
-# export ANDROID_HOME="~/Library/Android/sdk"
-export ANDROID_AVD_HOME="$XDG_CONFIG_HOME/.android/avd"
+export ANDROID_HOME="~/Library/Android/sdk"
 
 # === Appium ===
 # https://appium.io/docs/en/2.1/cli/env-vars
@@ -88,11 +96,14 @@ export ANDROID_AVD_HOME="$XDG_CONFIG_HOME/.android/avd"
 # Use system 'unzip' binary instead of JS lib.
 # If 'unzip' fails, it will use the lib as fallback though.
 export APPIUM_PREFER_SYSTEM_UNZIP='1'
+{%@@ endif @@%}
 
 [ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/shortcutrc ] && setsid shortcuts >/dev/null 2>&1
 
+{%@@ if os == "linux" @@%}
 # Start graphical server on user's current tty if not already running.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"
 
 # Switch escape and caps if tty and no passwd required:
 sudo -n loadkeys "${XDG_DATA_HOME:-$HOME/.local/share}"/larbs/ttymaps.kmap 2>/dev/null
+{%@@ endif @@%}

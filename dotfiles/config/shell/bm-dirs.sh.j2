@@ -1,31 +1,39 @@
 # Use '#' to add comments.
 
-# Home
+# Home dir
 h       "$HOME"
 doc     "$HOME/Documents"
 dwn     "$HOME/Downloads"
-arc     "$HOME/Archive"
-aud     "$HOME/Audio"
 mus     "$HOME/Music"
 pic     "$HOME/Pictures"
+vid     "$HOME/Videos"
+cac     "${XDG_CACHE_HOME:-$HOME/.cache}"
+
+{%@@ if "home" in profile @@%}
+# Home profile
+arc     "$HOME/Archive"
+aud     "$HOME/Audio"
 ent     "$HOME/Entertainment"
 hmr     "$HOME/Entertainment/Humor"
 nrd     "$HOME/Nerdy"
-vid     "$HOME/Videos"
-bks     "$HOME/Books"
 uni     "$HOME/University"
 jrd     "${JOURNAL_HOME:-$HOME/Journal}"
-cac     "${XDG_CACHE_HOME:-$HOME/.cache}"
+{%@@ endif @@%}
 
 # Config
 cf      "${XDG_CONFIG_HOME:-$HOME/.config}"
-cfy    "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi
+cfy     "${XDG_CONFIG_HOME:-$HOME/.config}"/yazi
 
 # Local
 lb      "$HOME/.local/bin"
 src     "$HOME/.local/src"
 flx     "$HOME/.local/src/flexycon"
 dt      "${XDG_DATA_HOME:-$HOME/.local/share}"
+
+{%@@ if "work" in profile @@%}
+# Work profile
+wis     "$HOME/.local/src/wis"
+{%@@ endif @@%}
 
 # Misc
 mn      "/mnt"
