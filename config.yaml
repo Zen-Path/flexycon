@@ -30,22 +30,18 @@ dotfiles:
         src: config/zsh/.zshrc.sh.j2
         dst: ~/.config/zsh/.zshrc
 profiles:
-    meta_shell:
+    meta_base:
         dotfiles:
             - f_profile
             - f_inputrc
             - f_aliasrc
             - f_bm-dirs
             - f_bm-files
+            - f_alacritty.toml
+            - f_zshrc
     linux-home:
-        dotfiles:
-            - f_alacritty.toml
-            - f_zshrc
         include:
-            - meta_shell
+            - meta_base
     mac-work:
-        dotfiles:
-            - f_alacritty.toml
-            - f_zshrc
         include:
-            - meta_shell
+            - meta_base
