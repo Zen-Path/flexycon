@@ -8,4 +8,13 @@ config:
     link_on_import: nolink
     longkey: false
 dotfiles:
+    f_alacritty.toml:
+        src: config/alacritty/alacritty.toml
+        dst: ~/.config/alacritty/alacritty.toml
 profiles:
+    arch-pc:
+        dotfiles:
+            - f_alacritty.toml
+    mac-work:
+        dotfiles:
+            - f_alacritty.toml
