@@ -27,7 +27,7 @@ dotfiles:
         src: config/shell/inputrc
         dst: ~/.config/shell/inputrc
     f_zshrc:
-        src: config/zsh/.zshrc
+        src: config/zsh/.zshrc.sh.j2
         dst: ~/.config/zsh/.zshrc
 profiles:
     meta_shell:
