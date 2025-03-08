@@ -49,6 +49,9 @@ dotfiles:
     f_firefox_user:
         src: config/firefox/user.js.j2
         dst: ~/.config/firefox/user.js
+    d_yazi:
+        src: config/yazi
+        dst: ~/.config/yazi
 profiles:
     meta_base:
         dotfiles:
@@ -61,6 +64,7 @@ profiles:
             - f_bm_files
             - d_firefox_chrome
             - f_firefox_user
+            - d_yazi
     linux-home:
         include:
             - meta_base
