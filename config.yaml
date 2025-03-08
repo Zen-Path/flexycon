@@ -4,7 +4,7 @@ config:
     create: true
     dotpath: dotfiles
     keepdot: false
-    link_dotfile_default: nolink
+    link_dotfile_default: absolute
     link_on_import: nolink
     longkey: false
 dotfiles:
@@ -18,7 +18,6 @@ dotfiles:
     f_shell_profile:
         src: config/shell/profile.sh.j2
         dst: ~/.zprofile
-        link: absolute
     f_shell_inputrc:
         src: config/shell/inputrc
         dst: ~/.config/shell/inputrc
