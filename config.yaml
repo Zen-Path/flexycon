@@ -12,9 +12,13 @@ dotfiles:
         src: ../config.yaml
         dst: ~/.config/dotdrop/config.yaml
     # Shell
+    # Using a link since accidentally deleting this file would be a
+    # PITA to restore without a shell config. This way, we can run:
+    # `ln -s .config/dotdrop/.zprofile .`
     f_shell_profile:
         src: config/shell/profile.sh.j2
-        dst: ~/.config/shell/profile
+        dst: ~/.zprofile
+        link: absolute
     f_shell_inputrc:
         src: config/shell/inputrc
         dst: ~/.config/shell/inputrc
