@@ -35,6 +35,9 @@ dotfiles:
     d_firefox:
         src: config/firefox
         dst: ~/.config/firefox
+    d_kitty:
+        src: config/kitty
+        dst: ~/.config/kitty
 profiles:
     meta_base:
         dotfiles:
@@ -53,3 +56,5 @@ profiles:
     mac-work:
         include:
             - meta_base
+        dotfiles:
+            - d_kitty
