@@ -8,6 +8,7 @@ config:
     link_on_import: nolink
     longkey: false
 actions:
+    yazi-upgrade-plugins: ya pack --upgrade
     vscode-list-extensions: code --list-extensions > "$FLEXYCON_HOME/dotfiles/config/vscode/extensions.txt"
 dotfiles:
     f_dotdrop_config:
@@ -91,8 +92,8 @@ profiles:
             - f_yazi_package
             - f_yazi_init
             - d_yazi_plugins
-        actions:
-            - upgrade-yazi
+        # actions:
+        #     - yazi-upgrade-plugins
     meta_base:
         dotfiles:
             - f_dotdrop_config
