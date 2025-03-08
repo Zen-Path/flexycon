@@ -17,13 +17,17 @@ alias p='pacman'
 alias t='task'
 alias z='zathura'
 alias ka='killall'
-alias py='python'
 alias sql='sqlite3'
+{%@@ if os == "linux" @@%}
+alias py='python'
+{%@@ elif os == "darwin" @@%}
+alias py='python3'
+{%@@ endif @@%}
 
 # Verbosity and common settings.
 {%@@ if os == "linux" @@%}
 alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
-{%@@elif os == "darwin" @@%}
+{%@@ elif os == "darwin" @@%}
 alias ls='ls -A -h --color=auto'
 {%@@ endif -@@%}
 
