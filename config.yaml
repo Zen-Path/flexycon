@@ -32,9 +32,9 @@ dotfiles:
         src: config/shell/bm-files.sh.j2
         dst: ~/.config/shell/bm-files
     # Terminal
-    f_alacritty.toml:
-        src: config/alacritty/alacritty.toml.j2
-        dst: ~/.config/alacritty/alacritty.toml
+    d_alacritty:
+        src: config/alacritty
+        dst: ~/.config/alacritty
     d_kitty:
         src: config/kitty
         dst: ~/.config/kitty
@@ -61,7 +61,7 @@ profiles:
         include:
             - meta_base
         dotfiles:
-            - f_alacritty.toml
+            - d_alacritty
     mac-work:
         include:
             - meta_base
