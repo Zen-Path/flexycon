@@ -32,6 +32,9 @@ dotfiles:
     f_config.yaml:
         src: ../config.yaml
         dst: ~/.config/dotdrop/config.yaml
+    d_firefox:
+        src: config/firefox
+        dst: ~/.config/firefox
 profiles:
     meta_base:
         dotfiles:
@@ -43,6 +46,7 @@ profiles:
             - f_bm-files
             - f_alacritty.toml
             - f_zshrc
+            - d_firefox
     linux-home:
         include:
             - meta_base
