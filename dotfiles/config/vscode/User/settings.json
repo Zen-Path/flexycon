@@ -22,7 +22,8 @@
     "cSpell.enableFiletypes": ["!c"],
     "files.autoSave": "onFocusChange",
     "files.exclude": {
-        "**/.git": false
+        "**/.git": false,
+        "**/node_modules": true
     },
     "files.trimTrailingWhitespace": true,
     "editor.scrollbar.vertical": "hidden",
@@ -42,5 +43,8 @@
     },
     "editor.detectIndentation": false,
     "diffEditor.ignoreTrimWhitespace": false,
-    "git.openRepositoryInParentFolders": "always"
+    "git.openRepositoryInParentFolders": "always",
+    "search.exclude": {
+        "**/.git": true
+    }
 }
