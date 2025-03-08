@@ -48,9 +48,26 @@ dotfiles:
     f_firefox_user:
         src: config/firefox/user.js.j2
         dst: ~/.config/firefox/user.js
-    d_yazi:
-        src: config/yazi
-        dst: ~/.config/yazi
+    # File Manager
+    f_yazi_config:
+        src: config/yazi/yazi.toml
+        dst: ~/.config/yazi/yazi.toml
+    f_yazi_keymap:
+        src: config/yazi/keymap.toml
+        dst: ~/.config/yazi/keymap.toml
+    f_yazi_theme:
+        src: config/yazi/theme.toml
+        dst: ~/.config/yazi/theme.toml
+    f_yazi_package:
+        src: config/yazi/package.toml
+        dst: ~/.config/yazi/package.toml
+    f_yazi_init:
+        src: config/yazi/init.lua
+        dst: ~/.config/yazi/init.lua
+    d_yazi_plugins:
+        src: config/yazi/plugins
+        dst: ~/.config/yazi/plugins
+        link: link_children
 profiles:
     meta_base:
         dotfiles:
@@ -63,7 +80,12 @@ profiles:
             - f_bm_files
             - d_firefox_chrome
             - f_firefox_user
-            - d_yazi
+            - f_yazi_config
+            - f_yazi_keymap
+            - f_yazi_theme
+            - f_yazi_package
+            - f_yazi_init
+            - d_yazi_plugins
     linux-home:
         include:
             - meta_base
