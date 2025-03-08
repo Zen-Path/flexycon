@@ -8,54 +8,60 @@ config:
     link_on_import: nolink
     longkey: false
 dotfiles:
+    f_dotdrop_config:
+        src: ../config.yaml
+        dst: ~/.config/dotdrop/config.yaml
+    # Shell
+    f_shell_profile:
+        src: config/shell/profile.sh.j2
+        dst: ~/.config/shell/profile
+    f_shell_inputrc:
+        src: config/shell/inputrc
+        dst: ~/.config/shell/inputrc
+    f_shell_aliasrc:
+        src: config/shell/aliasrc.sh.j2
+        dst: ~/.config/shell/aliasrc
+    f_zsh_config:
+        src: config/zsh/config.sh
+        dst: ~/.config/zsh/.zshrc
+    # Shortcuts
+    f_bm_dirs:
+        src: config/shell/bm-dirs.sh.j2
+        dst: ~/.config/shell/bm-dirs
+    f_bm_files:
+        src: config/shell/bm-files.sh.j2
+        dst: ~/.config/shell/bm-files
+    # Terminal
     f_alacritty.toml:
         src: config/alacritty/alacritty.toml.j2
         dst: ~/.config/alacritty/alacritty.toml
-    f_profile:
-        src: config/shell/profile.sh.j2
-        dst: ~/.config/shell/profile
-    f_aliasrc:
-        src: config/shell/aliasrc.sh.j2
-        dst: ~/.config/shell/aliasrc
-    f_bm-dirs:
-        src: config/shell/bm-dirs.sh.j2
-        dst: ~/.config/shell/bm-dirs
-    f_bm-files:
-        src: config/shell/bm-files.sh.j2
-        dst: ~/.config/shell/bm-files
-    f_inputrc:
-        src: config/shell/inputrc
-        dst: ~/.config/shell/inputrc
-    f_zshrc:
-        src: config/zsh/.zshrc.sh.j2
-        dst: ~/.config/zsh/.zshrc
-    f_config.yaml:
-        src: ../config.yaml
-        dst: ~/.config/dotdrop/config.yaml
-    f_firefox_user:
-        src: config/firefox/user.js.j2
-        dst: ~/.config/firefox/user.js
-    d_firefox_chrome:
-        src: config/firefox/chrome
-        dst: ~/.config/firefox/chrome
     d_kitty:
         src: config/kitty
         dst: ~/.config/kitty
+    # Browser
+    d_firefox_chrome:
+        src: config/firefox/chrome
+        dst: ~/.config/firefox/chrome
+    f_firefox_user:
+        src: config/firefox/user.js.j2
+        dst: ~/.config/firefox/user.js
 profiles:
     meta_base:
         dotfiles:
-            - f_config.yaml
-            - f_profile
-            - f_inputrc
-            - f_aliasrc
-            - f_bm-dirs
-            - f_bm-files
-            - f_alacritty.toml
-            - f_firefox_user
+            - f_dotdrop_config
+            - f_shell_profile
+            - f_shell_inputrc
+            - f_shell_aliasrc
+            - f_zsh_config
+            - f_bm_dirs
+            - f_bm_files
             - d_firefox_chrome
+            - f_firefox_user
     linux-home:
         include:
             - meta_base
+        dotfiles:
+            - f_alacritty.toml
     mac-work:
         include:
             - meta_base
