@@ -8,7 +8,7 @@ config:
     link_on_import: nolink
     longkey: false
 actions:
-    upgrade-yazi: ya pack --upgrade
+    vscode-list-extensions: code --list-extensions > "$FLEXYCON_HOME/dotfiles/config/vscode/extensions.txt"
 dotfiles:
     f_dotdrop_config:
         src: ../config.yaml
@@ -70,6 +70,18 @@ dotfiles:
         src: config/yazi/plugins
         dst: ~/.config/yazi/plugins
         link: link_children
+    f_vscode-keybindings:
+        src: config/vscode/User/keybindings.json
+        dst: ~/.config/Code - OSS/User/keybindings.json
+        link: nolink
+        actions:
+            - vscode-list-extensions
+    f_vscode_settings:
+        src: config/vscode/User/settings.json
+        dst: ~/.config/Code - OSS/User/settings.json
+        link: nolink
+        actions:
+            - vscode-list-extensions
 profiles:
     meta_yazi:
         dotfiles:
@@ -92,6 +104,8 @@ profiles:
             - f_bm_files
             - d_firefox_chrome
             - f_firefox_user
+            - f_vscode-keybindings
+            - f_vscode_settings
         include:
             - meta_yazi
     linux-home:
