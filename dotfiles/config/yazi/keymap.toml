@@ -226,9 +226,7 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
     { on = "'",     run = "search_do --via=fd --args='--no-ignore'", desc = "Display flat directory contents" },
     { on = "\"",    run = "search_do --via=fd --args='--type file --no-ignore'", desc = "Display flat directory files" },
 
-    { on = "<Enter>",   run = "open",           desc = "Open selected files" },
-    { on = "<S-Enter>", run = "noop",           desc = "" },
-    # There's an issue with 'Shift+Enter' for some reason
+    { on = "<Enter>",   run = "open",   desc = "Open selected files" },
     { on = "<C-Enter>", run = "open --hovered --interactive", desc = "Open selected files interactively" },
 
     # = 'z' to '?'
