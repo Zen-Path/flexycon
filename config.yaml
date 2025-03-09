@@ -89,6 +89,9 @@ dotfiles:
     d_dunst:
         src: config/dunst
         dst: ~/.config/dunst
+    f_config.ini:
+        src: config/git/config.ini
+        dst: ~/.config/git/config.ini
 profiles:
     meta_yazi:
         dotfiles:
@@ -109,6 +112,7 @@ profiles:
             - f_zsh_config
             - f_bm_dirs
             - f_bm_files
+            - f_config.ini
             - d_firefox_chrome
             - f_firefox_user
             - f_vscode-keybindings
