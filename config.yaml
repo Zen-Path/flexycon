@@ -340,6 +340,18 @@ profiles:
             - d_bottom
             - d_dunst
 
+            - f_compiler
+            - f_continuous_diff
+            - f_fzfopen
+            - f_getkeys
+            - f_ifinstalled
+            - f_imgconv
+            - f_noisereduce
+            - f_rcfmt
+            - f_sd
+            - f_shortcuts
+            - f_tag
+
     linux-home:
         include:
             - meta_mandatory
@@ -373,18 +385,6 @@ profiles:
             - f_select_unicode
             - f_setbg
             - f_sysact
-
-            - f_compiler
-            - f_continuous_diff
-            - f_fzfopen
-            - f_getkeys
-            - f_ifinstalled
-            - f_imgconv
-            - f_noisereduce
-            - f_rcfmt
-            - f_sd
-            - f_shortcuts
-            - f_tag
     mac-work:
         include:
             - meta_mandatory
