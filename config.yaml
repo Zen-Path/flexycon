@@ -129,6 +129,9 @@ dotfiles:
     d_fontconfig:
         src: config/fontconfig
         dst: ~/.config/fontconfig
+    f_init.vim:
+        src: config/nvim/init.vim
+        dst: ~/.config/nvim/init.vim
 profiles:
     meta_yazi:
         dotfiles:
@@ -162,6 +165,7 @@ profiles:
             - f_vscode_settings
             - d_bottom_config
             - d_gallery-dl
+            - f_init.vim
     linux-home:
         include:
             - meta_base
