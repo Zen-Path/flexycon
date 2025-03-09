@@ -98,6 +98,9 @@ dotfiles:
     d_yay:
         src: config/yay
         dst: ~/.config/yay
+    d_x11:
+        src: config/x11
+        dst: ~/.config/x11
 profiles:
     meta_yazi:
         dotfiles:
@@ -131,6 +134,7 @@ profiles:
             - meta_base
         dotfiles:
             - d_yay
+            - d_x11
             - d_alacritty
             - d_dunst
             - d_gtk-3.0
