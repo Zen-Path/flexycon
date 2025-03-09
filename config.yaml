@@ -117,6 +117,9 @@ dotfiles:
     f_mimeapps.list:
         src: config/mimeapps.list
         dst: ~/.config/mimeapps.list
+    f_config:
+        src: config/newsraft/config
+        dst: ~/.config/newsraft/config
     d_fontconfig:
         src: config/fontconfig
         dst: ~/.config/fontconfig
@@ -163,6 +166,7 @@ profiles:
             - d_dunst
             - d_gtk-3.0
             - f_mimeapps.list
+            - f_config
             - d_fontconfig
     mac-work:
         include:
