@@ -83,6 +83,9 @@ dotfiles:
         link: nolink
         actions:
             - vscode-list-extensions
+    d_bottom_config:
+        src: config/bottom
+        dst: ~/.config/bottom
 profiles:
     meta_yazi:
         dotfiles:
@@ -107,6 +110,7 @@ profiles:
             - f_firefox_user
             - f_vscode-keybindings
             - f_vscode_settings
+            - d_bottom_config
         include:
             - meta_yazi
     linux-home:
