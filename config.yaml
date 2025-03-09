@@ -114,6 +114,9 @@ dotfiles:
         src: config/mpv/plugins/mpv-gallery-view/scripts
         dst: ~/.config/mpv/scripts/
         link: link_children
+    f_mimeapps.list:
+        src: config/mimeapps.list
+        dst: ~/.config/mimeapps.list
 profiles:
     meta_yazi:
         dotfiles:
@@ -156,6 +159,7 @@ profiles:
             - d_alacritty
             - d_dunst
             - d_gtk-3.0
+            - f_mimeapps.list
     mac-work:
         include:
             - meta_base
