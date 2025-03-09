@@ -135,6 +135,9 @@ dotfiles:
     f_config:
         src: config/newsraft/config
         dst: ~/.config/newsraft/config
+    f_taskrc:
+        src: config/task/taskrc
+        dst: ~/.config/task/taskrc
     d_nsxiv:
         src: config/nsxiv
         dst: ~/.config/nsxiv
@@ -194,6 +197,7 @@ profiles:
             - f_daemon.conf
             - d_pipewire
             - f_config
+            - f_taskrc
             - d_nsxiv
             - d_fontconfig
     mac-work:
