@@ -123,6 +123,9 @@ dotfiles:
     f_config:
         src: config/newsraft/config
         dst: ~/.config/newsraft/config
+    d_nsxiv:
+        src: config/nsxiv
+        dst: ~/.config/nsxiv
     d_fontconfig:
         src: config/fontconfig
         dst: ~/.config/fontconfig
@@ -171,6 +174,7 @@ profiles:
             - d_gtk-3.0
             - f_mimeapps.list
             - f_config
+            - d_nsxiv
             - d_fontconfig
     mac-work:
         include:
