@@ -133,6 +133,8 @@ profiles:
             - f_mpv_plugin_gallery_view_gallery.lua
             - d_mpv_plugin_gallery_view_scripts
     meta_base:
+        include:
+            - meta_yazi
         dotfiles:
             - f_dotdrop_config
             - f_shell_profile
@@ -148,8 +150,6 @@ profiles:
             - f_vscode_settings
             - d_bottom_config
             - d_gallery-dl
-        include:
-            - meta_yazi
     linux-home:
         include:
             - meta_base
