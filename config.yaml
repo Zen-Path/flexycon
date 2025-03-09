@@ -156,6 +156,117 @@ dotfiles:
     d_unicode:
         src: share/unicode
         dst: ~/.local/share/unicode
+    d_statusbar:
+        src: bin/statusbar
+        dst: ~/.local/bin/statusbar
+    f_avds:
+        src: bin/avds
+        dst: ~/.local/bin/avds
+        chmod: "755"
+    f_compiler:
+        src: bin/compiler
+        dst: ~/.local/bin/compiler
+        chmod: "755"
+    f_continuous_diff:
+        src: bin/continuous_diff
+        dst: ~/.local/bin/continuous_diff
+        chmod: "755"
+    f_displayselect:
+        src: bin/displayselect
+        dst: ~/.local/bin/displayselect
+        chmod: "755"
+    f_dmenuhandler:
+        src: bin/dmenuhandler
+        dst: ~/.local/bin/dmenuhandler
+        chmod: "755"
+    f_dmenupass:
+        src: bin/dmenupass
+        dst: ~/.local/bin/dmenupass
+        chmod: "755"
+    f_dmenurecord:
+        src: bin/dmenurecord
+        dst: ~/.local/bin/dmenurecord
+        chmod: "755"
+    f_fzfopen:
+        src: bin/fzfopen
+        dst: ~/.local/bin/fzfopen
+        chmod: "755"
+    f_getkeys:
+        src: bin/getkeys
+        dst: ~/.local/bin/getkeys
+        chmod: "755"
+    f_ifinstalled:
+        src: bin/ifinstalled
+        dst: ~/.local/bin/ifinstalled
+        chmod: "755"
+    f_imgconv:
+        src: bin/imgconv
+        dst: ~/.local/bin/imgconv
+        chmod: "755"
+    f_journal_entry:
+        src: bin/journal_entry
+        dst: ~/.local/bin/journal_entry
+        chmod: "755"
+    f_kbselect:
+        src: bin/kbselect
+        dst: ~/.local/bin/kbselect
+        chmod: "755"
+    f_mounter:
+        src: bin/mounter
+        dst: ~/.local/bin/mounter
+        chmod: "755"
+    f_noisereduce:
+        src: bin/noisereduce
+        dst: ~/.local/bin/noisereduce
+        chmod: "755"
+    f_pkgsize:
+        src: bin/pkgsize
+        dst: ~/.local/bin/pkgsize
+        chmod: "755"
+    f_rcfmt:
+        src: bin/rcfmt
+        dst: ~/.local/bin/rcfmt
+        chmod: "755"
+    f_remapd:
+        src: bin/remapd
+        dst: ~/.local/bin/remapd
+        chmod: "755"
+    f_remaps:
+        src: bin/remaps
+        dst: ~/.local/bin/remaps
+        chmod: "755"
+    f_screenshot_utility:
+        src: bin/screenshot_utility
+        dst: ~/.local/bin/screenshot_utility
+        chmod: "755"
+    f_sd:
+        src: bin/sd
+        dst: ~/.local/bin/sd
+        chmod: "755"
+    f_select_unicode:
+        src: bin/select_unicode
+        dst: ~/.local/bin/select_unicode
+        chmod: "755"
+    f_setbg:
+        src: bin/setbg
+        dst: ~/.local/bin/setbg
+        chmod: "755"
+    f_shortcuts:
+        src: bin/shortcuts
+        dst: ~/.local/bin/shortcuts
+        chmod: "755"
+    f_sysact:
+        src: bin/sysact
+        dst: ~/.local/bin/sysact
+        chmod: "755"
+    f_tag:
+        src: bin/tag
+        dst: ~/.local/bin/tag
+        chmod: "755"
+    f_unmounter:
+        src: bin/unmounter
+        dst: ~/.local/bin/unmounter
+        chmod: "755"
 profiles:
     meta_yazi:
         dotfiles:
@@ -212,6 +323,34 @@ profiles:
             - d_fontconfig
             - d_applications
             - d_unicode
+            - d_statusbar
+            - f_avds
+            - f_compiler
+            - f_continuous_diff
+            - f_displayselect
+            - f_dmenuhandler
+            - f_dmenupass
+            - f_dmenurecord
+            - f_fzfopen
+            - f_getkeys
+            - f_ifinstalled
+            - f_imgconv
+            - f_journal_entry
+            - f_kbselect
+            - f_mounter
+            - f_noisereduce
+            - f_pkgsize
+            - f_rcfmt
+            - f_remapd
+            - f_remaps
+            - f_screenshot_utility
+            - f_sd
+            - f_select_unicode
+            - f_setbg
+            - f_shortcuts
+            - f_sysact
+            - f_tag
+            - f_unmounter
     mac-work:
         include:
             - meta_base
