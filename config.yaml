@@ -86,6 +86,9 @@ dotfiles:
     d_bottom_config:
         src: config/bottom
         dst: ~/.config/bottom
+    d_dunst:
+        src: config/dunst
+        dst: ~/.config/dunst
 profiles:
     meta_yazi:
         dotfiles:
@@ -118,6 +121,7 @@ profiles:
             - meta_base
         dotfiles:
             - d_alacritty
+            - d_dunst
     mac-work:
         include:
             - meta_base
