@@ -120,6 +120,9 @@ dotfiles:
     d_zathura:
         src: config/zathura
         dst: ~/.config/zathura
+    f_daemon.conf:
+        src: config/pulse/daemon.conf
+        dst: ~/.config/pulse/daemon.conf
     d_pipewire:
         src: config/pipewire
         dst: ~/.config/pipewire
@@ -180,6 +183,7 @@ profiles:
             - d_gtk-3.0
             - f_mimeapps.list
             - d_zathura
+            - f_daemon.conf
             - d_pipewire
             - f_config
             - d_nsxiv
