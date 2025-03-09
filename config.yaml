@@ -101,6 +101,19 @@ dotfiles:
     d_x11:
         src: config/x11
         dst: ~/.config/x11
+    f_mpv_config:
+        src: config/mpv/mpv.conf
+        dst: ~/.config/mpv/mpv.conf
+    f_mpv_input:
+        src: config/mpv/input.conf
+        dst: ~/.config/mpv/input.conf
+    f_mpv_plugin_gallery_view_gallery.lua:
+        src: config/mpv/plugins/mpv-gallery-view/script-modules/gallery.lua
+        dst: ~/.config/mpv/script-modules/gallery.lua
+    d_mpv_plugin_gallery_view_scripts:
+        src: config/mpv/plugins/mpv-gallery-view/scripts
+        dst: ~/.config/mpv/scripts/
+        link: link_children
 profiles:
     meta_yazi:
         dotfiles:
@@ -110,8 +123,12 @@ profiles:
             - f_yazi_package
             - f_yazi_init
             - d_yazi_plugins
-        # actions:
-        #     - yazi-upgrade-plugins
+    meta_mpv:
+        dotfiles:
+            - f_mpv_config
+            - f_mpv_input
+            - f_mpv_plugin_gallery_view_gallery.lua
+            - d_mpv_plugin_gallery_view_scripts
     meta_base:
         dotfiles:
             - f_dotdrop_config
@@ -132,6 +149,7 @@ profiles:
     linux-home:
         include:
             - meta_base
+            - meta_mpv
         dotfiles:
             - d_yay
             - d_x11
