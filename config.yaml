@@ -92,6 +92,9 @@ dotfiles:
     f_config.ini:
         src: config/git/config.ini
         dst: ~/.config/git/config.ini
+    d_gtk-3.0:
+        src: config/gtk-3.0
+        dst: ~/.config/gtk-3.0
 profiles:
     meta_yazi:
         dotfiles:
@@ -126,6 +129,7 @@ profiles:
         dotfiles:
             - d_alacritty
             - d_dunst
+            - d_gtk-3.0
     mac-work:
         include:
             - meta_base
