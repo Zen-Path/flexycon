@@ -89,6 +89,9 @@ dotfiles:
     d_dunst:
         src: config/dunst
         dst: ~/.config/dunst
+    d_gallery-dl:
+        src: config/gallery-dl
+        dst: ~/.config/gallery-dl
 profiles:
     meta_yazi:
         dotfiles:
@@ -114,6 +117,7 @@ profiles:
             - f_vscode-keybindings
             - f_vscode_settings
             - d_bottom_config
+            - d_gallery-dl
         include:
             - meta_yazi
     linux-home:
