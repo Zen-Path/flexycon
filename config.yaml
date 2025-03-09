@@ -11,32 +11,50 @@ actions:
     yazi-upgrade-plugins: ya pack --upgrade
     vscode-list-extensions: code --list-extensions > "$FLEXYCON_HOME/dotfiles/config/vscode/extensions.txt"
 dotfiles:
-    f_dotdrop_config:
+    # MANDATORY
+    f_dotdrop:
         src: ../config.yaml
         dst: ~/.config/dotdrop/config.yaml
-    # Shell
-    # Using a link since accidentally deleting this file would be a
-    # PITA to restore without a shell config. This way, we can run:
-    # `ln -s .config/dotdrop/.zprofile .`
     f_shell_profile:
+        # Using a link since accidentally deleting this file would be a
+        # PITA to restore without a shell config. This way, we can run:
+        # `ln -s .config/dotdrop/.zprofile .`
         src: config/shell/profile.sh.j2
         dst: ~/.zprofile
     f_shell_inputrc:
         src: config/shell/inputrc
         dst: ~/.config/shell/inputrc
-    f_shell_aliasrc:
-        src: config/shell/aliasrc.sh.j2
-        dst: ~/.config/shell/aliasrc
     f_zsh_config:
         src: config/zsh/config.sh
         dst: ~/.config/zsh/.zshrc
-    # Shortcuts
+    f_git_config:
+        src: config/git/config.ini
+        dst: ~/.config/git/config.ini
+
+    # Shell
+    f_shell_aliasrc:
+        src: config/shell/aliasrc.sh.j2
+        dst: ~/.config/shell/aliasrc
     f_bm_dirs:
         src: config/shell/bm-dirs.sh.j2
         dst: ~/.config/shell/bm-dirs
     f_bm_files:
         src: config/shell/bm-files.sh.j2
         dst: ~/.config/shell/bm-files
+    d_starship:
+        src: config/starship
+        dst: ~/.config/starship
+
+    # Package Managers
+    d_yay:
+        src: config/yay
+        dst: ~/.config/yay
+
+    # WM / Desktop Environment
+    d_x11:
+        src: config/x11
+        dst: ~/.config/x11
+
     # Terminal
     d_alacritty:
         src: config/alacritty
@@ -44,13 +62,29 @@ dotfiles:
     d_kitty:
         src: config/kitty
         dst: ~/.config/kitty
-    # Browser
-    d_firefox_chrome:
-        src: config/firefox/chrome
-        dst: ~/.config/firefox/chrome
-    f_firefox_user:
-        src: config/firefox/user.js.j2
-        dst: ~/.config/firefox/user.js
+
+    # Text Editor
+    f_vim_init:
+        src: config/nvim/init.vim
+        dst: ~/.config/nvim/init.vim
+    f_vscode_settings:
+        src: config/vscode/User/settings.json
+        dst: ~/.config/Code - OSS/User/settings.json
+        link: nolink
+        actions:
+            - vscode-list-extensions
+    f_vscode_keybindings:
+        src: config/vscode/User/keybindings.json
+        dst: ~/.config/Code - OSS/User/keybindings.json
+        link: nolink
+        actions:
+            - vscode-list-extensions
+
+    # Programming
+    d_python:
+        src: config/python
+        dst: ~/.config/python
+
     # File Manager
     f_yazi_config:
         src: config/yazi/yazi.toml
@@ -71,36 +105,16 @@ dotfiles:
         src: config/yazi/plugins
         dst: ~/.config/yazi/plugins
         link: link_children
-    f_vscode-keybindings:
-        src: config/vscode/User/keybindings.json
-        dst: ~/.config/Code - OSS/User/keybindings.json
-        link: nolink
-        actions:
-            - vscode-list-extensions
-    f_vscode_settings:
-        src: config/vscode/User/settings.json
-        dst: ~/.config/Code - OSS/User/settings.json
-        link: nolink
-        actions:
-            - vscode-list-extensions
-    d_bottom_config:
-        src: config/bottom
-        dst: ~/.config/bottom
-    d_dunst:
-        src: config/dunst
-        dst: ~/.config/dunst
-    f_config.ini:
-        src: config/git/config.ini
-        dst: ~/.config/git/config.ini
-    d_gtk-3.0:
-        src: config/gtk-3.0
-        dst: ~/.config/gtk-3.0
-    d_yay:
-        src: config/yay
-        dst: ~/.config/yay
-    d_x11:
-        src: config/x11
-        dst: ~/.config/x11
+
+    # Browser
+    d_firefox_chrome:
+        src: config/firefox/chrome
+        dst: ~/.config/firefox/chrome
+    f_firefox_user:
+        src: config/firefox/user.js.j2
+        dst: ~/.config/firefox/user.js
+
+    # Media
     f_mpv_config:
         src: config/mpv/mpv.conf
         dst: ~/.config/mpv/mpv.conf
@@ -114,55 +128,58 @@ dotfiles:
         src: config/mpv/plugins/mpv-gallery-view/scripts
         dst: ~/.config/mpv/scripts/
         link: link_children
-    f_mimeapps.list:
-        src: config/mimeapps.list
-        dst: ~/.config/mimeapps.list
-    d_zathura:
-        src: config/zathura
-        dst: ~/.config/zathura
-    d_yt-dlp:
+    d_nsxiv:
+        src: config/nsxiv
+        dst: ~/.config/nsxiv
+    d_yt_dlp:
         src: config/yt-dlp
         dst: ~/.config/yt-dlp
-    d_starship:
-        src: config/starship
-        dst: ~/.config/starship
-    d_python:
-        src: config/python
-        dst: ~/.config/python
-    f_daemon.conf:
+
+    # Audio
+    f_pulse_daemon:
         src: config/pulse/daemon.conf
         dst: ~/.config/pulse/daemon.conf
     d_pipewire:
         src: config/pipewire
         dst: ~/.config/pipewire
-    f_config:
-        src: config/newsraft/config
-        dst: ~/.config/newsraft/config
-    f_taskrc:
+
+    # Programs
+    f_taskwarrior_config:
         src: config/task/taskrc
         dst: ~/.config/task/taskrc
-    d_nsxiv:
-        src: config/nsxiv
-        dst: ~/.config/nsxiv
+    d_zathura:
+        src: config/zathura
+        dst: ~/.config/zathura
+    f_newsraft_config:
+        src: config/newsraft/config
+        dst: ~/.config/newsraft/config
+    d_bottom:
+        src: config/bottom
+        dst: ~/.config/bottom
+    d_dunst:
+        src: config/dunst
+        dst: ~/.config/dunst
+    d_gtk_3:
+        src: config/gtk-3.0
+        dst: ~/.config/gtk-3.0
+
+    # Misc
     d_fontconfig:
         src: config/fontconfig
         dst: ~/.config/fontconfig
-    f_init.vim:
-        src: config/nvim/init.vim
-        dst: ~/.config/nvim/init.vim
+    f_mimeapps.list:
+        src: config/mimeapps.list
+        dst: ~/.config/mimeapps.list
+
+    # Share
     d_applications:
         src: share/applications
         dst: ~/.local/share/applications
     d_unicode:
         src: share/unicode
         dst: ~/.local/share/unicode
-    d_statusbar:
-        src: bin/statusbar
-        dst: ~/.local/bin/statusbar
-    f_avds:
-        src: bin/avds
-        dst: ~/.local/bin/avds
-        chmod: "755"
+
+    # Bins
     f_compiler:
         src: bin/compiler
         dst: ~/.local/bin/compiler
@@ -170,22 +187,6 @@ dotfiles:
     f_continuous_diff:
         src: bin/continuous_diff
         dst: ~/.local/bin/continuous_diff
-        chmod: "755"
-    f_displayselect:
-        src: bin/displayselect
-        dst: ~/.local/bin/displayselect
-        chmod: "755"
-    f_dmenuhandler:
-        src: bin/dmenuhandler
-        dst: ~/.local/bin/dmenuhandler
-        chmod: "755"
-    f_dmenupass:
-        src: bin/dmenupass
-        dst: ~/.local/bin/dmenupass
-        chmod: "755"
-    f_dmenurecord:
-        src: bin/dmenurecord
-        dst: ~/.local/bin/dmenurecord
         chmod: "755"
     f_fzfopen:
         src: bin/fzfopen
@@ -203,6 +204,47 @@ dotfiles:
         src: bin/imgconv
         dst: ~/.local/bin/imgconv
         chmod: "755"
+    f_noisereduce:
+        src: bin/noisereduce
+        dst: ~/.local/bin/noisereduce
+        chmod: "755"
+    f_rcfmt:
+        src: bin/rcfmt
+        dst: ~/.local/bin/rcfmt
+        chmod: "755"
+    f_sd:
+        src: bin/sd
+        dst: ~/.local/bin/sd
+        chmod: "755"
+    f_shortcuts:
+        src: bin/shortcuts
+        dst: ~/.local/bin/shortcuts
+        chmod: "755"
+    f_tag:
+        src: bin/tag
+        dst: ~/.local/bin/tag
+        chmod: "755"
+
+    # Linux / Home
+    d_statusbar:
+        src: bin/statusbar
+        dst: ~/.local/bin/statusbar
+    f_displayselect:
+        src: bin/displayselect
+        dst: ~/.local/bin/displayselect
+        chmod: "755"
+    f_dmenuhandler:
+        src: bin/dmenuhandler
+        dst: ~/.local/bin/dmenuhandler
+        chmod: "755"
+    f_dmenupass:
+        src: bin/dmenupass
+        dst: ~/.local/bin/dmenupass
+        chmod: "755"
+    f_dmenurecord:
+        src: bin/dmenurecord
+        dst: ~/.local/bin/dmenurecord
+        chmod: "755"
     f_journal_entry:
         src: bin/journal_entry
         dst: ~/.local/bin/journal_entry
@@ -215,17 +257,13 @@ dotfiles:
         src: bin/mounter
         dst: ~/.local/bin/mounter
         chmod: "755"
-    f_noisereduce:
-        src: bin/noisereduce
-        dst: ~/.local/bin/noisereduce
+    f_unmounter:
+        src: bin/unmounter
+        dst: ~/.local/bin/unmounter
         chmod: "755"
     f_pkgsize:
         src: bin/pkgsize
         dst: ~/.local/bin/pkgsize
-        chmod: "755"
-    f_rcfmt:
-        src: bin/rcfmt
-        dst: ~/.local/bin/rcfmt
         chmod: "755"
     f_remapd:
         src: bin/remapd
@@ -239,10 +277,6 @@ dotfiles:
         src: bin/screenshot_utility
         dst: ~/.local/bin/screenshot_utility
         chmod: "755"
-    f_sd:
-        src: bin/sd
-        dst: ~/.local/bin/sd
-        chmod: "755"
     f_select_unicode:
         src: bin/select_unicode
         dst: ~/.local/bin/select_unicode
@@ -251,21 +285,15 @@ dotfiles:
         src: bin/setbg
         dst: ~/.local/bin/setbg
         chmod: "755"
-    f_shortcuts:
-        src: bin/shortcuts
-        dst: ~/.local/bin/shortcuts
-        chmod: "755"
     f_sysact:
         src: bin/sysact
         dst: ~/.local/bin/sysact
         chmod: "755"
-    f_tag:
-        src: bin/tag
-        dst: ~/.local/bin/tag
-        chmod: "755"
-    f_unmounter:
-        src: bin/unmounter
-        dst: ~/.local/bin/unmounter
+
+    # Android Work
+    f_avds:
+        src: bin/avds
+        dst: ~/.local/bin/avds
         chmod: "755"
 profiles:
     meta_yazi:
@@ -282,77 +310,85 @@ profiles:
             - f_mpv_input
             - f_mpv_plugin_gallery_view_gallery.lua
             - d_mpv_plugin_gallery_view_scripts
-    meta_base:
+    meta_mandatory:
+        dotfiles:
+            - f_dotdrop
+            - f_shell_profile
+            - f_shell_inputrc
+            - f_zsh_config
+            - f_git_config
+    meta_goodies:
         include:
             - meta_yazi
         dotfiles:
-            - f_dotdrop_config
-            - f_shell_profile
-            - f_shell_inputrc
             - f_shell_aliasrc
-            - f_zsh_config
             - f_bm_dirs
             - f_bm_files
-            - f_config.ini
-            - d_firefox_chrome
-            - f_firefox_user
-            - f_vscode-keybindings
-            - f_vscode_settings
-            - d_bottom_config
-            - f_init.vim
-    linux-home:
-        include:
-            - meta_base
-            - meta_mpv
-        dotfiles:
+            - d_starship
             - d_yay
             - d_x11
-            - d_alacritty
-            - d_dunst
-            - d_gtk-3.0
-            - f_mimeapps.list
-            - d_zathura
-            - d_yt-dlp
-            - d_starship
+            - f_vim_init
+            - f_vscode_settings
+            - f_vscode_keybindings
             - d_python
-            - f_daemon.conf
-            - d_pipewire
-            - f_config
-            - f_taskrc
+            - d_firefox_chrome
+            - f_firefox_user
+            - d_yt_dlp
+            - f_taskwarrior_config
+            - d_zathura
+            - f_newsraft_config
+            - d_bottom
+            - d_dunst
+
+    linux-home:
+        include:
+            - meta_mandatory
+            - meta_goodies
+            - meta_mpv
+        dotfiles:
+            - d_alacritty
             - d_nsxiv
+            - f_pulse_daemon
+            - d_pipewire
+            - d_gtk_3
             - d_fontconfig
+            - f_mimeapps.list
+
             - d_applications
             - d_unicode
+
             - d_statusbar
-            - f_avds
-            - f_compiler
-            - f_continuous_diff
             - f_displayselect
             - f_dmenuhandler
             - f_dmenupass
             - f_dmenurecord
+            - f_journal_entry
+            - f_kbselect
+            - f_mounter
+            - f_unmounter
+            - f_pkgsize
+            - f_remapd
+            - f_remaps
+            - f_screenshot_utility
+            - f_select_unicode
+            - f_setbg
+            - f_sysact
+
+            - f_compiler
+            - f_continuous_diff
             - f_fzfopen
             - f_getkeys
             - f_ifinstalled
             - f_imgconv
-            - f_journal_entry
-            - f_kbselect
-            - f_mounter
             - f_noisereduce
-            - f_pkgsize
             - f_rcfmt
-            - f_remapd
-            - f_remaps
-            - f_screenshot_utility
             - f_sd
-            - f_select_unicode
-            - f_setbg
             - f_shortcuts
-            - f_sysact
             - f_tag
-            - f_unmounter
     mac-work:
         include:
-            - meta_base
+            - meta_mandatory
+            - meta_goodies
         dotfiles:
             - d_kitty
+            - f_avds
