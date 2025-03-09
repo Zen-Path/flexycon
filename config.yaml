@@ -150,6 +150,9 @@ dotfiles:
     f_init.vim:
         src: config/nvim/init.vim
         dst: ~/.config/nvim/init.vim
+    d_applications:
+        src: share/applications
+        dst: ~/.local/share/applications
 profiles:
     meta_yazi:
         dotfiles:
@@ -204,6 +207,7 @@ profiles:
             - f_taskrc
             - d_nsxiv
             - d_fontconfig
+            - d_applications
     mac-work:
         include:
             - meta_base
