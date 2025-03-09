@@ -117,6 +117,9 @@ dotfiles:
     f_mimeapps.list:
         src: config/mimeapps.list
         dst: ~/.config/mimeapps.list
+    d_fontconfig:
+        src: config/fontconfig
+        dst: ~/.config/fontconfig
 profiles:
     meta_yazi:
         dotfiles:
@@ -160,6 +163,7 @@ profiles:
             - d_dunst
             - d_gtk-3.0
             - f_mimeapps.list
+            - d_fontconfig
     mac-work:
         include:
             - meta_base
