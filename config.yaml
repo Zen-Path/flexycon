@@ -120,6 +120,9 @@ dotfiles:
     d_zathura:
         src: config/zathura
         dst: ~/.config/zathura
+    d_starship:
+        src: config/starship
+        dst: ~/.config/starship
     d_python:
         src: config/python
         dst: ~/.config/python
@@ -186,6 +189,7 @@ profiles:
             - d_gtk-3.0
             - f_mimeapps.list
             - d_zathura
+            - d_starship
             - d_python
             - f_daemon.conf
             - d_pipewire
