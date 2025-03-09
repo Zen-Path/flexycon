@@ -156,6 +156,9 @@ dotfiles:
     d_applications:
         src: share/applications
         dst: ~/.local/share/applications
+    d_unicode:
+        src: share/unicode
+        dst: ~/.local/share/unicode
 profiles:
     meta_yazi:
         dotfiles:
@@ -212,6 +215,7 @@ profiles:
             - d_nsxiv
             - d_fontconfig
             - d_applications
+            - d_unicode
     mac-work:
         include:
             - meta_base
