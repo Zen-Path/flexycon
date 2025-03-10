@@ -1,3 +1,7 @@
+uservariables:
+    dotdrop-profile: "dotdrop-profile"
+    git-email: "git-email"
+    git-username: "git-username"
 config:
     backup: false
     banner: false
@@ -7,6 +11,8 @@ config:
     link_dotfile_default: absolute
     link_on_import: absolute
     longkey: false
+    import_variables:
+        - uservariables.yaml:optional
 actions:
     yazi-upgrade-plugins: ya pack --upgrade
     vscode-list-extensions: code --list-extensions > "$FLEXYCON_HOME/dotfiles/config/vscode/extensions.txt"
