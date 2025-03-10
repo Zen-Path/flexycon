@@ -229,6 +229,7 @@ dotfiles:
     d_statusbar:
         src: bin/statusbar
         dst: ~/.local/bin/statusbar
+        link: link_children
     f_displayselect:
         src: bin/displayselect
         dst: ~/.local/bin/displayselect
