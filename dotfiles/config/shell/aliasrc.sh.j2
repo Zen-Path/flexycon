@@ -58,9 +58,9 @@ alias pfr='pip freeze > requirements.txt'
 
 # Rclone
 alias rc='rclone --progress --exclude "No_Backup/**" --exclude ".git/" copy'
-alias rcd='rclone --dry-run --progress --exclude "No_Backup/**" --exclude ".git/" copy'
+alias rcd='rc --dry-run'
 alias rs='rclone --create-empty-src-dirs --track-renames --progress --exclude "No_Backup/**" --exclude ".git/" sync'
-alias rsd='rclone --create-empty-src-dirs --track-renames --dry-run --progress --exclude "No_Backup/**" --exclude ".git/" sync'
+alias rsd='rs --dry-run'
 
 # Taskwarrior
 # TODO: use a similar approach to 'open_journal_entry' instead of
