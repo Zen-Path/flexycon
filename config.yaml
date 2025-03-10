@@ -2,6 +2,8 @@ uservariables:
     dotdrop_profile: "dotdrop_profile"
     git_email: "git_email"
     git_username: "git_username"
+dynvariables:
+    vscode_extensions_path: "echo $FLEXYCON_HOME/dotfiles/config/vscode/extensions.txt"
 config:
     backup: false
     banner: false
@@ -14,8 +16,10 @@ config:
     import_variables:
         - uservariables.yaml:optional
 actions:
-    yazi-upgrade-plugins: ya pack --upgrade
-    vscode-list-extensions: code --list-extensions > "$FLEXYCON_HOME/dotfiles/config/vscode/extensions.txt"
+    post:
+        yazi-upgrade-plugins: ya pack --upgrade
+        vscode-list-extensions: code --list-extensions | sort > "{{@@ vscode_extensions_path @@}}"
+        vscode-install-extensions: cat "{{@@ vscode_extensions_path @@}}" | xargs -n 1 code --install-extension
 dotfiles:
     # MANDATORY
     f_dotdrop:
@@ -76,15 +80,9 @@ dotfiles:
     f_vscode_settings:
         src: config/vscode/User/settings.json
         dst: ~/.config/Code - OSS/User/settings.json
-        link: nolink
-        actions:
-            - vscode-list-extensions
     f_vscode_keybindings:
         src: config/vscode/User/keybindings.json
         dst: ~/.config/Code - OSS/User/keybindings.json
-        link: nolink
-        actions:
-            - vscode-list-extensions
 
     # Programming
     d_python:
@@ -311,6 +309,13 @@ profiles:
             - f_yazi_package
             - f_yazi_init
             - d_yazi_plugins
+    meta_vscode:
+        dotfiles:
+            - f_vscode_settings
+            - f_vscode_keybindings
+        actions:
+            - vscode-list-extensions
+            - vscode-install-extensions
     meta_mpv:
         dotfiles:
             - f_mpv_config
@@ -327,6 +332,7 @@ profiles:
     meta_goodies:
         include:
             - meta_yazi
+            - meta_vscode
         dotfiles:
             - f_shell_aliasrc
             - f_bm_dirs
@@ -335,8 +341,6 @@ profiles:
             - d_yay
             - d_x11
             - f_vim_init
-            - f_vscode_settings
-            - f_vscode_keybindings
             - d_python
             - d_firefox_chrome
             - f_firefox_user
