@@ -21,6 +21,13 @@ actions:
         vscode-list-extensions: code --list-extensions | sort > "{{@@ vscode_extensions_path @@}}"
         vscode-install-extensions: cat "{{@@ vscode_extensions_path @@}}" | xargs -n 1 code --install-extension
 dotfiles:
+    f_fake_profile_actions_trigger:
+        # "Fake" files are always considered installed, so we can use this
+        # to trick dotdrop into always running a profile's actions, so we
+        # can update, refresh, install stuff etc. Idea is still WIP.
+        src:
+        dst:
+
     # MANDATORY
     f_dotdrop:
         src: ../config.yaml
@@ -329,6 +336,8 @@ profiles:
             - f_shell_inputrc
             - f_zsh_config
             - f_git_config
+
+            - f_fake_profile_actions_trigger
     meta_goodies:
         include:
             - meta_yazi
