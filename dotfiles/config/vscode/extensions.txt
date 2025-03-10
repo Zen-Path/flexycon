@@ -9,8 +9,8 @@ mechatroner.rainbow-csv
 ms-python.debugpy
 ms-python.python
 pkief.material-icon-theme
-s-nlf-fh.glassit
 samuelcolvin.jinjahtml
+s-nlf-fh.glassit
 streetsidesoftware.code-spell-checker
 svelte.svelte-vscode
 yandeu.five-server
