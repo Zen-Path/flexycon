@@ -81,7 +81,13 @@ alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(play
 # alias fm='$FILE_MANAGER'
 
 # [P]ackage [M]anager
+{%@@ if os == "linux" @@%}
+{%@@ if "arch" in distro_like @@%}
 alias pm='yay'
+{%@@ endif @@%}
+{%@@ elif os == "darwin" @@%}
+alias pm='brew'
+{%@@ endif @@%}
 
 {%@@ if "home" in profile @@%}
 # [J]ournal [E]ntry
