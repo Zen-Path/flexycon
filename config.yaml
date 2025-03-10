@@ -1,7 +1,7 @@
 uservariables:
-    dotdrop-profile: "dotdrop-profile"
-    git-email: "git-email"
-    git-username: "git-username"
+    dotdrop_profile: "dotdrop_profile"
+    git_email: "git_email"
+    git_username: "git_username"
 config:
     backup: false
     banner: false
