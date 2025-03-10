@@ -316,6 +316,8 @@ profiles:
             - f_yazi_package
             - f_yazi_init
             - d_yazi_plugins
+        actions:
+            - yazi-upgrade-plugins
     meta_vscode:
         dotfiles:
             - f_vscode_settings
