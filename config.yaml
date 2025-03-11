@@ -4,6 +4,7 @@ uservariables:
     git_username: "git_username"
 dynvariables:
     vscode_extensions_path: "echo $FLEXYCON_HOME/dotfiles/config/vscode/extensions.txt"
+    vscode_config_dir_dst_mac: "echo $HOME/Library/Application Support/Code/User"
 config:
     backup: false
     banner: false
@@ -87,9 +88,15 @@ dotfiles:
     f_vscode_settings:
         src: config/vscode/User/settings.json
         dst: ~/.config/Code - OSS/User/settings.json
+    f_vscode_settings_mac:
+        src: config/vscode/User/settings.json
+        dst: "{{@@ vscode_config_dir_dst_mac @@}}/settings.json"
     f_vscode_keybindings:
         src: config/vscode/User/keybindings.json
         dst: ~/.config/Code - OSS/User/keybindings.json
+    f_vscode_keybindings_mac:
+        src: config/vscode/User/keybindings.json
+        dst: "{{@@ vscode_config_dir_dst_mac @@}}/keybindings.json"
 
     # Programming
     d_python:
@@ -319,9 +326,6 @@ profiles:
         actions:
             - yazi-upgrade-plugins
     meta_vscode:
-        dotfiles:
-            - f_vscode_settings
-            - f_vscode_keybindings
         actions:
             - vscode-list-extensions
             - vscode-install-extensions
@@ -352,6 +356,8 @@ profiles:
             - d_yay
             - d_x11
             - f_vim_init
+            - f_vscode_settings
+            - f_vscode_keybindings
             - d_python
             - d_firefox_chrome
             - f_firefox_user
@@ -413,4 +419,7 @@ profiles:
             - meta_goodies
         dotfiles:
             - d_kitty
+            - f_vscode_settings_mac
+            - f_vscode_keybindings_mac
+
             - f_avds
