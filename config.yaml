@@ -329,8 +329,8 @@ profiles:
             - f_yazi_package
             - f_yazi_init
             - d_yazi_plugins
-        actions:
-            - yazi_plugins_upgrade
+        # actions:
+        # - yazi_plugins_upgrade
 
     meta_vscode:
         variables:
@@ -340,9 +340,9 @@ profiles:
         dotfiles:
             - f_vscode_settings
             - f_vscode_keybindings
-        actions:
-            - vscode_extensions_save
-            - vscode_extensions_install
+        # actions:
+        # - vscode_extensions_save
+        # - vscode_extensions_install
 
     meta_firefox:
         variables:
