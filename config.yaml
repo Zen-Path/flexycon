@@ -42,9 +42,9 @@ dotfiles:
     f_zsh_config:
         src: config/zsh/config.sh
         dst: ~/.config/zsh/.zshrc
-    f_git_config:
-        src: config/git/config.ini
-        dst: ~/.config/git/config.ini
+    d_git:
+        src: config/git
+        dst: ~/.config/git
 
     # Shell
     f_shell_aliasrc:
@@ -369,7 +369,7 @@ profiles:
             - f_shell_profile
             - f_shell_inputrc
             - f_zsh_config
-            - f_git_config
+            - d_git
 
     meta_common:
         include:
