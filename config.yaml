@@ -193,6 +193,7 @@ dotfiles:
     d_applications:
         src: share/applications
         dst: ~/.local/share/applications
+        link: link_children
     d_unicode:
         src: share/unicode
         dst: ~/.local/share/unicode
@@ -248,6 +249,10 @@ dotfiles:
         src: bin/statusbar
         dst: ~/.local/bin/statusbar
         link: link_children
+    f_nsxiv_rifle:
+        src: ../deps/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle
+        dst: ~/.local/bin/nsxiv-rifle
+        chmod: "755"
     f_displayselect:
         src: bin/displayselect
         dst: ~/.local/bin/displayselect
