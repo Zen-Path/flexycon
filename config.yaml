@@ -1,10 +1,7 @@
 uservariables:
-    dotdrop_profile: "dotdrop_profile"
-    git_email: "git_email"
-    git_username: "git_username"
-dynvariables:
-    vscode_extensions_path: "echo $FLEXYCON_HOME/dotfiles/config/vscode/extensions.txt"
-    vscode_config_dir_dst_mac: "echo $HOME/Library/Application Support/Code/User"
+    active_dotdrop_profile: "Active dotdrop profile"
+    git_email: "Git email"
+    git_username: "Git username"
 config:
     backup: false
     banner: false
@@ -18,9 +15,9 @@ config:
         - uservariables.yaml:optional
 actions:
     post:
-        yazi-upgrade-plugins: ya pack --upgrade
-        vscode-list-extensions: code --list-extensions | sort > "{{@@ vscode_extensions_path @@}}"
-        vscode-install-extensions: cat "{{@@ vscode_extensions_path @@}}" | xargs -n 1 code --install-extension
+        yazi_plugins_upgrade: ya pack --upgrade
+        vscode_extensions_save: code --list-extensions | sort > "{{@@ f_vscode_extensions @@}}"
+        vscode_extensions_install: cat "{{@@ f_vscode_extensions @@}}" | xargs -n 1 code --install-extension
 dotfiles:
     f_fake_profile_actions_trigger:
         # "Fake" files are always considered installed, so we can use this
@@ -85,18 +82,15 @@ dotfiles:
     f_vim_init:
         src: config/nvim/init.vim
         dst: ~/.config/nvim/init.vim
+
+    ## VSCode
     f_vscode_settings:
-        src: config/vscode/User/settings.json
-        dst: ~/.config/Code - OSS/User/settings.json
-    f_vscode_settings_mac:
-        src: config/vscode/User/settings.json
-        dst: "{{@@ vscode_config_dir_dst_mac @@}}/settings.json"
+        src: "{{@@ d_vscode_src @@}}/settings.json"
+        dst: "{{@@ d_vscode_dst @@}}/settings.json"
+
     f_vscode_keybindings:
-        src: config/vscode/User/keybindings.json
-        dst: ~/.config/Code - OSS/User/keybindings.json
-    f_vscode_keybindings_mac:
-        src: config/vscode/User/keybindings.json
-        dst: "{{@@ vscode_config_dir_dst_mac @@}}/keybindings.json"
+        src: "{{@@ d_vscode_src @@}}/keybindings.json"
+        dst: "{{@@ d_vscode_dst @@}}/keybindings.json"
 
     # Programming
     d_python:
@@ -131,6 +125,9 @@ dotfiles:
     f_firefox_user_personal:
         src: "{{@@ f_firefox_user_src @@}}"
         dst: "{{@@ f_firefox_user_personal_dst @@}}/user.js"
+    f_firefox_user_work:
+        src: "{{@@ f_firefox_user_src @@}}"
+        dst: "{{@@ f_firefox_user_work_dst @@}}/user.js"
     f_firefox_user_front_end:
         src: "{{@@ f_firefox_user_src @@}}"
         dst: "{{@@ f_firefox_user_front_end_dst @@}}/user.js"
@@ -142,7 +139,7 @@ dotfiles:
     f_mpv_input:
         src: config/mpv/input.conf
         dst: ~/.config/mpv/input.conf
-    f_mpv_plugin_gallery_view_gallery.lua:
+    f_mpv_plugin_gallery_view_gallery_lua:
         src: config/mpv/plugins/mpv-gallery-view/script-modules/gallery.lua
         dst: ~/.config/mpv/script-modules/gallery.lua
     d_mpv_plugin_gallery_view_scripts:
@@ -318,6 +315,7 @@ dotfiles:
         dst: ~/.local/bin/avds
         chmod: "755"
 profiles:
+    # Programs
     meta_yazi:
         dotfiles:
             - f_yazi_config
@@ -327,25 +325,38 @@ profiles:
             - f_yazi_init
             - d_yazi_plugins
         actions:
-            - yazi-upgrade-plugins
+            - yazi_plugins_upgrade
+
     meta_vscode:
-        actions:
-            - vscode-list-extensions
-            - vscode-install-extensions
-    meta_mpv:
+        variables:
+            d_vscode_src: "config/vscode"
+        dynvariables:
+            f_vscode_extensions: "echo $FLEXYCON_HOME/dotfiles/{{@@ d_vscode_src @@}}/extensions.txt"
         dotfiles:
-            - f_mpv_config
-            - f_mpv_input
-            - f_mpv_plugin_gallery_view_gallery.lua
-            - d_mpv_plugin_gallery_view_scripts
+            - f_vscode_settings
+            - f_vscode_keybindings
+        actions:
+            - vscode_extensions_save
+            - vscode_extensions_install
+
     meta_firefox:
         variables:
             f_firefox_user_src: "config/firefox/user.js.j2"
         dynvariables:
             f_firefox_user_personal_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Personal'"
             f_firefox_user_front_end_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Front-End'"
+            f_firefox_user_work_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Work'"
         dotfiles:
             - d_firefox_chrome
+
+    meta_mpv:
+        dotfiles:
+            - f_mpv_config
+            - f_mpv_input
+            - f_mpv_plugin_gallery_view_gallery_lua
+            - d_mpv_plugin_gallery_view_scripts
+
+    # Meta Profiles
 
     meta_mandatory:
         dotfiles:
@@ -354,8 +365,10 @@ profiles:
             - f_shell_inputrc
             - f_zsh_config
             - f_git_config
-    meta_goodies:
+
+    meta_common:
         include:
+            - meta_mandatory
             - meta_yazi
             - meta_vscode
             - meta_firefox
@@ -389,14 +402,45 @@ profiles:
             - f_shortcuts
             - f_tag
 
-    linux-home:
-        include:
-            - meta_mandatory
-            - meta_goodies
-            - meta_mpv
+    ## OS
+
+    meta_linux:
         variables:
             d_firefox_profiles: "~/.mozilla/firefox"
+            d_vscode_dst: "~/.config/Code - OSS/User"
+
+    meta_mac:
+        variables:
+            d_firefox_profiles: "~/Library/Application Support/Firefox/Profiles"
+            d_vscode_dst: "~/Library/Application Support/Code/User"
+
+    ## Environment
+
+    meta_personal:
         dotfiles:
+            - f_firefox_user_personal
+
+    meta_work:
+        dotfiles:
+            - f_firefox_user_work
+
+    meta_front_end:
+        dotfiles:
+            - f_firefox_user_front_end
+
+    # Actual Profiles
+
+    linux_home:
+        include:
+            - meta_common
+            - meta_linux
+            - meta_personal
+            - meta_front_end
+            - meta_mpv
+        dotfiles:
+            # Config
+            - d_x11
+            - d_yay
             - d_alacritty
             - d_nsxiv
             - f_pulse_daemon
@@ -404,13 +448,14 @@ profiles:
             - d_gtk_3
             - d_fontconfig
             - f_mimeapps.list
+            - d_zathura
+            - d_dunst
 
+            # Share
             - d_applications
             - d_unicode
 
-            - f_firefox_user_personal
-            - f_firefox_user_front_end
-
+            # Bins
             - d_statusbar
             - f_displayselect
             - f_dmenuhandler
@@ -427,13 +472,14 @@ profiles:
             - f_select_unicode
             - f_setbg
             - f_sysact
-    mac-work:
-        include:
-            - meta_mandatory
-            - meta_goodies
-        dotfiles:
-            - d_kitty
-            - f_vscode_settings_mac
-            - f_vscode_keybindings_mac
 
+    mac_work:
+        include:
+            - meta_common
+            - meta_work
+        dotfiles:
+            # Config
+            - d_kitty
+
+            # Bins
             - f_avds
