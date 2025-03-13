@@ -385,19 +385,13 @@ profiles:
             - f_bm_dirs
             - f_bm_files
             - d_starship
-            - d_yay
-            - d_x11
             - f_vim_init
-            - f_vscode_settings
-            - f_vscode_keybindings
             - d_python
             - d_yt_dlp
             - d_gallery_dl
             - f_taskwarrior_config
-            - d_zathura
             - f_newsraft_config
             - d_bottom
-            - d_dunst
 
             - f_compiler
             - f_continuous_diff
