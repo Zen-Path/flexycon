@@ -348,6 +348,7 @@ profiles:
         variables:
             f_firefox_user_src: "config/firefox/user.js.j2"
         dynvariables:
+            # TODO: handle case where profile isn't found.
             f_firefox_user_personal_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Personal'"
             f_firefox_user_front_end_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Front-End'"
             f_firefox_user_work_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Work'"
@@ -410,7 +411,7 @@ profiles:
 
     meta_mac:
         variables:
-            d_firefox_profiles: "~/Library/Application Support/Firefox/Profiles"
+            d_firefox_profiles: "~/Library/Application\\ Support/Firefox/Profiles"
             d_vscode_dst: "~/Library/Application Support/Code/User"
 
     ## Environment
@@ -475,7 +476,9 @@ profiles:
     mac_work:
         include:
             - meta_common
+            - meta_mac
             - meta_work
+            - meta_personal
         dotfiles:
             # Config
             - d_kitty
