@@ -128,9 +128,12 @@ dotfiles:
     d_firefox_chrome:
         src: config/firefox/chrome
         dst: ~/.config/firefox/chrome
-    f_firefox_user:
-        src: config/firefox/user.js.j2
-        dst: ~/.config/firefox/user.js
+    f_firefox_user_personal:
+        src: "{{@@ f_firefox_user_src @@}}"
+        dst: "{{@@ f_firefox_user_personal_dst @@}}/user.js"
+    f_firefox_user_front_end:
+        src: "{{@@ f_firefox_user_src @@}}"
+        dst: "{{@@ f_firefox_user_front_end_dst @@}}/user.js"
 
     # Media
     f_mpv_config:
@@ -335,6 +338,15 @@ profiles:
             - f_mpv_input
             - f_mpv_plugin_gallery_view_gallery.lua
             - d_mpv_plugin_gallery_view_scripts
+    meta_firefox:
+        variables:
+            f_firefox_user_src: "config/firefox/user.js.j2"
+        dynvariables:
+            f_firefox_user_personal_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Personal'"
+            f_firefox_user_front_end_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Front-End'"
+        dotfiles:
+            - d_firefox_chrome
+
     meta_mandatory:
         dotfiles:
             - f_dotdrop
@@ -342,12 +354,11 @@ profiles:
             - f_shell_inputrc
             - f_zsh_config
             - f_git_config
-
-            - f_fake_profile_actions_trigger
     meta_goodies:
         include:
             - meta_yazi
             - meta_vscode
+            - meta_firefox
         dotfiles:
             - f_shell_aliasrc
             - f_bm_dirs
@@ -359,8 +370,6 @@ profiles:
             - f_vscode_settings
             - f_vscode_keybindings
             - d_python
-            - d_firefox_chrome
-            - f_firefox_user
             - d_yt_dlp
             - f_taskwarrior_config
             - d_zathura
@@ -385,6 +394,8 @@ profiles:
             - meta_mandatory
             - meta_goodies
             - meta_mpv
+        variables:
+            d_firefox_profiles: "~/.mozilla/firefox"
         dotfiles:
             - d_alacritty
             - d_nsxiv
@@ -396,6 +407,9 @@ profiles:
 
             - d_applications
             - d_unicode
+
+            - f_firefox_user_personal
+            - f_firefox_user_front_end
 
             - d_statusbar
             - f_displayselect
