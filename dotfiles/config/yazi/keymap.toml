@@ -87,7 +87,7 @@ keymap = [
     { on = "E",     run = "noop", desc = "" },
 
     # { on = "r",     run = "noop", desc = "" },
-    { on = "R",     run = "rename", desc = "Rename - hovered or bulk if multiple hovered" },
+    { on = "R",     run = "rename --cursor=before_ext", desc = "Rename - hovered or bulk if multiple hovered" },
     # TODO: notify user if selection spans directories.
     # TODO: if no file is selected, rename the current directory's contents
     { on = ["r", "b"], run = "plugin custom-rename", desc = "Rename - bulk" },
