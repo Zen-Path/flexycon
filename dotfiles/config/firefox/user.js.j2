@@ -59,7 +59,7 @@ user_pref("layout.css.prefers-color-scheme.content-override", 0);
 // === Fonts ===
 
 // Allow pages to choose their own fonts
-user_pref("browser.display.use_document_fonts", {{@@ 1 if "front-end" in _dotfile_abs_dst.lower() else 0 @@}});
+user_pref("browser.display.use_document_fonts", {{@@ 1 if _dotfile_key == f_firefox_user_front_end else 0 @@}});
 
 // Fonts selection
 {%@@ if os == "darwin" @@%}
@@ -128,7 +128,7 @@ user_pref("widget.gtk.overlay-scrollbars.enabled", true);
 user_pref("accessibility.browsewithcaret", false);
 
 // Always underline links
-user_pref("layout.css.always_underline_links", {{@@ "false" if "front-end" in _dotfile_abs_dst.lower() else "true" @@}});
+user_pref("layout.css.always_underline_links", {{@@ "false" if _dotfile_key == f_firefox_user_front_end else "true" @@}});
 
 // Search for text when you start typing
 user_pref("accessibility.typeaheadfind", false);
