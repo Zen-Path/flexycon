@@ -470,6 +470,7 @@ profiles:
             - f_kbselect
             - f_mounter
             - f_unmounter
+            - f_nsxiv_rifle
             - f_pkgsize
             - f_remapd
             - f_remaps
