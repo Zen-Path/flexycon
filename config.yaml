@@ -207,6 +207,10 @@ dotfiles:
         src: bin/continuous_diff
         dst: ~/.local/bin/continuous_diff
         chmod: "755"
+    f_env_cmd_runner:
+        src: bin/env_cmd_runner
+        dst: ~/.local/bin/env_cmd_runner
+        chmod: "755"
     f_fzfopen:
         src: bin/fzfopen
         dst: ~/.local/bin/fzfopen
@@ -461,6 +465,7 @@ profiles:
             - f_dmenuhandler
             - f_dmenupass
             - f_dmenurecord
+            - f_env_cmd_runner
             - f_journal_entry
             - f_kbselect
             - f_mounter
