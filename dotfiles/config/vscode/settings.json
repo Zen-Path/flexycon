@@ -46,5 +46,6 @@
     "git.openRepositoryInParentFolders": "always",
     "search.exclude": {
         "**/.git": true
-    }
+    },
+    "diffEditor.maxComputationTime": 30000
 }
