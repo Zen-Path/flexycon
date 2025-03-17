@@ -429,7 +429,7 @@ profiles:
     meta_mac:
         variables:
             d_firefox_profiles: "~/Library/Application\\ Support/Firefox/Profiles"
-            d_vscode_dst: "~/Library/Application Support/Code/User"
+            d_vscode_dst: "~/Library/Application\\ Support/Code/User"
 
     ## Environment
 
