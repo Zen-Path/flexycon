@@ -14,6 +14,7 @@ config:
     import_variables:
         - uservariables.yaml:optional
 actions:
+    update_user_shortcuts: user_shortcuts
     post:
         yazi_plugins_upgrade: ya pack --upgrade
         vscode_extensions_save: code --list-extensions | sort > "{{@@ f_vscode_extensions @@}}"
@@ -53,9 +54,15 @@ dotfiles:
     f_bm_dirs:
         src: config/shell/bm-dirs.sh.j2
         dst: ~/.config/shell/bm-dirs
+        link: nolink
+        actions:
+          - update_user_shortcuts
     f_bm_files:
         src: config/shell/bm-files.sh.j2
         dst: ~/.config/shell/bm-files
+        link: nolink
+        actions:
+          - update_user_shortcuts
     d_starship:
         src: config/starship
         dst: ~/.config/starship
@@ -242,10 +249,13 @@ dotfiles:
         src: bin/sd
         dst: ~/.local/bin/sd
         chmod: "755"
-    f_shortcuts:
-        src: bin/shortcuts
-        dst: ~/.local/bin/shortcuts
+    f_user_shortcuts:
+        src: bin/user_shortcuts
+        dst: ~/.local/bin/user_shortcuts
         chmod: "755"
+        link: nolink
+        actions:
+          - update_user_shortcuts
     f_tag:
         src: bin/tag
         dst: ~/.local/bin/tag
@@ -406,7 +416,7 @@ profiles:
             - f_noisereduce
             - f_rcfmt
             - f_sd
-            - f_shortcuts
+            - f_user_shortcuts
             - f_tag
 
     ## OS
