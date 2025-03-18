@@ -90,10 +90,13 @@ def main():
     output = []
 
     with args.file as f:
-        for line in f:
-            processed_line = process_line(line)
-            if processed_line:
-                output.append(processed_line)
+        try:
+            for line in f:
+                processed_line = process_line(line)
+                if processed_line:
+                    output.append(processed_line)
+        except:
+            print(f)
 
     filename_max_size = 100
     action_fmt = {
