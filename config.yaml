@@ -56,13 +56,13 @@ dotfiles:
         dst: ~/.config/shell/bm-dirs
         link: nolink
         actions:
-          - update_user_shortcuts
+            - update_user_shortcuts
     f_bm_files:
         src: config/shell/bm-files.sh.j2
         dst: ~/.config/shell/bm-files
         link: nolink
         actions:
-          - update_user_shortcuts
+            - update_user_shortcuts
     d_starship:
         src: config/starship
         dst: ~/.config/starship
@@ -258,7 +258,7 @@ dotfiles:
         chmod: "755"
         link: nolink
         actions:
-          - update_user_shortcuts
+            - update_user_shortcuts
     f_tag:
         src: bin/tag
         dst: ~/.local/bin/tag
