@@ -190,6 +190,9 @@ dotfiles:
     d_gtk_3:
         src: config/gtk-3.0
         dst: ~/.config/gtk-3.0
+    d_blugon:
+        src: config/blugon
+        dst: ~/.config/blugon
 
     # Misc
     d_fontconfig:
@@ -406,6 +409,7 @@ profiles:
             - f_taskwarrior_config
             - f_newsraft_config
             - d_bottom
+            - d_blugon
 
             - f_compiler
             - f_continuous_diff
