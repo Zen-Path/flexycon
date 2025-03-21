@@ -181,21 +181,23 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
     { on = ["g", "p"], run = "cd ~/Personal",      desc = "Goto ~/Personal" },
     { on = ["g", "P"], run = "cd ~/Projects",      desc = "Goto ~/Projects" },
     { on = ["g", "n"], run = "cd ~/Nerdy",         desc = "Goto ~/Nerdy" },
-    { on = ["g", "L"], run = "cd ~/.local",        desc = "Goto ~/.local" },
-    { on = ["g", "l", "s"], run = "cd ~/.local/share", desc = "Goto ~/.local/share" },
 
     # University
     { on = ["g", "U"], run = "cd ~/University", desc = "Goto ~/University" },
    	{ on = ["g", "u", "s"], run = ["reveal ~/University/TI-Y2/Sem-2/2024-2025_orar-iarna.pdf", "open"], desc = "Open university schedule" },
    	{ on = ["g", "u", "S"], run = "cd ~/University/TI-Y2/Sem-2", desc = "Goto university schedule" },
 
-    # Goto config
+    # ~/.config
     { on = ["g", "C"],      run = "cd ~/.config",           desc = "Goto config home" },
     { on = ["g", "c", "y"], run = "cd ~/.config/yazi",      desc = "Goto yazi config" },
     { on = ["g", "c", "e"], run = "cd ~/.config/nvim",      desc = "Goto editor config" },
     { on = ["g", "c", "w"], run = "cd ~/.mozilla/firefox",  desc = "Goto web browser config" },
 
-    # Goto source
+    # ~/.local
+    { on = ["g", "L"], run = "cd ~/.local",        desc = "Goto ~/.local" },
+    { on = ["g", "l", "s"], run = "cd ~/.local/share", desc = "Goto ~/.local/share" },
+
+    # ~/.local/src
     { on = ["g", "f"],      run = "cd ~/.local/src/flexycon",   desc = "Goto flexycon source" },
     { on = ["g", "S"],      run = "cd ~/.local/src",            desc = "Goto source home"},
     { on = ["g", "s", "d"], run = "cd ~/.local/src/dwm",        desc = "Goto dwm source" },
