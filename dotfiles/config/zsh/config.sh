@@ -192,6 +192,20 @@ function fm() {
     command rm --force -- "$tmp"
 }
 
+find_by_md5() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: find_by_md5 <md5_hash>"
+        return 1
+    fi
+
+    local target_hash="$1"
+
+    fd -t f . | while IFS= read -r file; do
+        hash=$(md5sum "$file" | awk '{print $1}')
+        [[ "$hash" == "$target_hash" ]] && echo "$file"
+    done
+}
+
 bindkey -s '^f' 'fzfopen\n'
 
 # Set up fzf key bindings and fuzzy completion
