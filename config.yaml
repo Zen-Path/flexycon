@@ -518,7 +518,6 @@ profiles:
             - f_sysact
 
             # Statusbar
-            - f_sb_battery
             - f_sb_date
             - f_sb_internet
             - f_sb_news
