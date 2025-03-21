@@ -30,6 +30,11 @@ src     "$HOME/.local/src"
 flx     "$HOME/.local/src/flexycon"
 dt      "${XDG_DATA_HOME:-$HOME/.local/share}"
 
+{%@@ if "home" in profile @@%}
+# Home profile
+priv     "$HOME/.local/src/private-files"
+{%@@ endif @@%}
+
 {%@@ if "work" in profile @@%}
 # Work profile
 wis     "$HOME/.local/src/wis"
