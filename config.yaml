@@ -334,27 +334,27 @@ dotfiles:
         chmod: "755"
 
     # Statusbar
-    f_sb-battery.sh:
+    f_sb_battery:
         src: bin/statusbar/sb-battery.sh
         dst: ~/.local/bin/statusbar/sb-battery
         chmod: "755"
-    f_sb-date.sh:
+    f_sb_date:
         src: bin/statusbar/sb-date.sh
         dst: ~/.local/bin/statusbar/sb-date
         chmod: "755"
-    f_sb-internet.sh:
+    f_sb_internet:
         src: bin/statusbar/sb-internet.sh
         dst: ~/.local/bin/statusbar/sb-internet
         chmod: "755"
-    f_sb-news.sh:
+    f_sb_news:
         src: bin/statusbar/sb-news.sh
         dst: ~/.local/bin/statusbar/sb-news
         chmod: "755"
-    f_sb-tasks.sh:
+    f_sb_tasks:
         src: bin/statusbar/sb-tasks.sh
         dst: ~/.local/bin/statusbar/sb-tasks
         chmod: "755"
-    f_sb-volume.sh:
+    f_sb_volume:
         src: bin/statusbar/sb-volume.sh
         dst: ~/.local/bin/statusbar/sb-volume
         chmod: "755"
@@ -518,12 +518,12 @@ profiles:
             - f_sysact
 
             # Statusbar
-            - f_sb-battery.sh
-            - f_sb-date.sh
-            - f_sb-internet.sh
-            - f_sb-news.sh
-            - f_sb-tasks.sh
-            - f_sb-volume.sh
+            - f_sb_battery
+            - f_sb_date
+            - f_sb_internet
+            - f_sb_news
+            - f_sb_tasks
+            - f_sb_volume
 
     mac_work:
         include:
