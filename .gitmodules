@@ -4,6 +4,6 @@
 [submodule "dotfiles/config/mpv/plugins/mpv-gallery-view"]
 	path = dotfiles/config/mpv/plugins/mpv-gallery-view
 	url = https://github.com/occivink/mpv-gallery-view
-[submodule "deps/nsxiv-extra"]
-	path = deps/nsxiv-extra
+[submodule "src/nsxiv-extra"]
+	path = src/nsxiv-extra
 	url = https://github.com/Zen-Path/nsxiv-extra
