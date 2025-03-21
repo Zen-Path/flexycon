@@ -48,7 +48,7 @@ bindkey -M vicmd '^e' edit-command-line
 bindkey -M visual '^[[P' vi-delete
 
 # Change cursor shape for different vi modes.
-zle-keymap-select() {
+function zle-keymap-select() {
     case $KEYMAP in
         vicmd) echo -ne '\e[1 q' ;;        # block
         viins | main) echo -ne '\e[5 q' ;; # beam
@@ -56,15 +56,20 @@ zle-keymap-select() {
 }
 zle -N zle-keymap-select
 
-zle-line-init() {
+function zle-line-init() {
     # Initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
     zle -K viins
     echo -ne "\e[5 q"
 }
 zle -N zle-line-init
 
-echo -ne '\e[5 q'                # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q'; } # Use beam shape cursor for each new prompt.
+# Use beam shape cursor on startup.
+echo -ne '\e[5 q'
+
+# Use beam shape cursor for each new prompt.
+function preexec() {
+    echo -ne '\e[5 q'
+}
 
 function src_short() {
     shortcuts > /dev/null
@@ -192,7 +197,7 @@ function fm() {
     command rm --force -- "$tmp"
 }
 
-find_by_md5() {
+function find_by_md5() {
     if [[ -z "$1" ]]; then
         echo "Usage: find_by_md5 <md5_hash>"
         return 1
