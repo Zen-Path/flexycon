@@ -156,9 +156,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Screenshot Utility")
 
     # Create subparsers for actions
-    subparsers = parser.add_subparsers(
-        dest="action", help="Screenshot action"
-    )
+    subparsers = parser.add_subparsers(dest="action", help="Screenshot action")
 
     # Area action
     subparsers.add_parser("area", help="Capture a selected area")
