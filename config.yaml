@@ -28,9 +28,6 @@ dotfiles:
         dst:
 
     # MANDATORY
-    f_dotdrop:
-        src: ../config.yaml
-        dst: ~/.config/dotdrop/config.yaml
     f_shell_profile:
         # Using a link since accidentally deleting this file would be a
         # PITA to restore without a shell config. This way, we can run:
@@ -385,7 +382,6 @@ profiles:
 
     meta_mandatory:
         dotfiles:
-            - f_dotdrop
             - f_shell_profile
             - f_shell_inputrc
             - f_zsh_config
