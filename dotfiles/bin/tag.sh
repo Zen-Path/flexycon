@@ -11,18 +11,18 @@ Options:
 	-d: year of publication
 	-g: genre
 	-c: comment
-You will be prompted for title, artist, album and track if not given." && exit 1 ;}
+You will be prompted for title, artist, album and track if not given." && exit 1; }
 
 while getopts "a:t:A:n:N:d:g:c:" o; do case "${o}" in
-	a) artist="${OPTARG}" ;;
-	t) title="${OPTARG}" ;;
-	A) album="${OPTARG}" ;;
-	n) track="${OPTARG}" ;;
-	N) total="${OPTARG}" ;;
-	d) date="${OPTARG}" ;;
-	g) genre="${OPTARG}" ;;
-	c) comment="${OPTARG}" ;;
-	*) printf "Invalid option: -%s\\n" "$OPTARG" && err ;;
+    a) artist="${OPTARG}" ;;
+    t) title="${OPTARG}" ;;
+    A) album="${OPTARG}" ;;
+    n) track="${OPTARG}" ;;
+    N) total="${OPTARG}" ;;
+    d) date="${OPTARG}" ;;
+    g) genre="${OPTARG}" ;;
+    c) comment="${OPTARG}" ;;
+    *) printf "Invalid option: -%s\\n" "$OPTARG" && err ;;
 esac done
 
 shift $((OPTIND - 1))
@@ -40,10 +40,10 @@ trap 'rm -f $temp' HUP INT QUIT TERM PWR EXIT
 [ -z "$track" ] && echo 'Enter a track number.' && read -r track
 
 cp -f "$file" "$temp" && ffmpeg -i "$temp" -map 0 -y -codec copy \
-	-metadata title="$title" \
-	-metadata album="$album" \
-	-metadata artist="$artist" \
-	-metadata track="${track}${total:+/"$total"}" \
-	${date:+-metadata date="$date"} \
-	${genre:+-metadata genre="$genre"} \
-	${comment:+-metadata comment="$comment"} "$file"
+    -metadata title="$title" \
+    -metadata album="$album" \
+    -metadata artist="$artist" \
+    -metadata track="${track}${total:+/"$total"}" \
+    ${date:+-metadata date="$date"} \
+    ${genre:+-metadata genre="$genre"} \
+    ${comment:+-metadata comment="$comment"} "$file"

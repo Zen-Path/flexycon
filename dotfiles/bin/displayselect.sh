@@ -13,10 +13,10 @@ twoscreen() { # If multi-monitor is selected and there are two screens.
         external=$(echo "$screens" | dmenu -i -p "Optimize resolution for:")
         internal=$(echo "$screens" | grep -v "$external")
 
-        res_external=$(xrandr --query | sed -n "/^$external/,/\+/p" | \
-            tail -n 1 | awk '{print $1}')
-        res_internal=$(xrandr --query | sed -n "/^$internal/,/\+/p" | \
-            tail -n 1 | awk '{print $1}')
+        res_external=$(xrandr --query | sed -n "/^$external/,/\+/p" \
+            | tail -n 1 | awk '{print $1}')
+        res_internal=$(xrandr --query | sed -n "/^$internal/,/\+/p" \
+            | tail -n 1 | awk '{print $1}')
 
         res_ext_x=$(echo "$res_external" | sed 's/x.*//')
         res_ext_y=$(echo "$res_external" | sed 's/.*x//')
@@ -36,30 +36,34 @@ twoscreen() { # If multi-monitor is selected and there are two screens.
         direction=$(printf "left\\nright" | dmenu -i -p "What side of $primary should $secondary be on?")
         xrandr --output "$primary" --auto --scale 1.0x1.0 --output "$secondary" --"$direction"-of "$primary" --auto --scale 1.0x1.0
     fi
-    }
+}
 
 morescreen() { # If multi-monitor is selected and there are more than two screens.
-	primary=$(echo "$screens" | dmenu -i -p "Select primary display:")
-	secondary=$(echo "$screens" | grep -v ^"$primary"$ | dmenu -i -p "Select secondary display:")
-	direction=$(printf "left\\nright" | dmenu -i -p "What side of $primary should $secondary be on?")
-	tertiary=$(echo "$screens" | grep -v ^"$primary"$ | grep -v ^"$secondary"$ | dmenu -i -p "Select third display:")
-	xrandr --output "$primary" --auto --output "$secondary" --"$direction"-of "$primary" --auto --output "$tertiary" --"$(printf "left\\nright" | grep -v "$direction")"-of "$primary" --auto
-	}
+    primary=$(echo "$screens" | dmenu -i -p "Select primary display:")
+    secondary=$(echo "$screens" | grep -v ^"$primary"$ | dmenu -i -p "Select secondary display:")
+    direction=$(printf "left\\nright" | dmenu -i -p "What side of $primary should $secondary be on?")
+    tertiary=$(echo "$screens" | grep -v ^"$primary"$ | grep -v ^"$secondary"$ | dmenu -i -p "Select third display:")
+    xrandr --output "$primary" --auto --output "$secondary" --"$direction"-of "$primary" --auto --output "$tertiary" --"$(printf "left\\nright" | grep -v "$direction")"-of "$primary" --auto
+}
 
 multimon() { # Multi-monitor handler.
-	case "$(echo "$screens" | wc -l)" in
-		2) twoscreen ;;
-		*) morescreen ;;
-	esac ;}
+    case "$(echo "$screens" | wc -l)" in
+        2) twoscreen ;;
+        *) morescreen ;;
+    esac
+}
 
 onescreen() { # If only one output available or chosen.
-	xrandr --output "$1" --auto --scale 1.0x1.0 $(echo "$allposs" | grep -v "\b$1" | awk '{print "--output", $1, "--off"}' | paste -sd ' ' -)
-	}
+    xrandr --output "$1" --auto --scale 1.0x1.0 $(echo "$allposs" | grep -v "\b$1" | awk '{print "--output", $1, "--off"}' | paste -sd ' ' -)
+}
 
 postrun() { # Stuff to run to clean up.
-	setbg		# Fix background if screen size/arangement has changed.
-	{ killall dunst ; setsid -f dunst ;} >/dev/null 2>&1 # Restart dunst to ensure proper location on screen
-	}
+    setbg   # Fix background if screen size/arangement has changed.
+    {
+        killall dunst
+        setsid -f dunst
+    } > /dev/null 2>&1 # Restart dunst to ensure proper location on screen
+}
 
 # Get all possible displays
 allposs=$(xrandr -q | grep "connected")
@@ -68,15 +72,23 @@ allposs=$(xrandr -q | grep "connected")
 screens=$(echo "$allposs" | awk '/ connected/ {print $1}')
 
 # If there's only one screen
-[ "$(echo "$screens" | wc -l)" -lt 2 ] &&
-	{ onescreen "$screens"; postrun; notify-send "💻 Only one screen detected." "Using it in its optimal settings...";  exit ;}
+[ "$(echo "$screens" | wc -l)" -lt 2 ] \
+    && {
+        onescreen "$screens"
+        postrun
+        notify-send "💻 Only one screen detected." "Using it in its optimal settings..."
+        exit
+    }
 
 # Get user choice including multi-monitor and manual selection:
-chosen=$(printf "%s\\nmulti-monitor\\nmanual selection" "$screens" | dmenu -i -p "Select display arangement:") &&
-case "$chosen" in
-	"manual selection") arandr ; exit ;;
-	"multi-monitor") multimon ;;
-	*) onescreen "$chosen" ;;
-esac
+chosen=$(printf "%s\\nmulti-monitor\\nmanual selection" "$screens" | dmenu -i -p "Select display arangement:") \
+    && case "$chosen" in
+        "manual selection")
+            arandr
+            exit
+            ;;
+        "multi-monitor") multimon ;;
+        *) onescreen "$chosen" ;;
+    esac
 
 postrun

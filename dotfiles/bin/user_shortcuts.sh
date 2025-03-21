@@ -13,14 +13,14 @@ fish_shortcuts="/dev/null"
 vifm_shortcuts="/dev/null"
 
 # Remove, prepare files
-rm -f "$lf_shortcuts" "$qute_shortcuts" "$zsh_named_dirs" "$vim_shortcuts" 2>/dev/null
+rm -f "$lf_shortcuts" "$qute_shortcuts" "$zsh_named_dirs" "$vim_shortcuts" 2> /dev/null
 printf "# vim: filetype=sh\\n" > "$fish_shortcuts"
 printf "# vim: filetype=sh\\nalias " > "$shell_shortcuts"
 printf "\" vim: filetype=vim\\n" > "$vifm_shortcuts"
 
 # Format the `directories` file in the correct syntax and sent it to all three configs.
-eval "echo \"$(cat "$bmdirs")\"" | \
-awk "!/^\s*#/ && !/^\s*\$/ {gsub(\"\\\s*#.*$\",\"\");
+eval "echo \"$(cat "$bmdirs")\"" \
+    | awk "!/^\s*#/ && !/^\s*\$/ {gsub(\"\\\s*#.*$\",\"\");
 	printf(\"%s=\42cd %s && ls -A\42 \\\\\n\",\$1,\$2)   >> \"$shell_shortcuts\" ;
 	printf(\"hash -d %s=%s \n\",\$1,\$2)                 >> \"$zsh_named_dirs\"  ;
 	printf(\"abbr %s \42cd %s; and ls -A\42\n\",\$1,\$2) >> \"$fish_shortcuts\"  ;
@@ -30,8 +30,8 @@ awk "!/^\s*#/ && !/^\s*\$/ {gsub(\"\\\s*#.*$\",\"\");
 	printf(\"cmap ;%s %s\n\",\$1,\$2)                    >> \"$vim_shortcuts\" }"
 
 # Format the `files` file in the correct syntax and sent it to both configs.
-eval "echo \"$(cat "$bmfiles")\"" | \
-awk "!/^\s*#/ && !/^\s*\$/ {gsub(\"\\\s*#.*$\",\"\");
+eval "echo \"$(cat "$bmfiles")\"" \
+    | awk "!/^\s*#/ && !/^\s*\$/ {gsub(\"\\\s*#.*$\",\"\");
 	printf(\"%s=\42\$EDITOR %s\42 \\\\\n\",\$1,\$2)  >> \"$shell_shortcuts\" ;
 	printf(\"hash -d %s=%s \n\",\$1,\$2)             >> \"$zsh_named_dirs\"  ;
 	printf(\"abbr %s \42\$EDITOR %s\42 \n\",\$1,\$2) >> \"$fish_shortcuts\"  ;
