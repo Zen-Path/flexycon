@@ -16,24 +16,38 @@ toggle_wifi() {
 case $BLOCK_BUTTON in
     1) "$TERMINAL" -e nmtui ;;
     2) toggle_wifi ;;
-    3) notify-send "🌐 Internet module" "\- Click to connect
-❌: wifi disabled
-📡: no wifi connection
-📶: wifi connection with quality
-❎: no ethernet
-🌐: ethernet working
-🔒: vpn is active
+    3) notify-send "🌐 Internet module" -- "\
+Show internet status.
+
+<b>Actions</b>
+- Left   : Open nmtui
+- Middle : Toggle wifi
+- Right  : Show this message
+
+<b>Status</b>
+- 🌐: ethernet working
+- ❎: no ethernet
+- 📶: wifi connection with quality
+- 📡: no wifi connection
+- ❌: wifi disabled
+- 🔒: vpn is active
 " ;;
-    8) "$TERMINAL" -e "$EDITOR" "$0" ;;
+    8) setsid -f "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-if grep -xq 'up' /sys/class/net/w*/operstate 2> /dev/null; then
+# Wifi
+wifiicon=""
+if [ "$(cat /sys/class/net/w*/operstate 2> /dev/null)" = 'up' ]; then
     wifiicon="$(awk '/^\s*w/ { print "📶", int($3 * 100 / 70) "% " }' /proc/net/wireless)"
-elif grep -xq 'down' /sys/class/net/w*/operstate 2> /dev/null; then
-    grep -xq '0x1003' /sys/class/net/w*/flags && wifiicon="📡 " || wifiicon=""
+elif [ "$(cat /sys/class/net/w*/operstate 2> /dev/null)" = 'down' ]; then
+    [ "$(cat /sys/class/net/w*/flags 2> /dev/null)" = '0x1003' ] && wifiicon="📡 " || wifiicon="❌ "
 fi
 
-vpn="$(sed "s/.*/ 🔒/" /sys/class/net/tun*/operstate 2> /dev/null)"
-# ethernet="$(sed "s/down/❎/;s/up//" /sys/class/net/e*/operstate 2>/dev/null)"
+# Ethernet
+[ "$(cat /sys/class/net/e*/operstate 2> /dev/null)" = 'up' ] && ethericon="🌐" || ethericon="❎"
 
-printf "%s%s%s\n" "$wifiicon" "$ethernet" "$vpn"
+# TUN
+tunicon=""
+[ -n "$(cat /sys/class/net/tun*/operstate 2> /dev/null)" ] && tunicon=" 🔒"
+
+printf "%s%s%s\n" "$wifiicon" "$ethericon" "$tunicon"
