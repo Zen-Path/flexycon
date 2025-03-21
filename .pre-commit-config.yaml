@@ -31,5 +31,12 @@ repos:
       rev: v3.11.0-1
       hooks:
           - id: shfmt # prebuilt upstream executable
-            args: [-i=2, -ci]
+            args:
+                [
+                    --indent=4,
+                    --binary-next-line,
+                    --case-indent,
+                    --space-redirects,
+                    --write,
+                ]
             files: \.sh$
