@@ -134,7 +134,7 @@ function imgopt() {
     output_path=$(construct_output_path "$input_path" "compressed")
 
     case "$extension" in
-        jpg|jpeg)
+        jpg | jpeg)
             ffmpeg -i "$input_path" -q:v 10 "$output_path"
             ;;
         png)
@@ -180,26 +180,26 @@ function trim_media() {
 }
 
 function pdftopng() {
-	magick -density 300 "$1" -quality 100 -alpha remove "$2"
+    magick -density 300 "$1" -quality 100 -alpha remove "$2"
 }
 
 function fm() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	command rm --force -- "$tmp"
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    command rm --force -- "$tmp"
 }
 
 bindkey -s '^f' 'fzfopen\n'
 
 # Set up fzf key bindings and fuzzy completion
-if command -v fzf >/dev/null 2>&1; then
-  source <(fzf --zsh)
+if command -v fzf > /dev/null 2>&1; then
+    source <(fzf --zsh)
 fi
 
-if command -v starship >/dev/null 2>&1; then
+if command -v starship > /dev/null 2>&1; then
     eval "$(starship init zsh)"
 fi
 
