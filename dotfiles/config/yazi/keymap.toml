@@ -203,6 +203,10 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
     { on = ["g", "s", "l"], run = "cd ~/.local/src/labs",       desc = "Goto labs source" },
     { on = ["g", "s", "w"], run = "cd ~/.local/src/wis",        desc = "Goto wis source" },
 
+    # /
+    { on = ["g", "M"],      run = "cd /mnt",   desc = "Goto /mnt" },
+
+
     # Open files
    	{ on = ["g", "c", "f"], run = ["reveal ~/.config/newsraft/feeds", "open"], desc = "Open newsraft feeds" },
 
