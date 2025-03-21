@@ -126,18 +126,25 @@ dotfiles:
         link: link_children
 
     # Browser
-    d_firefox_chrome:
-        src: config/firefox/chrome
-        dst: ~/.config/firefox/chrome
+    d_firefox_chrome_personal:
+        src: "{{@@ d_firefox_chrome_src @@}}"
+        dst: "{{@@ d_firefox_profiles @@}}/Personal/chrome"
+    d_firefox_chrome_work:
+        src: "{{@@ d_firefox_chrome_src @@}}"
+        dst: "{{@@ d_firefox_profiles @@}}/Work/chrome"
+    d_firefox_chrome_front_end:
+        src: "{{@@ d_firefox_chrome_src @@}}"
+        dst: "{{@@ d_firefox_profiles @@}}/Front-End/chrome"
+
     f_firefox_user_personal:
         src: "{{@@ f_firefox_user_src @@}}"
-        dst: "{{@@ f_firefox_user_personal_dst @@}}/user.js"
+        dst: "{{@@ d_firefox_profiles @@}}/Personal/user.js"
     f_firefox_user_work:
         src: "{{@@ f_firefox_user_src @@}}"
-        dst: "{{@@ f_firefox_user_work_dst @@}}/user.js"
+        dst: "{{@@ d_firefox_profiles @@}}/Work/user.js"
     f_firefox_user_front_end:
         src: "{{@@ f_firefox_user_src @@}}"
-        dst: "{{@@ f_firefox_user_front_end_dst @@}}/user.js"
+        dst: "{{@@ d_firefox_profiles @@}}/Front-End/user.js"
 
     # Media
     f_mpv_config:
@@ -266,7 +273,7 @@ dotfiles:
         dst: ~/.local/bin/statusbar
         link: link_children
     f_nsxiv_rifle:
-        src: ../deps/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle
+        src: ../src/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle
         dst: ~/.local/bin/nsxiv-rifle
         chmod: "755"
     f_displayselect:
@@ -362,14 +369,10 @@ profiles:
 
     meta_firefox:
         variables:
+            d_firefox_chrome_src: "config/firefox/chrome"
+            d_firefox_chrome_dst: "~/.config/firefox/chrome"
             f_firefox_user_src: "config/firefox/user.js.j2"
-        dynvariables:
-            # TODO: handle case where profile isn't found.
-            f_firefox_user_personal_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Personal'"
-            f_firefox_user_front_end_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Front-End'"
-            f_firefox_user_work_dst: "find {{@@ d_firefox_profiles @@}} -name '*.Work'"
-        dotfiles:
-            - d_firefox_chrome
+            d_firefox_profiles: "~/.config/firefox"
 
     meta_mpv:
         dotfiles:
@@ -422,26 +425,27 @@ profiles:
 
     meta_linux:
         variables:
-            d_firefox_profiles: "~/.mozilla/firefox"
             d_vscode_dst: "~/.config/Code - OSS/User"
 
     meta_mac:
         variables:
-            d_firefox_profiles: "~/Library/Application\\ Support/Firefox/Profiles"
             d_vscode_dst: "~/Library/Application\\ Support/Code/User"
 
     ## Environment
 
     meta_personal:
         dotfiles:
+            - d_firefox_chrome_personal
             - f_firefox_user_personal
 
     meta_work:
         dotfiles:
+            - d_firefox_chrome_work
             - f_firefox_user_work
 
     meta_front_end:
         dotfiles:
+            - d_firefox_chrome_front_end
             - f_firefox_user_front_end
 
     # Actual Profiles
