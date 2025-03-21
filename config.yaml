@@ -216,130 +216,152 @@ dotfiles:
 
     # Bins
     f_compiler:
-        src: bin/compiler
+        src: bin/compiler.sh
         dst: ~/.local/bin/compiler
         chmod: "755"
     f_continuous_diff:
-        src: bin/continuous_diff
+        src: bin/continuous_diff.py
         dst: ~/.local/bin/continuous_diff
         chmod: "755"
     f_env_cmd_runner:
-        src: bin/env_cmd_runner
+        src: bin/env_cmd_runner.sh
         dst: ~/.local/bin/env_cmd_runner
         chmod: "755"
     f_fzfopen:
-        src: bin/fzfopen
+        src: bin/fzfopen.sh
         dst: ~/.local/bin/fzfopen
         chmod: "755"
     f_getkeys:
-        src: bin/getkeys
+        src: bin/getkeys.sh
         dst: ~/.local/bin/getkeys
         chmod: "755"
     f_ifinstalled:
-        src: bin/ifinstalled
+        src: bin/ifinstalled.sh
         dst: ~/.local/bin/ifinstalled
         chmod: "755"
     f_imgconv:
-        src: bin/imgconv
+        src: bin/imgconv.sh
         dst: ~/.local/bin/imgconv
         chmod: "755"
     f_noisereduce:
-        src: bin/noisereduce
+        src: bin/noisereduce.sh
         dst: ~/.local/bin/noisereduce
         chmod: "755"
     f_rcfmt:
-        src: bin/rcfmt
+        src: bin/rcfmt.sh
         dst: ~/.local/bin/rcfmt
         chmod: "755"
     f_sd:
-        src: bin/sd
+        src: bin/sd.sh
         dst: ~/.local/bin/sd
         chmod: "755"
     f_user_shortcuts:
-        src: bin/user_shortcuts
+        src: bin/user_shortcuts.sh
         dst: ~/.local/bin/user_shortcuts
         chmod: "755"
         link: nolink
         actions:
             - update_user_shortcuts
     f_tag:
-        src: bin/tag
+        src: bin/tag.sh
         dst: ~/.local/bin/tag
         chmod: "755"
 
     # Linux / Home
-    d_statusbar:
-        src: bin/statusbar
-        dst: ~/.local/bin/statusbar
-        link: link_children
-    f_nsxiv_rifle:
-        src: ../src/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle
-        dst: ~/.local/bin/nsxiv-rifle
-        chmod: "755"
     f_displayselect:
-        src: bin/displayselect
+        src: bin/displayselect.sh
         dst: ~/.local/bin/displayselect
         chmod: "755"
     f_dmenuhandler:
-        src: bin/dmenuhandler
+        src: bin/dmenuhandler.sh
         dst: ~/.local/bin/dmenuhandler
         chmod: "755"
     f_dmenupass:
-        src: bin/dmenupass
+        src: bin/dmenupass.sh
         dst: ~/.local/bin/dmenupass
         chmod: "755"
     f_dmenurecord:
-        src: bin/dmenurecord
+        src: bin/dmenurecord.sh
         dst: ~/.local/bin/dmenurecord
         chmod: "755"
     f_journal_entry:
-        src: bin/journal_entry
+        src: bin/journal_entry.py
         dst: ~/.local/bin/journal_entry
         chmod: "755"
     f_kbselect:
-        src: bin/kbselect
+        src: bin/kbselect.py
         dst: ~/.local/bin/kbselect
         chmod: "755"
     f_mounter:
-        src: bin/mounter
+        src: bin/mounter.sh
         dst: ~/.local/bin/mounter
         chmod: "755"
     f_unmounter:
-        src: bin/unmounter
+        src: bin/unmounter.sh
         dst: ~/.local/bin/unmounter
         chmod: "755"
+    f_nsxiv_rifle:
+        src: ../src/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle.sh
+        dst: ~/.local/bin/nsxiv-rifle
+        chmod: "755"
     f_pkgsize:
-        src: bin/pkgsize
+        src: bin/pkgsize.sh
         dst: ~/.local/bin/pkgsize
         chmod: "755"
     f_remapd:
-        src: bin/remapd
+        src: bin/remapd.sh
         dst: ~/.local/bin/remapd
         chmod: "755"
     f_remaps:
-        src: bin/remaps
+        src: bin/remaps.sh
         dst: ~/.local/bin/remaps
         chmod: "755"
     f_screenshot_utility:
-        src: bin/screenshot_utility
+        src: bin/screenshot_utility.py
         dst: ~/.local/bin/screenshot_utility
         chmod: "755"
     f_select_unicode:
-        src: bin/select_unicode
+        src: bin/select_unicode.sh
         dst: ~/.local/bin/select_unicode
         chmod: "755"
     f_setbg:
-        src: bin/setbg
+        src: bin/setbg.sh
         dst: ~/.local/bin/setbg
         chmod: "755"
     f_sysact:
-        src: bin/sysact
+        src: bin/sysact.sh
         dst: ~/.local/bin/sysact
+        chmod: "755"
+
+    # Statusbar
+    f_sb-battery.sh:
+        src: bin/statusbar/sb-battery.sh
+        dst: ~/.local/bin/statusbar/sb-battery
+        chmod: "755"
+    f_sb-date.sh:
+        src: bin/statusbar/sb-date.sh
+        dst: ~/.local/bin/statusbar/sb-date
+        chmod: "755"
+    f_sb-internet.sh:
+        src: bin/statusbar/sb-internet.sh
+        dst: ~/.local/bin/statusbar/sb-internet
+        chmod: "755"
+    f_sb-news.sh:
+        src: bin/statusbar/sb-news.sh
+        dst: ~/.local/bin/statusbar/sb-news
+        chmod: "755"
+    f_sb-tasks.sh:
+        src: bin/statusbar/sb-tasks.sh
+        dst: ~/.local/bin/statusbar/sb-tasks
+        chmod: "755"
+    f_sb-volume.sh:
+        src: bin/statusbar/sb-volume.sh
+        dst: ~/.local/bin/statusbar/sb-volume
         chmod: "755"
 
     # Android Work
     f_avds:
-        src: bin/avds
+        src: bin/avds.sh
         dst: ~/.local/bin/avds
         chmod: "755"
 profiles:
@@ -477,7 +499,6 @@ profiles:
             - d_unicode
 
             # Bins
-            - d_statusbar
             - f_displayselect
             - f_dmenuhandler
             - f_dmenupass
@@ -495,6 +516,14 @@ profiles:
             - f_select_unicode
             - f_setbg
             - f_sysact
+
+            # Statusbar
+            - f_sb-battery.sh
+            - f_sb-date.sh
+            - f_sb-internet.sh
+            - f_sb-news.sh
+            - f_sb-tasks.sh
+            - f_sb-volume.sh
 
     mac_work:
         include:
