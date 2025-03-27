@@ -64,7 +64,7 @@ class Gallery:
             + (["--range", f"{range_[0]}-{range_[1]}"] if range_ else [])
             + [
                 "--exec",
-                f'if [ -f "{Gallery.FILES_DIR}/{{_path}}" ]; then rm {{_path}}; else mv {{_path}} {Gallery.FILES_DIR}; fi && ln --symbolic {Gallery.FILES_DIR}/{{_filename}} {{_directory}}',
+                f'mkdir -p {Gallery.FILES_DIR}; if [ -f "{Gallery.FILES_DIR}/{{_path}}" ]; then rm {{_path}}; else mv {{_path}} {Gallery.FILES_DIR}; fi && ln --symbolic {Gallery.FILES_DIR}/{{_filename}} {{_directory}}',
             ]
         )
 
