@@ -395,6 +395,26 @@
             "format": "original",
             "include": ["art"]
         },
+        "nhentai": {
+            "gallery": {
+                "directory": [
+                    "{category}",
+                    "{subcategory}",
+                    "{title!g:X180/../}_lg-{lang!g}_id-{gallery_id!s}"
+                ]
+            },
+            "filename": "{category}_{num:03}_us-{artist[0]!g:X60/../}_id-{media_id!s}_gid-{gallery_id!s}.{extension}",
+            "postprocessors": [
+                {
+                    "name": "metadata",
+                    "mode": "modify",
+                    "fields": {
+                        "gallery_url": "https://nhentai.net/g/{gallery_id!s}",
+                        "download_time": "{_now:%Y-%m-%d_%H-%M-%S}"
+                    }
+                }
+            ]
+        },
         "nsfwalbum": {
             "referer": false
         },
@@ -514,10 +534,10 @@
         },
         "rule34": {
             "post": {
-                "directory": ["{category}", "{subcategory}", "{creator_id!s}"]
+                "directory": ["{category}", "{subcategory}"]
             },
             "tag": {
-                "directory": ["{category}", "{subcategory}", "{creator_id!s}"]
+                "directory": ["{category}", "{subcategory}", "{search_tags}"]
             },
             "directory": ["{category}", "{subcategory}"],
             "filename": "{category}_id-{id!s}_tt-{tags!g:X200/../}.{extension}",
