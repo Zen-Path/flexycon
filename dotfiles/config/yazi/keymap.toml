@@ -203,7 +203,6 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
     { on = ["g", "s", "d"], run = "cd ~/.local/src/dwm",        desc = "Goto dwm source" },
     { on = ["g", "s", "D"], run = "cd ~/.local/src/dwm-status", desc = "Goto dwm-status source" },
     { on = ["g", "s", "l"], run = "cd ~/.local/src/labs",       desc = "Goto labs source" },
-    { on = ["g", "s", "w"], run = "cd ~/.local/src/wis",        desc = "Goto wis source" },
 
     # /
     { on = ["g", "M"],      run = "cd /mnt",   desc = "Goto /mnt" },
