@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Check if at least one argument (the command) is provided
 if [ $# -lt 1 ]; then
@@ -34,4 +34,3 @@ else
     # If running in a terminal, directly run the command with the files
     $COMMAND_EXPANDED "$@"
 fi
-
