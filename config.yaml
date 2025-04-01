@@ -251,9 +251,9 @@ dotfiles:
         src: bin/rcfmt.sh
         dst: ~/.local/bin/rcfmt
         chmod: "755"
-    f_sd:
-        src: bin/sd.sh
-        dst: ~/.local/bin/sd
+    f_sdir:
+        src: bin/sdir.sh
+        dst: ~/.local/bin/sdir
         chmod: "755"
     f_user_shortcuts:
         src: bin/user_shortcuts.sh
@@ -439,7 +439,7 @@ profiles:
             - f_imgconv
             - f_noisereduce
             - f_rcfmt
-            - f_sd
+            - f_sdir
             - f_user_shortcuts
             - f_tag
 
