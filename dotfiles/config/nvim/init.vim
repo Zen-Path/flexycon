@@ -29,7 +29,6 @@ colorscheme gruvbox-baby
 
 set title
 set bg=dark
-set go=a
 set mouse=a
 set nohlsearch
 set clipboard+=unnamedplus
