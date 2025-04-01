@@ -347,7 +347,7 @@ dotfiles:
         dst: ~/.local/bin/statusbar/sb-internet
         chmod: "755"
     f_sb_news:
-        src: bin/statusbar/sb-news.sh
+        src: bin/statusbar/sb-news.py
         dst: ~/.local/bin/statusbar/sb-news
         chmod: "755"
     f_sb_tasks:
