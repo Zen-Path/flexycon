@@ -57,7 +57,7 @@ alias penv='source venv/bin/activate 2> /dev/null || source .venv/bin/activate 2
 alias pfr='pip freeze > requirements.txt'
 
 # Rclone
-alias rc='rclone --progress --exclude "No_Backup/**" --exclude ".git/" copy'
+alias rc='rclone --progress --create-empty-src-dirs --exclude "No_Backup/**" --exclude ".git/" copy'
 alias rcd='rc --dry-run'
 alias rs='rclone --create-empty-src-dirs --track-renames --progress --exclude "No_Backup/**" --exclude ".git/" sync'
 alias rsd='rs --dry-run'
