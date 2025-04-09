@@ -1,14 +1,14 @@
 local function prompt()
-	return ya.input {
-		title = "Custom search:",
-		position = { "center", w = 50 },
-		realtime = false,
-		debounce = 0.1,
-	}
+    return ya.input({
+        title = "Custom search:",
+        position = { "center", w = 50 },
+        realtime = false,
+        debounce = 0.1,
+    })
 end
 
 local function entry()
-	local value, event = prompt()
+    local value, event = prompt()
 
     local search_value, search_opts = value:match('^"(.-)"%s*(.*)$')
 
@@ -23,7 +23,10 @@ local function entry()
         ya.dbg("Search Options:", search_opts)
     end
 
-  	ya.manager_emit("search_do", { search_value, via = "fd", args = search_opts })
+    ya.manager_emit(
+        "search_do",
+        { search_value, via = "fd", args = search_opts }
+    )
 end
 
 return { entry = entry }
