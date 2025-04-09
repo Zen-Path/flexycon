@@ -1,38 +1,43 @@
 // ==UserScript==
-// @name        File Downloader
-// @namespace   Violentmonkey Scripts
-// @match       http*://*/*
-// @grant       GM_registerMenuCommand
-// @version     0.0.1
-// @author      me
-// @description Automatically download a file
-// @downloadURL ***
+// @name            File Downloader
+// @namespace       Violentmonkey Scripts
+// @match           http*://*/*
+// @version         0.1.0
+// @author          Me
+// @description     Automatically download a file
+// @downloadURL     ***
+// @grant           GM_registerMenuCommand
+// @grant           GM_xmlhttpRequest
 // @supportURL
 // @homepageURL
 // ==/UserScript==
 
-async function downloadGalleries(urls) {
-    try {
-        const response = await fetch(
-            "http://localhost:5000/download_galleries",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ urls }),
+function downloadGalleries(urls) {
+    const requestData = JSON.stringify({ urls });
+
+    GM_xmlhttpRequest({
+        method: "POST",
+        url: "http://localhost:5000/download_galleries",
+        headers: { "Content-Type": "application/json" },
+        data: requestData,
+        onload: function (response) {
+            try {
+                const data = JSON.parse(response.responseText);
+
+                if (response.status === 200) {
+                    console.log("Download Output:", data.output);
+                    alert("Download complete!");
+                } else {
+                    console.error("Error:", data.error);
+                }
+            } catch (err) {
+                console.error("Error parsing response:", err);
             }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error("Error:", data.error);
-        } else {
-            console.log("Download Output:", data.output);
-            alert("Download complete!");
-        }
-    } catch (err) {
-        console.error("Request failed:", err);
-    }
+        },
+        onerror: function (error) {
+            console.error("Request failed:", error);
+        },
+    });
 }
 
 function main() {
