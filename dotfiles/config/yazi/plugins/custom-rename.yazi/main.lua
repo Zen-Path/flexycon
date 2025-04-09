@@ -1,6 +1,6 @@
 function utility_exists(utility)
     -- Check if the OS is Windows (Windows path separator is '\')
-    local is_windows = package.config:sub(1,1) == '\\'
+    local is_windows = package.config:sub(1, 1) == "\\"
     local command
 
     if is_windows then
@@ -28,9 +28,12 @@ local function entry(_, job)
         ya.dbg("vidir is available.")
 
         if job.args[1] == "full-path" then
-            ya.mgr_emit("shell", { 'vidir -- \"$@\"', block = true })
+            ya.mgr_emit("shell", { 'vidir -- "$@"', block = true })
         else
-            ya.mgr_emit("shell", { 'vidir -- $(basename -a -- \"$@\")', block = true })
+            ya.mgr_emit(
+                "shell",
+                { 'vidir -- $(basename -a -- "$@")', block = true }
+            )
         end
     else
         ya.dbg("vidir is not available.")
