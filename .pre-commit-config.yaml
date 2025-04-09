@@ -40,3 +40,8 @@ repos:
                     --write,
                 ]
             files: \.sh$
+    - repo: https://github.com/JohnnyMorganz/StyLua
+      rev: v2.0.2
+      hooks:
+          - id: stylua-system # or stylua / stylua-system / stylua-github
+            files: \.lua$
