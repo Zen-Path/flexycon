@@ -194,7 +194,12 @@ function fm() {
     if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
         builtin cd -- "$cwd"
     fi
+
+    {%@@ if os == "darwin" @@%}
+    command rm -f -- "$tmp"
+    {%@@ else @@%}
     command rm --force -- "$tmp"
+    {%@@ endif -@@%}
 }
 
 function find_by_md5() {
