@@ -86,9 +86,9 @@ dotfiles:
         dst: ~/.config/kitty
 
     # Text Editor
-    f_vim_init:
-        src: config/nvim/init.vim
-        dst: ~/.config/nvim/init.vim
+    f_nvim_init:
+        src: config/nvim/init.lua
+        dst: ~/.config/nvim/init.lua
 
     ## VSCode
     f_vscode_settings:
@@ -423,7 +423,7 @@ profiles:
             - f_bm_dirs
             - f_bm_files
             - d_starship
-            - f_vim_init
+            - f_nvim_init
             - d_python
             - d_yt_dlp
             - f_taskwarrior_config

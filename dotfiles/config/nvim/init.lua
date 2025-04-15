@@ -1,0 +1,145 @@
+-- vim.g.mapleader = ","
+
+-- vim.keymap.set("n", ",,", [[:keepp /<++><CR>ca<]], { noremap = true, silent = true })
+-- vim.keymap.set("i", ",,", [[<Esc>:keepp /<++><CR>ca<]], { noremap = true, silent = true })
+
+local fn = vim.fn
+local install_path = fn.stdpath("config") .. "/autoload/plug.vim"
+
+if fn.empty(fn.glob(install_path)) > 0 then
+    print("Downloading junegunn/vim-plug to manage plugins...")
+    fn.system({ "mkdir", "-p", vim.fn.stdpath("config") .. "/autoload" })
+    fn.system({
+        "curl",
+        "-fLo",
+        install_path,
+        "--create-dirs",
+        "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim",
+    })
+    vim.cmd([[autocmd VimEnter * PlugInstall]])
+end
+
+vim.cmd([[
+  call plug#begin(stdpath('config') . '/plugged')
+    Plug 'luisiacc/gruvbox-baby'
+    Plug 'tpope/vim-surround'
+    Plug 'preservim/nerdtree'
+    Plug 'junegunn/goyo.vim'
+    Plug 'jreybert/vimagit'
+    Plug 'vimwiki/vimwiki'
+    Plug 'vim-airline/vim-airline'
+    Plug 'tpope/vim-commentary'
+    Plug 'ap/vim-css-color'
+  call plug#end()
+]])
+
+-- THEME
+vim.g.gruvbox_baby_transparent_mode = 1
+vim.cmd.colorscheme("gruvbox-baby")
+
+-- EDITOR
+vim.opt.title = true
+vim.opt.background = "dark"
+vim.opt.mouse = "a"
+vim.opt.hlsearch = false
+vim.opt.clipboard:append("unnamedplus")
+vim.opt.showmode = false
+vim.opt.ruler = false
+vim.opt.laststatus = 0
+vim.opt.showcmd = false
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+-- TAB vs SPACES
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.tabstop = 4 -- Visual width of \t characters
+vim.opt.shiftwidth = 4 -- Indentation width for << and >>
+vim.opt.smartindent = true -- Enable smart autoindenting
+
+vim.opt.softtabstop = 4 -- Number of spaces inserted when pressing <Tab>
+vim.opt.autoindent = true -- Copy indent from current line when starting a new one
+
+-- KEY MAPPINGS
+local map = vim.keymap.set
+local opts = { noremap = true, silent = true }
+
+-- Don't yank when changing with 'c'
+map("n", "c", [["_c]], opts)
+
+-- Dot-repeat for visual selections
+map("v", ".", ":normal .<CR>", opts)
+
+-- Goyo prose mode toggle
+map("n", "<leader>f", ":Goyo | set bg=light | set linebreak<CR>", opts)
+
+-- Toggle spell check
+map("n", "<leader>o", ":setlocal spell! spelllang=en_us<CR>", opts)
+
+-- Redo with U
+map("n", "U", ":redo<CR>", opts)
+
+-- Replace all
+map("n", "S", ":%s//g<Left><Left>", opts)
+
+-- Replace Ex mode with gq
+map("n", "Q", "gq", opts)
+
+-- Run shellcheck
+map("n", "<leader>s", ":!clear && shellcheck -x %<CR>", opts)
+
+vim.cmd([[
+  cabbrev w!! execute 'silent! write !sudo tee % >/dev/null' | edit!
+]])
+
+-- CUSTOM COMMANDS
+vim.api.nvim_create_user_command("DelEmpty", "%g/^$/d", {})
+vim.api.nvim_create_user_command("ReduceEmpty", "g/\\v(^\\s*$\\n){2,}", {})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = "*",
+    callback = function()
+        -- Save current cursor position
+        local pos = vim.fn.getpos(".")
+
+        -- Remove trailing spaces
+        vim.cmd([[%s/\s\+$//e]])
+
+        -- Remove extra blank lines at EOF
+        vim.cmd([[%s/\n\+\%$//e]])
+
+        -- Add exactly one newline at EOF
+        local last_line = vim.fn.line("$")
+        local last_line_content = vim.fn.getline(last_line)
+        if last_line_content ~= "" then
+            vim.fn.append(last_line, "")
+        end
+
+        -- Restore cursor position
+        vim.fn.setpos(".", pos)
+    end,
+})
+
+-- GENERAL
+vim.opt.compatible = false -- Not strictly needed, Neovim is always 'nocompatible'
+vim.cmd([[filetype plugin on]]) -- No Lua API for this, keep as vim.cmd
+vim.cmd([[syntax on]]) -- Likewise, still VimL
+
+vim.opt.encoding = "utf-8"
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.wildmode = { "longest", "list", "full" }
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        vim.opt_local.formatoptions:remove({ "c", "r", "o" })
+    end,
+})
+
+-- Load command shortcuts generated from bm-dirs and bm-files via user shortcuts script.
+local shortcuts_file = vim.fn.expand("~/.config/nvim/shortcuts.vim")
+if vim.fn.filereadable(shortcuts_file) == 1 then
+    vim.cmd("silent! source " .. shortcuts_file)
+end
