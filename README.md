@@ -4,6 +4,15 @@ Flexible programmatic configuration.
 
 ## Tips
 
+### Mac sleep enable / disable
+
+Enable:
+```sh
+sudo pmset -a disablesleep 0
+```
+
+Source: https://gist.github.com/laurion/d93eb70efcc6f3b3716173c94e74f435
+
 ### Monday as first day of the week
 
 1. Open `/etc/locale.conf` and change `LC_TIME` to `en_DK.UTF-8` (Denmark)
