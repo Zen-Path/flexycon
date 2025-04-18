@@ -451,7 +451,7 @@ profiles:
 
     meta_mac:
         variables:
-            d_vscode_dst: "~/Library/Application\\ Support/Code/User"
+            d_vscode_dst: "~/Library/Application\ Support/Code/User"
 
     ## Environment
 
