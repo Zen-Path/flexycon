@@ -523,4 +523,9 @@ profiles:
             - meta_common
             - meta_mac
             - meta_work
+
+    mac_home:
+        include:
+            - meta_common
+            - meta_mac
             - meta_personal
