@@ -40,7 +40,9 @@ export XDG_VIDEOS_DIR="$HOME/Videos"
 
 export XDG_PUBLICSHARE_DIR="$HOME/Public"
 export XDG_DESKTOP_DIR="$HOME/Desktop"
+{%@@ if os == "linux" @@%}
 export XDG_TEMPLATES_DIR="$HOME/"
+{%@@ endif @@%}
 
 # ~/ Clean-up:
 {%@@ if os == "linux" @@%}
