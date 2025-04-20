@@ -52,14 +52,14 @@ export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+# export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
+# export CARGO_HOME="$XDG_DATA_HOME/cargo"
+# export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export HISTFILE="$XDG_DATA_HOME/history"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
 export npm_config_cache="$XDG_CACHE_HOME/npm"
-export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
+# export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
 export LESSHISTFILE="/dev/null"
 export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
@@ -85,13 +85,13 @@ export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude
 export FZF_DEFAULT_OPTS='--multi --extended'
 
 export BAT_THEME='gruvbox-dark'
-export PASTEL_COLOR_MODE='24bit'
+# export PASTEL_COLOR_MODE='24bit'
 
 {%@@- if os == "linux" @@%}
 export _JAVA_AWT_WM_NONREPARENTING='1' # Fix for Java applications in dwm
 {%@@ endif -@@%}
 
-export MOZ_USE_XINPUT2='1' # Mozilla smooth scrolling/touchpads.
+# export MOZ_USE_XINPUT2='1' # Mozilla smooth scrolling/touchpads.
 
 {%@@ if os == "darwin" @@%}
 # === Android Studio ===
