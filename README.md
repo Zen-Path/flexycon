@@ -7,6 +7,7 @@ Flexible programmatic configuration.
 ### Mac sleep enable / disable
 
 Enable:
+
 ```sh
 sudo pmset -a disablesleep 0
 ```
