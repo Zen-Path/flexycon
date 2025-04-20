@@ -14,7 +14,7 @@ config:
     import_variables:
         - uservariables.yaml:optional
 actions:
-    update_user_shortcuts: user_shortcuts
+    generate_user_shortcuts: user_shortcuts
     post:
         yazi_plugins_upgrade: ya pack --upgrade
         vscode_extensions_save: code --list-extensions | sort > "{{@@ f_vscode_extensions @@}}"
@@ -48,18 +48,6 @@ dotfiles:
     f_shell_aliasrc:
         src: config/shell/aliasrc.sh.j2
         dst: ~/.config/shell/aliasrc
-    f_bm_dirs:
-        src: config/shell/bm-dirs.sh.j2
-        dst: ~/.config/shell/bm-dirs
-        link: nolink
-        actions:
-            - update_user_shortcuts
-    f_bm_files:
-        src: config/shell/bm-files.sh.j2
-        dst: ~/.config/shell/bm-files
-        link: nolink
-        actions:
-            - update_user_shortcuts
     d_starship:
         src: config/starship
         dst: ~/.config/starship
@@ -256,12 +244,12 @@ dotfiles:
         dst: ~/.local/bin/sdir
         chmod: "755"
     f_user_shortcuts:
-        src: bin/user_shortcuts.sh
+        src: bin/user_shortcuts.py
         dst: ~/.local/bin/user_shortcuts
         chmod: "755"
         link: nolink
         actions:
-            - update_user_shortcuts
+            - generate_user_shortcuts
     f_tag:
         src: bin/tag.sh
         dst: ~/.local/bin/tag
@@ -420,8 +408,6 @@ profiles:
             - meta_firefox
         dotfiles:
             - f_shell_aliasrc
-            - f_bm_dirs
-            - f_bm_files
             - d_starship
             - f_nvim_init
             - d_python

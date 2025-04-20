@@ -103,7 +103,7 @@ export ANDROID_HOME="~/Library/Android/sdk"
 export APPIUM_PREFER_SYSTEM_UNZIP='1'
 {%@@ endif @@%}
 
-[ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}"/shell/shortcutrc ] && setsid shortcuts >/dev/null 2>&1
+[ ! -f "${XDG_CONFIG_HOME}"/shell/shortcuts.sh ] && setsid user_shortcuts >/dev/null 2>&1
 
 {%@@ if os == "linux" @@%}
 # Start graphical server on user's current tty if not already running.

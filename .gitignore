@@ -1,5 +1,6 @@
 # Config
 uservariables.yaml
+dotfiles/config/yazi/shortcuts.toml
 
 # MacOS files
 .DS_Store
