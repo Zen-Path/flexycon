@@ -72,6 +72,7 @@ open-in-browser = [
 # Play
 play = [
 	{ run = 'mpv --force-window "$@"',  orphan = true,  desc = "Play",  for = "linux" },
+    { run = 'open "$@"',                orphan = true,  desc = "Play",  for = "macos" },
 	{ run = 'mpv --force-window %*',    orphan = true,  desc = "Play",  for = "windows" },
 ]
 play-new-win = [
