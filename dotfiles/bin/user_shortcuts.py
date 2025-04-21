@@ -298,9 +298,9 @@ def main():
         ),
         Bookmark(
             "f",
-            ["$XDG_CONFIG_HOME", "shell", "aliasrc"],
+            ["$XDG_CONFIG_HOME", "shell", "aliases.sh"],
             {"default": ["c", "s", "a"]},
-            "shell aliasrc",
+            "shell aliases.sh",
         ),
         Bookmark(
             "f",

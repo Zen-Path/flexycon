@@ -45,9 +45,9 @@ dotfiles:
         dst: ~/.config/git
 
     # Shell
-    f_shell_aliasrc:
-        src: config/shell/aliasrc.sh.j2
-        dst: ~/.config/shell/aliasrc
+    f_shell_aliases:
+        src: config/shell/aliases.sh.j2
+        dst: ~/.config/shell/aliases.sh
     d_starship:
         src: config/starship
         dst: ~/.config/starship
@@ -407,7 +407,7 @@ profiles:
             - meta_vscode
             - meta_firefox
         dotfiles:
-            - f_shell_aliasrc
+            - f_shell_aliases
             - d_starship
             - f_nvim_init
             - d_python
