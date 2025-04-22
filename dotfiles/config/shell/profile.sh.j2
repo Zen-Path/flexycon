@@ -113,7 +113,13 @@ export APPIUM_PREFER_SYSTEM_UNZIP='1'
 
 ## ENV SETTINGS
 
-[ ! -f "${XDG_CONFIG_HOME}"/shell/shortcuts.sh ] && setsid user_shortcuts >/dev/null 2>&1
+# {%@@ if os == "linux" @@%}
+
+[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && setsid user_shortcuts >/dev/null 2>&1
+# {%@@ elif os == "darwin" @@%}
+
+[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && user_shortcuts
+# {%@@ endif @@%}
 
 {%@@ if os == "linux" @@%}
 # Start graphical server on user's current tty if not already running.
