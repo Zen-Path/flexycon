@@ -229,7 +229,7 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
     { on = ":",     run = "shell --block --interactive",    desc = "Run a shell command (block)" },
 
     { on = "'",     run = "search_do --via=fd --args='--no-ignore'", desc = "Display flat directory contents" },
-    { on = "\"",    run = "search_do --via=fd --args='--type file --no-ignore'", desc = "Display flat directory files" },
+    { on = '"',     run = "search_do --via=fd --args='--type file --no-ignore'", desc = "Display flat directory files" },
 
     { on = "<Enter>",   run = "open",   desc = "Open selected files" },
     { on = "<C-Enter>", run = "open --hovered --interactive", desc = "Open selected files interactively" },
