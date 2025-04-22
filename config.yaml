@@ -424,6 +424,7 @@ profiles:
             - f_ifinstalled
             - f_imgconv
             - f_noisereduce
+            - f_pkgsize
             - f_rcfmt
             - f_sdir
             - f_user_shortcuts
@@ -449,6 +450,7 @@ profiles:
             # Config
             - d_firefox_chrome_personal
             - f_firefox_user_personal
+            - f_journal_entry
 
     meta_work:
         dotfiles:
@@ -498,12 +500,10 @@ profiles:
             - f_dmenupass
             - f_dmenurecord
             - f_env_cmd_runner
-            - f_journal_entry
             - f_kbselect
             - f_mounter
             - f_unmounter
             - f_nsxiv_rifle
-            - f_pkgsize
             - f_remapd
             - f_remaps
             - f_screenshot_utility
