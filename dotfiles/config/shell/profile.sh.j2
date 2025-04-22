@@ -126,5 +126,5 @@ export APPIUM_PREFER_SYSTEM_UNZIP='1'
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"
 
 # Switch escape and caps if tty and no passwd required:
-sudo -n loadkeys "${XDG_DATA_HOME:-$HOME/.local/share}"/larbs/ttymaps.kmap 2>/dev/null
+sudo -n loadkeys "$XDG_DATA_HOME"/larbs/ttymaps.kmap 2>/dev/null
 {%@@ endif @@%}

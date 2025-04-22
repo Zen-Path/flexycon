@@ -18,7 +18,7 @@ setopt interactive_comments
 # History in cache directory:
 HISTSIZE=100000
 SAVEHIST=100000
-HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/history"
+HISTFILE="$XDG_CACHE_HOME/zsh/history"
 setopt appendhistory
 
 # Load aliases and shortcuts if existent.
