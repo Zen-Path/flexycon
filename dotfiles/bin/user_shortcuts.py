@@ -153,16 +153,27 @@ class YaziBookmarkRenderer(BookmarkRenderer):
     def compose_bookmark(
         self, alias: Union[List[str], bool], bookmark: Bookmark
     ) -> str:
+        verb = "Open" if bookmark.type == "d" else "Reveal"
+        type_readable = "dir" if bookmark.type == "d" else "file"
         description_fmt = (
-            f"{'Open' if bookmark.type == 'd' else 'Reveal'} {bookmark.description} {'dir' if bookmark.type == 'd' else 'file'}"
+            f"{verb} {bookmark.description} {type_readable}"
             if bookmark.description
             else ""
         )
 
         # All yazi bookmarks should start with 'g'.
         alias = ["g"] + alias
+        command = (
+            f'"cd {self._get_path(bookmark)}"'
+            if bookmark.type == "d"
+            else f'["reveal {self._get_path(bookmark)}", "open"]'
+        )
 
-        return f'    {{ on = {alias}, run = "cd {self._get_path(bookmark)}", desc = "{description_fmt}" }},'
+        return f'{self.indentation}{{ on = {alias}, run = {command}, desc = "{description_fmt}" }},'
+
+    def compose_file(self) -> str:
+        # Add newline so we can comment out the import statement in keymap.toml
+        return f"\n{self.indentation}# SHORTCUTS\n{self.compose_bookmarks()}\n"
 
 
 # ENTRY POINT
