@@ -50,12 +50,14 @@ class BookmarkRenderer(ABC):
         path_parts: List[str],
         resolve_path: bool = False,
         escape_path: bool = False,
+        indentation_level: int = 4,
     ):
         self.name = name
         self.path_parts = path_parts
         self.resolve_path = resolve_path
         self.escape_path = escape_path
         self.processed_bookmarks: Dict[str, Tuple[List[str], Bookmark]] = {}
+        self.indentation = " " * indentation_level
 
     def process(self, bookmarks: List[Bookmark]) -> None:
         logger.info(f"[{self.name}] Processing bookmarks...")
