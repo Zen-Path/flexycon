@@ -1,3 +1,9 @@
+#!/usr/bin/env zsh
+
+# {{@@ header() @@}}
+
+# NOTE: Leave an empty line after commented block for templating purposes.
+
 # Enable colors and change prompt:
 autoload -U colors && colors # Load colors
 
