@@ -6,6 +6,7 @@ import argparse
 import logging
 import os
 import shlex
+import sys
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
@@ -15,12 +16,55 @@ from typing import Dict, List, Literal, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
 
+# Optional: You can replace these colors with others or use colorama for cross-platform support
+LOG_COLORS = {
+    logging.DEBUG: "\033[94m",  # Blue
+    logging.INFO: "\033[92m",  # Green
+    logging.WARNING: "\033[93m",  # Yellow
+    logging.ERROR: "\033[91m",  # Red
+    logging.CRITICAL: "\033[95m",  # Magenta
+}
+RESET_COLOR = "\033[0m"
+
+LEVEL_NAME_MAP = {
+    logging.DEBUG: "DBG",
+    logging.INFO: "INF",
+    logging.WARNING: "WRN",
+    logging.ERROR: "ERR",
+    logging.CRITICAL: "CRT",
+}
+
+
+class ColoredFormatter(logging.Formatter):
+    def format(self, record):
+        # Patch the levelname
+        if record.levelno in LEVEL_NAME_MAP:
+            record.levelname = LEVEL_NAME_MAP[record.levelno]
+
+        color = LOG_COLORS.get(record.levelno, "")
+        formatted = super().format(record)
+        return f"{color}{formatted}{RESET_COLOR}"
+
 
 def setup_logging(verbose: bool = False) -> None:
-    logging.basicConfig(
-        level=logging.DEBUG if verbose else logging.INFO,
-        format="%(levelname)s: %(message)s",
+    level = logging.DEBUG if verbose else logging.WARNING
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(level)
+
+    formatter = ColoredFormatter(
+        fmt="%(levelname)s | %(asctime)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
     )
+    handler.setFormatter(formatter)
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(level)
+
+    # Remove default handlers if any (avoid duplicate logs)
+    if root_logger.hasHandlers():
+        root_logger.handlers.clear()
+
+    root_logger.addHandler(handler)
 
 
 def resolve_path(path_parts: List[str]) -> str:
