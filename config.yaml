@@ -235,8 +235,8 @@ dotfiles:
         src: scripts/noisereduce.sh
         dst: ~/.local/bin/noisereduce
         chmod: "755"
-    f_rcfmt:
-        src: scripts/rcfmt.sh
+    f_rclone_fmt:
+        src: scripts/rclone_fmt/run.sh
         dst: ~/.local/bin/rcfmt
         chmod: "755"
     f_sdir:
@@ -425,7 +425,7 @@ profiles:
             - f_imgconv
             - f_noisereduce
             - f_pkgsize
-            - f_rcfmt
+            - f_rclone_fmt
             - f_sdir
             - f_user_shortcuts
             - f_tag
