@@ -244,12 +244,9 @@ dotfiles:
         dst: ~/.local/bin/sdir
         chmod: "755"
     f_user_shortcuts:
-        src: scripts/user_shortcuts.py
+        src: scripts/user_shortcuts/run.sh
         dst: ~/.local/bin/user_shortcuts
         chmod: "755"
-        link: nolink
-        actions:
-            - generate_user_shortcuts
     f_tag:
         src: scripts/tag.sh
         dst: ~/.local/bin/tag
