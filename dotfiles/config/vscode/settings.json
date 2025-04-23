@@ -19,7 +19,7 @@
     "files.trimFinalNewlines": true,
     "prettier.proseWrap": "always",
     "editor.wordWrapColumn": 120,
-    "cSpell.enableFiletypes": ["!c"],
+    "cSpell.enabledFileTypes": {},
     "files.autoSave": "onFocusChange",
     "files.exclude": {
         "**/.git": false,
