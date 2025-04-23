@@ -48,7 +48,7 @@ class BookmarkRenderer(ABC):
             )
             if isinstance(alias_value, list):
                 alias_str = "".join(alias_value)
-                self.processed_bookmarks[alias_str] = [alias_value, bookmark]
+                self.processed_bookmarks[alias_str] = (alias_value, bookmark)
 
                 logger.debug(f"- Added alias '{alias_str}' for bookmark {i}")
                 count += 1
@@ -90,5 +90,5 @@ class BookmarkRenderer(ABC):
         return self.compose_bookmarks()
 
     @abstractmethod
-    def compose_bookmark(self, alias: str, bookmark: Bookmark) -> str:
+    def compose_bookmark(self, alias: List[str], bookmark: Bookmark) -> str:
         pass

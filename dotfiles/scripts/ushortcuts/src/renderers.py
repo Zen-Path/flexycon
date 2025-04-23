@@ -4,9 +4,7 @@ from src.core import Bookmark, BookmarkRenderer
 
 
 class ZshBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(
-        self, alias: Union[List[str], bool], bookmark: Bookmark
-    ) -> str:
+    def compose_bookmark(self, alias: List[str], bookmark: Bookmark) -> str:
         description_fmt = f"# {bookmark.description}\n" if bookmark.description else ""
 
         alias_cmd = "cd" if bookmark.type == "d" else "$EDITOR"
@@ -32,9 +30,7 @@ ZSH = ZshBookmarkRenderer(
 
 
 class NVimBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(
-        self, alias: Union[List[str], bool], bookmark: Bookmark
-    ) -> str:
+    def compose_bookmark(self, alias: List[str], bookmark: Bookmark) -> str:
         description_fmt = f'" {bookmark.description}\n' if bookmark.description else ""
         return f'{description_fmt}cmap ;{alias} "{self._get_path(bookmark)}"'
 
@@ -43,9 +39,7 @@ NVIM = NVimBookmarkRenderer("NeoVim", ["$XDG_CONFIG_HOME", "nvim", "shortcuts.vi
 
 
 class YaziBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(
-        self, alias: Union[List[str], bool], bookmark: Bookmark
-    ) -> str:
+    def compose_bookmark(self, alias: List[str], bookmark: Bookmark) -> str:
         verb = "Open" if bookmark.type == "d" else "Reveal"
         type_readable = "dir" if bookmark.type == "d" else "file"
         description_fmt = (
