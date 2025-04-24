@@ -37,7 +37,7 @@ class ColoredFormatter(logging.Formatter):
 
 
 def setup_logging(verbose: bool = False) -> None:
-    level = logging.DEBUG if verbose else logging.WARNING
+    level = logging.DEBUG if verbose else logging.ERROR
 
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(level)
