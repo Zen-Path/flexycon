@@ -1,8 +1,5 @@
 vim.g.mapleader = ","
 
--- vim.keymap.set("n", ",,", [[:keepp /<++><CR>ca<]], { noremap = true, silent = true })
--- vim.keymap.set("i", ",,", [[<Esc>:keepp /<++><CR>ca<]], { noremap = true, silent = true })
-
 local fn = vim.fn
 local install_path = fn.stdpath("config") .. "/autoload/plug.vim"
 
@@ -90,6 +87,9 @@ map("n", "<leader>s", ":!clear && shellcheck -x %<CR>", opts)
 vim.cmd([[
   cabbrev w!! execute 'silent! write !sudo tee % >/dev/null' | edit!
 ]])
+
+vim.keymap.set("n", ",,", [[:keepp /<++><CR>ca<]], opts)
+vim.keymap.set("i", ",,", [[<Esc>:keepp /<++><CR>ca<]], opts)
 
 -- CUSTOM COMMANDS
 vim.api.nvim_create_user_command("DelEmpty", "%g/^$/d", {})
