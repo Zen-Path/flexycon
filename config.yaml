@@ -235,6 +235,10 @@ dotfiles:
         src: scripts/imgconv.sh
         dst: ~/.local/bin/imgconv
         chmod: "755"
+    f_media_server:
+        src: scripts/media_server/run.sh
+        dst: ~/.local/bin/media_server
+        chmod: "755"
     f_noisereduce:
         src: scripts/noisereduce.sh
         dst: ~/.local/bin/noisereduce
@@ -427,6 +431,7 @@ profiles:
             - f_git_logs
             - f_ifinstalled
             - f_imgconv
+            - f_media_server
             - f_noisereduce
             - f_pkgsize
             - f_rclone_fmt
