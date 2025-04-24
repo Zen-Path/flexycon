@@ -1,4 +1,4 @@
--- vim.g.mapleader = ","
+vim.g.mapleader = ","
 
 -- vim.keymap.set("n", ",,", [[:keepp /<++><CR>ca<]], { noremap = true, silent = true })
 -- vim.keymap.set("i", ",,", [[<Esc>:keepp /<++><CR>ca<]], { noremap = true, silent = true })
