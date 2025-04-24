@@ -22,8 +22,13 @@
     "cSpell.enabledFileTypes": {},
     "files.autoSave": "onFocusChange",
     "files.exclude": {
+        "**/__pycache__": true,
         "**/.git": false,
-        "**/node_modules": true
+        "**/.mypy_cache": true,
+        "**/.venv": true,
+        "**/node_modules": true,
+        "**/shared.egg-info": true,
+        "**/venv": true
     },
     "files.trimTrailingWhitespace": true,
     "editor.scrollbar.vertical": "hidden",
