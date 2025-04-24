@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
-import abc
 import argparse
 import os
 import subprocess
 from datetime import datetime
 
-from flx_utils import ClipboardUtility, ensure_directories_exist
+from shared.helpers import ClipboardUtility, ensure_directories_exist
 
 
 class MaimUtility:

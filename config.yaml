@@ -306,7 +306,7 @@ dotfiles:
         dst: ~/.local/bin/remaps
         chmod: "755"
     f_screenshot_utility:
-        src: scripts/screenshot_utility.py
+        src: scripts/screenshot_utility/run.sh
         dst: ~/.local/bin/screenshot_utility
         chmod: "755"
     f_select_unicode:
