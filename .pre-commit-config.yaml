@@ -3,7 +3,7 @@ repos:
       rev: 25.1.0
       hooks:
           - id: black
-            name: black (python files only)
+            name: black (py)
             files: \.py$
 
     - repo: https://github.com/pre-commit/mirrors-mypy
@@ -21,7 +21,7 @@ repos:
       rev: v4.0.0-alpha.8
       hooks:
           - id: prettier
-            name: prettier (non-python files)
+            name: prettier (js|json|css|html|md)
             # Either list the file extensions you want prettified:
             files: \.(js|jsx|ts|tsx|json|css|scss|html|md)$
             # or exclude python files:
@@ -40,8 +40,10 @@ repos:
                     --write,
                 ]
             files: \.sh$
+
     - repo: https://github.com/JohnnyMorganz/StyLua
       rev: v2.0.2
       hooks:
-          - id: stylua-system # or stylua / stylua-system / stylua-github
+          - id: stylua-system # stylua | stylua-system | stylua-github
+            name: stylua (lua)
             files: \.lua$
