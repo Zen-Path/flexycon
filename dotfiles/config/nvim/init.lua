@@ -71,6 +71,19 @@ vim.opt.smartindent = true -- Smart auto-indenting
 vim.opt.softtabstop = 4 -- Number of spaces inserted when pressing <Tab>
 vim.opt.autoindent = true -- Copy indent from current line when starting a new one
 
+-- BACKUPS and HISTORY
+
+-- Persistent undo
+-- Keep undo history accessible across restarts.
+vim.opt.undofile = true
+vim.opt.undodir = undo_dir
+
+-- Backups
+-- Restore the last saved-on-disk version
+vim.opt.backup = true -- Keep a copy before overwriting
+vim.opt.writebackup = true -- Keep a temp copy during the write
+vim.opt.backupdir = backup_dir
+
 -- KEY MAPPINGS
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
