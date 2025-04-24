@@ -23,9 +23,9 @@ repos:
           - id: prettier
             name: prettier (non-python files)
             # Either list the file extensions you want prettified:
-            # files: \.(js|jsx|ts|tsx|json|css|scss|html|md)$
+            files: \.(js|jsx|ts|tsx|json|css|scss|html|md)$
             # or exclude python files:
-            exclude: \.py$
+            # exclude: \.py$
 
     - repo: https://github.com/scop/pre-commit-shfmt
       rev: v3.11.0-1
