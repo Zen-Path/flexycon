@@ -274,7 +274,7 @@ dotfiles:
         dst: ~/.local/bin/dmenurecord
         chmod: "755"
     f_journal_entry:
-        src: scripts/journal_entry.py
+        src: scripts/journal_entry/run.sh
         dst: ~/.local/bin/journal_entry
         chmod: "755"
     f_kbselect:
