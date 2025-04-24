@@ -408,6 +408,7 @@ profiles:
             - meta_vscode
             - meta_firefox
         dotfiles:
+            # Config
             - f_shell_aliases
             - d_starship
             - f_nvim_init
@@ -418,6 +419,7 @@ profiles:
             - d_bottom
             - d_blugon
 
+            # Scripts
             - f_compiler
             - f_continuous_diff
             - f_fzfopen
