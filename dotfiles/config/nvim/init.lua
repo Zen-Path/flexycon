@@ -27,6 +27,7 @@ vim.cmd([[
     Plug 'vim-airline/vim-airline'
     Plug 'tpope/vim-commentary'
     Plug 'ap/vim-css-color'
+    Plug 'lambdalisue/vim-suda'
   call plug#end()
 ]])
 
@@ -84,9 +85,13 @@ map("n", "Q", "gq", opts)
 -- Run shellcheck
 map("n", "<leader>s", ":!clear && shellcheck -x %<CR>", opts)
 
-vim.cmd([[
-  cabbrev w!! execute 'silent! write !sudo tee % >/dev/null' | edit!
-]])
+-- Write to files that require sudo
+vim.api.nvim_set_keymap(
+    "c", -- in command-line mode
+    "w!!", -- what you type
+    "SudaWrite", -- what it expands to
+    { noremap = true, silent = false } -- set silent to false to see the expansion
+)
 
 vim.keymap.set("n", ",,", [[:keepp /<++><CR>ca<]], opts)
 vim.keymap.set("i", ",,", [[<Esc>:keepp /<++><CR>ca<]], opts)
