@@ -223,6 +223,10 @@ dotfiles:
         src: scripts/getkeys.sh
         dst: ~/.local/bin/getkeys
         chmod: "755"
+    f_git_logs:
+        src: scripts/git_logs/run.sh
+        dst: ~/.local/bin/git_logs
+        chmod: "755"
     f_ifinstalled:
         src: scripts/ifinstalled.sh
         dst: ~/.local/bin/ifinstalled
@@ -418,6 +422,7 @@ profiles:
             - f_continuous_diff
             - f_fzfopen
             - f_getkeys
+            - f_git_logs
             - f_ifinstalled
             - f_imgconv
             - f_noisereduce

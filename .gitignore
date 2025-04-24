@@ -2,6 +2,8 @@
 uservariables.yaml
 dotfiles/config/yazi/shortcuts.toml
 
+dotfiles/scripts/git_logs/src/repos.py
+
 # MacOS files
 .DS_Store
 
