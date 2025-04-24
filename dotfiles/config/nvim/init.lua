@@ -64,9 +64,9 @@ vim.opt.smartcase = true
 
 -- TAB vs SPACES
 vim.opt.expandtab = true -- Use spaces instead of tabs
-vim.opt.tabstop = 4 -- Visual width of \t characters
+vim.opt.tabstop = 4 -- Visual width of '\t' characters
 vim.opt.shiftwidth = 4 -- Indentation width for << and >>
-vim.opt.smartindent = true -- Enable smart autoindenting
+vim.opt.smartindent = true -- Smart auto-indenting
 
 vim.opt.softtabstop = 4 -- Number of spaces inserted when pressing <Tab>
 vim.opt.autoindent = true -- Copy indent from current line when starting a new one
