@@ -31,6 +31,20 @@ vim.cmd([[
   call plug#end()
 ]])
 
+-- FILES
+local data_home = os.getenv("XDG_DATA_HOME")
+
+local nvim_data = data_home .. "/nvim"
+local undo_dir = nvim_data .. "/undo//"
+local backup_dir = nvim_data .. "/backup//"
+
+-- Ensure the dirs (and any parents) exist
+for _, dir in ipairs({ undo_dir, backup_dir }) do
+    if vim.fn.isdirectory(dir) == 0 then
+        vim.fn.mkdir(dir, "p")
+    end
+end
+
 -- THEME
 vim.g.gruvbox_baby_transparent_mode = 1
 vim.cmd.colorscheme("gruvbox-baby")
