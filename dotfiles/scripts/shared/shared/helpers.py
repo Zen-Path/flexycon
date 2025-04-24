@@ -33,3 +33,30 @@ def run_command(command: List[str]) -> Tuple[int, List[str]]:
 
     logger.info(f"Command ({command}) finished with return code {returncode}")
     return returncode, output
+
+
+def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
+    possible_resp = positive_resp + negative_resp
+    if default not in possible_resp:
+        return False
+
+    default_index = possible_resp.index(default)
+    possible_resp[default_index] = possible_resp[default_index].upper()
+
+    try:
+        user_resp = input(f"> {prompt} ({'/'.join(possible_resp)}): ").strip().lower()
+    except KeyboardInterrupt:
+        exit()
+
+    return user_resp in positive_resp
+
+
+def ensure_directory_interactive(path):
+    if not os.path.exists(path):
+        print(f":: The directory '{path}' does not exist.")
+        user_resp = prompt_user("Would you like to create the directory?")
+        if user_resp:
+            os.makedirs(path)
+        else:
+            print(":: Operation cancelled by user.")
+            sys.exit(1)
