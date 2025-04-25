@@ -225,13 +225,20 @@ shortcuts: List[Bookmark] = [
         {"default": ["w", "i", "s"], YAZI.name: ["s", "w"]},
         "wis source",
     ),
-    # Misc
+    # Flexycon
     Bookmark(
         "d",
         [flex_home],
         {"default": ["f", "l", "x"], YAZI.name: ["F"]},
         "sources",
     ),
+    Bookmark(
+        "f",
+        [flex_scripts, "user_shortcuts", "src", "data.py"],
+        {"default": ["s", "h", "r", "t"]},
+        "shell aliases.sh",
+    ),
+    # Misc
     Bookmark(
         "d",
         ["$JOURNAL_HOME"],
