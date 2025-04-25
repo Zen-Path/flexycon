@@ -80,7 +80,7 @@ keymap = [
     { on = "q",     run = "quit",               desc = "Quit the process" },
     { on = "Q",     run = "quit --no-cwd-file", desc = "Quit the process without outputting cwd-file" },
 
-    { on = "w",     run = "tasks_show", desc = "Show task manager" },
+    { on = "w",     run = "tasks:show", desc = "Show task manager" },
     { on = "W",     run = "noop", desc = "" },
 
     { on = "e",     run = "noop", desc = "" },
@@ -448,7 +448,7 @@ keymap = [
 keymap = [
     { on = "<C-c>",   run = "close",                                      desc = "Cancel completion" },
     { on = "<Tab>",   run = "close --submit",                             desc = "Submit the completion" },
-    { on = "<Enter>", run = [ "close --submit", "close_input --submit" ], desc = "Submit the completion and input" },
+    { on = "<Enter>", run = [ "close --submit", "input:close --submit" ], desc = "Submit the completion and input" },
 
     { on = "<A-k>", run = "arrow -1", desc = "Move cursor up" },
     { on = "<A-j>", run = "arrow 1",  desc = "Move cursor down" },
