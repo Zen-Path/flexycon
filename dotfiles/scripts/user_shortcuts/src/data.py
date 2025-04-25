@@ -1,7 +1,16 @@
+import os
+from pathlib import Path
 from typing import List
 
 from src.core import Bookmark
 from src.renderers import YAZI
+
+flex_home = Path(
+    os.getenv("FLEXYCON_HOME") or str(Path.home() / ".local" / "src" / "flexycon")
+)
+flex_dotfiles = flex_home / "dotfiles"
+flex_config = flex_dotfiles / "config"
+flex_scripts = flex_dotfiles / "scripts"
 
 shortcuts: List[Bookmark] = [
     # Home
@@ -219,7 +228,7 @@ shortcuts: List[Bookmark] = [
     # Misc
     Bookmark(
         "d",
-        ["$FLEXYCON_HOME"],
+        [flex_home],
         {"default": ["f", "l", "x"], YAZI.name: ["F"]},
         "sources",
     ),
