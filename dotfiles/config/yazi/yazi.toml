@@ -161,7 +161,7 @@ preloaders = [
 	{ mime = "application/ms-opentype", run = "font" },
 ]
 previewers = [
-	{ name = "*/",      run = "folder", sync = true },
+	{ name = "*/",      run = "folder" },
 	# Code
 	{ mime = "text/*",  run = "code" },
 	{ mime = "*/{xml,javascript,wine-extension-ini}", run = "code" },
