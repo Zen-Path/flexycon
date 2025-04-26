@@ -18,11 +18,6 @@ alias t='task'
 alias z='zathura'
 alias ka='killall'
 alias sql='sqlite3'
-{%@@ if os == "linux" @@%}
-alias py='python'
-{%@@ elif os == "darwin" @@%}
-alias py='/opt/homebrew/bin/python3'
-{%@@ endif @@%}
 
 # Verbosity and common settings.
 {%@@ if os == "linux" @@%}
@@ -53,8 +48,22 @@ alias tse='tsc --target es6'
 alias jq='jq --indent 4'
 alias jqs='jq --sort-keys'
 alias adbpac='adb shell cmd package list packages'
-alias penv='source venv/bin/activate 2> /dev/null || source .venv/bin/activate 2> /dev/null'
+
+## Python
+{%@@ if os == "linux" @@%}
+alias py='python'
+{%@@ elif os == "darwin" @@%}
+alias py='/opt/homebrew/bin/python3'
+{%@@ endif @@%}
+
+# [Python] Virtual [Env]ironment [C]reate
+alias penvc='py -m venv venv'
+
+# [P]ip [F]reeze to [R]equirements
 alias pfr='pip freeze > requirements.txt'
+
+# [P]ip [I]nstall from [R]equirements
+alias pir='pip install -r requirements.txt'
 
 # Rclone
 alias rc='rclone'
