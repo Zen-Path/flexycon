@@ -32,7 +32,7 @@ dotfiles:
         # Using a link since accidentally deleting this file would be a
         # PITA to restore without a shell config. This way, we can run:
         # `ln -s .config/dotdrop/.zprofile .`
-        src: config/shell/profile.sh.j2
+        src: config/shell/profile.sh
         dst: ~/.zprofile
     f_shell_inputrc:
         src: config/shell/inputrc
@@ -46,7 +46,7 @@ dotfiles:
 
     # Shell
     f_shell_aliases:
-        src: config/shell/aliases.sh.j2
+        src: config/shell/aliases.sh
         dst: ~/.config/shell/aliases.sh
     d_starship:
         src: config/starship
