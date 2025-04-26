@@ -69,12 +69,6 @@ export FLEXYCON_HOME="$HOME/.local/src/flexycon"
 export BAT_THEME='gruvbox-dark'
 # export PASTEL_COLOR_MODE='24bit'
 
-{%@@- if os == "linux" @@%}
-export _JAVA_AWT_WM_NONREPARENTING='1' # Fix for Java applications in dwm
-{%@@ endif -@@%}
-
-# export MOZ_USE_XINPUT2='1' # Mozilla smooth scrolling/touchpads.
-
 ## Less
 export LESSOPEN='| /usr/bin/highlight -O ansi %s 2>/dev/null'
 export LESS='--RAW-CONTROL-CHARS --quit-if-one-screen'
