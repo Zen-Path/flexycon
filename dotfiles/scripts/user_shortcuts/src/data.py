@@ -216,7 +216,7 @@ shortcuts: List[Bookmark] = [
     Bookmark(
         "d",
         ["$XDG_SRC_HOME", "private"],
-        {"default": ["p", "r", "v"], YAZI.name: ["s", "p"]},
+        {"default": ["p", "r", "v"], YAZI.name: ["P"]},
         "private source",
     ),
     Bookmark(
