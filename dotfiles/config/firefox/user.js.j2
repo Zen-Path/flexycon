@@ -129,7 +129,13 @@ user_pref("widget.gtk.overlay-scrollbars.enabled", true);
 user_pref("accessibility.browsewithcaret", false);
 
 // Always underline links
-user_pref("layout.css.always_underline_links", {{@@ "false" if _dotfile_key == "f_firefox_user_front_end" else "true" @@}});
+// {%@@ if _dotfile_key == "f_firefox_user_front_end" @@%}
+
+user_pref("layout.css.always_underline_links", "false");
+// {%@@ else @@%}
+
+user_pref("layout.css.always_underline_links", "true");
+// {%@@ endif @@%}
 
 // Search for text when you start typing
 user_pref("accessibility.typeaheadfind", false);
