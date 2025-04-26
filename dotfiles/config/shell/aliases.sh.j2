@@ -3,7 +3,7 @@
 # {{@@ header() @@}}
 
 # Make some system commands not require sudo.
-for command in mount umount pacman updatedb su shutdown reboot ; do
+for command in mount umount su shutdown reboot; do
 	alias "$command=sudo $command"
 done; unset command
 
@@ -14,8 +14,7 @@ done; unset command
 alias e='$EDITOR'
 alias E='$GRAPHICAL_EDITOR'
 alias g='git'
-alias o='xdg-open'
-alias p='pacman'
+alias o='open'
 alias t='task'
 alias ka='killall'
 alias sql='sqlite3'
@@ -36,7 +35,6 @@ alias shfmt='shfmt --indent 4 --binary-next-line --case-indent --space-redirects
 # Use colored output
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
-alias ip='ip -color=auto'
 
 # Dev-oriented
 alias mci='sudo make clean install'
