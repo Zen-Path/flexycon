@@ -149,3 +149,32 @@ function find_by_md5() {
         [[ "$hash" == "$target_hash" ]] && echo "$file"
     done
 }
+
+# DEVELOPMENT
+
+# [Python] Virtual [Env]ironment [A]ctivate
+penva() {
+    local env_dirs=("venv" ".venv" "env")
+    local activate_script
+
+    # If an explicit path was given, try that first
+    if [ -n "$1" ] && [ -f "$1/bin/activate" ]; then
+        activate_script="$1/bin/activate"
+    else
+        # Otherwise search through a list of common venv folders
+        for d in "${env_dirs[@]}"; do
+            if [ -f "$d/bin/activate" ]; then
+                activate_script="$d/bin/activate"
+                break
+            fi
+        done
+    fi
+
+    if [ -z "$activate_script" ]; then
+        echo "Error: no virtualenv activate script found in $(pwd)" >&2
+        return 1
+    fi
+
+    source "$activate_script"
+    printf "➜ Activated %s\n" "$activate_script"
+}
