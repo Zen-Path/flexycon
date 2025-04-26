@@ -230,7 +230,7 @@ shortcuts: List[Bookmark] = [
         "d",
         [flex_home],
         {"default": ["f", "l", "x"], YAZI.name: ["F"]},
-        "sources",
+        "flexycon home",
     ),
     Bookmark(
         "f",
