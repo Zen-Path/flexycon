@@ -35,7 +35,7 @@ class BookmarkRenderer(ABC):
         self.path_parts = path_parts
         self.resolve_path = resolve_path
         self.escape_path = escape_path
-        self.processed_bookmarks: Dict[str, Tuple[List[str], Bookmark]] = {}
+        self.processed_bookmarks: List[Tuple[List[str], Bookmark]] = []
         self.indentation = " " * indentation_level
 
     def process(self, bookmarks: List[Bookmark]) -> None:
@@ -48,7 +48,7 @@ class BookmarkRenderer(ABC):
             )
             if isinstance(alias_value, list):
                 alias_str = "".join(alias_value)
-                self.processed_bookmarks[alias_str] = (alias_value, bookmark)
+                self.processed_bookmarks.append((alias_value, bookmark))
 
                 logger.debug(f"- Added alias '{alias_str}' for bookmark {i}")
                 count += 1
@@ -82,8 +82,8 @@ class BookmarkRenderer(ABC):
 
     def compose_bookmarks(self) -> str:
         lines = []
-        for alias_str, [alias, bookmark] in self.processed_bookmarks.items():
-            lines += [self.compose_bookmark(alias, bookmark)]
+        for [alias_segments, bookmark] in self.processed_bookmarks:
+            lines += [self.compose_bookmark(alias_segments, bookmark)]
         return "\n".join(lines)
 
     def compose_file(self) -> str:
