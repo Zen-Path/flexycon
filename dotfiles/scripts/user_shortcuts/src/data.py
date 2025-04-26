@@ -233,6 +233,18 @@ shortcuts: List[Bookmark] = [
         "flexycon home",
     ),
     Bookmark(
+        "d",
+        [flex_home, "dotfiles", "config"],
+        {"default": ["f", "l", "x", "c"], YAZI.name: ["f", "c"]},
+        "flexycon config",
+    ),
+    Bookmark(
+        "d",
+        [flex_home, "dotfiles", "scripts"],
+        {"default": ["f", "l", "x", "s"], YAZI.name: ["f", "s"]},
+        "flexycon scripts",
+    ),
+    Bookmark(
         "f",
         [flex_scripts, "user_shortcuts", "src", "data.py"],
         {"default": ["s", "h", "r", "t"]},
