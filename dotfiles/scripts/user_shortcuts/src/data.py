@@ -247,7 +247,7 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         "d",
-        ["mnt"],
+        ["/mnt"],
         {"default": ["m", "n"], YAZI.name: ["M"]},
         "mount",
     ),
