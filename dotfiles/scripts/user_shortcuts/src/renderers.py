@@ -4,24 +4,38 @@ from src.core import Bookmark, BookmarkRenderer
 
 
 class ZshBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias: List[str], bookmark: Bookmark) -> str:
+    def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         description_fmt = f"# {bookmark.description}\n" if bookmark.description else ""
 
-        alias_cmd = "cd" if bookmark.type == "d" else "$EDITOR"
-        alias_fmt = f'alias {"".join(alias):>5}="{alias_cmd} {self._get_path(bookmark)} && ls -A"'
+        alias_name = "".join(alias_segments)
 
-        named_dirs_fmt = (
-            f'\nhash -d {"".join(alias):>3}="{bookmark.resolved_path}"'
+        # Shell keywords
+        alias_keyword = "alias"
+        hash_keyword = "hash -d"
+
+        # Determine max width so the '=' line up
+        max_keyword_len = max(len(alias_keyword), len(hash_keyword))
+
+        alias_header = f"{alias_keyword:<{max_keyword_len}} {alias_name}"
+        hash_header = f"{hash_keyword:<{max_keyword_len}} {alias_name}"
+
+        target_command = "cd" if bookmark.type == "d" else "$EDITOR"
+        alias_definition = (
+            f'{alias_header}="{target_command} {self._get_path(bookmark)} && ls -A"'
+        )
+
+        hash_definition = (
+            f'\n{hash_header}="{bookmark.resolved_path}"'
             if bookmark.type == "d"
             else ""
         )
 
         # Example:
         # # home
-        # alias     h="cd /Users/home && ls -A"
-        # hash -d   h=/Users/home
+        # alias   dwn="cd '$XDG_DOWNLOAD_DIR' && ls -A"
+        # hash -d dwn="/Users/home/Downloads"
 
-        return f"{description_fmt}{alias_fmt}{named_dirs_fmt}\n"
+        return f"{description_fmt}{alias_definition}{hash_definition}\n"
 
 
 ZSH = ZshBookmarkRenderer(
