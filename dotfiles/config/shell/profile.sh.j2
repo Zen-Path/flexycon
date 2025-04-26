@@ -12,7 +12,7 @@ export PATH
 
 unsetopt PROMPT_SP
 
-export DOTDROP_PROFILE={{@@ "'" + _vars["active_dotdrop_profile"] + "'" @@}}
+# {{@@ "\n" @@}}export DOTDROP_PROFILE={{@@ "'" + _vars["active_dotdrop_profile"] + "'" @@}}
 
 # DEFAULT PROGRAMS
 
@@ -57,9 +57,9 @@ export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 
 ## Misc files
-{%@@ if "work" not in profile @@%}
+# {%@@ if "home" in profile +@@%}
 export JOURNAL_HOME="$XDG_DOCUMENTS_DIR/Journal"
-{%@@ endif @@%}
+# {%@@ endif +@@%}
 export FLEXYCON_HOME="$HOME/.local/src/flexycon"
 
 # PROGRAM SETTINGS
@@ -83,7 +83,7 @@ export LESS='--RAW-CONTROL-CHARS --quit-if-one-screen'
 export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .git/ --exclude node_modules/ --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/rustup'
 export FZF_DEFAULT_OPTS='--multi --extended'
 
-{%@@ if "work" not in profile @@%}
+#{%@@ if "work" in profile +@@%}
 ## Android Studio
 # TODO: change path to actual android home
 export ANDROID_HOME="$HOME/Library/Android/sdk"
@@ -98,7 +98,7 @@ export ANDROID_HOME="$HOME/Library/Android/sdk"
 # Use system 'unzip' binary instead of JS lib.
 # If 'unzip' fails, it will use the lib as fallback though.
 export APPIUM_PREFER_SYSTEM_UNZIP='1'
-{%@@ endif @@%}
+#{%@@ endif +@@%}
 
 ## ENV SETTINGS
 
