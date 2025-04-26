@@ -267,7 +267,7 @@ profiles:
         variables:
             d_firefox_chrome_src: "config/firefox/chrome"
             d_firefox_chrome_dst: "~/.config/firefox/chrome"
-            f_firefox_user_src: "config/firefox/user.js.j2"
+            f_firefox_user_src: "config/firefox/user.js"
             d_firefox_profiles: "~/.config/firefox"
 
     meta_mpv:
