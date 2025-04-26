@@ -4,10 +4,8 @@
 
 # Shell profile. Runs on login. Environmental variables are set here.
 
-{%@@ if os == "darwin" @@%}
 # Add Homebrew to $PATH
 PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
-{%@@ endif -@@%}
 
 PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
 export PATH
@@ -20,7 +18,7 @@ export DOTDROP_PROFILE={{@@ "'" + _vars["active_dotdrop_profile"] + "'" @@}}
 
 export EDITOR='nvim'
 export GRAPHICAL_EDITOR='code'
-export TERMINAL={{@@ "'kitty'" if os == "darwin" else "'alacritty'" @@}}
+export TERMINAL='kitty'
 export BROWSER='firefox'
 export FILE_MANAGER='yazi'
 
@@ -37,23 +35,12 @@ export XDG_DOCUMENTS_DIR="$HOME/Documents"
 export XDG_DOWNLOAD_DIR="$HOME/Downloads"
 export XDG_MUSIC_DIR="$HOME/Music"
 export XDG_PICTURES_DIR="$HOME/Pictures"
-{%@@ if os == "darwin" @@%}
 export XDG_VIDEOS_DIR="$HOME/Movies"
-{%@@ elif os == "linux" @@%}
-export XDG_VIDEOS_DIR="$HOME/Videos"
-{%@@ endif @@%}
 
 export XDG_PUBLICSHARE_DIR="$HOME/Public"
 export XDG_DESKTOP_DIR="$HOME/Desktop"
-{%@@ if os == "linux" @@%}
-export XDG_TEMPLATES_DIR="$HOME/"
-{%@@ endif @@%}
 
 ## $HOME Clean-up
-{%@@ if os == "linux" @@%}
-export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
-{%@@ endif -@@%}
-
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
@@ -77,9 +64,8 @@ export FLEXYCON_HOME="$HOME/.local/src/flexycon"
 
 # PROGRAM SETTINGS
 
-{%@@ if os == "linux" @@%}
-export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
-{%@@ endif -@@%}
+# export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+
 export BAT_THEME='gruvbox-dark'
 # export PASTEL_COLOR_MODE='24bit'
 
@@ -97,7 +83,7 @@ export LESS='--RAW-CONTROL-CHARS --quit-if-one-screen'
 export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .git/ --exclude node_modules/ --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/rustup'
 export FZF_DEFAULT_OPTS='--multi --extended'
 
-{%@@ if os == "darwin" @@%}
+{%@@ if "work" not in profile @@%}
 ## Android Studio
 # TODO: change path to actual android home
 export ANDROID_HOME="$HOME/Library/Android/sdk"
@@ -116,18 +102,4 @@ export APPIUM_PREFER_SYSTEM_UNZIP='1'
 
 ## ENV SETTINGS
 
-# {%@@ if os == "linux" @@%}
-
-[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && setsid user_shortcuts >/dev/null 2>&1
-# {%@@ elif os == "darwin" @@%}
-
 [ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && user_shortcuts
-# {%@@ endif @@%}
-
-{%@@ if os == "linux" @@%}
-# Start graphical server on user's current tty if not already running.
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"
-
-# Switch escape and caps if tty and no passwd required:
-sudo -n loadkeys "$XDG_DATA_HOME"/larbs/ttymaps.kmap 2>/dev/null
-{%@@ endif @@%}

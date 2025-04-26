@@ -126,14 +126,7 @@ function fm() {
         builtin cd -- "$cwd"
     fi
 
-    # {%@@ if os == "darwin" @@%}
-
     command rm -f -- "$tmp"
-    # {%@@ else @@%}
-
-    command rm --force -- "$tmp"
-    # {%@@ endif @@%}
-
 }
 
 function find_by_md5() {

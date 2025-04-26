@@ -15,17 +15,11 @@ alias g='git'
 alias o='xdg-open'
 alias p='pacman'
 alias t='task'
-alias z='zathura'
 alias ka='killall'
 alias sql='sqlite3'
 
 # Verbosity and common settings.
-{%@@ if os == "linux" @@%}
-alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
-{%@@ elif os == "darwin" @@%}
 alias ls='ls -A -h --color=auto'
-{%@@ endif -@@%}
-
 alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -vI'
@@ -50,11 +44,7 @@ alias jqs='jq --sort-keys'
 alias adbpac='adb shell cmd package list packages'
 
 ## Python
-{%@@ if os == "linux" @@%}
-alias py='python'
-{%@@ elif os == "darwin" @@%}
 alias py='/opt/homebrew/bin/python3'
-{%@@ endif @@%}
 
 # [Python] Virtual [Env]ironment [C]reate
 alias penvc='py -m venv venv'
@@ -91,13 +81,7 @@ alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(play
 # alias fm='$FILE_MANAGER'
 
 # [P]ackage [M]anager
-{%@@ if os == "linux" @@%}
-{%@@ if "arch" in distro_like @@%}
-alias pm='yay'
-{%@@ endif @@%}
-{%@@ elif os == "darwin" @@%}
 alias pm='brew'
-{%@@ endif @@%}
 
 {%@@ if "home" in profile @@%}
 # [J]ournal [E]ntry
