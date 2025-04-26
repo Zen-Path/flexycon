@@ -4,8 +4,9 @@
 
 # Make some system commands not require sudo.
 for command in mount umount su shutdown reboot; do
-	alias "$command=sudo $command"
-done; unset command
+    alias "$command=sudo $command"
+done
+unset command
 
 # Note: Prefer to keep env vars in single quotes, so they are expanded
 # when they're used, not when defined. See SC2139.
