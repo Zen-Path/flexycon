@@ -151,6 +151,14 @@ dotfiles:
         dst: ~/.config/gtk-3.0
 
     # Scripts
+    f_dmenuhandler:
+        src: scripts/dmenuhandler.sh
+        dst: ~/.local/bin/dmenuhandler
+        chmod: "755"
+    f_dmenupass:
+        src: scripts/dmenupass.sh
+        dst: ~/.local/bin/dmenupass
+        chmod: "755"
     f_compiler:
         src: scripts/compiler.sh
         dst: ~/.local/bin/compiler
@@ -179,21 +187,41 @@ dotfiles:
         src: scripts/imgconv.sh
         dst: ~/.local/bin/imgconv
         chmod: "755"
+    f_journal_entry:
+        src: scripts/journal_entry/run.sh
+        dst: ~/.local/bin/journal_entry
+        chmod: "755"
     f_media_server:
         src: scripts/media_server/run.sh
         dst: ~/.local/bin/media_server
+        chmod: "755"
+    f_mounter:
+        src: scripts/mounter.sh
+        dst: ~/.local/bin/mounter
         chmod: "755"
     f_noisereduce:
         src: scripts/noisereduce.sh
         dst: ~/.local/bin/noisereduce
         chmod: "755"
+    f_pkgsize:
+        src: scripts/pkgsize.sh
+        dst: ~/.local/bin/pkgsize
+        chmod: "755"
     f_rclone_fmt:
         src: scripts/rclone_fmt/run.sh
         dst: ~/.local/bin/rcfmt
         chmod: "755"
+    f_screenshot_utility:
+        src: scripts/screenshot_utility/run.sh
+        dst: ~/.local/bin/screenshot_utility
+        chmod: "755"
     f_sdir:
         src: scripts/sdir.sh
         dst: ~/.local/bin/sdir
+        chmod: "755"
+    f_setbg:
+        src: scripts/setbg.sh
+        dst: ~/.local/bin/setbg
         chmod: "755"
     f_user_shortcuts:
         src: scripts/user_shortcuts/run.sh
@@ -204,43 +232,14 @@ dotfiles:
         dst: ~/.local/bin/tag
         chmod: "755"
 
-    # Linux / Home
-    f_dmenuhandler:
-        src: scripts/dmenuhandler.sh
-        dst: ~/.local/bin/dmenuhandler
-        chmod: "755"
-    f_dmenupass:
-        src: scripts/dmenupass.sh
-        dst: ~/.local/bin/dmenupass
-        chmod: "755"
-    f_journal_entry:
-        src: scripts/journal_entry/run.sh
-        dst: ~/.local/bin/journal_entry
-        chmod: "755"
-    f_mounter:
-        src: scripts/mounter.sh
-        dst: ~/.local/bin/mounter
-        chmod: "755"
-    f_pkgsize:
-        src: scripts/pkgsize.sh
-        dst: ~/.local/bin/pkgsize
-        chmod: "755"
-    f_screenshot_utility:
-        src: scripts/screenshot_utility/run.sh
-        dst: ~/.local/bin/screenshot_utility
-        chmod: "755"
-    f_setbg:
-        src: scripts/setbg.sh
-        dst: ~/.local/bin/setbg
-        chmod: "755"
-
-    # Android Work
+    ## Android Work
     f_avds:
         src: scripts/avds.sh
         dst: ~/.local/bin/avds
         chmod: "755"
 profiles:
     # Programs
+
     meta_yazi:
         dotfiles:
             - f_yazi_config
@@ -321,12 +320,9 @@ profiles:
             - f_tag
 
     ## OS
-
-    meta_linux:
-        variables:
-            d_vscode_dst: "~/.config/Code - OSS/User"
-
     meta_mac:
+        include:
+             - meta_common
         variables:
             d_vscode_dst: "~/Library/Application\ Support/Code/User"
         dotfiles:
@@ -334,12 +330,13 @@ profiles:
             - d_kitty
 
     ## Environment
-
     meta_personal:
         dotfiles:
             # Config
             - d_firefox_chrome_personal
             - f_firefox_user_personal
+
+            # Scripts
             - f_journal_entry
 
     meta_work:
@@ -347,6 +344,7 @@ profiles:
             # Config
             - d_firefox_chrome_work
             - f_firefox_user_work
+
             # Scripts
             - f_avds
 
@@ -358,32 +356,12 @@ profiles:
 
     # Actual Profiles
 
-    linux_home:
-        include:
-            - meta_common
-            - meta_linux
-            - meta_personal
-            - meta_front_end
-            - meta_mpv
-        dotfiles:
-            # Config
-            - d_gtk_3
-
-            # Scripts
-            - f_dmenuhandler
-            - f_dmenupass
-            - f_mounter
-            - f_screenshot_utility
-            - f_setbg
-
     mac_work:
         include:
-            - meta_common
             - meta_mac
             - meta_work
 
     mac_home:
         include:
-            - meta_common
             - meta_mac
             - meta_personal
