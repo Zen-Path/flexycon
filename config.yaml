@@ -191,6 +191,10 @@ dotfiles:
         src: scripts/journal_entry/run.sh
         dst: ~/.local/bin/journal_entry
         chmod: "755"
+    f_jsonc_to_json:
+        src: scripts/jsonc_to_json/run.sh
+        dst: ~/.local/bin/jsonc2json
+        chmod: "755"
     f_media_server:
         src: scripts/media_server/run.sh
         dst: ~/.local/bin/media_server
@@ -311,6 +315,7 @@ profiles:
             - f_git_logs
             - f_ifinstalled
             - f_imgconv
+            - f_jsonc_to_json
             - f_media_server
             - f_noisereduce
             - f_pkgsize
