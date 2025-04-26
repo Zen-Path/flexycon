@@ -90,5 +90,5 @@ class BookmarkRenderer(ABC):
         return self.compose_bookmarks()
 
     @abstractmethod
-    def compose_bookmark(self, alias: List[str], bookmark: Bookmark) -> str:
+    def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         pass

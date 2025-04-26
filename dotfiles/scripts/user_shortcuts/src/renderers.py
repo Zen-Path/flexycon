@@ -30,16 +30,16 @@ ZSH = ZshBookmarkRenderer(
 
 
 class NVimBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias: List[str], bookmark: Bookmark) -> str:
+    def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         description_fmt = f'" {bookmark.description}\n' if bookmark.description else ""
-        return f'{description_fmt}cmap ;{alias} "{self._get_path(bookmark)}"'
+        return f'{description_fmt}cmap ;{alias_segments} "{self._get_path(bookmark)}"'
 
 
 NVIM = NVimBookmarkRenderer("NeoVim", ["$XDG_CONFIG_HOME", "nvim", "shortcuts.vim"])
 
 
 class YaziBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias: List[str], bookmark: Bookmark) -> str:
+    def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         verb = "Open" if bookmark.type == "d" else "Reveal"
         type_readable = "dir" if bookmark.type == "d" else "file"
         description_fmt = (
@@ -49,14 +49,14 @@ class YaziBookmarkRenderer(BookmarkRenderer):
         )
 
         # All yazi bookmarks should start with 'g'.
-        alias = ["g"] + alias
+        alias_segments = ["g"] + alias_segments
         command = (
             f'"cd {self._get_path(bookmark)}"'
             if bookmark.type == "d"
             else f'["reveal {self._get_path(bookmark)}", "open"]'
         )
 
-        return f'{self.indentation}{{ on = {alias}, run = {command}, desc = "{description_fmt}" }},'
+        return f'{self.indentation}{{ on = {alias_segments}, run = {command}, desc = "{description_fmt}" }},'
 
     def compose_file(self) -> str:
         # Add newline so we can comment out the import statement in keymap.toml
