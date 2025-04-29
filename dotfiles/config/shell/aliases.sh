@@ -51,6 +51,9 @@ alias py='/opt/homebrew/bin/python3'
 # [Python] Virtual [Env]ironment [C]reate
 alias penvc='py -m venv venv'
 
+# [Python] Virtual [Env]ironment [D]eactivate
+alias penvd='deactivate && echo "Deactivated python environment."'
+
 # [P]ip [F]reeze to [R]equirements
 alias pfr='pip freeze > requirements.txt'
 
