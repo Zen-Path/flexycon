@@ -125,8 +125,8 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         "f",
-        ["$XDG_CONFIG_HOME", "shell", "aliases.sh"],
-        {"default": ["c", "s", "a"]},
+        [flex_config, "shell", "aliases.sh"],
+        {"default": ["f", "s", "a"]},
         "shell aliases.sh",
     ),
     Bookmark(
@@ -144,8 +144,8 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         "f",
-        ["$XDG_CONFIG_HOME", "git", "config.ini"],
-        {"default": ["c", "g", "c"]},
+        [flex_config, "git", "config.ini"],
+        {"default": ["f", "g", "c"]},
         "git config.init",
     ),
     ## Yazi

@@ -15,6 +15,7 @@ class Bookmark:
     type: Literal["d", "f"]
     path_parts: List[str]
     aliases: Dict[str, Union[bool, List[str]]]
+    is_template: bool = False
     description: Optional[str] = None
 
     @property
