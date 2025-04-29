@@ -130,7 +130,7 @@ btn_labels  = [ "  [Y]es  ", "  (N)o  " ]
 
 # : Completion {{{
 
-[completion]
+[cmp]
 border          = { fg = "blue" }
 active          = { reversed = true }
 inactive        = {}
