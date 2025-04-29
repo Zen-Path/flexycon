@@ -103,3 +103,4 @@ alias doti='dotdrop install'
 
 alias pc='pre-commit'
 alias pcr='pre-commit run'
+alias pcra='pre-commit run --all-files'
