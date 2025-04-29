@@ -55,6 +55,7 @@ export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
 export LESSHISTFILE="/dev/null"
 export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+export DOOMDIR="$XDG_CONFIG_HOME/doom"
 
 ## Misc files
 # {%@@ if "home" in profile +@@%}
