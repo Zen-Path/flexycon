@@ -268,7 +268,7 @@ shortcuts: List[Bookmark] = [
     Bookmark(
         type="f",
         path_parts=[*flex_scripts, "user_shortcuts", "src", "data.py"],
-        aliases={"default": ["s", "h", "r", "t"]},
+        aliases={"default": ["s", "h", "r", "t"], YAZI.name: ["s", "c"]},
         description="user shortcuts data",
     ),
     # Misc
