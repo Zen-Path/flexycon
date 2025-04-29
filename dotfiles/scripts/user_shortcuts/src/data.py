@@ -5,12 +5,10 @@ from typing import List
 from src.core import Bookmark
 from src.renderers import YAZI
 
-flex_home = Path(
-    os.getenv("FLEXYCON_HOME") or str(Path.home() / ".local" / "src" / "flexycon")
-)
-flex_dotfiles = flex_home / "dotfiles"
-flex_config = flex_dotfiles / "config"
-flex_scripts = flex_dotfiles / "scripts"
+flex_home = ["$FLEXYCON_HOME"]
+flex_dotfiles = flex_home + ["dotfiles"]
+flex_config = flex_dotfiles + ["config"]
+flex_scripts = flex_dotfiles + ["scripts"]
 
 shortcuts: List[Bookmark] = [
     # Home
@@ -121,11 +119,11 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "shell"],
         aliases={"default": ["c", "s", "d"]},
-        description="configs",
+        description="shell config",
     ),
     Bookmark(
         type="f",
-        path_parts=[flex_config, "shell", "aliases.sh"],
+        path_parts=[*flex_config, "shell", "aliases.sh"],
         aliases={"default": ["f", "s", "a"]},
         description="shell aliases.sh",
     ),
@@ -144,28 +142,40 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="f",
-        path_parts=[flex_config, "git", "config.ini"],
+        path_parts=[*flex_config, "git", "config.ini"],
         aliases={"default": ["f", "g", "c"]},
         description="git config.init",
     ),
     ## Yazi
     Bookmark(
         type="d",
-        path_parts=["$XDG_CONFIG_HOME", "YAZI"],
+        path_parts=["$XDG_CONFIG_HOME", "yazi"],
         aliases={"default": ["c", "y", "d"]},
-        description="YAZI config",
+        description="yazi config",
+    ),
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_CONFIG_HOME", "yazi", "plugins"],
+        aliases={"default": ["c", "y", "p", "d"]},
+        description="yazi plugins",
     ),
     Bookmark(
         type="f",
-        path_parts=["$XDG_CONFIG_HOME", "YAZI", "YAZI.toml"],
-        aliases={"default": ["c", "y", "y"]},
-        description="YAZI YAZI.toml",
-    ),
-    Bookmark(
-        type="f",
-        path_parts=["$XDG_CONFIG_HOME", "YAZI", "keymap.toml"],
+        path_parts=["$XDG_CONFIG_HOME", "yazi", "keymap.toml"],
         aliases={"default": ["c", "y", "k"]},
-        description="YAZI keymap.toml",
+        description="yazi keymap.toml",
+    ),
+    Bookmark(
+        type="f",
+        path_parts=["$XDG_CONFIG_HOME", "yazi", "theme.toml"],
+        aliases={"default": ["c", "y", "t"]},
+        description="yazi theme.toml",
+    ),
+    Bookmark(
+        type="f",
+        path_parts=["$XDG_CONFIG_HOME", "yazi", "yazi.toml"],
+        aliases={"default": ["c", "y", "y"]},
+        description="yazi yazi.toml",
     ),
     ## NeoVim
     Bookmark(
@@ -228,26 +238,26 @@ shortcuts: List[Bookmark] = [
     # Flexycon
     Bookmark(
         type="d",
-        path_parts=[flex_home],
+        path_parts=[*flex_home],
         aliases={"default": ["f", "l", "x"], YAZI.name: ["F"]},
         description="flexycon home",
     ),
     Bookmark(
         type="d",
-        path_parts=[flex_home, "dotfiles", "config"],
+        path_parts=[*flex_config],
         aliases={"default": ["f", "l", "x", "c"], YAZI.name: ["f", "c"]},
         description="flexycon config",
     ),
     Bookmark(
         type="d",
-        path_parts=[flex_home, "dotfiles", "scripts"],
+        path_parts=[flex_scripts],
         aliases={"default": ["f", "l", "x", "s"], YAZI.name: ["f", "s"]},
         description="flexycon scripts",
     ),
     Bookmark(
         type="f",
-        path_parts=[flex_scripts, "user_shortcuts", "src", "data.py"],
-        aliases={"default": ["s", "h", "r", "t"]},
+        path_parts=[*flex_scripts, "user_shortcuts", "src", "data.py"],
+        aliases={"default": ["s", "h", "r", "t"], YAZI.name: ["s", "c"]},
         description="user shortcuts data",
     ),
     # Misc
