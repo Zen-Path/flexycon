@@ -141,21 +141,33 @@ shortcuts: List[Bookmark] = [
     ## Yazi
     Bookmark(
         type="d",
-        path_parts=["$XDG_CONFIG_HOME", "YAZI"],
+        path_parts=["$XDG_CONFIG_HOME", "yazi"],
         aliases={"default": ["c", "y", "d"]},
-        description="YAZI config",
+        description="yazi config",
+    ),
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_CONFIG_HOME", "yazi", "plugins"],
+        aliases={"default": ["c", "y", "p", "d"]},
+        description="yazi plugins",
     ),
     Bookmark(
         type="f",
-        path_parts=["$XDG_CONFIG_HOME", "YAZI", "YAZI.toml"],
-        aliases={"default": ["c", "y", "y"]},
-        description="YAZI YAZI.toml",
-    ),
-    Bookmark(
-        type="f",
-        path_parts=["$XDG_CONFIG_HOME", "YAZI", "keymap.toml"],
+        path_parts=["$XDG_CONFIG_HOME", "yazi", "keymap.toml"],
         aliases={"default": ["c", "y", "k"]},
-        description="YAZI keymap.toml",
+        description="yazi keymap.toml",
+    ),
+    Bookmark(
+        type="f",
+        path_parts=["$XDG_CONFIG_HOME", "yazi", "theme.toml"],
+        aliases={"default": ["c", "y", "t"]},
+        description="yazi theme.toml",
+    ),
+    Bookmark(
+        type="f",
+        path_parts=["$XDG_CONFIG_HOME", "yazi", "yazi.toml"],
+        aliases={"default": ["c", "y", "y"]},
+        description="yazi yazi.toml",
     ),
     ## NeoVim
     Bookmark(
