@@ -111,7 +111,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "shell"],
         aliases={"default": ["c", "s", "d"]},
-        description="configs",
+        description="shell config",
     ),
     Bookmark(
         type="f",
@@ -200,7 +200,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$HOME", "Library", "Application Support", "Firefox"],
         aliases={"default": ["l", "i", "b", "f"], YAZI.name: ["l", "f"]},
-        description="library firefox",
+        description="firefox library",
     ),
     Bookmark(
         type="f",
