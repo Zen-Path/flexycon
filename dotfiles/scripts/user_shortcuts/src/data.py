@@ -84,12 +84,6 @@ shortcuts: List[Bookmark] = [
         aliases={"default": ["l", "i", "b"], YAZI.name: ["L"]},
         description="library",
     ),
-    Bookmark(
-        type="d",
-        path_parts=["$HOME", "Library", "Application Support", "Firefox"],
-        aliases={"default": ["l", "i", "b", "f"], YAZI.name: ["l", "f"]},
-        description="library firefox",
-    ),
     # University
     Bookmark(
         type="d",
@@ -192,6 +186,25 @@ shortcuts: List[Bookmark] = [
         path_parts=["$XDG_CONFIG_HOME", "newsraft", "feeds"],
         aliases={"default": ["c", "N", "f"]},
         description="newsraft feeds",
+    ),
+    ## Firefox
+    Bookmark(
+        type="d",
+        path_parts=["$HOME", "Library", "Application Support", "Firefox"],
+        aliases={"default": ["l", "i", "b", "f"], YAZI.name: ["l", "f"]},
+        description="library firefox",
+    ),
+    Bookmark(
+        type="f",
+        path_parts=[flex_config, "firefox", "user.js"],
+        aliases={"default": ["f", "F", "u"]},
+        description="firefox user.js",
+    ),
+    Bookmark(
+        type="d",
+        path_parts=[flex_config, "firefox", "chrome"],
+        aliases={"default": ["f", "F", "c"]},
+        description="firefox chrome",
     ),
     # Local
     Bookmark(
