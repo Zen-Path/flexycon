@@ -1,16 +1,12 @@
-import os
-from pathlib import Path
 from typing import List
 
 from src.core import Bookmark
 from src.renderers import YAZI
 
-flex_home = Path(
-    os.getenv("FLEXYCON_HOME") or str(Path.home() / ".local" / "src" / "flexycon")
-)
-flex_dotfiles = flex_home / "dotfiles"
-flex_config = flex_dotfiles / "config"
-flex_scripts = flex_dotfiles / "scripts"
+flex_home = ["$FLEXYCON_HOME"]
+flex_dotfiles = flex_home + ["dotfiles"]
+flex_config = flex_dotfiles + ["config"]
+flex_scripts = flex_dotfiles + ["scripts"]
 
 shortcuts: List[Bookmark] = [
     # Home
@@ -119,7 +115,7 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="f",
-        path_parts=[flex_config, "shell", "aliases.sh"],
+        path_parts=[*flex_config, "shell", "aliases.sh"],
         aliases={"default": ["f", "s", "a"]},
         description="shell aliases.sh",
     ),
@@ -138,7 +134,7 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="f",
-        path_parts=[flex_config, "git", "config.ini"],
+        path_parts=[*flex_config, "git", "config.ini"],
         aliases={"default": ["f", "g", "c"]},
         description="git config.init",
     ),
@@ -196,13 +192,13 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="f",
-        path_parts=[flex_config, "firefox", "user.js"],
+        path_parts=[*flex_config, "firefox", "user.js"],
         aliases={"default": ["f", "F", "u"]},
         description="firefox user.js",
     ),
     Bookmark(
         type="d",
-        path_parts=[flex_config, "firefox", "chrome"],
+        path_parts=[*flex_config, "firefox", "chrome"],
         aliases={"default": ["f", "F", "c"]},
         description="firefox chrome",
     ),
@@ -241,25 +237,25 @@ shortcuts: List[Bookmark] = [
     # Flexycon
     Bookmark(
         type="d",
-        path_parts=[flex_home],
+        path_parts=[*flex_home],
         aliases={"default": ["f", "l", "x"], YAZI.name: ["F"]},
         description="flexycon home",
     ),
     Bookmark(
         type="d",
-        path_parts=[flex_home, "dotfiles", "config"],
+        path_parts=[*flex_config],
         aliases={"default": ["f", "l", "x", "c"], YAZI.name: ["f", "c"]},
         description="flexycon config",
     ),
     Bookmark(
         type="d",
-        path_parts=[flex_home, "dotfiles", "scripts"],
+        path_parts=[*flex_scripts],
         aliases={"default": ["f", "l", "x", "s"], YAZI.name: ["f", "s"]},
         description="flexycon scripts",
     ),
     Bookmark(
         type="f",
-        path_parts=[flex_scripts, "user_shortcuts", "src", "data.py"],
+        path_parts=[*flex_scripts, "user_shortcuts", "src", "data.py"],
         aliases={"default": ["s", "h", "r", "t"]},
         description="user shortcuts data",
     ),
