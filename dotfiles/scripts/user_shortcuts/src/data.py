@@ -248,7 +248,7 @@ shortcuts: List[Bookmark] = [
         "f",
         [flex_scripts, "user_shortcuts", "src", "data.py"],
         {"default": ["s", "h", "r", "t"]},
-        "shell aliases.sh",
+        "user shortcuts data",
     ),
     # Misc
     Bookmark(
