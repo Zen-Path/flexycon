@@ -32,8 +32,7 @@ def get_commit_messages_on_date(repo, branch_name, date, exclude_commits=set()):
             if commit.hexsha not in seen:
                 messages.append(f"- {commit.summary}")
                 seen.add(commit.hexsha)
-        elif commit_date < datetime.fromisoformat(date_str).date():
-            break
+
     return messages
 
 
