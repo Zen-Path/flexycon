@@ -35,10 +35,10 @@ layouts:
 
 # First mod (default option + shift).
 mod1:
-  - option
-  - shift
-  # - control
-  # - command
+  # - option
+  # - shift
+  - control
+  - command
 
 # Second mod (default option + shift + control).
 mod2:
@@ -60,15 +60,24 @@ mod2:
 # '.'
 # ','
 
-# Move to the next layout in the list.
-cycle-layout:
+# Throw windows onto spaces
+throw-space-1:
   mod: mod1
-  key: space
+  key: "1"
+
+throw-space-2:
+  mod: mod1
+  key: "2"
+
+# Move to the next layout in the list.
+cycle-layout: false
+#   mod: mod1
+#   key: space
 
 # Move to the previous layout in the list.
-cycle-layout-backward:
-  mod: mod2
-  key: space
+cycle-layout-backward: false
+#   mod: mod2
+#   key: space
 
 # Shrink the main pane by a percentage of the screen dimension as defined by window-resize-step. Note that not all layouts respond to this command.
 shrink-main:
@@ -83,12 +92,12 @@ expand-main:
 # Increase the number of windows in the main pane. Note that not all layouts respond to this command.
 increase-main:
   mod: mod1
-  key: ','
+  key: i
 
 # Decrease the number of windows in the main pane. Note that not all layouts respond to this command.
 decrease-main:
-  mod: mod1
-  key: '.'
+  mod: mod2
+  key: i
 
 # General purpose command for custom layouts. Functionality is layout-dependent.
 # command1:
@@ -155,7 +164,7 @@ swap-cw:
 # Swap the position of the currently focused window with the main window in the list.
 swap-main:
   mod: mod1
-  key: enter
+  key: space
 
 # Move focus to the n-th screen in the list; e.g., focus-screen-3 will move mouse focus to the 3rd screen. Note that the main window in the given screen will be focused.
 #focus-screen-n:
@@ -319,4 +328,3 @@ restore-layouts-on-launch: true
 
 # true to display some optional debug information in the layout HUD (default false).
 debug-layout-info: false
-
