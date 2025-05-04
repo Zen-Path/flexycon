@@ -4,6 +4,9 @@ import argparse
 import logging
 import os
 import subprocess
+import sys
+from pathlib import Path
+from typing import Optional
 
 from shared.args import format_help_choices
 from shared.date_args import add_date_args, resolve_date
@@ -20,6 +23,12 @@ def parse_args():
     )
 
     add_date_args(parser, format_help_choices)
+
+    parser.add_argument(
+        "--get-journal-entry-path",
+        action="store_true",
+        help="return the path of the journal entry",
+    )
 
     parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
@@ -51,6 +60,21 @@ def open_journal_entry(target_date):
     subprocess.run([editor, file_path])
 
 
+def get_journal_entry_path(target_date) -> Optional[Path]:
+    journal_home_var = os.getenv("JOURNAL_HOME")
+    if not journal_home_var:
+        logger.warning(f"Missing environment variable 'JOURNAL_HOME'")
+
+    journal_home = journal_home_var or (Path.home() / "Documents" / "Journal")
+
+    return (
+        Path(journal_home)
+        / target_date.strftime("%Y")
+        / target_date.strftime("%m")
+        / f"{target_date.strftime('%m.%d')}.md"
+    )
+
+
 # TODO: add tests
 def main():
     args = parse_args()
@@ -58,7 +82,16 @@ def main():
     setup_logging(verbose=args.verbose)
 
     target_date = resolve_date(args)
-    logger.info(f"Target date: {target_date.strftime('%Y-%m-%d')}\n")
+
+    if args.get_journal_entry_path:
+        path = get_journal_entry_path(target_date)
+        if not path:
+            logger.error(
+                "Could not find journal entry for %s", target_date.strftime("%Y-%m-%d")
+            )
+            sys.exit(1)
+        print(path)
+        return
 
     open_journal_entry(target_date)
 
