@@ -154,6 +154,9 @@ dotfiles:
     d_gtk_3:
         src: config/gtk-3.0
         dst: ~/.config/gtk-3.0
+    f_hammerspoon_init:
+      src: config/hammerspoon/init.lua
+      dst: ~/.config/hammerspoon/init.lua
 
     # Scripts
     f_dmenuhandler:
@@ -339,6 +342,7 @@ profiles:
             # Config
             - d_kitty
             - f_amethyst
+            - f_hammerspoon_init
 
     ## Environment
     meta_personal:
