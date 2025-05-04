@@ -71,6 +71,11 @@ dotfiles:
         src: "{{@@ d_vscode_src @@}}/keybindings.json"
         dst: "{{@@ d_vscode_dst @@}}/keybindings.json"
 
+    # Window management
+    f_amethyst:
+        src: config/amethyst/amethyst.yml
+        dst: ~/.config/amethyst/amethyst.yml
+
     # Programming
     d_python:
         src: config/python
@@ -333,6 +338,7 @@ profiles:
         dotfiles:
             # Config
             - d_kitty
+            - f_amethyst
 
     ## Environment
     meta_personal:
