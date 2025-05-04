@@ -86,7 +86,8 @@ keymap = [
     { on = "W",     run = "noop", desc = "" },
 
     { on = "e",     run = "noop", desc = "" },
-    { on = "E",     run = "noop", desc = "" },
+    { on = "E",     run = """shell 'ya emit reveal "$(journal_entry --get-journal-entry-path)"'
+    """,    desc = "Reveal current journal entry" },
 
     # { on = "r",     run = "noop", desc = "" },
     { on = "R",     run = "rename --cursor=before_ext", desc = "Rename - hovered or bulk if multiple hovered" },

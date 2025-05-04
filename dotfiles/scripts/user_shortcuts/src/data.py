@@ -284,5 +284,4 @@ shortcuts: List[Bookmark] = [
         aliases={"default": ["m", "n"], YAZI.name: ["M"]},
         description="mount",
     ),
-    # TODO: figure out if revealing today's journal entry is possible in YAZI
 ]
