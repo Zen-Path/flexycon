@@ -10,7 +10,7 @@ from typing import Optional
 
 from shared.args import format_help_choices
 from shared.date_args import add_date_args, resolve_date
-from shared.helpers import ensure_directory_interactive, run_command
+from shared.helpers import ensure_directory_interactive
 from shared.logger import setup_logging
 
 logger = logging.getLogger(__name__)
