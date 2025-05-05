@@ -26,8 +26,8 @@
         "**/.git": false,
         "**/.mypy_cache": true,
         "**/.venv": true,
+        "**/*.egg-info": true,
         "**/node_modules": true,
-        "**/shared.egg-info": true,
         "**/venv": true
     },
     "files.trimTrailingWhitespace": true,
