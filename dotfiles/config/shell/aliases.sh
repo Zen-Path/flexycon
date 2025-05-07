@@ -46,7 +46,9 @@ alias jqs='jq --sort-keys'
 alias adbpac='adb shell cmd package list packages'
 
 ## Python
-alias py='/opt/homebrew/bin/python3'
+alias py='python3'
+# [Py]thon [B]rew
+alias pyb='/opt/homebrew/bin/python3'
 
 # [Python] Virtual [Env]ironment [C]reate
 alias penvc='py -m venv venv'
