@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       User Scripts
 // @match           http*://*/*
-// @version         1.2.0
+// @version         1.3.0
 // @author          Me
 // @description     Send a download request for a URL to a local media server
 // @downloadURL     ***
@@ -57,6 +57,11 @@ function main() {
     GM_registerMenuCommand("Download Gallery", () =>
         downloadMedia([currentUrl], "gallery")
     );
+    GM_registerMenuCommand("Download Galleries", () => {
+        const userInput = prompt("Paste the gallery urls.");
+        const galleryUrls = userInput.split(" ");
+        downloadMedia(galleryUrls, "gallery");
+    });
 }
 
 main();
