@@ -33,6 +33,7 @@ vim.cmd([[
 
 -- FILES
 local data_home = os.getenv("XDG_DATA_HOME")
+    or (os.getenv("HOME") .. "/.local/share")
 
 local nvim_data = data_home .. "/nvim"
 local undo_dir = nvim_data .. "/undo//"
