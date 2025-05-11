@@ -51,7 +51,7 @@ alias py='python3'
 alias pyb='/opt/homebrew/bin/python3'
 
 # [Python] Virtual [Env]ironment [C]reate
-alias penvc='py -m venv venv'
+alias penvc='pyb -m venv venv'
 
 # [Python] Virtual [Env]ironment [D]eactivate
 alias penvd='deactivate && echo "Deactivated python environment."'
