@@ -52,5 +52,6 @@
     "search.exclude": {
         "**/.git": true
     },
-    "diffEditor.maxComputationTime": 30000
+    "diffEditor.maxComputationTime": 30000,
+    "git.confirmSync": false
 }
