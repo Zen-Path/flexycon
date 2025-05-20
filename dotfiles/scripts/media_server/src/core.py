@@ -32,7 +32,7 @@ class Gallery:
             f"ln -s {Gallery.FILES_DIR}/{{_filename}} {{_directory}}"
         )
 
-        command += ["--exec", exec_cmd]
+        # command += ["--exec", exec_cmd]
 
         return command
 
