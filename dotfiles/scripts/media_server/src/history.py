@@ -3,6 +3,8 @@ import os
 import time
 from pathlib import Path
 
+from shared.helpers import ensure_directories_exist
+
 XDG_DATA_HOME = Path(
     os.getenv("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
 )
@@ -32,6 +34,7 @@ def log_history_entry(urls, status="done"):
     try:
         acquire_lock()
         # Read history
+        ensure_directories_exist(HISTORY_FILE)
         if os.path.exists(HISTORY_FILE):
             with open(HISTORY_FILE, "r", encoding="utf-8") as f:
                 try:
