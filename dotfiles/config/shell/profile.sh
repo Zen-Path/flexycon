@@ -77,6 +77,8 @@ export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude
 export FZF_DEFAULT_OPTS='--multi --extended'
 
 #{%@@ if "work" in profile +@@%}
+export JAVA_HOME="/opt/homebrew/opt/openjdk"
+
 ## Android Studio
 # TODO: change path to actual android home
 export ANDROID_HOME="$HOME/Library/Android/sdk"
