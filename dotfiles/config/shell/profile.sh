@@ -5,7 +5,7 @@
 # Shell profile. Runs on login. Environmental variables are set here.
 
 # Add Homebrew to $PATH
-PATH="/opt/homebrew/bin:$PATH"
+PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
 PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
 export PATH
