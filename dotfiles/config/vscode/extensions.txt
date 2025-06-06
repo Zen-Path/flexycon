@@ -5,13 +5,10 @@ jdinhlife.gruvbox
 ms-python.debugpy
 ms-python.python
 ms-python.vscode-pylance
-noxiz.jinja-snippets
 pkief.material-icon-theme
 remisa.shellman
 rpinski.shebang-snippets
-samuelcolvin.jinjahtml
 streetsidesoftware.code-spell-checker
 tamasfe.even-better-toml
 timonwong.shellcheck
-wholroyd.jinja
 yandeu.five-server
