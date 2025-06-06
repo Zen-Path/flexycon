@@ -172,7 +172,7 @@ dotfiles:
         dst: ~/.local/bin/compiler
         chmod: "755"
     f_continuous_diff:
-        src: scripts/continuous_diff.py
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/continuous_diff
         chmod: "755"
     f_fzfopen:
@@ -184,7 +184,7 @@ dotfiles:
         dst: ~/.local/bin/getkeys
         chmod: "755"
     f_git_logs:
-        src: scripts/git_logs/run.sh
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/git_logs
         chmod: "755"
     f_ifinstalled:
@@ -196,15 +196,15 @@ dotfiles:
         dst: ~/.local/bin/imgconv
         chmod: "755"
     f_journal_entry:
-        src: scripts/journal_entry/run.sh
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/journal_entry
         chmod: "755"
     f_jsonc_to_json:
-        src: scripts/jsonc_to_json/run.sh
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/jsonc2json
         chmod: "755"
     f_media_server:
-        src: scripts/media_server/run.sh
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/media_server
         chmod: "755"
     f_mounter:
@@ -220,11 +220,11 @@ dotfiles:
         dst: ~/.local/bin/pkgsize
         chmod: "755"
     f_rclone_fmt:
-        src: scripts/rclone_fmt/run.sh
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/rcfmt
         chmod: "755"
     f_screenshot_utility:
-        src: scripts/screenshot_utility/run.sh
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/screenshot_utility
         chmod: "755"
     f_sdir:
@@ -236,7 +236,7 @@ dotfiles:
         dst: ~/.local/bin/setbg
         chmod: "755"
     f_user_shortcuts:
-        src: scripts/user_shortcuts/run.sh
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/user_shortcuts
         chmod: "755"
     f_tag:
