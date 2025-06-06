@@ -9,6 +9,7 @@ itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.2
 smmap==5.0.2
+tabulate==0.9.0
 types-colorama==0.4.15.20240311
 types-Flask-Cors==6.0.0.20250520
 types-setuptools==80.9.0.20250529
