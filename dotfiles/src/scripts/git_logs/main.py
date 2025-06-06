@@ -75,7 +75,7 @@ def main():
 
             main_messages = get_commit_messages_on_date(repo, main_branch, target_date)
             if main_messages:
-                branch_block = f"### {main_branch}\n" + "\n".join(main_messages)
+                branch_block = f"\n{"\n".join(main_messages)}"
                 repo_sections.append(branch_block)
 
             # For the other branches, we only want to see commits that aren't also
