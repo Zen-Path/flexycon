@@ -160,15 +160,15 @@ dotfiles:
 
     # Scripts
     f_dmenuhandler:
-        src: scripts/dmenuhandler.sh
+        src: src/scripts/dmenuhandler.sh
         dst: ~/.local/bin/dmenuhandler
         chmod: "755"
     f_dmenupass:
-        src: scripts/dmenupass.sh
+        src: src/scripts/dmenupass.sh
         dst: ~/.local/bin/dmenupass
         chmod: "755"
     f_compiler:
-        src: scripts/compiler.sh
+        src: src/scripts/compiler.sh
         dst: ~/.local/bin/compiler
         chmod: "755"
     f_continuous_diff:
@@ -176,11 +176,11 @@ dotfiles:
         dst: ~/.local/bin/continuous_diff
         chmod: "755"
     f_fzfopen:
-        src: scripts/fzfopen.sh
+        src: src/scripts/fzfopen.sh
         dst: ~/.local/bin/fzfopen
         chmod: "755"
     f_getkeys:
-        src: scripts/getkeys.sh
+        src: src/scripts/getkeys.sh
         dst: ~/.local/bin/getkeys
         chmod: "755"
     f_git_logs:
@@ -188,11 +188,11 @@ dotfiles:
         dst: ~/.local/bin/git_logs
         chmod: "755"
     f_ifinstalled:
-        src: scripts/ifinstalled.sh
+        src: src/scripts/ifinstalled.sh
         dst: ~/.local/bin/ifinstalled
         chmod: "755"
     f_imgconv:
-        src: scripts/imgconv.sh
+        src: src/scripts/imgconv.sh
         dst: ~/.local/bin/imgconv
         chmod: "755"
     f_journal_entry:
@@ -208,15 +208,15 @@ dotfiles:
         dst: ~/.local/bin/media_server
         chmod: "755"
     f_mounter:
-        src: scripts/mounter.sh
+        src: src/scripts/mounter.sh
         dst: ~/.local/bin/mounter
         chmod: "755"
     f_noisereduce:
-        src: scripts/noisereduce.sh
+        src: src/scripts/noisereduce.sh
         dst: ~/.local/bin/noisereduce
         chmod: "755"
     f_pkgsize:
-        src: scripts/pkgsize.sh
+        src: src/scripts/pkgsize.sh
         dst: ~/.local/bin/pkgsize
         chmod: "755"
     f_rclone_fmt:
@@ -228,11 +228,11 @@ dotfiles:
         dst: ~/.local/bin/screenshot_utility
         chmod: "755"
     f_sdir:
-        src: scripts/sdir.sh
+        src: src/scripts/sdir.sh
         dst: ~/.local/bin/sdir
         chmod: "755"
     f_setbg:
-        src: scripts/setbg.sh
+        src: src/scripts/setbg.sh
         dst: ~/.local/bin/setbg
         chmod: "755"
     f_user_shortcuts:
@@ -240,13 +240,13 @@ dotfiles:
         dst: ~/.local/bin/user_shortcuts
         chmod: "755"
     f_tag:
-        src: scripts/tag.sh
+        src: src/scripts/tag.sh
         dst: ~/.local/bin/tag
         chmod: "755"
 
     ## Android Work
     f_avds:
-        src: scripts/avds.sh
+        src: src/scripts/avds.sh
         dst: ~/.local/bin/avds
         chmod: "755"
 profiles:
