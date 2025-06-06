@@ -57,7 +57,7 @@ alias penvc='pyb -m venv venv'
 alias penvd='deactivate && echo "Deactivated python environment."'
 
 # [P]ip [F]reeze to [R]equirements
-alias pfr='pip freeze > requirements.txt'
+alias pfr='pip freeze | grep -v "^-e" > requirements.txt'
 
 # [P]ip [I]nstall from [R]equirements
 alias pir='pip install -r requirements.txt'
