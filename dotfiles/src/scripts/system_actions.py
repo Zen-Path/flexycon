@@ -33,7 +33,6 @@ def get_parent_process_chain(start_pid=None):
         process_chain.append((current_process.name(), current_process.pid))
         current_process = current_process.parent()
 
-
     return process_chain
 
 
@@ -70,6 +69,7 @@ class Dwm(WindowManager):
 
     def refresh(self):
         os.kill(self.pid, signal.SIGHUP)
+
 
 class I3(WindowManager):
     def __init__(self):
@@ -185,7 +185,6 @@ class SystemActionsMenu:
             case _:
                 return None
 
-
     def _dmenu_prompt(self, question):
         menu_input = "\n".join(self.actions_map.keys())
 
@@ -218,24 +217,31 @@ def main():
     system = System(lock_cmd="slock")
     display = Display
 
-    system_actions = filter(None, [
-        SystemAction("Sleep", "😴", lambda: system.sleep),
-        SystemAction("Lock","🔒", lambda: system.lock),
-        SystemAction("Power Off", "🔌", lambda: system.power_off),
-        SystemAction("Reboot","🔄", lambda: system.reboot),
-        SystemAction(
-            f"Terminate {window_manger.display_name}",
-            "☠️",
-            lambda: window_manger.terminate,
-        ),
-        SystemAction(
-            f"Refresh {window_manger.display_name}",
-            "♻️",
-            lambda: window_manger.refresh(),
-        ) if hasattr(window_manger, "refresh") else None,
-        # SystemAction("Display Off", "📺", lambda *_: QuickAction.turn_off_display()),
-        SystemAction("Hibernate", "🐻", lambda: system.hibernate),
-    ])
+    system_actions = filter(
+        None,
+        [
+            SystemAction("Sleep", "😴", lambda: system.sleep),
+            SystemAction("Lock", "🔒", lambda: system.lock),
+            SystemAction("Power Off", "🔌", lambda: system.power_off),
+            SystemAction("Reboot", "🔄", lambda: system.reboot),
+            SystemAction(
+                f"Terminate {window_manger.display_name}",
+                "☠️",
+                lambda: window_manger.terminate,
+            ),
+            (
+                SystemAction(
+                    f"Refresh {window_manger.display_name}",
+                    "♻️",
+                    lambda: window_manger.refresh(),
+                )
+                if hasattr(window_manger, "refresh")
+                else None
+            ),
+            # SystemAction("Display Off", "📺", lambda *_: QuickAction.turn_off_display()),
+            SystemAction("Hibernate", "🐻", lambda: system.hibernate),
+        ],
+    )
 
     system_actions_menu = SystemActionsMenu(system_actions)
     selected_action = system_actions_menu.prompt()
