@@ -40,9 +40,6 @@ def get_parent_process_chain(start_pid=None):
 class WindowManager:
     """Base class for window managers."""
 
-    # Centralized presets of known window managers
-    PRESETS = []
-
     def __init__(self, display_name: str, process_name: str):
         self.display_name = display_name
         self.process_name = process_name
@@ -66,20 +63,6 @@ class WindowManager:
         self.pid = None
         return None
 
-    @classmethod
-    def find_closest_window_manager(cls):
-        """
-        Find the closest window manager to the current process.
-        """
-        process_chain = get_parent_process_chain()
-
-        for name, pid in process_chain:
-            for wm in cls.PRESETS:
-                if name == wm.process_name:
-                    return wm
-
-        return None
-
 
 class Dwm(WindowManager):
     def __init__(self):
@@ -96,9 +79,6 @@ class I3(WindowManager):
 class Openbox(WindowManager):
     def __init__(self):
         super().__init__("Openbox", "openbox")
-
-
-WindowManager.PRESETS = [cls() for cls in WindowManager.__subclasses__()]
 
 
 @dataclass
