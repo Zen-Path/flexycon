@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List, Optional
 
-from shared.helpers import resolve_path
+from common.helpers import resolve_path
 
 
 class GitRepo:

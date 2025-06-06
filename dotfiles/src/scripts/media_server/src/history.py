@@ -3,7 +3,7 @@ import os
 import time
 from pathlib import Path
 
-from shared.helpers import ensure_directories_exist
+from common.helpers import ensure_directories_exist
 
 XDG_DATA_HOME = Path(
     os.getenv("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")

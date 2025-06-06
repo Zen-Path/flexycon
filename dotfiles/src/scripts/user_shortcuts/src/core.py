@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple, Union
 
-from shared.helpers import resolve_path
+from common.helpers import resolve_path
 
 logger = logging.getLogger(__name__)
 

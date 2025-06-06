@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from shared.logger import setup_logging
+from common.logger import setup_logging
 from src.data import shortcuts
 from src.renderers import NVIM, YAZI, ZSH
 

@@ -1,9 +1,9 @@
 import argparse
 import logging
 
+from common.logger import setup_logging
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from shared.logger import setup_logging
 from src.core import Gallery
 from src.history import log_history_entry
 
