@@ -78,6 +78,8 @@ def main():
                 branch_block = f"### {main_branch}\n" + "\n".join(main_messages)
                 repo_sections.append(branch_block)
 
+            # For the other branches, we only want to see commits that aren't also
+            # on the main branch.
             for branch in repo.heads:
                 if branch.name == main_branch:
                     continue
