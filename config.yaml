@@ -201,7 +201,7 @@ dotfiles:
         chmod: "755"
     f_jsonc_to_json:
         src: src/scripts/py-run.sh
-        dst: ~/.local/bin/jsonc2json
+        dst: ~/.local/bin/jsonc_to_json
         chmod: "755"
     f_media_server:
         src: src/scripts/py-run.sh
