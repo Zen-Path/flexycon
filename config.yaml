@@ -221,7 +221,7 @@ dotfiles:
         chmod: "755"
     f_rclone_fmt:
         src: src/scripts/py-run.sh
-        dst: ~/.local/bin/rcfmt
+        dst: ~/.local/bin/rclone_fmt
         chmod: "755"
     f_screenshot_utility:
         src: src/scripts/py-run.sh

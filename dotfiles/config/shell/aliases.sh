@@ -68,6 +68,7 @@ alias rc_c='rclone copy --progress --create-empty-src-dirs --exclude "No_Backup/
 alias rc_cd='rc_c --dry-run'
 alias rc_s='rclone sync --progress --create-empty-src-dirs --track-renames --exclude "No_Backup/**" --exclude ".git/"'
 alias rc_sd='rc_s --dry-run'
+alias rcfmt='rclone_fmt'
 
 # Taskwarrior
 # TODO: use a similar approach to 'open_journal_entry' instead of
