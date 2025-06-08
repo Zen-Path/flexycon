@@ -6,7 +6,7 @@ from src.renderers import YAZI
 flex_home = ["$FLEXYCON_HOME"]
 flex_dotfiles = flex_home + ["dotfiles"]
 flex_config = flex_dotfiles + ["config"]
-flex_scripts = flex_dotfiles + ["scripts"]
+flex_scripts = flex_dotfiles + ["src", "scripts"]
 
 shortcuts: List[Bookmark] = [
     # Home
