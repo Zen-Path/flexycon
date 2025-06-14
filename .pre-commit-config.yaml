@@ -47,3 +47,11 @@ repos:
           - id: stylua-system # stylua | stylua-system | stylua-github
             name: stylua (lua)
             files: \.lua$
+    - repo: local
+      hooks:
+          - id: taplo-format
+            name: Format TOML with Taplo
+            entry: taplo
+            language: system
+            types: [toml]
+            args: ["format"]
