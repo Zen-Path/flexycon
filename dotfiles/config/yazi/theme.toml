@@ -58,8 +58,9 @@ unset_main  = { bg = "red", bold = true }
 unset_alt   = { fg = "red", bg = "gray" }
 
 [status]
-separator_open  = ""
-separator_close = ""
+overall   = {}
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
 
 # Progress
 progress_label  = { bold = true }
