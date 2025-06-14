@@ -23,10 +23,7 @@ local function entry()
         ya.dbg("Search Options:", search_opts)
     end
 
-    ya.manager_emit(
-        "search_do",
-        { search_value, via = "fd", args = search_opts }
-    )
+    ya.emit("search_do", { search_value, via = "fd", args = search_opts })
 end
 
 return { entry = entry }
