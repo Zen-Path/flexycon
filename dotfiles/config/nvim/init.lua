@@ -126,7 +126,9 @@ vim.keymap.set("i", ",,", [[<Esc>:keepp /<++><CR>ca<]], opts)
 
 -- CUSTOM COMMANDS
 vim.api.nvim_create_user_command("DelEmpty", "%g/^$/d", {})
-vim.api.nvim_create_user_command("ReduceEmpty", "g/\\v(^\\s*$\\n){2,}", {})
+vim.api.nvim_create_user_command("ReduceEmpty", function()
+    vim.cmd([[%s/\v(\n\s*){2,}/\r\r/g]])
+end, {})
 
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*",
