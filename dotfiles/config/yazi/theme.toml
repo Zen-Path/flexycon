@@ -58,7 +58,7 @@ unset_main  = { bg = "red", bold = true }
 unset_alt   = { fg = "red", bg = "gray" }
 
 [status]
-overall   = {}
+overall     = { fg = "white", bg = "reset" }
 sep_left  = { open = "", close = "" }
 sep_right = { open = "", close = "" }
 
