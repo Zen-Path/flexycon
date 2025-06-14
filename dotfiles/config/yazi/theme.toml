@@ -7,15 +7,9 @@
 
 # vim:fileencoding=utf-8:foldmethod=marker
 
-# : Flavor {{{
-
 [flavor]
 dark  = ""
 light = ""
-
-# : }}}
-
-# : Manager {{{
 
 [mgr]
 cwd = { fg = "cyan" }
@@ -46,13 +40,9 @@ border_style    = { fg = "lightred" }
 # Highlighting
 syntect_theme   = ""
 
-# : }}}
-
 [tabs]
 active   = { fg = "red", bg = "lightyellow", bold = true }
 inactive = { fg = "lightyellow", bg = "red" }
-
-# : Mode {{{
 
 [mode]
 
@@ -66,11 +56,6 @@ select_alt  = { fg = "red", bg = "gray" }
 # Unset mode
 unset_main  = { bg = "red", bold = true }
 unset_alt   = { fg = "red", bg = "gray" }
-
-# : }}}
-
-
-# : Status bar {{{
 
 [status]
 separator_open  = ""
@@ -88,31 +73,16 @@ perm_read       = { fg = "yellow" }
 perm_write      = { fg = "red" }
 perm_exec       = { fg = "cyan" }
 
-# : }}}
-
-
-# : Pick {{{
-
 [pick]
 border      = { fg = "blue" }
 active      = { fg = "magenta", bold = true }
 inactive    = {}
-
-# : }}}
-
-
-# : Input {{{
 
 [input]
 border      = { fg = "blue" }
 title       = {}
 value       = {}
 selected    = { reversed = true }
-
-# : }}}
-
-
-# : Confirm {{{
 
 [confirm]
 border      = { fg = "blue" }
@@ -122,11 +92,6 @@ list        = {}
 btn_yes     = { reversed = true }
 btn_no      = {}
 btn_labels  = [ "  [Y]es  ", "  (N)o  " ]
-
-# : }}}
-
-
-# : Completion {{{
 
 [cmp]
 border          = { fg = "blue" }
@@ -138,20 +103,10 @@ icon_file       = ""
 icon_folder     = ""
 icon_command    = ""
 
-# : }}}
-
-
-# : Tasks {{{
-
 [tasks]
 border  = { fg = "blue" }
 title   = {}
 hovered = { fg = "magenta", underline = true }
-
-# : }}}
-
-
-# : Which {{{
 
 [which]
 cols            = 3
@@ -162,22 +117,12 @@ desc            = { fg = "lightmagenta" }
 separator       = "  "
 separator_style = { fg = "darkgray" }
 
-# : }}}
-
-
-# : Help {{{
-
 [help]
 on      = { fg = "cyan" }
 run     = { fg = "magenta" }
 desc    = {}
 hovered = { reversed = true, bold = true }
 footer  = { fg = "black", bg = "white" }
-
-# : }}}
-
-
-# : Notify {{{
 
 [notify]
 title_info  = { fg = "green" }
@@ -188,11 +133,6 @@ title_error = { fg = "red" }
 icon_info   = ""
 icon_warn   = ""
 icon_error  = ""
-
-# : }}}
-
-
-# : File-specific styles {{{
 
 [filetype]
 
@@ -224,11 +164,6 @@ rules = [
 	{ name = "*",   fg = "gray" },
 	{ name = "*/",  fg = "blue",    bold = true }
 ]
-
-# : }}}
-
-
-# : Icons {{{
 
 [icon]
 
@@ -869,5 +804,3 @@ conds = [
 	{ if = "exec",      text = "" },
 	{ if = "!dir",      text = "󰈔" },
 ]
-
-# : }}}
