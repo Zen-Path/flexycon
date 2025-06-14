@@ -62,8 +62,8 @@ class YaziBookmarkRenderer(BookmarkRenderer):
             else ""
         )
 
-        # All yazi bookmarks should start with 'g'.
-        alias_segments = ["g"] + alias_segments
+        # All yazi bookmarks should start with 'b'.
+        alias_segments = ["b"] + alias_segments
         command = (
             f'"cd {self._get_path(bookmark)}"'
             if bookmark.type == "d"
