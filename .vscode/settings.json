@@ -1,8 +1,14 @@
 {
     "cSpell.words": [
+        "darkgray",
         "dotdrop",
         "flexycon",
         "keymap",
+        "lightcyan",
+        "lightgreen",
+        "lightmagenta",
+        "lightred",
+        "lightyellow",
         "newsraft",
         "nvim",
         "rclone",
