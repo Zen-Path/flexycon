@@ -3,256 +3,319 @@
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [mgr]
-ratio           = [ 2, 4, 3 ]
-sort_by         = "natural"
-sort_sensitive  = false
-sort_reverse    = false
-sort_dir_first  = true
-sort_translit   = true
-linemode        = "size"
-show_hidden     = true
-show_symlink    = true
-scrolloff       = 5
+linemode       = "size"
+ratio          = [2, 4, 3]
+scrolloff      = 5
+show_hidden    = true
+show_symlink   = true
+sort_by        = "natural"
+sort_dir_first = true
+sort_reverse   = false
+sort_sensitive = false
+sort_translit  = true
 # Discourage the use of the mouse.
-mouse_events    = [ "click" ]
-title_format    = "Yazi: {cwd}"
+mouse_events = ["click"]
+title_format = "Yazi: {cwd}"
 
 [preview]
-wrap            = "yes"
-tab_size        = 2
-max_width       = 1000
-max_height      = 1000
 cache_dir       = ""
 image_delay     = 30
 image_filter    = "triangle"
 image_quality   = 75
+max_height      = 1000
+max_width       = 1000
+tab_size        = 2
+ueberzug_offset = [0, 0, 0, 0]
 ueberzug_scale  = 1
-ueberzug_offset = [ 0, 0, 0, 0 ]
+wrap            = "yes"
 
 [opener]
 # TODO: Add commands for macos and windows where missing
 
 cd = [
-	{ run = 'ya emit cd "$1"', desc = "Enter directory"},
+    { run = 'ya emit cd "$1"', desc = "Enter directory" },
 ]
 reveal = [
-	{ run = 'xdg-open "$(dirname "$1")"',               desc = "Reveal",    for = "linux" },
-	{ run = 'open -R "$1"',                             desc = "Reveal",    for = "macos" },
-	{ run = 'explorer /select,"%1"',    orphan = true,  desc = "Reveal",    for = "windows" },
+    { run = 'xdg-open "$(dirname "$1")"', desc = "Reveal", for = "linux" },
+    { run = 'open -R "$1"', desc = "Reveal", for = "macos" },
+    { run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
 ]
 
 # Edit
 edit = [
-	{ run = '${EDITOR:-vi} "$@"',   block = true,   desc = "Edit",          for = "unix" },
-	{ run = 'code %*',              orphan = true,  desc = "Edit",          for = "windows" },
-	{ run = 'code -w %*',           block = true,   desc = "Edit (block)",  for = "windows" },
-]
-edit-new-win = [
-	{ run = '${TERMINAL} -e ${EDITOR:-vi} "$@"', orphan = true,  desc = "Edit in new window",  for = "linux" },
+    { run = '${EDITOR:-vi} "$@"', block = true, desc = "Edit", for = "unix" },
+    { run = 'code %*', orphan = true, desc = "Edit", for = "windows" },
+    { run = 'code -w %*', block = true, desc = "Edit (block)", for = "windows" },
 ]
 edit-image = [
-	{ run = '${TERMINAL} -e gimp "$@"', orphan = true, desc = "Edit image",  for = "unix" },
+    { run = '${TERMINAL} -e gimp "$@"', orphan = true, desc = "Edit image", for = "unix" },
+]
+edit-new-win = [
+    { run = '${TERMINAL} -e ${EDITOR:-vi} "$@"', orphan = true, desc = "Edit in new window", for = "linux" },
 ]
 
 # Open
 open = [
-	{ run = 'xdg-open "$1"',    orphan = true,  desc = "Open",  for = "linux" },
-	{ run = 'open "$@"',                        desc = "Open",  for = "macos" },
-	{ run = 'start "" "%1"',    orphan = true,  desc = "Open",  for = "windows" },
+    { run = 'xdg-open "$1"', orphan = true, desc = "Open", for = "linux" },
+    { run = 'open "$@"', desc = "Open", for = "macos" },
+    { run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
 ]
 open-new-win = [
-	{ run = '${TERMINAL} -e xdg-open "$1"', orphan = true,  desc = "Open in new window",  for = "linux" },
+    { run = '${TERMINAL} -e xdg-open "$1"', orphan = true, desc = "Open in new window", for = "linux" },
 ]
 
 open-in-browser = [
-    { run = '${BROWSER} "$1"', orphan = true,  desc = "Open in browser",  for = "linux" },
+    { run = '${BROWSER} "$1"', orphan = true, desc = "Open in browser", for = "linux" },
 ]
 
 # Play
 play = [
-	{ run = 'mpv --force-window "$@"',  orphan = true,  desc = "Play",  for = "linux" },
-    { run = 'mpv --force-window "$@"',  orphan = true,  desc = "Play",  for = "macos" },
-	{ run = 'mpv --force-window %*',    orphan = true,  desc = "Play",  for = "windows" },
+    { run = 'mpv --force-window "$@"', orphan = true, desc = "Play", for = "linux" },
+    { run = 'mpv --force-window "$@"', orphan = true, desc = "Play", for = "macos" },
+    { run = 'mpv --force-window %*', orphan = true, desc = "Play", for = "windows" },
 ]
 play-new-win = [
-	{ run = '${TERMINAL} -e mpv --force-window "$@"',   orphan = true,  desc = "Play in new window",  for = "linux" },
+    { run = '${TERMINAL} -e mpv --force-window "$@"', orphan = true, desc = "Play in new window", for = "linux" },
 ]
 
 # File info
-show-media-info = [
-	{ run = '''mediainfo "$1"; echo ":: Press enter to exit"; read _''',   block = true, desc = "Show media info", for = "unix" },
-]
 show-exif-info = [
-	{ run = '''exiftool "$1"; echo "\n:: Press enter to exit"; read _''',    block = true, desc = "Show EXIF info", for = "unix" },
+    { run = '''exiftool "$1"; echo "\n:: Press enter to exit"; read _''', block = true, desc = "Show EXIF info", for = "unix" },
+]
+show-media-info = [
+    { run = '''mediainfo "$1"; echo ":: Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
 
 # Misc
 extract = [
-	{ run = 'ya pub extract --list "$@"',   desc = "Extract here",  for = "unix" },
-	{ run = 'ya pub extract --list %*',     desc = "Extract here",  for = "windows" },
+    { run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
+    { run = 'ya pub extract --list %*', desc = "Extract here", for = "windows" },
 ]
 
 [open]
 rules = [
-	# Folder
-	{ name = "*/",              use = [ "cd", "open", "reveal" ] },
-	# Text
-	{ mime = "text/html",       use = [ "edit", "edit-new-win", "open-in-browser", "show-exif-info", "reveal" ] },
-	{ mime = "text/*",          use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
-	# Image
-	{ mime = "image/*",         use = [ "open", "open-new-win", "edit-image", "show-exif-info", "reveal" ] },
-	# Media
-	{ mime = "{audio,video}/*", use = [ "play", "play-new-win", "show-media-info", "reveal" ] },
-  	# PDF
-	{ mime = "application/pdf", use = [ "open", "open-new-win", "show-exif-info", "reveal" ] },
-	# JSON
-	{ mime = "application/{json,ndjson}", use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
-	{ mime = "*/javascript",    use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
-	# Archive
-	{ mime = "application/{,g}zip",                 use = [ "extract", "show-exif-info", "reveal" ] },
-	{ mime = "application/{tar,bzip*,7z*,xz,rar}",  use = [ "extract", "show-exif-info", "reveal" ] },
-	# Empty file
-	{ mime = "inode/empty",     use = [ "edit", "edit-new-win", "show-exif-info", "reveal" ] },
-	# Fallback
-	{ name = "*",               use = [ "edit", "edit-new-win", "open", "open-new-win", "play", "play-new-win", "show-exif-info", "reveal" ] },
+    # Folder
+    { name = "*/", use = [
+        "cd",
+        "open",
+        "reveal",
+    ] },
+    # Text
+    { mime = "text/html", use = [
+        "edit",
+        "edit-new-win",
+        "open-in-browser",
+        "show-exif-info",
+        "reveal",
+    ] },
+    { mime = "text/*", use = [
+        "edit",
+        "edit-new-win",
+        "show-exif-info",
+        "reveal",
+    ] },
+    # Image
+    { mime = "image/*", use = [
+        "open",
+        "open-new-win",
+        "edit-image",
+        "show-exif-info",
+        "reveal",
+    ] },
+    # Media
+    { mime = "{audio,video}/*", use = [
+        "play",
+        "play-new-win",
+        "show-media-info",
+        "reveal",
+    ] },
+    # PDF
+    { mime = "application/pdf", use = [
+        "open",
+        "open-new-win",
+        "show-exif-info",
+        "reveal",
+    ] },
+    # JSON
+    { mime = "application/{json,ndjson}", use = [
+        "edit",
+        "edit-new-win",
+        "show-exif-info",
+        "reveal",
+    ] },
+    { mime = "*/javascript", use = [
+        "edit",
+        "edit-new-win",
+        "show-exif-info",
+        "reveal",
+    ] },
+    # Archive
+    { mime = "application/{,g}zip", use = [
+        "extract",
+        "show-exif-info",
+        "reveal",
+    ] },
+    { mime = "application/{tar,bzip*,7z*,xz,rar}", use = [
+        "extract",
+        "show-exif-info",
+        "reveal",
+    ] },
+    # Empty file
+    { mime = "inode/empty", use = [
+        "edit",
+        "edit-new-win",
+        "show-exif-info",
+        "reveal",
+    ] },
+    # Fallback
+    { name = "*", use = [
+        "edit",
+        "edit-new-win",
+        "open",
+        "open-new-win",
+        "play",
+        "play-new-win",
+        "show-exif-info",
+        "reveal",
+    ] },
 ]
 
 [tasks]
-micro_workers    = 10
-macro_workers    = 25
 bizarre_retry    = 5
-image_alloc      = 536870912  # 512MB
-image_bound      = [ 0, 0 ]
+image_alloc      = 536870912 # 512MB
+image_bound      = [0, 0]
+macro_workers    = 25
+micro_workers    = 10
 suppress_preload = false
 
 [plugin]
 
 fetchers = [
-	# Mimetype
-    { id    = "mime",   name = "*",     run = "mime-ext",  if = "!(mime|dummy)",   prio = "high"},
-	# { id    = "mime",   name = "*",     run = "mime",      if = "!mime",           prio = "high" },
-    { id    = "git",    name = "*",     run = "git" },
-    { id    = "git",    name = "*/",    run = "git" },
-]
-spotters = [
-	{ name = "*/",      run = "folder" },
-	# Code
-	{ mime = "text/*",  run = "code" },
-	{ mime = "*/{xml,javascript,wine-extension-ini}", run = "code" },
-	# Image
-	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
-	{ mime = "image/*", run = "image" },
-	# Video
-	{ mime = "video/*", run = "video" },
-	# Fallback
-	{ name = "*",       run = "file" },
+    # Mimetype
+    { id = "mime", name = "*", run = "mime-ext", if = "!(mime|dummy)", prio = "high" },
+    # { id    = "mime",   name = "*",     run = "mime",      if = "!mime",           prio = "high" },
+    { id = "git", name = "*", run = "git" },
+    { id = "git", name = "*/", run = "git" },
 ]
 preloaders = [
-	# Image
-	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
-	{ mime = "image/*", run = "image" },
-	# Video
-	{ mime = "video/*", run = "video" },
-	# PDF
-	{ mime = "application/pdf", run = "pdf" },
-	# Font
-	{ mime = "font/*",  run = "font" },
-	{ mime = "application/ms-opentype", run = "font" },
+    # Image
+    { mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
+    { mime = "image/*", run = "image" },
+    # Video
+    { mime = "video/*", run = "video" },
+    # PDF
+    { mime = "application/pdf", run = "pdf" },
+    # Font
+    { mime = "font/*", run = "font" },
+    { mime = "application/ms-opentype", run = "font" },
 ]
 previewers = [
-	{ name = "*/",      run = "folder" },
-	# Code
-	{ mime = "text/*",  run = "code" },
-	{ mime = "*/{xml,javascript,wine-extension-ini}", run = "code" },
-	# JSON
-	{ mime = "application/{json,ndjson}", run = "json" },
-	# Image
-	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
-	{ mime = "image/*", run = "image" },
-	# Video
-	{ mime = "video/*", run = "video" },
-	# PDF
-	{ mime = "application/pdf", run = "pdf" },
-	# Archive
-	{ mime = "application/{,g}zip", run = "archive" },
-	{ mime = "application/{tar,bzip*,7z*,xz,rar,iso9660-image}", run = "archive" },
-	# Font
-	{ mime = "font/*",  run = "font" },
-	{ mime = "application/ms-opentype", run = "font" },
-	# Empty file
-	{ mime = "inode/empty", run = "empty" },
-	# Fallback
-	{ name = "*",       run = "code" },
+    { name = "*/", run = "folder" },
+    # Code
+    { mime = "text/*", run = "code" },
+    { mime = "*/{xml,javascript,wine-extension-ini}", run = "code" },
+    # JSON
+    { mime = "application/{json,ndjson}", run = "json" },
+    # Image
+    { mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
+    { mime = "image/*", run = "image" },
+    # Video
+    { mime = "video/*", run = "video" },
+    # PDF
+    { mime = "application/pdf", run = "pdf" },
+    # Archive
+    { mime = "application/{,g}zip", run = "archive" },
+    { mime = "application/{tar,bzip*,7z*,xz,rar,iso9660-image}", run = "archive" },
+    # Font
+    { mime = "font/*", run = "font" },
+    { mime = "application/ms-opentype", run = "font" },
+    # Empty file
+    { mime = "inode/empty", run = "empty" },
+    # Fallback
+    { name = "*", run = "code" },
+]
+spotters = [
+    { name = "*/", run = "folder" },
+    # Code
+    { mime = "text/*", run = "code" },
+    { mime = "*/{xml,javascript,wine-extension-ini}", run = "code" },
+    # Image
+    { mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
+    { mime = "image/*", run = "image" },
+    # Video
+    { mime = "video/*", run = "video" },
+    # Fallback
+    { name = "*", run = "file" },
 ]
 
 [input]
 cursor_blink = false
 
 # cd
-cd_title        = "Change directory:"
-cd_origin       = "top-center"
-cd_offset       = [ 0, 2, 50, 3 ]
+cd_offset = [0, 2, 50, 3]
+cd_origin = "top-center"
+cd_title  = "Change directory:"
 
 # create
-create_title    = ["Create:", "Create (dir):"]
-create_origin   = "top-center"
-create_offset   = [ 0, 2, 50, 3 ]
+create_offset = [0, 2, 50, 3]
+create_origin = "top-center"
+create_title  = ["Create:", "Create (dir):"]
 
 # rename
-rename_title    = "Rename:"
-rename_origin   = "hovered"
-rename_offset   = [ 0, 1, 50, 3 ]
+rename_offset = [0, 1, 50, 3]
+rename_origin = "hovered"
+rename_title  = "Rename:"
 
 # filter
-filter_title    = "Filter:"
-filter_origin   = "top-center"
-filter_offset   = [ 0, 2, 50, 3 ]
+filter_offset = [0, 2, 50, 3]
+filter_origin = "top-center"
+filter_title  = "Filter:"
 
 # find
-find_title      = [ "Find next:", "Find previous:" ]
-find_origin     = "top-center"
-find_offset     = [ 0, 2, 50, 3 ]
+find_offset = [0, 2, 50, 3]
+find_origin = "top-center"
+find_title  = ["Find next:", "Find previous:"]
 
 # search
-search_title    = "Search via {n}:"
-search_origin   = "top-center"
-search_offset   = [ 0, 2, 50, 3 ]
+search_offset = [0, 2, 50, 3]
+search_origin = "top-center"
+search_title  = "Search via {n}:"
 
 # shell
-shell_title     = [ "Shell:", "Shell (block):" ]
-shell_origin    = "top-center"
-shell_offset    = [ 0, 2, 50, 3 ]
+shell_offset = [0, 2, 50, 3]
+shell_origin = "top-center"
+shell_title  = ["Shell:", "Shell (block):"]
 
 [confirm]
 # trash
-trash_title 	= "Trash {n} file{s}?"
-trash_origin	= "center"
-trash_offset	= [ 0, 0, 70, 20 ]
+trash_offset = [0, 0, 70, 20]
+trash_origin = "center"
+trash_title  = "Trash {n} file{s}?"
 
 # delete
-delete_title 	= "Permanently delete {n} file{s}?"
-delete_origin	= "center"
-delete_offset	= [ 0, 0, 70, 20 ]
+delete_offset = [0, 0, 70, 20]
+delete_origin = "center"
+delete_title  = "Permanently delete {n} file{s}?"
 
 # overwrite
-overwrite_title     = "Overwrite file?"
-overwrite_content   = "Will overwrite the following file:"
-overwrite_origin    = "center"
-overwrite_offset    = [ 0, 0, 50, 15 ]
+overwrite_content = "Will overwrite the following file:"
+overwrite_offset  = [0, 0, 50, 15]
+overwrite_origin  = "center"
+overwrite_title   = "Overwrite file?"
 
 # quit
-quit_title      = "Quit?"
-quit_content    = "The following task is still running, are you sure you want to quit?"
-quit_origin     = "center"
-quit_offset     = [ 0, 0, 50, 15 ]
+quit_content = "The following task is still running, are you sure you want to quit?"
+quit_offset  = [0, 0, 50, 15]
+quit_origin  = "center"
+quit_title   = "Quit?"
 
 [pick]
-open_title      = "Open with:"
-open_origin     = "hovered"
-open_offset     = [ 0, 1, 50, 10 ]
+open_offset = [0, 1, 50, 10]
+open_origin = "hovered"
+open_title  = "Open with:"
 
 [which]
-sort_by         = "none"
-sort_sensitive  = false
-sort_reverse    = false
-sort_translit   = false
+sort_by        = "none"
+sort_reverse   = false
+sort_sensitive = false
+sort_translit  = false
