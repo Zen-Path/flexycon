@@ -28,9 +28,9 @@ local function entry(_, job)
         ya.dbg("vidir is available.")
 
         if job.args[1] == "full-path" then
-            ya.mgr_emit("shell", { 'vidir -- "$@"', block = true })
+            ya.emit("shell", { 'vidir -- "$@"', block = true })
         else
-            ya.mgr_emit(
+            ya.emit(
                 "shell",
                 { 'vidir -- $(basename -a -- "$@")', block = true }
             )
@@ -38,7 +38,7 @@ local function entry(_, job)
     else
         ya.dbg("vidir is not available.")
 
-        ya.mgr_emit("rename", { bulk = true })
+        ya.emit("rename", { bulk = true })
     end
 end
 
