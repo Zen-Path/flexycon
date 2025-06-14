@@ -166,6 +166,7 @@ keymap = [
     { on = ["g", "r"], run = '''
 shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
 ''', desc = "Go to the root of the current Git repository" },
+    { on = ["g", "c"], run = "plugin vcs-files", desc = "Show Git file changes" },
     { on = ["g", "<Space>"], run = "cd --interactive", desc = "Jump interactively" },
 
     # {%@@ include 'config/yazi/shortcuts.toml' @@%}
