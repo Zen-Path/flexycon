@@ -59,8 +59,8 @@ unset_alt   = { fg = "red", bg = "gray" }
 
 [status]
 overall     = { fg = "white", bg = "reset" }
-sep_left  = { open = "", close = "" }
-sep_right = { open = "", close = "" }
+sep_left    = { open = "", close = "" }
+sep_right   = { open = "", close = "" }
 
 # Progress
 progress_label  = { bold = true }
