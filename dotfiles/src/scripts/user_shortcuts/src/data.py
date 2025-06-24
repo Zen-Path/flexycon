@@ -231,7 +231,7 @@ shortcuts: List[Bookmark] = [
     Bookmark(
         type="d",
         path_parts=["$XDG_SRC_HOME"],
-        aliases={"default": ["s", "r", "c"], YAZI.name: ["s"]},
+        aliases={"default": ["s", "r", "c"], YAZI.name: ["S"]},
         description="sources",
     ),
     Bookmark(
