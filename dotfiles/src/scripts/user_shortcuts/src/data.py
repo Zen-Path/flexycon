@@ -246,6 +246,12 @@ shortcuts: List[Bookmark] = [
         aliases={"default": ["w", "i", "s"], YAZI.name: ["s", "w"]},
         description="wis source",
     ),
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_SRC_HOME", "md-scripts"],
+        aliases={"default": ["m", "d", "d"], YAZI.name: ["s", "m", "d"]},
+        description="mobile department scripts",
+    ),
     # Flexycon
     Bookmark(
         type="d",
