@@ -290,4 +290,10 @@ shortcuts: List[Bookmark] = [
         aliases={"default": ["m", "n"], YAZI.name: ["M"]},
         description="mount",
     ),
+    Bookmark(
+        type="d",
+        path_parts=["/Volumes"],
+        aliases={"default": ["v", "o", "l"], YAZI.name: ["V"]},
+        description="volumes",
+    ),
 ]
