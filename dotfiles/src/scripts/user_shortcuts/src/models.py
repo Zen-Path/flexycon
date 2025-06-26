@@ -1,4 +1,5 @@
 import logging
+import os
 import shlex
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -27,13 +28,13 @@ class BookmarkRenderer(ABC):
         self,
         name: str,
         path_parts: List[str],
-        resolve_path: bool = False,
+        expand_vars: bool = False,
         escape_path: bool = False,
         indentation_level: int = 4,
     ):
         self.name = name
         self.path_parts = path_parts
-        self.resolve_path = resolve_path
+        self.expand_vars = expand_vars
         self.escape_path = escape_path
         self.processed_bookmarks: List[Tuple[List[str], Bookmark]] = []
         self.indentation = " " * indentation_level
@@ -61,17 +62,15 @@ class BookmarkRenderer(ABC):
         self._write_output(content)
 
     def _get_path(self, bookmark: Bookmark) -> str:
-        result = Path(*bookmark.path_parts)
+        path_str = os.path.join(*bookmark.path_parts)
 
-        if self.resolve_path:
-            result = resolve_path(result)
-
-        result_str = str(result)
+        if self.expand_vars:
+            path_str = os.path.expandvars(path_str)
 
         if self.escape_path:
-            result_str = shlex.quote(result_str)
+            path_str = shlex.quote(path_str)
 
-        return result_str
+        return path_str
 
     def _write_output(self, content: str) -> None:
         path = Path(resolve_path(self.path_parts))
