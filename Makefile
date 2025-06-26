@@ -47,8 +47,10 @@ install:
 	@echo "🔧 Ensuring virtual environment is set up..."
 	@$(MAKE) setup
 
-	@echo "Installing Python dependencies..."
+	@echo "♻️ Updating pip..."
 	@$(VENV_BIN)/pip install --upgrade pip
+
+	@echo "📦 Installing Python dependencies..."
 	@$(VENV_BIN)/pip install -r requirements.txt
 
 	@if [ ! -d "src" ]; then \
@@ -56,10 +58,10 @@ install:
 	fi
 	@$(VENV_BIN)/pip install -e .
 
-	@echo "Installing npm packages..."
+	@echo "📦 Installing npm packages..."
 	@npm install
 
-	@echo "Installing pre-commit hooks..."
+	@echo "📦 Installing pre-commit hooks..."
 	@pre-commit install
 
 help:
