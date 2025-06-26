@@ -2,6 +2,7 @@ uservariables:
     active_dotdrop_profile: "Active dotdrop profile"
     git_email: "Git email"
     git_username: "Git username"
+
 config:
     backup: false
     banner: false
@@ -13,12 +14,14 @@ config:
     longkey: false
     import_variables:
         - uservariables.yaml:optional
+
 actions:
     generate_user_shortcuts: user_shortcuts
     post:
         yazi_plugins_upgrade: ya pack --upgrade
         vscode_extensions_save: code --list-extensions | sort > "{{@@ f_vscode_extensions @@}}"
         vscode_extensions_install: cat "{{@@ f_vscode_extensions @@}}" | xargs -n 1 code --install-extension
+
 dotfiles:
     f_fake_profile_actions_trigger:
         # "Fake" files are always considered installed, so we can use this
@@ -34,12 +37,15 @@ dotfiles:
         # `ln -s .config/dotdrop/.zprofile .`
         src: config/shell/profile.sh
         dst: ~/.zprofile
+
     f_shell_inputrc:
         src: config/shell/inputrc
         dst: ~/.config/shell/inputrc
+
     f_zsh_config:
         src: config/zsh/config.sh
         dst: ~/.config/zsh/.zshrc
+
     d_git:
         src: config/git
         dst: ~/.config/git
@@ -48,6 +54,7 @@ dotfiles:
     f_shell_aliases:
         src: config/shell/aliases.sh
         dst: ~/.config/shell/aliases.sh
+
     d_starship:
         src: config/starship
         dst: ~/.config/starship
@@ -85,40 +92,52 @@ dotfiles:
     f_yazi_config:
         src: config/yazi/yazi.toml
         dst: ~/.config/yazi/yazi.toml
+
     f_yazi_keymap:
         src: config/yazi/keymap.toml
         dst: ~/.config/yazi/keymap.toml
+
     f_yazi_theme:
         src: config/yazi/theme.toml
         dst: ~/.config/yazi/theme.toml
+
     f_yazi_package:
         src: config/yazi/package.toml
         dst: ~/.config/yazi/package.toml
+
     f_yazi_init:
         src: config/yazi/init.lua
         dst: ~/.config/yazi/init.lua
+
     d_yazi_plugins:
         src: config/yazi/plugins
         dst: ~/.config/yazi/plugins
         link: link_children
 
     # Browser
+
+    ## Chrome dir
     d_firefox_chrome_personal:
         src: "{{@@ d_firefox_chrome_src @@}}"
         dst: "{{@@ d_firefox_profiles @@}}/Personal/chrome"
+
     d_firefox_chrome_work:
         src: "{{@@ d_firefox_chrome_src @@}}"
         dst: "{{@@ d_firefox_profiles @@}}/Work/chrome"
+
     d_firefox_chrome_front_end:
         src: "{{@@ d_firefox_chrome_src @@}}"
         dst: "{{@@ d_firefox_profiles @@}}/Front-End/chrome"
 
+    ## User profiles
     f_firefox_user_personal:
         src: "{{@@ f_firefox_user_src @@}}"
         dst: "{{@@ d_firefox_profiles @@}}/Personal/user.js"
+
     f_firefox_user_work:
         src: "{{@@ f_firefox_user_src @@}}"
         dst: "{{@@ d_firefox_profiles @@}}/Work/user.js"
+
     f_firefox_user_front_end:
         src: "{{@@ f_firefox_user_src @@}}"
         dst: "{{@@ d_firefox_profiles @@}}/Front-End/user.js"
@@ -127,16 +146,20 @@ dotfiles:
     f_mpv_config:
         src: config/mpv/mpv.conf
         dst: ~/.config/mpv/mpv.conf
+
     f_mpv_input:
         src: config/mpv/input.conf
         dst: ~/.config/mpv/input.conf
+
     f_mpv_plugin_gallery_view_gallery_lua:
         src: config/mpv/plugins/mpv-gallery-view/script-modules/gallery.lua
         dst: ~/.config/mpv/script-modules/gallery.lua
+
     d_mpv_plugin_gallery_view_scripts:
         src: config/mpv/plugins/mpv-gallery-view/scripts
         dst: ~/.config/mpv/scripts/
         link: link_children
+
     d_yt_dlp:
         src: config/yt-dlp
         dst: ~/.config/yt-dlp
@@ -145,100 +168,124 @@ dotfiles:
     f_taskwarrior_config:
         src: config/task/taskrc
         dst: ~/.config/task/taskrc
+
     f_newsraft_config:
         src: config/newsraft/config
         dst: ~/.config/newsraft/config
+
     d_bottom:
         src: config/bottom
         dst: ~/.config/bottom
+
     d_gtk_3:
         src: config/gtk-3.0
         dst: ~/.config/gtk-3.0
+
     f_hammerspoon_init:
-      src: config/hammerspoon/init.lua
-      dst: ~/.config/hammerspoon/init.lua
+        src: config/hammerspoon/init.lua
+        dst: ~/.config/hammerspoon/init.lua
 
     # Scripts
     f_dmenuhandler:
         src: src/scripts/dmenuhandler.sh
         dst: ~/.local/bin/dmenuhandler
         chmod: "755"
+
     f_dmenupass:
         src: src/scripts/dmenupass.sh
         dst: ~/.local/bin/dmenupass
         chmod: "755"
+
     f_compiler:
         src: src/scripts/compiler.sh
         dst: ~/.local/bin/compiler
         chmod: "755"
+
     f_continuous_diff:
         src: src/scripts/py-run.sh
         dst: ~/.local/bin/continuous_diff
         chmod: "755"
+
     f_fzfopen:
         src: src/scripts/fzfopen.sh
         dst: ~/.local/bin/fzfopen
         chmod: "755"
+
     f_getkeys:
         src: src/scripts/getkeys.sh
         dst: ~/.local/bin/getkeys
         chmod: "755"
+
     f_git_logs:
         src: src/scripts/py-run.sh
         dst: ~/.local/bin/git_logs
         chmod: "755"
+
     f_ifinstalled:
         src: src/scripts/ifinstalled.sh
         dst: ~/.local/bin/ifinstalled
         chmod: "755"
+
     f_imgconv:
         src: src/scripts/imgconv.sh
         dst: ~/.local/bin/imgconv
         chmod: "755"
+
     f_journal_entry:
         src: src/scripts/py-run.sh
         dst: ~/.local/bin/journal_entry
         chmod: "755"
+
     f_jsonc_to_json:
         src: src/scripts/py-run.sh
         dst: ~/.local/bin/jsonc_to_json
         chmod: "755"
+
     f_media_server:
         src: src/scripts/py-run.sh
         dst: ~/.local/bin/media_server
         chmod: "755"
+
     f_mounter:
         src: src/scripts/mounter.sh
         dst: ~/.local/bin/mounter
         chmod: "755"
+
     f_noisereduce:
         src: src/scripts/noisereduce.sh
         dst: ~/.local/bin/noisereduce
         chmod: "755"
+
     f_pkgsize:
         src: src/scripts/pkgsize.sh
         dst: ~/.local/bin/pkgsize
         chmod: "755"
+
     f_rclone_fmt:
         src: src/scripts/py-run.sh
         dst: ~/.local/bin/rclone_fmt
         chmod: "755"
+
     f_screenshot_utility:
         src: src/scripts/py-run.sh
         dst: ~/.local/bin/screenshot_utility
         chmod: "755"
+
     f_sdir:
         src: src/scripts/sdir.sh
         dst: ~/.local/bin/sdir
         chmod: "755"
+
     f_setbg:
         src: src/scripts/setbg.sh
         dst: ~/.local/bin/setbg
         chmod: "755"
+
     f_user_shortcuts:
         src: src/scripts/py-run.sh
         dst: ~/.local/bin/user_shortcuts
         chmod: "755"
+
     f_tag:
         src: src/scripts/tag.sh
         dst: ~/.local/bin/tag
@@ -249,6 +296,7 @@ dotfiles:
         src: src/scripts/avds.sh
         dst: ~/.local/bin/avds
         chmod: "755"
+
 profiles:
     # Programs
 
@@ -335,7 +383,7 @@ profiles:
     ## OS
     meta_mac:
         include:
-             - meta_common
+            - meta_common
         variables:
             d_vscode_dst: "~/Library/Application\ Support/Code/User"
         dotfiles:
