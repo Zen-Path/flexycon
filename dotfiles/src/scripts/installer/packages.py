@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod, abstractproperty
-from typing import Dict, List, Optional, Type
+from abc import ABC, abstractmethod
+from typing import List, Optional, Type
 
 from common.helpers import run_command
 
