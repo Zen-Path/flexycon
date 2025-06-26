@@ -12,7 +12,8 @@ CLEAN_TARGETS = \
 	node_modules \
 	dist \
 	build \
-	*.egg-info
+	*.egg-info \
+	.DS_Store
 
 # Additional dirs for full clean
 FULL_CLEAN_TARGETS = \
