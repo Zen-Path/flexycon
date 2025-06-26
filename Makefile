@@ -44,10 +44,8 @@ setup:
 	fi
 
 install:
-	@if [ ! -d "$(VENV_DIR)" ]; then \
-		echo "⚠️  Virtual environment not found. Run 'make setup' first."; \
-		exit 1; \
-	fi
+	@echo "🔧 Ensuring virtual environment is set up..."
+	@$(MAKE) setup
 
 	@echo "Installing Python dependencies..."
 	@$(VENV_BIN)/pip install --upgrade pip
