@@ -36,22 +36,29 @@ class ColoredFormatter(logging.Formatter):
         return f"{color}{formatted}{Style.RESET_ALL}"
 
 
-def setup_logging(verbose: bool = False) -> None:
-    level = logging.DEBUG if verbose else logging.ERROR
-
+def setup_logging(
+    logger: logging.Logger,
+    level: int = logging.ERROR,
+    date_fmt: str = "%Y-%m-%d %H:%M:%S",
+) -> None:
+    """Configure a specific logger with a colorized stream handler."""
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(level)
 
     formatter = ColoredFormatter(
-        fmt="%(levelname)s | %(asctime)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+        fmt="%(levelname)s | %(asctime)s | %(message)s", datefmt=date_fmt
     )
     handler.setFormatter(formatter)
 
-    root_logger = logging.getLogger()
-    root_logger.setLevel(level)
+    logger.setLevel(level)
+    logger.handlers.clear()  # Remove existing handlers to avoid duplicates
+    logger.propagate = False  # Prevent bubbling to ancestor loggers
+    logger.addHandler(handler)
 
-    # Remove default handlers if any (avoid duplicate logs)
-    if root_logger.hasHandlers():
-        root_logger.handlers.clear()
 
-    root_logger.addHandler(handler)
+def test_logging_fmt(logger):
+    logger.debug("Debugging info")
+    logger.info("General info")
+    logger.warning("Something may be wrong")
+    logger.error("An error occurred")
+    logger.critical("Critical failure!")

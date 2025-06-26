@@ -15,7 +15,7 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Enable debug output.")
     args = parser.parse_args()
 
-    setup_logging(verbose=args.verbose)
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
 
     for renderer in (ZSH, NVIM, YAZI):
         renderer.process(shortcuts)

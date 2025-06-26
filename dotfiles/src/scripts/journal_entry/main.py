@@ -79,7 +79,7 @@ def get_journal_entry_path(target_date) -> Optional[Path]:
 def main():
     args = parse_args()
 
-    setup_logging(verbose=args.verbose)
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 
     target_date = resolve_date(args)
     logger.info(f"Target date: {target_date.strftime('%Y-%m-%d')}")

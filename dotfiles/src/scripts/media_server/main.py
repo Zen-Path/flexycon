@@ -59,7 +59,7 @@ def parse_args():
 def main():
     args = parse_args()
 
-    setup_logging(verbose=args.verbose)
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 
     app.run(port=5000, debug=True)
 
