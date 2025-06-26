@@ -4,5 +4,5 @@ setup(
     name="flexycon",
     version="0.0.1",
     package_dir={"": "dotfiles/src"},  # where setuptools should look
-    packages=find_packages(where="src"),
+    packages=find_packages(where="dotfiles/src"),
 )
