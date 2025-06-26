@@ -15,5 +15,6 @@
         "rclone",
         "venv",
         "yazi"
-    ]
+    ],
+    "makefile.configureOnOpen": false
 }
