@@ -62,7 +62,7 @@ install:
 	@npm install
 
 	@echo "📦 Installing pre-commit hooks..."
-	@pre-commit install
+	@$(VENV_BIN)/pre-commit install
 
 help:
 	@echo "Available make targets:"
