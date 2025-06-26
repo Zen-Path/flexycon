@@ -7,7 +7,7 @@ from common.args import format_help_choices
 from common.date_args import add_date_args, resolve_date
 from common.logger import setup_logging
 from git import InvalidGitRepositoryError, Repo
-from src.repos import GIT_REPOS
+from scripts.git_logs.src.repos import GIT_REPOS
 
 logger = logging.getLogger(__name__)
 

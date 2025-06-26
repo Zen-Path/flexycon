@@ -1,7 +1,7 @@
 from typing import List
 
-from src.core import Bookmark
-from src.renderers import YAZI
+from scripts.user_shortcuts.src.models import Bookmark
+from scripts.user_shortcuts.src.renderers import YAZI
 
 flex_home = ["$FLEXYCON_HOME"]
 flex_dotfiles = flex_home + ["dotfiles"]

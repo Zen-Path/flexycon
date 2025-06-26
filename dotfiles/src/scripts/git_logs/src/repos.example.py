@@ -1,4 +1,4 @@
-from src.core import GitRepo
+from scripts.git_logs.src.core import GitRepo
 
 src_dir = "$XDG_SRC_HOME"
 

@@ -4,8 +4,8 @@ import logging
 from common.logger import setup_logging
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from src.core import Gallery
-from src.history import log_history_entry
+from scripts.media_server.src.history import log_history_entry
+from scripts.media_server.src.models import Gallery
 
 logger = logging.getLogger(__name__)
 

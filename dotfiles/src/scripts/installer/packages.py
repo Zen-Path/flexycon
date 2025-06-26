@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod, abstractproperty
 from typing import Dict, List, Optional, Type
 
-from utils import run_command
+from common.helpers import run_command
 
 
 class PackageManager(ABC):

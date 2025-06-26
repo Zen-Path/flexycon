@@ -1,6 +1,6 @@
 from typing import List
 
-from src.core import Bookmark, BookmarkRenderer
+from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
 
 
 class ZshBookmarkRenderer(BookmarkRenderer):

@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from packages import Package, PackageManager, PacMan, Yay
+from scripts.installer.packages import Package, PackageManager, PacMan, Yay
 
 install_packages = [
     Package(
