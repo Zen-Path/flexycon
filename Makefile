@@ -36,8 +36,12 @@ clean-all: clean
 	@echo "Full cleanup complete."
 
 setup:
-	@echo "Creating Python virtual environment..."
-	@$(PYTHON) -m venv $(VENV_DIR)
+	@if [ -d "$(VENV_DIR)" ]; then \
+		echo "✅ Virtual environment already exists at '$(VENV_DIR)'."; \
+	else \
+		echo "🐍 Creating Python virtual environment in '$(VENV_DIR)'..."; \
+		$(PYTHON) -m venv $(VENV_DIR); \
+	fi
 
 install:
 	@if [ ! -d "$(VENV_DIR)" ]; then \
