@@ -53,5 +53,6 @@
         "**/.git": true
     },
     "diffEditor.maxComputationTime": 30000,
-    "git.confirmSync": false
+    "git.confirmSync": false,
+    "python.analysis.typeCheckingMode": "standard"
 }
