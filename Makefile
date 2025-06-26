@@ -5,7 +5,7 @@ VENV_DIR = venv
 VENV_BIN = $(VENV_DIR)/bin
 
 # Directories to clean (safe)
-CLEAN_DIRS = \
+CLEAN_TARGETS = \
 	.mypy_cache \
 	.pytest_cache \
 	__pycache__ \
@@ -15,21 +15,21 @@ CLEAN_DIRS = \
 	*.egg-info
 
 # Additional dirs for full clean
-FULL_CLEAN_DIRS = \
+FULL_CLEAN_TARGETS = \
 	.venv \
 	venv
 
 
 clean:
 	@echo "Cleaning up project (safe)..."
-	@for dir in $(CLEAN_DIRS); do \
+	@for dir in $(CLEAN_TARGETS); do \
 		find . -name "$$dir" -exec rm -rf {} +; \
 	done
 	@echo "Safe cleanup complete."
 
 clean-all: clean
 	@echo "Cleaning up project (full)..."
-	@for dir in $(FULL_CLEAN_DIRS); do \
+	@for dir in $(FULL_CLEAN_TARGETS); do \
 		find . -name "$$dir" -exec rm -rf {} +; \
 	done
 	@echo "Full cleanup complete."
