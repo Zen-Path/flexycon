@@ -39,14 +39,17 @@ class ColoredFormatter(logging.Formatter):
 def setup_logging(
     logger: logging.Logger,
     level: int = logging.ERROR,
-    date_fmt: str = "%Y-%m-%d %H:%M:%S",
+    date_fmt: str = "%H:%M:%S",
 ) -> None:
-    """Configure a specific logger with a colorized stream handler."""
+    """
+    Configure a specific logger with a colorized stream handler.
+    To display the full timestamp, use date_fmt="%Y-%m-%d %H:%M:%S"
+    """
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(level)
 
     formatter = ColoredFormatter(
-        fmt="%(levelname)s | %(asctime)s | %(message)s", datefmt=date_fmt
+        fmt="%(levelname).3s | %(asctime)s | %(message)s", datefmt=date_fmt
     )
     handler.setFormatter(formatter)
 
