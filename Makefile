@@ -33,6 +33,12 @@ clean-all: clean
 	@for dir in $(FULL_CLEAN_TARGETS); do \
 		find . -name "$$dir" -exec rm -rf {} +; \
 	done
+
+	@echo "Cleaning up pre-commit hooks..."
+	@if [ -d "$(VENV_DIR)" ]; then \
+		@$(VENV_BIN)/pre-commit clean; \
+	fi
+
 	@echo "Full cleanup complete."
 
 setup:
