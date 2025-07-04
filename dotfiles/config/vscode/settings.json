@@ -1,58 +1,58 @@
 {
-    "workbench.colorTheme": "Gruvbox Dark Hard",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "window.menuBarVisibility": "toggle",
-    "[html]": {
-        "editor.defaultFormatter": "vscode.html-language-features"
-    },
-    "git.autofetch": true,
-    "extensions.experimental.affinity": {
-        "asvetliakov.vscode-neovim": 1
-    },
-    "editor.renderWhitespace": "all",
     "[css]": {
         "editor.defaultFormatter": "vscode.css-language-features"
     },
-    "workbench.iconTheme": "material-icon-theme",
-    "workbench.startupEditor": "none",
-    "files.insertFinalNewline": true,
-    "files.trimFinalNewlines": true,
-    "prettier.proseWrap": "always",
-    "editor.wordWrapColumn": 120,
-    "cSpell.enabledFileTypes": {},
-    "files.autoSave": "onFocusChange",
-    "files.exclude": {
-        "**/__pycache__": true,
-        "**/.git": false,
-        "**/.mypy_cache": true,
-        "**/.venv": true,
-        "**/*.egg-info": true,
-        "**/node_modules": true,
-        "**/venv": true
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
     },
-    "files.trimTrailingWhitespace": true,
-    "editor.scrollbar.vertical": "hidden",
-    "editor.scrollbar.verticalScrollbarSize": 0,
-    "editor.smoothScrolling": true,
-    "editor.lineNumbers": "relative",
-    "diffEditor.hideUnchangedRegions.enabled": true,
-    "editor.wordWrap": "bounded",
-    "explorer.confirmDelete": false,
-    "glassit.alpha": 235,
     "[python]": {
         "editor.defaultFormatter": "mikoz.black-py"
     },
-    "window.zoomLevel": 1,
     "[xml]": {
         "editor.defaultFormatter": "DotJoshJohnson.xml"
     },
-    "editor.detectIndentation": false,
+    "cSpell.enabledFileTypes": {},
+    "diffEditor.hideUnchangedRegions.enabled": true,
     "diffEditor.ignoreTrimWhitespace": false,
+    "diffEditor.maxComputationTime": 30000,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.detectIndentation": false,
+    "editor.lineNumbers": "relative",
+    "editor.renderWhitespace": "all",
+    "editor.scrollbar.vertical": "hidden",
+    "editor.scrollbar.verticalScrollbarSize": 0,
+    "editor.smoothScrolling": true,
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 120,
+    "explorer.confirmDelete": false,
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "files.autoSave": "onFocusChange",
+    "files.exclude": {
+        "**/*.egg-info": true,
+        "**/.git": false,
+        "**/.mypy_cache": true,
+        "**/.venv": true,
+        "**/__pycache__": true,
+        "**/node_modules": true,
+        "**/venv": true
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
     "git.openRepositoryInParentFolders": "always",
+    "glassit.alpha": 235,
+    "prettier.proseWrap": "always",
+    "python.analysis.typeCheckingMode": "standard",
     "search.exclude": {
         "**/.git": true
     },
-    "diffEditor.maxComputationTime": 30000,
-    "git.confirmSync": false,
-    "python.analysis.typeCheckingMode": "standard"
+    "window.menuBarVisibility": "toggle",
+    "window.zoomLevel": 1,
+    "workbench.colorTheme": "Gruvbox Dark Hard",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.startupEditor": "none"
 }
