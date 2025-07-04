@@ -73,8 +73,8 @@ install:
 
 help:
 	@echo "Available make targets:"
-	@echo "  setup       Create Python virtual environment using $(PYTHON)"
-	@echo "  install     Install Python, npm, and pre-commit dependencies"
-	@echo "  clean       Remove temporary/project files (safe)"
-	@echo "  clean-all   Run clean and remove virtual environments"
-	@echo "  help        Show this help message"
+	@echo "  setup       		Setup project and init git submodules"
+	@echo "  install			Create Python venv, install Python, project dependencies"
+	@echo "  clean				Remove temporary/project files and venv"
+	@echo "  init-submodules	Initialize and fetch git submodules"
+	@echo "  help				Show this help message"
