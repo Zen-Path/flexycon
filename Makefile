@@ -4,6 +4,9 @@ PYTHON ?= /opt/homebrew/bin/python3
 VENV_DIR = venv
 VENV_BIN = $(VENV_DIR)/bin
 
+# Should be the value of `package_dir` in setup.py
+PACKAGE_DIR := "dotfiles/src"
+
 CLEAN_TARGETS = \
 	.venv \
 	venv \
@@ -60,8 +63,9 @@ install:
 	@echo "📦 Installing Python dependencies..."
 	@$(VENV_BIN)/pip install -r requirements.txt
 
-	@if [ ! -d "src" ]; then \
-		mkdir "src"; \
+	echo "🔧 Installing current project in editable mode...";
+	@if [ ! -d "$(PACKAGE_DIR)" ]; then \
+		mkdir -p "$(PACKAGE_DIR)"; \
 	fi
 	@$(VENV_BIN)/pip install -e .
 
