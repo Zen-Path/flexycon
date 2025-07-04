@@ -60,8 +60,12 @@ install:
 	@echo "♻️ Updating pip..."
 	@$(VENV_BIN)/pip install --upgrade pip
 
-	@echo "📦 Installing Python dependencies..."
-	@$(VENV_BIN)/pip install -r requirements.txt
+	@if [ -f "requirements.txt" ]; then \
+		echo "📦 Installing Python dependencies..."; \
+		$(VENV_BIN)/pip install -r requirements.txt; \
+	else \
+		echo "⚠️ Python dependencies not found."; \
+	fi
 
 	echo "🔧 Installing current project in editable mode...";
 	@if [ ! -d "$(PACKAGE_DIR)" ]; then \
