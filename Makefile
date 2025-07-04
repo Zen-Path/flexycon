@@ -1,4 +1,4 @@
-.PHONY: clean setup install help
+.PHONY: clean setup init-submodules install help
 
 PYTHON ?= /opt/homebrew/bin/python3
 VENV_DIR = venv
@@ -30,7 +30,21 @@ clean:
 	@echo "Full cleanup complete."
 
 setup:
-	@echo ""
+	@$(MAKE) init-submodules
+	@echo "✅ Setup completed successfully."
+
+init-submodules:
+	@if [ ! -f .gitmodules ]; then \
+		echo "No git submodules found. Skipping."; \
+	else \
+		echo "Initializing submodules..."; \
+		git submodule init || { echo "Failed to initialize submodules"; exit 1; }; \
+		echo "Updating submodules..."; \
+		if ! git submodule update --recursive --remote; then \
+			echo "Error: Unable to fetch submodules. Please check your network or Git server access."; \
+			exit 1; \
+		fi; \
+	fi
 
 install:
 	@if [ -d "$(VENV_DIR)" ]; then \
