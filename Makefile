@@ -10,10 +10,10 @@ CLEAN_TARGETS = \
 	.mypy_cache \
 	.pytest_cache \
 	__pycache__ \
-	node_modules \
 	dist \
 	build \
 	*.egg-info \
+	node_modules \
 	.DS_Store
 
 clean:
