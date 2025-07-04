@@ -1,16 +1,18 @@
 {
+    "arrowParens": "always",
+    "bracketSameLine": true,
+    "bracketSpacing": true,
+    "endOfLine": "lf",
+    "experimentalTernaries": false,
+    "jsonRecursiveSort": true,
+    "jsxSingleQuote": false,
+    "plugins": ["prettier-plugin-sort-json"],
     "printWidth": 80,
-    "tabWidth": 4,
-    "useTabs": false,
+    "proseWrap": "preserve",
+    "quoteProps": "as-needed",
     "semi": true,
     "singleQuote": false,
-    "quoteProps": "as-needed",
-    "jsxSingleQuote": false,
+    "tabWidth": 4,
     "trailingComma": "es5",
-    "bracketSpacing": true,
-    "bracketSameLine": true,
-    "arrowParens": "always",
-    "proseWrap": "preserve",
-    "endOfLine": "lf",
-    "experimentalTernaries": false
+    "useTabs": false
 }
