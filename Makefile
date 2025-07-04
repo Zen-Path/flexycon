@@ -30,16 +30,15 @@ clean:
 	@echo "Full cleanup complete."
 
 setup:
+	@echo ""
+
+install:
 	@if [ -d "$(VENV_DIR)" ]; then \
 		echo "✅ Virtual environment already exists at '$(VENV_DIR)'."; \
 	else \
 		echo "🐍 Creating Python virtual environment in '$(VENV_DIR)'..."; \
 		$(PYTHON) -m venv $(VENV_DIR); \
 	fi
-
-install:
-	@echo "🔧 Ensuring virtual environment is set up..."
-	@$(MAKE) setup
 
 	@echo "♻️ Updating pip..."
 	@$(VENV_BIN)/pip install --upgrade pip
