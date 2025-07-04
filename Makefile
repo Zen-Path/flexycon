@@ -1,11 +1,12 @@
-.PHONY: clean clean-all setup install help
+.PHONY: clean setup install help
 
 PYTHON ?= /opt/homebrew/bin/python3
 VENV_DIR = venv
 VENV_BIN = $(VENV_DIR)/bin
 
-# Directories to clean (safe)
 CLEAN_TARGETS = \
+	.venv \
+	venv \
 	.mypy_cache \
 	.pytest_cache \
 	__pycache__ \
@@ -15,22 +16,9 @@ CLEAN_TARGETS = \
 	*.egg-info \
 	.DS_Store
 
-# Additional dirs for full clean
-FULL_CLEAN_TARGETS = \
-	.venv \
-	venv
-
-
 clean:
-	@echo "Cleaning up project (safe)..."
+	@echo "Cleaning up project..."
 	@for dir in $(CLEAN_TARGETS); do \
-		find . -name "$$dir" -exec rm -rf {} +; \
-	done
-	@echo "Safe cleanup complete."
-
-clean-all: clean
-	@echo "Cleaning up project (full)..."
-	@for dir in $(FULL_CLEAN_TARGETS); do \
 		find . -name "$$dir" -exec rm -rf {} +; \
 	done
 
