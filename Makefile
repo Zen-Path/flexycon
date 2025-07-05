@@ -7,6 +7,9 @@ VENV_BIN = $(VENV_DIR)/bin
 # Should be the value of `package_dir` in setup.py
 PACKAGE_DIR := "dotfiles/src"
 
+# System package dependencies
+BREW_DEPS := python3 node dotdrop
+
 CLEAN_TARGETS = \
 	.venv \
 	venv \
@@ -50,6 +53,32 @@ init-submodules:
 	fi
 
 install:
+	@case "$$(uname)" in \
+		Darwin) \
+			echo "🖥️ Detected macOS system."; \
+			if ! command -v brew >/dev/null 2>&1; then \
+				echo "❌ Homebrew is not installed. Please install it from https://brew.sh/"; \
+				exit 1; \
+			fi; \
+			\
+			for dep in $(BREW_DEPS); do \
+				if ! command -v "$$dep" >/dev/null 2>&1; then \
+					read -p "🔍 '$$dep' is not installed. Install it now? [y/N]: " ans; \
+					\
+					case "$$ans" in \
+						y|Y) echo "➡️ Installing $$dep..."; brew install "$$dep" ;; \
+						*) echo "⚠️ Skipping $$dep";; \
+					esac; \
+				else \
+					echo "✅ '$$dep' is already installed."; \
+				fi; \
+			done \
+			;; \
+		*) \
+			echo "ℹ️ Non-macOS system detected. Skipping Homebrew setup."; \
+			;; \
+	esac
+
 	@if [ ! -d "$(VENV_DIR)" ]; then \
 		echo "🐍 Creating Python venv in '$(VENV_DIR)'..."; \
 		$(PYTHON) -m venv $(VENV_DIR); \
