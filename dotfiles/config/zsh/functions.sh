@@ -10,11 +10,11 @@ function src_short() {
 }
 
 # Run a command on every 'Enter' (e.g. `run_loop cargo run`)
-function run_loop {
-    local cmd="$@"
+function run_loop() {
     while true; do
-        eval "$cmd"
-        read
+        "$@"
+        print -n "\n:: Press Enter to rerun... "
+        read < /dev/tty
     done
 }
 
