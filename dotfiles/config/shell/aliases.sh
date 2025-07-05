@@ -8,7 +8,7 @@
 
 # Make some system commands not require sudo.
 for command in mount umount su shutdown reboot; do
-    alias "$command=sudo $command"
+    alias "$command"="sudo $command"
 done
 unset command
 
