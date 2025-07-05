@@ -2,7 +2,9 @@
     "cSpell.words": [
         "darkgray",
         "dotdrop",
+        "esac",
         "flexycon",
+        "gitmodules",
         "keymap",
         "lightcyan",
         "lightgreen",
@@ -13,6 +15,8 @@
         "mypy",
         "newsraft",
         "nvim",
+        "pycache",
+        "pytest",
         "rclone",
         "venv",
         "yazi"
