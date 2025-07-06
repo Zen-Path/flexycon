@@ -73,7 +73,7 @@ export LESSOPEN='| /usr/bin/highlight -O ansi %s 2>/dev/null'
 export LESS='--RAW-CONTROL-CHARS --quit-if-one-screen'
 
 ## Fzf
-export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .git/ --exclude node_modules/ --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/rustup'
+export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .git/ --exclude node_modules/ --exclude venv/ --exclude .venv/ --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/rustup'
 export FZF_DEFAULT_OPTS='--multi --extended'
 
 #{%@@ if "work" in profile +@@%}
