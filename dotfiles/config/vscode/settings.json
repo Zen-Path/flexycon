@@ -14,7 +14,7 @@
     "cSpell.enabledFileTypes": {},
     "diffEditor.hideUnchangedRegions.enabled": true,
     "diffEditor.ignoreTrimWhitespace": false,
-    "diffEditor.maxComputationTime": 30000,
+    "diffEditor.maxComputationTime": 3000,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.detectIndentation": false,
     "editor.lineNumbers": "relative",
