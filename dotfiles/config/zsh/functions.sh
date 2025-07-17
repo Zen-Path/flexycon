@@ -119,6 +119,14 @@ function pdftopng() {
     magick -density 300 "$1" -quality 100 -alpha remove "$2"
 }
 
+function webmp_to_mp4() {
+    local input_path="$1"
+    set -- $(split_filename_extension "$input_path")
+    filename=$1
+
+    ffmpeg -fflags +genpts -i "$input_path" -r 24 "$filename.mp4"
+}
+
 function fm() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
     yazi "$@" --cwd-file="$tmp"
