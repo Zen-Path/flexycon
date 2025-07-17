@@ -127,6 +127,13 @@ function webmp_to_mp4() {
     ffmpeg -fflags +genpts -i "$input_path" -r 24 "$filename.mp4"
 }
 
+function vid_rotate() {
+    local input_path="$1"
+    local output_path=$(construct_output_path "$input_path" "rotated")
+
+    ffmpeg -i "$input_path" -vf "transpose=1" "$output_path"
+}
+
 function fm() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
     yazi "$@" --cwd-file="$tmp"
