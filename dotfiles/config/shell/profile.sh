@@ -4,8 +4,10 @@
 
 # Shell profile. Runs on login. Environmental variables are set here.
 
+# {%@@- if os == "darwin" +@@%}
 # Add Homebrew to $PATH
 PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+# {%@@- endif +@@%}
 
 PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
 export PATH
@@ -18,9 +20,14 @@ unsetopt PROMPT_SP
 
 export EDITOR='nvim'
 export GRAPHICAL_EDITOR='code'
-export TERMINAL='kitty'
 export BROWSER='firefox'
 export FILE_MANAGER='yazi'
+
+# {%@@- if os == "darwin" +@@%}
+export TERMINAL='kitty'
+# {%@@- elif os == "linux" +@@%}
+export TERMINAL='alacritty'
+# {%@@- endif +@@%}
 
 # FILES
 
@@ -35,12 +42,25 @@ export XDG_DOCUMENTS_DIR="$HOME/Documents"
 export XDG_DOWNLOAD_DIR="$HOME/Downloads"
 export XDG_MUSIC_DIR="$HOME/Music"
 export XDG_PICTURES_DIR="$HOME/Pictures"
+
+# {%@@- if os == "darwin" +@@%}
 export XDG_VIDEOS_DIR="$HOME/Movies"
+# {%@@- elif os == "linux" +@@%}
+export XDG_VIDEOS_DIR="$HOME/Videos"
+# {%@@- endif +@@%}
 
 export XDG_PUBLICSHARE_DIR="$HOME/Public"
 export XDG_DESKTOP_DIR="$HOME/Desktop"
 
+# {%@@- if os == "linux" +@@%}
+export XDG_TEMPLATES_DIR="$HOME/"
+# {%@@- endif +@@%}
+
 ## $HOME Clean-up
+# {%@@- if os == "linux" +@@%}
+export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
+# {%@@- endif -@@%}
+
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
@@ -58,15 +78,24 @@ export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 export DOOMDIR="$XDG_CONFIG_HOME/doom"
 
 ## Misc files
-# {%@@ if "home" in profile +@@%}
+# {%@@- if "home" in profile +@@%}
 export JOURNAL_HOME="$XDG_DOCUMENTS_DIR/Journal"
-# {%@@ endif +@@%}
+# {%@@- endif +@@%}
 export FLEXYCON_HOME="$HOME/.local/src/flexycon"
 
 # PROGRAM SETTINGS
 
+# {%@@- if os == "linux" +@@%}
+export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+# {%@@- endif -@@%}
 export BAT_THEME='gruvbox-dark'
 # export PASTEL_COLOR_MODE='24bit'
+
+# {%@@- if os == "linux" +@@%}
+export _JAVA_AWT_WM_NONREPARENTING='1' # Fix for Java applications in dwm
+# {%@@- endif -@@%}
+
+# export MOZ_USE_XINPUT2='1' # Mozilla smooth scrolling/touchpads.
 
 ## Less
 export LESSOPEN='| /usr/bin/highlight -O ansi %s 2>/dev/null'
@@ -97,6 +126,18 @@ export APPIUM_PREFER_SYSTEM_UNZIP='1'
 
 ## ENV SETTINGS
 
-# export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+# {%@@- if os == "linux" +@@%}
+
+[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && setsid user_shortcuts > /dev/null 2>&1
+# {%@@- elif os == "darwin" +@@%}
 
 [ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && user_shortcuts
+# {%@@- endif +@@%}
+
+# {%@@- if os == "linux" +@@%}
+# Start graphical server on user's current tty if not already running.
+[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg > /dev/null 2>&1 && startx "$XINITRC"
+
+# Switch escape and caps if tty and no passwd required:
+sudo -n loadkeys "$XDG_DATA_HOME"/larbs/ttymaps.kmap 2> /dev/null
+# {%@@- endif +@@%}

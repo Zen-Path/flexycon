@@ -76,8 +76,3 @@ rg --only-matching 'pattern: (\d+)' --replace '$1'
 ## TODO
 
 - [Emmet](https://www.emmet.io/) for nvim / emacs
-
-### Replacements
-
-- Zathura
-- dwmblocks

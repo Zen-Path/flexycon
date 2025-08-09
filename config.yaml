@@ -59,7 +59,25 @@ dotfiles:
         src: config/starship
         dst: ~/.config/starship
 
+    # Package Managers
+    d_yay:
+        src: config/yay
+        dst: ~/.config/yay
+
+    # WM / Desktop Environment
+    d_x11:
+        src: config/x11
+        dst: ~/.config/x11
+
+    f_x11_profile:
+        src: config/x11/xprofile
+        dst: ~/.xprofile
+
     # Terminal
+    d_alacritty:
+        src: config/alacritty
+        dst: ~/.config/alacritty
+
     d_kitty:
         src: config/kitty
         dst: ~/.config/kitty
@@ -160,14 +178,31 @@ dotfiles:
         dst: ~/.config/mpv/scripts/
         link: link_children
 
+    d_nsxiv:
+        src: config/nsxiv
+        dst: ~/.config/nsxiv
+
     d_yt_dlp:
         src: config/yt-dlp
         dst: ~/.config/yt-dlp
+
+    # Audio
+    f_pulse_daemon:
+        src: config/pulse/daemon.conf
+        dst: ~/.config/pulse/daemon.conf
+
+    d_pipewire:
+        src: config/pipewire
+        dst: ~/.config/pipewire
 
     # Programs
     f_taskwarrior_config:
         src: config/task/taskrc
         dst: ~/.config/task/taskrc
+
+    d_zathura:
+        src: config/zathura
+        dst: ~/.config/zathura
 
     f_newsraft_config:
         src: config/newsraft/config
@@ -177,25 +212,41 @@ dotfiles:
         src: config/bottom
         dst: ~/.config/bottom
 
+    d_dunst:
+        src: config/dunst
+        dst: ~/.config/dunst
+
     d_gtk_3:
         src: config/gtk-3.0
         dst: ~/.config/gtk-3.0
+
+    d_blugon:
+        src: config/blugon
+        dst: ~/.config/blugon
 
     f_hammerspoon_init:
         src: config/hammerspoon/init.lua
         dst: ~/.config/hammerspoon/init.lua
 
+    # Misc
+    d_fontconfig:
+        src: config/fontconfig
+        dst: ~/.config/fontconfig
+
+    f_mimeapps.list:
+        src: config/mimeapps.list
+        dst: ~/.config/mimeapps.list
+
+    # Share
+    d_applications:
+        src: share/applications
+        dst: ~/.local/share/applications
+
+    d_unicode:
+        src: share/unicode
+        dst: ~/.local/share/unicode
+
     # Scripts
-    f_dmenuhandler:
-        src: src/scripts/dmenuhandler.sh
-        dst: ~/.local/bin/dmenuhandler
-        chmod: "755"
-
-    f_dmenupass:
-        src: src/scripts/dmenupass.sh
-        dst: ~/.local/bin/dmenupass
-        chmod: "755"
-
     f_compiler:
         src: src/scripts/compiler.sh
         dst: ~/.local/bin/compiler
@@ -246,19 +297,9 @@ dotfiles:
         dst: ~/.local/bin/media_server
         chmod: "755"
 
-    f_mounter:
-        src: src/scripts/mounter.sh
-        dst: ~/.local/bin/mounter
-        chmod: "755"
-
     f_noisereduce:
         src: src/scripts/noisereduce.sh
         dst: ~/.local/bin/noisereduce
-        chmod: "755"
-
-    f_pkgsize:
-        src: src/scripts/pkgsize.sh
-        dst: ~/.local/bin/pkgsize
         chmod: "755"
 
     f_rclone_fmt:
@@ -266,19 +307,9 @@ dotfiles:
         dst: ~/.local/bin/rclone_fmt
         chmod: "755"
 
-    f_screenshot_utility:
-        src: src/scripts/py-run.sh
-        dst: ~/.local/bin/screenshot_utility
-        chmod: "755"
-
     f_sdir:
         src: src/scripts/sdir.sh
         dst: ~/.local/bin/sdir
-        chmod: "755"
-
-    f_setbg:
-        src: src/scripts/setbg.sh
-        dst: ~/.local/bin/setbg
         chmod: "755"
 
     f_user_shortcuts:
@@ -291,7 +322,119 @@ dotfiles:
         dst: ~/.local/bin/tag
         chmod: "755"
 
-    ## Android Work
+    # Linux / Home
+    f_displayselect:
+        src: src/scripts/displayselect.sh
+        dst: ~/.local/bin/displayselect
+        chmod: "755"
+
+    f_dmenuhandler:
+        src: src/scripts/dmenuhandler.sh
+        dst: ~/.local/bin/dmenuhandler
+        chmod: "755"
+
+    f_dmenupass:
+        src: src/scripts/dmenupass.sh
+        dst: ~/.local/bin/dmenupass
+        chmod: "755"
+
+    f_dmenurecord:
+        src: src/scripts/dmenurecord.sh
+        dst: ~/.local/bin/dmenurecord
+        chmod: "755"
+
+    f_env_cmd_runner:
+        src: src/scripts/env_cmd_runner.sh
+        dst: ~/.local/bin/env_cmd_runner
+        chmod: "755"
+
+    f_kbselect:
+        src: src/scripts/kbselect.py
+        dst: ~/.local/bin/kbselect
+        chmod: "755"
+
+    f_mounter:
+        src: src/scripts/mounter.sh
+        dst: ~/.local/bin/mounter
+        chmod: "755"
+
+    f_unmounter:
+        src: src/scripts/unmounter.sh
+        dst: ~/.local/bin/unmounter
+        chmod: "755"
+
+    f_nsxiv_rifle:
+        src: ../src/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle.sh
+        dst: ~/.local/bin/nsxiv-rifle
+        chmod: "755"
+
+    f_pkgsize:
+        src: src/scripts/pkgsize.sh
+        dst: ~/.local/bin/pkgsize
+        chmod: "755"
+
+    f_remapd:
+        src: src/scripts/remapd.sh
+        dst: ~/.local/bin/remapd
+        chmod: "755"
+
+    f_remaps:
+        src: src/scripts/remaps.sh
+        dst: ~/.local/bin/remaps
+        chmod: "755"
+
+    f_screenshot_utility:
+        src: src/scripts/py-run.sh
+        dst: ~/.local/bin/screenshot_utility
+        chmod: "755"
+
+    f_select_unicode:
+        src: src/scripts/select_unicode.sh
+        dst: ~/.local/bin/select_unicode
+        chmod: "755"
+
+    f_setbg:
+        src: src/scripts/setbg.sh
+        dst: ~/.local/bin/setbg
+        chmod: "755"
+
+    f_sysact:
+        src: src/scripts/sysact.sh
+        dst: ~/.local/bin/sysact
+        chmod: "755"
+
+    # Statusbar
+    f_sb_battery:
+        src: src/scripts/statusbar/sb-battery.sh
+        dst: ~/.local/bin/statusbar/sb-battery
+        chmod: "755"
+
+    f_sb_date:
+        src: src/scripts/statusbar/sb-date.sh
+        dst: ~/.local/bin/statusbar/sb-date
+        chmod: "755"
+
+    f_sb_internet:
+        src: src/scripts/statusbar/sb-internet.sh
+        dst: ~/.local/bin/statusbar/sb-internet
+        chmod: "755"
+
+    f_sb_news:
+        src: src/scripts/statusbar/sb-news.py
+        dst: ~/.local/bin/statusbar/sb-news
+        chmod: "755"
+
+    f_sb_tasks:
+        src: src/scripts/statusbar/sb-tasks.sh
+        dst: ~/.local/bin/statusbar/sb-tasks
+        chmod: "755"
+
+    f_sb_volume:
+        src: src/scripts/statusbar/sb-volume.sh
+        dst: ~/.local/bin/statusbar/sb-volume
+        chmod: "755"
+
+    # Android Work
     f_avds:
         src: src/scripts/avds.sh
         dst: ~/.local/bin/avds
@@ -381,6 +524,12 @@ profiles:
             - f_tag
 
     ## OS
+    meta_linux:
+        include:
+            - meta_common
+        variables:
+            d_vscode_dst: "~/.config/Code - OSS/User"
+
     meta_mac:
         include:
             - meta_common
@@ -418,6 +567,56 @@ profiles:
             - f_firefox_user_front_end
 
     # Actual Profiles
+
+    linux_home:
+        include:
+            - meta_linux
+            - meta_personal
+            - meta_front_end
+            - meta_mpv
+        dotfiles:
+            # Config
+            - d_x11
+            - f_x11_profile
+            - d_yay
+            - d_alacritty
+            - d_nsxiv
+            - f_pulse_daemon
+            - d_pipewire
+            - d_gtk_3
+            - d_fontconfig
+            - f_mimeapps.list
+            - d_zathura
+            - d_dunst
+            - d_blugon
+
+            # Share
+            - d_applications
+            - d_unicode
+
+            # Scripts
+            - f_displayselect
+            - f_dmenuhandler
+            - f_dmenupass
+            - f_dmenurecord
+            - f_env_cmd_runner
+            - f_kbselect
+            - f_mounter
+            - f_unmounter
+            - f_nsxiv_rifle
+            - f_remapd
+            - f_remaps
+            - f_screenshot_utility
+            - f_select_unicode
+            - f_setbg
+            - f_sysact
+
+            # Statusbar
+            - f_sb_date
+            - f_sb_internet
+            - f_sb_news
+            - f_sb_tasks
+            - f_sb_volume
 
     mac_work:
         include:

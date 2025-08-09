@@ -3,8 +3,8 @@
 # {{@@ header() @@}}
 
 # shellcheck disable=SC2139
-# Keep env vars in single quotes, so they are expanded when they're used,
-# not when they're defined.
+#   Keep env vars in single quotes, so they are expanded when they're used,
+#   not when they're defined.
 
 # Make some system commands not require sudo.
 for command in mount umount su shutdown reboot; do
@@ -16,13 +16,25 @@ unset command
 alias e='$EDITOR'
 alias E='$GRAPHICAL_EDITOR'
 alias g='git'
-alias o='open'
 alias t='task'
 alias ka='killall'
 alias sql='sqlite3'
 
+# {%@@- if os == "linux" +@@%}
+alias p='pacman'
+# {%@@- endif +@@%}
+
+# {%@@- if os == "linux" +@@%}
+alias o='xdg-open'
+# {%@@- elif os == "darwin" +@@%}
+alias o='open'
+# {%@@- endif +@@%}
+
+# {%@@- if os == "linux" +@@%}
+alias z='zathura'
+# {%@@- endif +@@%}
+
 # Verbosity and common settings.
-alias ls='ls -A -h --color=auto'
 alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -vI'
@@ -34,9 +46,16 @@ alias mkd='mkdir -pv'
 alias ffmpeg='ffmpeg -hide_banner'
 alias shfmt='shfmt --indent 4 --binary-next-line --case-indent --space-redirects --write'
 
+# {%@@- if os == "linux" +@@%}
+alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
+# {%@@- elif os == "darwin" +@@%}
+alias ls='ls -A -h --color=auto'
+# {%@@- endif +@@%}
+
 # Use colored output
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
+alias ip='ip -color=auto'
 
 # Dev-oriented
 alias mci='sudo make clean install'
@@ -47,11 +66,18 @@ alias adbpac='adb shell cmd package list packages'
 
 ## Python
 alias py='python3'
+
+# {%@@- if os == "darwin" +@@%}
 # [Py]thon [B]rew
 alias pyb='/opt/homebrew/bin/python3'
+# {%@@- endif +@@%}
 
 # [Python] Virtual [Env]ironment [C]reate
+# {%@@- if os == "linux" +@@%}
+alias penvc='py -m venv venv'
+# {%@@- elif os == "darwin" +@@%}
 alias penvc='pyb -m venv venv'
+# {%@@- endif +@@%}
 
 # [Python] Virtual [Env]ironment [D]eactivate
 alias penvd='deactivate && echo "Deactivated python environment."'
@@ -64,11 +90,11 @@ alias pir='pip install -r requirements.txt'
 
 # Rclone
 alias rc='rclone'
+alias rcfmt='rclone_fmt'
 alias rc_c='rclone copy --progress --create-empty-src-dirs --exclude "No_Backup/**" --exclude ".git/"'
 alias rc_cd='rc_c --dry-run'
 alias rc_s='rclone sync --progress --create-empty-src-dirs --track-renames --exclude "No_Backup/**" --exclude ".git/"'
 alias rc_sd='rc_s --dry-run'
-alias rcfmt='rclone_fmt'
 
 # Taskwarrior
 # TODO: use a similar approach to 'open_journal_entry' instead of
@@ -89,12 +115,18 @@ alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(play
 # alias fm='$FILE_MANAGER'
 
 # [P]ackage [M]anager
+# {%@@- if os == "linux" +@@%}
+# {%@@- if "arch" in distro_like +@@%}
+alias pm='yay'
+# {%@@- endif +@@%}
+# {%@@- elif os == "darwin" +@@%}
 alias pm='brew'
+# {%@@- endif +@@%}
 
-# {%@@ if "home" in profile +@@%}
+# {%@@- if "home" in profile +@@%}
 # [J]ournal [E]ntry
 alias je='journal_entry'
-# {%@@ endif +@@%}
+# {%@@- endif +@@%}
 
 # [G]allery [D]ownload
 alias gld='gallery-dl'

@@ -1,3 +1,9 @@
+[submodule "dotfiles/config/x11/themes"]
+	path = dotfiles/config/x11/themes
+	url = https://github.com/janoamaral/Xresources-themes
 [submodule "dotfiles/config/mpv/plugins/mpv-gallery-view"]
 	path = dotfiles/config/mpv/plugins/mpv-gallery-view
 	url = https://github.com/occivink/mpv-gallery-view
+[submodule "src/nsxiv-extra"]
+	path = src/nsxiv-extra
+	url = https://github.com/Zen-Path/nsxiv-extra
