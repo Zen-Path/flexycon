@@ -1,6 +1,14 @@
 .PHONY: clean setup init-submodules install help
 
-PYTHON ?= /opt/homebrew/bin/python3
+# Detect OS
+UNAME_S := $(shell uname --kernel-name)
+
+PYTHON := python3
+
+ifeq ($(UNAME_S),Darwin)
+    PYTHON := /usr/local/bin/python3
+endif
+
 VENV_DIR = venv
 VENV_BIN = $(VENV_DIR)/bin
 
