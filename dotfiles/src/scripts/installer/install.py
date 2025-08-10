@@ -29,6 +29,37 @@ install_packages = [
     ),
 ]
 
+# Unix
+# bat
+# bottom
+# vscode
+# clang
+# mpv
+# newsraft
+# taskwarrior-tui
+# unrar
+# zip
+# unzip
+# yazi
+# zsh-fast-syntax-highlighting-git
+# zathura-pdf-poppler
+# fd
+# dust
+
+
+# X11
+# dunst
+# maim
+# pamixer
+# pulsemixer
+# ueberzugpp
+# xcompmgr
+# xdotool
+# xorg-server
+# xorg-xev
+# xorg-xinit
+# xwallpaper
+
 if __name__ == "__main__":
     grouped = defaultdict(list)
     for pkg in install_packages:
