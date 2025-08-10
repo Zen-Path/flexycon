@@ -420,7 +420,7 @@ dotfiles:
         chmod: "755"
 
     f_sb_news:
-        src: src/scripts/statusbar/sb-news.py
+        src: src/scripts/statusbar/sb-news.sh
         dst: ~/.local/bin/statusbar/sb-news
         chmod: "755"
 
