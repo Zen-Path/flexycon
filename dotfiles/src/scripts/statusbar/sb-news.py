@@ -2,18 +2,8 @@
 
 import os
 import subprocess
-from enum import Enum
 
-
-# TODO: Add more buttons
-class MouseButton(Enum):
-    LEFT = 1
-    MIDDLE = 2
-    RIGHT = 3
-    SCROLL_UP = 4
-    SCROLL_DOWN = 5
-    EXTRA = 8
-
+from scripts.statusbar.shared import EDITOR, TERMINAL, MouseButton
 
 # Environment variables
 NEWS_DIR = os.path.join(
@@ -21,8 +11,6 @@ NEWS_DIR = os.path.join(
 )
 NEWS_DB = os.path.join(NEWS_DIR, "newsraft.sqlite3")
 NEWS_DB_BACKUP = os.path.join(NEWS_DIR, "newsraft_backup.sqlite3")
-TERMINAL = os.environ.get("TERMINAL", "alacritty")
-EDITOR = os.environ.get("EDITOR", "nvim")
 
 
 def notify(title, message):
@@ -117,7 +105,7 @@ def handle_block_button(button_id):
                 "- Middle click syncs RSS feeds\n"
                 "\n<b>Note:</b> Only one instance of newsraft may be running at a time.",
             )
-        case MouseButton.EXTRA.value:
+        case MouseButton.EXTRA_3.value:
             subprocess.Popen([TERMINAL, "-e", EDITOR, __file__])
 
 
