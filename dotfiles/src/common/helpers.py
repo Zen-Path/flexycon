@@ -4,9 +4,23 @@ import shutil
 import subprocess
 import sys
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from typing import List, Tuple
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class CommandResult:
+    return_code: int
+    output: str
+
+    @property
+    def success(self) -> bool:
+        return self.return_code == 0
+
+    def __str__(self) -> str:
+        return self.output
 
 
 def resolve_path(path_parts: List[str]) -> str:
@@ -14,10 +28,9 @@ def resolve_path(path_parts: List[str]) -> str:
     return os.path.expandvars(os.path.join(*path_parts))
 
 
-def run_command(command: List[str]) -> Tuple[int, List[str]]:
-    """Run a shell command."""
+def run_command(command: List[str]) -> CommandResult:
+    """Run a shell command and return its result."""
     logger.info(f"Running: {command}")
-    print(command)
 
     output = []
     with subprocess.Popen(
@@ -32,10 +45,11 @@ def run_command(command: List[str]) -> Tuple[int, List[str]]:
                 output.append(line)
                 logger.info(line.strip())
 
-        returncode = process.wait()
+        return_code = process.wait()
 
-    logger.info(f"Command ({command}) finished with return code {returncode}")
-    return returncode, output
+    logger.info(f"Command ({command}) finished with return code {return_code}")
+
+    return CommandResult(return_code=return_code, output="\n".join(output))
 
 
 def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
