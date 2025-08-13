@@ -4,11 +4,15 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional, Tuple
 
+from dotenv import load_dotenv
+
 logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 
 class Gallery:
-    BASE_DIR = Path(os.getenv("HOME", ".")) / "Downloads"
+    BASE_DIR = Path(os.getenv("DOWNLOAD_DIR", "Downloads"))
     GALLERIES_DIR = BASE_DIR / "Galleries"
     FILES_DIR = BASE_DIR / "Files"
 
