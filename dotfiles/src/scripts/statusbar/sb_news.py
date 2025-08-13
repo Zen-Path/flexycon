@@ -3,6 +3,7 @@
 import os
 import subprocess
 
+from common.helpers import notify
 from scripts.statusbar.shared import EDITOR, TERMINAL, MouseButton
 
 # Environment variables
@@ -11,12 +12,6 @@ NEWS_DIR = os.path.join(
 )
 NEWS_DB = os.path.join(NEWS_DIR, "newsraft.sqlite3")
 NEWS_DB_BACKUP = os.path.join(NEWS_DIR, "newsraft_backup.sqlite3")
-
-
-def notify(title, message):
-    """Send a desktop notification."""
-    result = subprocess.run(["notify-send", title, message], check=False)
-    return result.returncode == 0
 
 
 def reload_newsraft():
