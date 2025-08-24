@@ -59,6 +59,7 @@ install_packages = [
 # xorg-xev
 # xorg-xinit
 # xwallpaper
+# gruvbox-dark-gtk
 
 if __name__ == "__main__":
     grouped = defaultdict(list)
