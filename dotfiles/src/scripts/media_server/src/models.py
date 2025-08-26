@@ -45,7 +45,7 @@ class Gallery:
     def download(
         urls: List[str], range_: Optional[Tuple[int, int]] = None
     ) -> CommandResult:
-        Gallery.ensure_directories()
+        # Gallery.ensure_directories()
 
         command = Gallery.build_command(urls, range_)
 
