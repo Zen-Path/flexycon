@@ -4,6 +4,7 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional, Tuple
 
+from common.helpers import CommandResult, run_command
 from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
@@ -43,26 +44,9 @@ class Gallery:
     @staticmethod
     def download(
         urls: List[str], range_: Optional[Tuple[int, int]] = None
-    ) -> Tuple[int, List[str]]:
+    ) -> CommandResult:
         Gallery.ensure_directories()
 
         command = Gallery.build_command(urls, range_)
-        logger.info(f"Running: {' '.join(command)}")
 
-        output = []
-        with subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            universal_newlines=True,
-            bufsize=1,
-        ) as process:
-            if process.stdout is not None:
-                for line in process.stdout:
-                    output.append(line)
-                    logger.info(line.strip())
-
-            returncode = process.wait()
-
-        logger.info(f"Command finished with return code {returncode}")
-        return returncode, output
+        return run_command(command)

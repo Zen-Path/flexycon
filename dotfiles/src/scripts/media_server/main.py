@@ -77,23 +77,22 @@ def download_media():
     try:
         match type_:
             case "gallery":
-                returncode, output = Gallery.download(urls)
+                cmd_result = Gallery.download(urls)
             case _:
-                return jsonify({"error": "'type_' is unknown."})
+                return jsonify({"error": "'type_' is unknown."}), 400
 
         log_history_entry(urls)
 
         return jsonify(
             {
-                "status": "success" if returncode == 0 else "error",
-                "return_code": returncode,
-                "output": output,
+                "return_code": cmd_result.return_code,
+                "output": cmd_result.output,
             }
         )
 
     except Exception as e:
         logger.error(f"Error during execution: {e}")
-        return jsonify({"status": "error", "return_code": -1, "error": str(e)}), 500
+        return jsonify({"return_code": 1, "error": str(e)}), 500
 
 
 def parse_args():
