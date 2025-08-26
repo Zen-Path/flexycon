@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Tuple
 
-logger = logging.getLogger(__name__)
+from common.logger import logger
 
 
 @dataclass

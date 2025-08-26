@@ -3,6 +3,9 @@ import sys
 
 from colorama import Fore, Style, init
 
+logger = logging.getLogger(__name__)
+
+
 # Initialize colorama
 init(autoreset=True)
 

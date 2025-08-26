@@ -7,8 +7,6 @@ from flask_cors import CORS
 from scripts.media_server.src.history import log_history_entry
 from scripts.media_server.src.models import Gallery
 
-logger = logging.getLogger(__name__)
-
 # Flask setup
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
