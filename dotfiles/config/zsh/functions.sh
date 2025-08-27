@@ -144,6 +144,26 @@ function fm() {
     command rm -f -- "$tmp"
 }
 
+# Open a file or directory using fzf.
+function fzfopen() {
+
+    target_path="$(fzf --preview '\
+    mime_type=$(file --mime-type -b {});\
+    \
+    case "$mime_type" in \
+        inode/directory) \
+            ls -A -hN --color=always --group-directories-first {} ;; \
+        text/*) \
+            bat --color=always --style=numbers --line-range=:50 {} 2> /dev/null ;; \
+        *) \
+            true ;; \
+    esac')"
+
+    [ -z "$target_path" ] && exit 1
+
+    fm "$target_path"
+}
+
 function find_by_md5() {
     if [[ -z "$1" ]]; then
         echo "Usage: find_by_md5 <md5_hash>"

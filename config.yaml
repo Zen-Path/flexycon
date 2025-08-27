@@ -257,11 +257,6 @@ dotfiles:
         dst: ~/.local/bin/continuous_diff
         chmod: "755"
 
-    f_fzfopen:
-        src: src/scripts/fzfopen.sh
-        dst: ~/.local/bin/fzfopen
-        chmod: "755"
-
     f_getkeys:
         src: src/scripts/getkeys.sh
         dst: ~/.local/bin/getkeys
@@ -509,7 +504,6 @@ profiles:
             # Scripts
             - f_compiler
             - f_continuous_diff
-            - f_fzfopen
             - f_getkeys
             - f_git_logs
             - f_ifinstalled
