@@ -42,10 +42,16 @@ install_packages = [
 # unzip
 # yazi
 # zsh-fast-syntax-highlighting-git
-# zathura-pdf-poppler
 # fd
 # dust
-
+# taplo
+# tree
+# ripgrep
+# ripgrep-all
+# 7zip
+# rclone
+# npm
+# node
 
 # X11
 # dunst
@@ -60,6 +66,9 @@ install_packages = [
 # xorg-xinit
 # xwallpaper
 # gruvbox-dark-gtk
+# trash-cli
+# zathura-pdf-poppler
+
 
 if __name__ == "__main__":
     grouped = defaultdict(list)
