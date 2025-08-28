@@ -68,6 +68,10 @@ open-in-browser = [
     { run = '${BROWSER} "$1"', orphan = true, desc = "Open in browser", for = "linux" },
 ]
 
+open-in-graphical-editor = [
+    { run = '${GRAPHICAL_EDITOR} "$1"', orphan = true, desc = "Open in graphical editor", for = "unix" },
+]
+
 # Play
 play = [
     { run = 'mpv --force-window "$@"', orphan = true, desc = "Play", for = "linux" },
@@ -99,6 +103,7 @@ rules = [
     { name = "*/", use = [
         "cd",
         "open",
+        "open-in-graphical-editor",
         "reveal",
     ] },
     # Text
