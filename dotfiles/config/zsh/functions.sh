@@ -146,13 +146,17 @@ function fm() {
 
 # Open a file or directory using fzf.
 function fzfopen() {
-
     target_path="$(fzf --preview '\
     mime_type=$(file --mime-type -b {});\
     \
     case "$mime_type" in \
         inode/directory) \
+            {%@@ if os == "linux" @@%}
             ls -A -hN --color=always --group-directories-first {} ;; \
+            {%@@ elif os == "darwin" @@%}
+            ls -A -h --color=always {} \
+            {%@@ endif @@%}
+            ;; \
         text/*) \
             bat --color=always --style=numbers --line-range=:50 {} 2> /dev/null ;; \
         *) \
