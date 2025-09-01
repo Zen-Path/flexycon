@@ -1,6 +1,21 @@
+import platform
 from typing import List
 
 from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
+
+
+def get_target_command(bookmark):
+    if bookmark.type == "d":
+        return "cd"
+
+    system = platform.system()
+    commands = {
+        "Darwin": "open",
+        "Linux": "xdg-open",
+    }
+
+    # Default to $EDITOR if defined, otherwise "vi"
+    return commands.get(system, "$EDITOR")
 
 
 class ZshBookmarkRenderer(BookmarkRenderer):
@@ -19,7 +34,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         alias_header = f"{alias_keyword:<{max_keyword_len}} {alias_name}"
         hash_header = f"{hash_keyword:<{max_keyword_len}} {alias_name}"
 
-        target_command = "cd" if bookmark.type == "d" else "$EDITOR"
+        target_command = get_target_command(bookmark)
         alias_definition = (
             f'{alias_header}="{target_command} {self._get_path(bookmark)} && ls -A"'
         )
