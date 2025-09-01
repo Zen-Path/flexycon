@@ -4,8 +4,8 @@
 # displays and lets user select one to use. User may also select "manual
 # selection" which opens arandr.
 
-twoscreen() { # If multi-monitor is selected and there are two screens.
-
+# If multi-monitor is selected and there are two screens.
+two_screen() {
     mirror=$(printf "no\\nyes" | dmenu -i -p "Mirror displays?")
     # Mirror displays using native resolution of external display and a scaled
     # version for the internal display
@@ -38,7 +38,8 @@ twoscreen() { # If multi-monitor is selected and there are two screens.
     fi
 }
 
-morescreen() { # If multi-monitor is selected and there are more than two screens.
+# If multi-monitor is selected and there are more than two screens.
+more_screen() {
     primary=$(echo "$screens" | dmenu -i -p "Select primary display:")
     secondary=$(echo "$screens" | grep -v ^"$primary"$ | dmenu -i -p "Select secondary display:")
     direction=$(printf "left\\nright" | dmenu -i -p "What side of $primary should $secondary be on?")
@@ -46,19 +47,22 @@ morescreen() { # If multi-monitor is selected and there are more than two screen
     xrandr --output "$primary" --auto --output "$secondary" --"$direction"-of "$primary" --auto --output "$tertiary" --"$(printf "left\\nright" | grep -v "$direction")"-of "$primary" --auto
 }
 
-multimon() { # Multi-monitor handler.
+# Multi-monitor handler.
+multi_monitor() {
     case "$(echo "$screens" | wc -l)" in
-        2) twoscreen ;;
-        *) morescreen ;;
+        2) two_screen ;;
+        *) more_screen ;;
     esac
 }
 
-onescreen() { # If only one output available or chosen.
-    xrandr --output "$1" --auto --scale 1.0x1.0 $(echo "$allposs" | grep -v "\b$1" | awk '{print "--output", $1, "--off"}' | paste -sd ' ' -)
+# If only one output available or chosen.
+one_screen() {
+    xrandr --output "$1" --auto --scale 1.0x1.0 $(echo "$all_possible" | grep -v "\b$1" | awk '{print "--output", $1, "--off"}' | paste -sd ' ' -)
 }
 
-postrun() { # Stuff to run to clean up.
-    setbg   # Fix background if screen size/arangement has changed.
+# Stuff to run to clean up.
+post_run() {
+    setbg # Fix background if screen size/arrangement has changed.
     {
         killall dunst
         setsid -f dunst
@@ -66,29 +70,29 @@ postrun() { # Stuff to run to clean up.
 }
 
 # Get all possible displays
-allposs=$(xrandr -q | grep "connected")
+all_possible=$(xrandr -q | grep "connected")
 
 # Get all connected screens.
-screens=$(echo "$allposs" | awk '/ connected/ {print $1}')
+screens=$(echo "$all_possible" | awk '/ connected/ {print $1}')
 
 # If there's only one screen
 [ "$(echo "$screens" | wc -l)" -lt 2 ] \
     && {
-        onescreen "$screens"
-        postrun
+        one_screen "$screens"
+        post_run
         notify-send "💻 Only one screen detected." "Using it in its optimal settings..."
         exit
     }
 
 # Get user choice including multi-monitor and manual selection:
-chosen=$(printf "%s\\nmulti-monitor\\nmanual selection" "$screens" | dmenu -i -p "Select display arangement:") \
+chosen=$(printf "%s\\nmulti-monitor\\nmanual selection" "$screens" | dmenu -i -p "Select display arrangement:") \
     && case "$chosen" in
         "manual selection")
             arandr
             exit
             ;;
-        "multi-monitor") multimon ;;
-        *) onescreen "$chosen" ;;
+        "multi-monitor") multi_monitor ;;
+        *) one_screen "$chosen" ;;
     esac
 
-postrun
+post_run
