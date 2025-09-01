@@ -1,7 +1,7 @@
 .PHONY: clean setup init-submodules install help
 
 # Detect OS
-UNAME_S := $(shell uname --kernel-name)
+UNAME_S := $(shell uname -s) # --kernel-name
 
 PYTHON := python3
 
