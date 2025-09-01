@@ -35,9 +35,9 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         hash_header = f"{hash_keyword:<{max_keyword_len}} {alias_name}"
 
         target_command = get_target_command(bookmark)
-        alias_definition = (
-            f'{alias_header}="{target_command} {self._get_path(bookmark)} && ls -A"'
-        )
+
+        ls_command = " && ls -A"
+        alias_definition = f'{alias_header}="{target_command} {self._get_path(bookmark)}{ls_command if bookmark.type == "d" else ""}"'
 
         hash_definition = (
             f'\n{hash_header}="{bookmark.resolved_path}"'
