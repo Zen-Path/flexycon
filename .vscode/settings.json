@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
         "darkgray",
+        "dmenu",
         "dotdrop",
+        "dunst",
         "esac",
         "flexycon",
         "gitmodules",
@@ -19,6 +21,8 @@
         "pytest",
         "rclone",
         "venv",
+        "xclip",
+        "xrandr",
         "yazi"
     ],
     "makefile.configureOnOpen": false
