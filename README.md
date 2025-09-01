@@ -26,9 +26,23 @@ make install
 
 # Tips
 
-### Mac sleep enable / disable
+### Mac
 
-Enable:
+- To make Finder always show hidden files:
+
+```sh
+defaults write com.apple.finder AppleShowAllFiles -bool true
+killall Finder
+```
+
+- To hide items from the Desktop:
+
+```sh
+defaults write com.apple.finder CreateDesktop false
+killall Finder
+```
+
+- To enable sleep:
 
 ```sh
 sudo pmset -a disablesleep 0
