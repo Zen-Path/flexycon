@@ -242,10 +242,6 @@ dotfiles:
         src: share/applications
         dst: ~/.local/share/applications
 
-    d_unicode:
-        src: share/unicode
-        dst: ~/.local/share/unicode
-
     # Scripts
     f_compiler:
         src: src/scripts/compiler.sh
@@ -384,7 +380,7 @@ dotfiles:
         chmod: "755"
 
     f_select_unicode:
-        src: src/scripts/select_unicode.sh
+        src: src/scripts/py-run.sh
         dst: ~/.local/bin/select_unicode
         chmod: "755"
 
@@ -586,7 +582,6 @@ profiles:
 
             # Share
             - d_applications
-            - d_unicode
 
             # Scripts
             - f_displayselect
