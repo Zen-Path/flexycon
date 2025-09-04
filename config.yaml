@@ -213,9 +213,9 @@ dotfiles:
         src: config/zathura
         dst: ~/.config/zathura
 
-    f_newsraft_config:
-        src: config/newsraft/config
-        dst: ~/.config/newsraft/config
+    d_newsraft:
+        src: config/newsraft
+        dst: ~/.config/newsraft
 
     d_bottom:
         src: config/bottom
@@ -504,7 +504,7 @@ profiles:
             - d_yt_dlp
             - f_gallery_config
             - f_taskwarrior_config
-            - f_newsraft_config
+            - d_newsraft
             - d_bottom
 
             # Scripts
