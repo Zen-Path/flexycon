@@ -3,6 +3,9 @@ uservariables:
     git_email: "Git email"
     git_username: "Git username"
 
+trans_install:
+    jsonc_to_json: jsonc_to_json "{0}" "{1}"
+
 config:
     backup: false
     banner: false
@@ -185,6 +188,12 @@ dotfiles:
     d_yt_dlp:
         src: config/yt-dlp
         dst: ~/.config/yt-dlp
+
+    f_gallery_config:
+        src: config/gallery-dl/config.jsonc
+        dst: ~/.config/gallery-dl/config.json
+        link: nolink
+        trans_install: jsonc_to_json
 
     # Audio
     f_pulse_daemon:
@@ -493,6 +502,7 @@ profiles:
             - f_nvim_init
             - d_python
             - d_yt_dlp
+            - f_gallery_config
             - f_taskwarrior_config
             - f_newsraft_config
             - d_bottom
