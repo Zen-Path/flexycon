@@ -205,9 +205,9 @@ dotfiles:
         dst: ~/.config/pipewire
 
     # Programs
-    f_taskwarrior_config:
-        src: config/task/taskrc
-        dst: ~/.config/task/taskrc
+    d_task_warrior:
+        src: config/task
+        dst: ~/.config/task
 
     d_zathura:
         src: config/zathura
@@ -503,7 +503,7 @@ profiles:
             - d_python
             - d_yt_dlp
             - f_gallery_config
-            - f_taskwarrior_config
+            - d_task_warrior
             - d_newsraft
             - d_bottom
 
