@@ -135,6 +135,7 @@ keymap = [
     { on = "y", run = "yank", desc = "Yank selected files (copy)" },
     { on = "Y", run = "unyank", desc = "Cancel the yank status" },
 
+    # "trash-restore" is linux-only
     { on = "u", run = "shell 'trash-restore' --block", desc = "Restore files" },
     { on = "U", run = "noop", desc = "" },
     { on = "<C-u>", run = "arrow -50%", desc = "Move cursor up half page" },
