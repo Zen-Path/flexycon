@@ -35,6 +35,7 @@ wrap            = "yes"
 cd = [
     { run = 'ya emit cd "$1"', desc = "Enter directory" },
 ]
+
 reveal = [
     { run = 'xdg-open "$(dirname "$1")"', desc = "Reveal", for = "linux" },
     { run = 'open -R "$1"', desc = "Reveal", for = "macos" },
@@ -47,10 +48,12 @@ edit = [
     { run = 'code %*', orphan = true, desc = "Edit", for = "windows" },
     { run = 'code -w %*', block = true, desc = "Edit (block)", for = "windows" },
 ]
-edit-image = [
+
+edit_image = [
     { run = '${TERMINAL} -e gimp "$@"', orphan = true, desc = "Edit image", for = "unix" },
 ]
-edit-new-win = [
+
+edit_new_win = [
     { run = '${TERMINAL} -e ${EDITOR:-vi} "$@"', orphan = true, desc = "Edit in new window", for = "linux" },
 ]
 
@@ -60,15 +63,16 @@ open = [
     { run = 'open "$@"', desc = "Open", for = "macos" },
     { run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
 ]
-open-new-win = [
+
+open_new_win = [
     { run = '${TERMINAL} -e xdg-open "$1"', orphan = true, desc = "Open in new window", for = "linux" },
 ]
 
-open-in-browser = [
+open_in_browser = [
     { run = '${BROWSER} "$1"', orphan = true, desc = "Open in browser", for = "linux" },
 ]
 
-open-in-graphical-editor = [
+open_in_graphical_editor = [
     { run = '${GRAPHICAL_EDITOR} "$1"', orphan = true, desc = "Open in graphical editor", for = "unix" },
 ]
 
@@ -79,15 +83,17 @@ play = [
     { run = 'open "$@"', orphan = true, desc = "Play (default app)", for = "macos" },
     { run = 'mpv --force-window %*', orphan = true, desc = "Play", for = "windows" },
 ]
-play-new-win = [
+
+play_new_win = [
     { run = '${TERMINAL} -e mpv --force-window "$@"', orphan = true, desc = "Play in new window", for = "linux" },
 ]
 
 # File info
-show-exif-info = [
+show_exif_info = [
     { run = '''exiftool "$1"; echo "\n:: Press enter to exit"; read _''', block = true, desc = "Show EXIF info", for = "unix" },
 ]
-show-media-info = [
+
+show_media_info = [
     { run = '''mediainfo "$1"; echo ":: Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
 
@@ -103,85 +109,85 @@ rules = [
     { name = "*/", use = [
         "cd",
         "open",
-        "open-in-graphical-editor",
+        "open_in_graphical_editor",
         "reveal",
     ] },
     # Text
     { mime = "text/html", use = [
         "edit",
-        "edit-new-win",
-        "open-in-browser",
-        "show-exif-info",
+        "edit_new_win",
+        "open_in_browser",
+        "show_exif_info",
         "reveal",
     ] },
     { mime = "text/*", use = [
         "edit",
-        "edit-new-win",
-        "show-exif-info",
+        "edit_new_win",
+        "show_exif_info",
         "reveal",
     ] },
     # Image
     { mime = "image/*", use = [
         "open",
-        "open-new-win",
-        "edit-image",
-        "show-exif-info",
+        "open_new_win",
+        "edit_image",
+        "show_exif_info",
         "reveal",
     ] },
     # Media
     { mime = "{audio,video}/*", use = [
         "play",
-        "play-new-win",
-        "show-media-info",
+        "play_new_win",
+        "show_media_info",
         "reveal",
     ] },
     # PDF
     { mime = "application/pdf", use = [
         "open",
-        "open-new-win",
-        "show-exif-info",
+        "open_new_win",
+        "show_exif_info",
         "reveal",
     ] },
     # JSON
     { mime = "application/{json,ndjson}", use = [
         "edit",
-        "edit-new-win",
-        "show-exif-info",
+        "edit_new_win",
+        "show_exif_info",
         "reveal",
     ] },
     { mime = "*/javascript", use = [
         "edit",
-        "edit-new-win",
-        "show-exif-info",
+        "edit_new_win",
+        "show_exif_info",
         "reveal",
     ] },
     # Archive
     { mime = "application/{,g}zip", use = [
         "extract",
-        "show-exif-info",
+        "show_exif_info",
         "reveal",
     ] },
     { mime = "application/{tar,bzip*,7z*,xz,rar}", use = [
         "extract",
-        "show-exif-info",
+        "show_exif_info",
         "reveal",
     ] },
     # Empty file
     { mime = "inode/empty", use = [
         "edit",
-        "edit-new-win",
-        "show-exif-info",
+        "edit_new_win",
+        "show_exif_info",
         "reveal",
     ] },
     # Fallback
     { name = "*", use = [
         "edit",
-        "edit-new-win",
+        "edit_new_win",
         "open",
-        "open-new-win",
+        "open_new_win",
         "play",
-        "play-new-win",
-        "show-exif-info",
+        "play_new_win",
+        "show_exif_info",
         "reveal",
     ] },
 ]
