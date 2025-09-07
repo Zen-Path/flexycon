@@ -54,7 +54,7 @@ edit_image = [
 ]
 
 edit_new_win = [
-    { run = '${TERMINAL} -e ${EDITOR:-vi} "$@"', orphan = true, desc = "Edit in new window", for = "linux" },
+    { run = '${TERMINAL} -e ${EDITOR:-vi} "$@"', orphan = true, desc = "Edit in new window", for = "unix" },
 ]
 
 # Open
@@ -69,7 +69,7 @@ open_new_win = [
 ]
 
 open_in_browser = [
-    { run = '${BROWSER} "$1"', orphan = true, desc = "Open in browser", for = "linux" },
+    { run = '${BROWSER} "$1"', orphan = true, desc = "Open in browser", for = "unix" },
 ]
 
 open_in_graphical_editor = [
