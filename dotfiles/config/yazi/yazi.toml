@@ -104,6 +104,9 @@ extract = [
 ]
 
 [open]
+
+# Note: every rule is checked against, and items in "use" are pooled.
+
 rules = [
     # Folder
     { name = "*/", use = [
@@ -117,76 +120,51 @@ rules = [
         "edit",
         "edit_new_win",
         "open_in_browser",
-        "show_exif_info",
-        "reveal",
     ] },
     { mime = "text/*", use = [
         "edit",
         "edit_new_win",
-        "show_exif_info",
-        "reveal",
     ] },
     # Image
     { mime = "image/*", use = [
         "open",
         "open_new_win",
         "edit_image",
-        "show_exif_info",
-        "reveal",
     ] },
     # Media
     { mime = "{audio,video}/*", use = [
         "play",
         "play_new_win",
-        "show_media_info",
-        "reveal",
     ] },
     # PDF
     { mime = "application/pdf", use = [
         "open",
         "open_new_win",
-        "show_exif_info",
-        "reveal",
     ] },
     # JSON
     { mime = "application/{json,ndjson}", use = [
         "edit",
         "edit_new_win",
-        "show_exif_info",
-        "reveal",
     ] },
     { mime = "*/javascript", use = [
         "edit",
         "edit_new_win",
-        "show_exif_info",
-        "reveal",
     ] },
     # Archive
     { mime = "application/{,g}zip", use = [
         "extract",
-        "show_exif_info",
-        "reveal",
     ] },
     { mime = "application/{tar,bzip*,7z*,xz,rar}", use = [
         "extract",
-        "show_exif_info",
-        "reveal",
     ] },
     # Empty file
     { mime = "inode/empty", use = [
         "edit",
         "edit_new_win",
-        "show_exif_info",
-        "reveal",
     ] },
     # Fallback
     { name = "*", use = [
-        "edit",
-        "edit_new_win",
         "open",
-        "open_new_win",
-        "play",
-        "play_new_win",
         "show_exif_info",
         "reveal",
     ] },
