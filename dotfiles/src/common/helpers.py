@@ -68,7 +68,7 @@ def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
     return user_resp in positive_resp
 
 
-def notify(title: str, message: str):
+def notify(title: str, message: str = ""):
     """Send a desktop notification."""
     result = subprocess.run(["notify-send", title, message], check=False)
     return result.returncode == 0
