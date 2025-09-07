@@ -115,16 +115,27 @@ rules = [
         "open_in_graphical_editor",
         "reveal",
     ] },
+
     # Text
-    { mime = "text/html", use = [
-        "edit",
-        "edit_new_win",
-        "open_in_browser",
-    ] },
     { mime = "text/*", use = [
         "edit",
         "edit_new_win",
     ] },
+    # JSON
+    { mime = "application/{json,ndjson}", use = [
+        "edit",
+        "edit_new_win",
+    ] },
+    { mime = "*/javascript", use = [
+        "edit",
+        "edit_new_win",
+    ] },
+    # Empty file
+    { mime = "inode/empty", use = [
+        "edit",
+        "edit_new_win",
+    ] },
+
     # Image
     { mime = "image/*", use = [
         "open",
@@ -136,19 +147,11 @@ rules = [
         "play",
         "play_new_win",
     ] },
+
     # PDF
     { mime = "application/pdf", use = [
         "open",
         "open_new_win",
-    ] },
-    # JSON
-    { mime = "application/{json,ndjson}", use = [
-        "edit",
-        "edit_new_win",
-    ] },
-    { mime = "*/javascript", use = [
-        "edit",
-        "edit_new_win",
     ] },
     # Archive
     { mime = "application/{,g}zip", use = [
@@ -157,11 +160,7 @@ rules = [
     { mime = "application/{tar,bzip*,7z*,xz,rar}", use = [
         "extract",
     ] },
-    # Empty file
-    { mime = "inode/empty", use = [
-        "edit",
-        "edit_new_win",
-    ] },
+
     # Fallback
     { name = "*", use = [
         "open",
