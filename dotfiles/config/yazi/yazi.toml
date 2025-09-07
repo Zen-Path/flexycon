@@ -164,6 +164,7 @@ rules = [
     # Fallback
     { name = "*", use = [
         "open",
+        "open_in_browser",
         "show_exif_info",
         "reveal",
     ] },
