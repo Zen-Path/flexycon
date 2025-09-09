@@ -181,9 +181,9 @@ dotfiles:
         dst: ~/.config/mpv/scripts/
         link: link_children
 
-    d_nsxiv:
-        src: config/nsxiv
-        dst: ~/.config/nsxiv
+    f_nsxiv_exec_key_handler:
+        src: src/scripts/py-run.sh
+        dst: ~/.config/nsxiv/exec/key-handler
 
     d_yt_dlp:
         src: config/yt-dlp
@@ -580,7 +580,7 @@ profiles:
             - f_x11_profile
             - d_yay
             - d_alacritty
-            - d_nsxiv
+            - f_nsxiv_exec_key_handler
             - f_pulse_daemon
             - d_pipewire
             - d_gtk_3
