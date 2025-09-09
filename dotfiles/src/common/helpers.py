@@ -6,7 +6,7 @@ import subprocess
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from common.logger import logger
 
@@ -73,10 +73,16 @@ def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
     return user_resp in positive_resp
 
 
-def notify(title: str, message: str = ""):
+def notify(title: str, message: Optional[str] = None, icon: Optional[str] = None):
     """Send a desktop notification."""
-    result = subprocess.run(["notify-send", title, message], check=False)
-    return result.returncode == 0
+    cmd = ["notify-send", title]
+    if message:
+        cmd.extend([message])
+
+    if icon:
+        cmd.extend(["-i", icon])
+
+    return run_command(cmd)
 
 
 def ensure_directory_interactive(path):
