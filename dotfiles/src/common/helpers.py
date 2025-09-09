@@ -1,5 +1,6 @@
 import logging
 import os
+import secrets
 import shutil
 import subprocess
 import sys
@@ -30,7 +31,9 @@ def resolve_path(path_parts: List[str]) -> str:
 
 def run_command(command: List[str]) -> CommandResult:
     """Run a shell command and return its result."""
-    logger.info(f"Running: {command}")
+    cmd_identifier = secrets.token_hex(5)  # 8 hex chars
+
+    logger.info(f"Running {command} with id '{cmd_identifier}'")
 
     output = []
     with subprocess.Popen(
@@ -47,7 +50,9 @@ def run_command(command: List[str]) -> CommandResult:
 
         return_code = process.wait()
 
-    logger.info(f"Command ({command}) finished with return code {return_code}")
+    logger.info(
+        f"Command with id '{cmd_identifier}' finished with return code {return_code}"
+    )
 
     return CommandResult(return_code=return_code, output="\n".join(output))
 
