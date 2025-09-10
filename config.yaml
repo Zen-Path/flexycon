@@ -434,6 +434,11 @@ dotfiles:
         dst: ~/.local/bin/statusbar/sb-volume
         chmod: "755"
 
+    f_sb_recording:
+        src: src/scripts/statusbar/sb-recording.sh
+        dst: ~/.local/bin/statusbar/sb-recording
+        chmod: "755"
+
     # Android Work
     f_avds:
         src: src/scripts/avds.sh
@@ -616,6 +621,7 @@ profiles:
             - f_sb_news
             - f_sb_tasks
             - f_sb_volume
+            - f_sb_recording
 
     mac_work:
         include:

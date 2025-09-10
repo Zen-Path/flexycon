@@ -22,13 +22,15 @@ get_dimensions() { xrandr | grep -oP '(?<=current ).*(?=,)' | tr -d ' '; }
 
 update_icon() {
     echo "$1" > /tmp/recording_icon
-    pkill -RTMIN+9 "${STATUSBAR:-dwmblocks}"
+    kill -43 "$(pidof ${STATUSBAR:-dwmblocks})"
 }
 
 kill_recording() {
     recpid="$(cat /tmp/recording_pid)"
     kill -15 "$recpid"
     rm -f /tmp/recording_pid
+    update_icon ""
+    rm -f /tmp/recording_icon
 }
 
 get_selection() {
