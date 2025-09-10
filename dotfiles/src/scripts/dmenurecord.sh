@@ -11,7 +11,7 @@
 
 videos_dir="$HOME/Videos/Screencasts"
 audio_dir="$HOME/Music"
-date_fmt='%y-%m-%d_%H-%M-%S'
+date_fmt='%Y-%m-%d_%H-%M-%S'
 
 [ ! -d "$videos_dir" ] && mkdir -p "$videos_dir"
 [ ! -d "$audio_dir" ] && mkdir -p "$audio_dir"

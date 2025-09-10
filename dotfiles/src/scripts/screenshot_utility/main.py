@@ -85,7 +85,7 @@ class ScreenshotUtility:
 
     def compose_output_path(self, capture_type, name=None, ext="png"):
         """Generate a file path to the output directory with the current timestamp."""
-        timestamp = datetime.now().strftime("%y-%m-%d_%H-%M-%S")
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         name_fmt = f"-{name[:100].replace(" ", "-")}" if name else ""
 
         return os.path.join(
