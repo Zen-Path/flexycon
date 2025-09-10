@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+#!{{@@ env['FLEXYCON_HOME'] @@}}/venv/bin/python
 
 import os
 import subprocess
 import sys
 
 from common.helpers import notify, run_command
-from scripts.statusbar.shared import (
+from statusbar.shared import (
     EDITOR,
     STATUSBAR,
     TERMINAL,

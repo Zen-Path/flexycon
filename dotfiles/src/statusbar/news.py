@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
+#!{{@@ env['FLEXYCON_HOME'] @@}}/venv/bin/python
 
 import os
 import subprocess
 
 from common.helpers import notify
-from scripts.statusbar.shared import EDITOR, TERMINAL, MouseButton
+from statusbar.shared import EDITOR, TERMINAL, MouseButton
 
 # Environment variables
 NEWS_DIR = os.path.join(

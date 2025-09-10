@@ -405,37 +405,37 @@ dotfiles:
 
     # Statusbar
     f_sb_battery:
-        src: src/scripts/statusbar/sb-battery.sh
+        src: src/statusbar/battery.sh
         dst: ~/.local/bin/statusbar/sb-battery
         chmod: "755"
 
     f_sb_date:
-        src: src/scripts/statusbar/sb-date.sh
+        src: src/statusbar/date.sh
         dst: ~/.local/bin/statusbar/sb-date
         chmod: "755"
 
     f_sb_internet:
-        src: src/scripts/statusbar/sb-internet.sh
+        src: src/statusbar/internet.sh
         dst: ~/.local/bin/statusbar/sb-internet
         chmod: "755"
 
     f_sb_news:
-        src: src/scripts/statusbar/sb-news.sh
+        src: src/statusbar/news.py
         dst: ~/.local/bin/statusbar/sb-news
         chmod: "755"
 
     f_sb_tasks:
-        src: src/scripts/statusbar/sb-tasks.sh
+        src: src/statusbar/tasks.sh
         dst: ~/.local/bin/statusbar/sb-tasks
         chmod: "755"
 
     f_sb_volume:
-        src: src/scripts/statusbar/sb-volume.sh
+        src: src/statusbar/volume.py
         dst: ~/.local/bin/statusbar/sb-volume
         chmod: "755"
 
     f_sb_recording:
-        src: src/scripts/statusbar/sb-recording.sh
+        src: src/statusbar/recording.py
         dst: ~/.local/bin/statusbar/sb-recording
         chmod: "755"
 
