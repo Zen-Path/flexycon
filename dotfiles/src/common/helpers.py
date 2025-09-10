@@ -85,6 +85,14 @@ def notify(title: str, message: Optional[str] = None, icon: Optional[str] = None
     return run_command(cmd)
 
 
+def get_notifications_paused_status():
+    return run_command(["dunstctl", "is-paused"])
+
+
+def set_notifications_status(status: str):
+    return run_command(["dunstctl", "set-paused", status])
+
+
 def ensure_directory_interactive(path):
     if not os.path.exists(path):
         print(f":: The directory '{path}' does not exist.")
