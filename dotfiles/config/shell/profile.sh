@@ -23,6 +23,10 @@ export GRAPHICAL_EDITOR='code'
 export BROWSER='firefox'
 export FILE_MANAGER='yazi'
 
+# {%@@- if os == "linux" +@@%}
+export STATUSBAR='dwmblocks'
+# {%@@- endif +@@%}
+
 # {%@@- if os == "darwin" +@@%}
 export TERMINAL='kitty'
 # {%@@- elif os == "linux" +@@%}
