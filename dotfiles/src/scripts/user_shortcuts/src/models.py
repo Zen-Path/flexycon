@@ -4,7 +4,7 @@ import shlex
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Literal, Optional, Tuple, Union
+from typing import Dict, List, Literal, Optional, Tuple
 
 from common.helpers import resolve_path
 
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class Bookmark:
     type: Literal["d", "f"]
     path_parts: List[str]
-    aliases: Dict[str, Union[bool, List[str]]]
+    aliases: Dict[str, List[str]]
     description: Optional[str] = None
 
     @property
