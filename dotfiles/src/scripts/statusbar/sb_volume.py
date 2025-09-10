@@ -5,7 +5,13 @@ import subprocess
 import sys
 
 from common.helpers import notify, run_command
-from scripts.statusbar.shared import EDITOR, STATUSBAR, TERMINAL, MouseButton
+from scripts.statusbar.shared import (
+    EDITOR,
+    STATUSBAR,
+    TERMINAL,
+    MouseButton,
+    handle_block_button,
+)
 
 
 def update_volume(amount: int):
@@ -44,20 +50,8 @@ ACTIONS = {
 }
 
 
-def handle_block_button():
-    """Handle block button events."""
-    block_button = os.environ.get("BLOCK_BUTTON")
-    if not block_button:
-        return
-
-    button = MouseButton(int(block_button))
-    action = ACTIONS.get(button)
-    if action:
-        action()
-
-
 def main():
-    handle_block_button()
+    handle_block_button(ACTIONS)
 
     # Should return something like this:
     # - 'Volume: 0.55'
