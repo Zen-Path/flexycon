@@ -113,8 +113,9 @@ def generate_test_data(output_dir, base_db, num_backups=10):
     print(f"Generated {num_backups} backups with diffs.")
 
 
-def main():
+def build_parser():
     parser = argparse.ArgumentParser(description="SQLite Diff and Restore Utility")
+
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     diff_parser = subparsers.add_parser(
@@ -144,7 +145,11 @@ def main():
         "--num-backups", type=int, default=10, help="Number of backups to generate."
     )
 
-    args = parser.parse_args()
+    return parser
+
+
+def main():
+    args = build_parser().parse_args()
 
     if args.command == "diff":
         generate_diff(args.old_db, args.new_db, args.output_dir)

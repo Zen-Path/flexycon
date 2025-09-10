@@ -14,7 +14,7 @@ from common.helpers import ensure_directory_interactive
 from common.logger import logger, setup_logging
 
 
-def parse_args():
+def build_parser():
     parser = argparse.ArgumentParser(
         description="Open a journal entry in the user's $EDITOR for a date."
         "If no $EDITOR is found, it defaults to 'vim'."
@@ -30,7 +30,7 @@ def parse_args():
 
     parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
-    return parser.parse_args()
+    return parser
 
 
 def open_journal_entry(target_date):
@@ -75,7 +75,7 @@ def get_journal_entry_path(target_date) -> Optional[Path]:
 
 # TODO: add tests
 def main():
-    args = parse_args()
+    args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 

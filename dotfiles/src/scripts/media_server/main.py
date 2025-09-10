@@ -95,18 +95,18 @@ def download_media():
         return jsonify({"return_code": 1, "error": str(e)}), 500
 
 
-def parse_args():
+def build_parser():
     parser = argparse.ArgumentParser(
         description="Media server to download files from the web."
     )
 
     parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
-    return parser.parse_args()
+    return parser
 
 
 def main():
-    args = parse_args()
+    args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 

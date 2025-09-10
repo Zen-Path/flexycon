@@ -33,7 +33,7 @@ def format_char_entries(chars: dict[str, str]) -> list[str]:
     return result
 
 
-def parse_args():
+def build_parser():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         description="Prompt the user for a unicode character and copies or inserts it."
@@ -52,11 +52,11 @@ def parse_args():
     )
     parser.add_argument("--verbose", action="store_true", help="Enable debug output.")
 
-    return parser.parse_args()
+    return parser
 
 
 def main():
-    args = parse_args()
+    args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
 

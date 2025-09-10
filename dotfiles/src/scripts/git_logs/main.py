@@ -34,7 +34,7 @@ def get_commit_messages_on_date(repo, branch_name, date, exclude_commits=set()):
     return messages
 
 
-def parse_args():
+def build_parser():
     parser = argparse.ArgumentParser(
         description="List Git commits in a repo for all branches by a date."
     )
@@ -43,11 +43,11 @@ def parse_args():
 
     parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
-    return parser.parse_args()
+    return parser
 
 
 def main():
-    args = parse_args()
+    args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 

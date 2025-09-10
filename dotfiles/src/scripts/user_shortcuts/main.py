@@ -7,18 +7,23 @@ from scripts.user_shortcuts.src.formatting import format_bookmarks
 from scripts.user_shortcuts.src.renderers import NVIM, YAZI, ZSH
 
 
-def main():
+def build_parser():
     parser = argparse.ArgumentParser(
         description="Generate bookmarks for various tools."
     )
+
     parser.add_argument(
         "-l",
         "--list-shortcuts",
         action="store_true",
         help="List shortcuts in a human-friendly way.",
     )
-    parser.add_argument("--verbose", action="store_true", help="Enable debug output.")
-    args = parser.parse_args()
+
+    return parser
+
+
+def main():
+    args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
 

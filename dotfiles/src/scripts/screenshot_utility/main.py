@@ -150,7 +150,7 @@ def prompt_user(actions):
         print("Invalid choice.")
 
 
-def parse_args():
+def build_parser():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Screenshot Utility")
 
@@ -200,6 +200,7 @@ def parse_args():
         action="store_false",
         help="Do not copy the screenshot to the clipboard",
     )
+
     parser.add_argument(
         "-d",
         "--output-directory",
@@ -208,11 +209,11 @@ def parse_args():
         help="Set the output directory for screenshots",
     )
 
-    return parser.parse_args()
+    return parser
 
 
 def main():
-    args = parse_args()
+    args = build_parser().parse_args()
 
     screenshot_utility = ScreenshotUtility(
         output_dir=args.output_directory if args.output_directory else None

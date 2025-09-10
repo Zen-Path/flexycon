@@ -40,10 +40,11 @@ def process_line(line):
     return [mod_type, filepath, size]
 
 
-def main():
+def build_parser():
     parser = argparse.ArgumentParser(
         description="Process log files and output skipped operations."
     )
+
     parser.add_argument(
         "file",
         nargs="?",
@@ -55,7 +56,11 @@ def main():
         "-V", "--verbose", action="store_true", help="Increase output verbosity"
     )
 
-    args = parser.parse_args()
+    return parser
+
+
+def main():
+    args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 
