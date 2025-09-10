@@ -52,9 +52,7 @@ def build_parser():
         default=sys.stdin,
         help="File to process (default: stdin)",
     )
-    parser.add_argument(
-        "-V", "--verbose", action="store_true", help="Increase output verbosity"
-    )
+    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
 
     return parser
 

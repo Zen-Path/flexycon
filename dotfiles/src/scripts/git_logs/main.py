@@ -41,7 +41,7 @@ def build_parser():
 
     add_date_args(parser, format_help_choices)
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
 
     return parser
 

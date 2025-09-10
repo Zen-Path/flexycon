@@ -18,6 +18,7 @@ def build_parser():
         action="store_true",
         help="List shortcuts in a human-friendly way.",
     )
+    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
 
     return parser
 

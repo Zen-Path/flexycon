@@ -63,7 +63,7 @@ def build_parser():
         description="Statusbar script to manage recordings."
     )
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
 
     return parser
 

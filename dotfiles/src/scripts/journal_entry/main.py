@@ -25,10 +25,10 @@ def build_parser():
     parser.add_argument(
         "--get-journal-entry-path",
         action="store_true",
-        help="return the path of the journal entry",
+        help="Return the path of the journal entry",
     )
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
 
     return parser
 

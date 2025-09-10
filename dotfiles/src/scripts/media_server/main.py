@@ -100,7 +100,7 @@ def build_parser():
         description="Media server to download files from the web."
     )
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
 
     return parser
 
