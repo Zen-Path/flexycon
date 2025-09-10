@@ -5,9 +5,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Type
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from common.logger import logger, setup_logging
 
 
 def run_command(command: List[str]) -> int:
@@ -161,6 +159,8 @@ class Package:
 
 # Example usage
 if __name__ == "__main__":
+    setup_logging(logger, logging.INFO)
+
     installer = detect_installer()
 
     print(installer)

@@ -11,9 +11,7 @@ from typing import Optional
 from common.args import format_help_choices
 from common.date_args import add_date_args, resolve_date
 from common.helpers import ensure_directory_interactive
-from common.logger import setup_logging
-
-logger = logging.getLogger(__name__)
+from common.logger import logger, setup_logging
 
 
 def parse_args():

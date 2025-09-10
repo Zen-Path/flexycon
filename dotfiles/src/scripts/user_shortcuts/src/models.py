@@ -7,8 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple
 
 from common.helpers import resolve_path
-
-logger = logging.getLogger(__name__)
+from common.logger import logger
 
 
 @dataclass

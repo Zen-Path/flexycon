@@ -1,12 +1,10 @@
 import argparse
 import logging
 
-from common.logger import setup_logging
+from common.logger import logger, setup_logging
 from scripts.user_shortcuts.data.shortcuts import shortcuts
 from scripts.user_shortcuts.src.formatting import format_bookmarks
 from scripts.user_shortcuts.src.renderers import NVIM, YAZI, ZSH
-
-logger = logging.getLogger(__name__)
 
 
 def main():

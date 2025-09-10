@@ -7,32 +7,16 @@ import sys
 from pprint import pprint
 
 from colorama import Fore, Style, init
+from common.logger import logger, setup_logging
 from tabulate import tabulate
 
 # Initialize colorama
 init(autoreset=True)
 
 
-# Custom formatter for colorful logging
-class ColorFormatter(logging.Formatter):
-    COLORS = {
-        "DEBUG": Fore.BLUE,
-        "INFO": Fore.GREEN,
-        "WARNING": Fore.YELLOW,
-        "ERROR": Fore.RED,
-        "CRITICAL": Fore.RED + Style.BRIGHT,
-    }
-
-    def format(self, record):
-        color = self.COLORS.get(record.levelname, "")
-        reset = Style.RESET_ALL
-        message = super().format(record)
-        return f"{color}{message}{reset}"
-
-
 # Function to process lines
 def process_line(line):
-    logging.debug(f"{line.strip()}")
+    logger.debug(f"{line.strip()}")
     match = re.search(
         r"NOTICE: (.*): Skipped (copy|delete|update|remove directory|set directory modification time) as --dry-run is set( \(size (.*)\))?",
         line,
@@ -44,7 +28,7 @@ def process_line(line):
     filepath, mod_type, size = None, None, 0
     if match:
         groups = match.groups()
-        logging.debug(f"Match groups: {groups}")
+        logger.debug(f"Match groups: {groups}")
         filepath = groups[0]
         mod_type = groups[1]
         if groups[3]:
@@ -73,19 +57,7 @@ def main():
 
     args = parser.parse_args()
 
-    # Configure logging
-    handler = logging.StreamHandler()
-    handler.setFormatter(
-        ColorFormatter(
-            fmt="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S"
-        )
-    )
-    root = logging.getLogger()
-    root.addHandler(handler)
-    if args.verbose:
-        root.setLevel(logging.DEBUG)
-    else:
-        root.setLevel(logging.CRITICAL)  # Suppress logging by default
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 
     output = []
 

@@ -5,9 +5,8 @@ from pathlib import Path
 from typing import List, Optional, Tuple
 
 from common.helpers import CommandResult, run_command
+from common.logger import logger
 from dotenv import load_dotenv
-
-logger = logging.getLogger(__name__)
 
 load_dotenv()
 
