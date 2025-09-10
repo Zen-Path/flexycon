@@ -1,1 +1,1 @@
-../../../../../../flexycon-private/dotfiles/git_logs/repos.py
+../../../../../../flexycon-private/data/git_logs/repos.py
