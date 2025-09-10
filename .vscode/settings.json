@@ -21,6 +21,7 @@
         "pycache",
         "pytest",
         "rclone",
+        "taskwarrior",
         "ueberzug",
         "venv",
         "xclip",
