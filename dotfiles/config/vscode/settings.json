@@ -47,6 +47,7 @@
     "glassit.alpha": 235,
     "prettier.proseWrap": "always",
     "python.analysis.typeCheckingMode": "standard",
+    "python.languageServer": "Pylance",
     "search.exclude": {
         "**/.git": true
     },
