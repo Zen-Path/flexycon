@@ -18,18 +18,17 @@ date_fmt='%Y-%m-%d_%H-%M-%S'
 
 # Utils
 
-getdim() { xrandr | grep -oP '(?<=current ).*(?=,)' | tr -d ' '; }
+get_dimensions() { xrandr | grep -oP '(?<=current ).*(?=,)' | tr -d ' '; }
 
-updateicon() {
-    echo "$1" > /tmp/recordingicon
+update_icon() {
+    echo "$1" > /tmp/recording_icon
     pkill -RTMIN+9 "${STATUSBAR:-dwmblocks}"
 }
 
-killrecording() {
-    recpid="$(cat /tmp/recordingpid)"
+kill_recording() {
+    recpid="$(cat /tmp/recording_pid)"
     kill -15 "$recpid"
-    rm -f /tmp/recordingpid
-    updateicon ""
+    rm -f /tmp/recording_pid
 }
 
 get_selection() {
@@ -46,8 +45,8 @@ get_selection() {
 }
 
 # Recording Modes
-# TODO - unify both videoselected function so there's no duplication
-videoselected_hidef() {
+# TODO - unify both video_selected function so there's no duplication
+video_selected_hidef() {
     # POSIX-compliant.
     set -- $(get_selection)
     [ -z "$1" ] \
@@ -72,12 +71,12 @@ videoselected_hidef() {
         -pix_fmt yuv420p \
         "$output_path" &
 
-    echo "$output_path" > /tmp/recordingpath
-    echo $! > /tmp/recordingpid
-    updateicon "⏺️"
+    echo "$output_path" > /tmp/recording_path
+    echo $! > /tmp/recording_pid
+    update_icon "⏺️"
 }
 
-videoselected() {
+video_selected() {
     # POSIX-compliant.
     set -- $(get_selection)
     [ -z "$1" ] \
@@ -101,29 +100,29 @@ videoselected() {
         -pix_fmt yuv420p \
         "$output_path" &
 
-    echo "$output_path" > /tmp/recordingpath
-    echo $! > /tmp/recordingpid
-    updateicon "⏺️"
+    echo "$output_path" > /tmp/recording_path
+    echo $! > /tmp/recording_pid
+    update_icon "⏺️"
 }
 
 video() {
     ffmpeg \
         -f x11grab \
         -framerate 30 \
-        -s "$(getdim)" \
+        -s "$(get_dimensions)" \
         -i "$DISPLAY" \
         -c:v libx264 -qp 0 -r 30 \
         "$HOME/video-$(date "+$date_fmt").mp4" &
 
-    echo $! > /tmp/recordingpid
-    updateicon "⏺️"
+    echo $! > /tmp/recording_pid
+    update_icon "⏺️"
 }
 
 screencast() {
     ffmpeg -y \
         -f x11grab \
         -framerate 30 \
-        -s "$(getdim)" \
+        -s "$(get_dimensions)" \
         -i "$DISPLAY" \
         -r 24 \
         -use_wallclock_as_timestamps 1 \
@@ -132,19 +131,19 @@ screencast() {
         -crf 0 -preset ultrafast -c:a aac \
         "$HOME/screencast-$(date "+$date_fmt").mp4" &
 
-    echo $! > /tmp/recordingpid
-    updateicon "⏺️🎙️"
+    echo $! > /tmp/recording_pid
+    update_icon "⏺️🎙️"
 }
 
-webcamhidef() {
+webcam_hidef() {
     ffmpeg \
         -f v4l2 \
         -i /dev/video0 \
         -video_size 1920x1080 \
         "$HOME/webcam-$(date "+$date_fmt").mp4" &
 
-    echo $! > /tmp/recordingpid
-    updateicon "🎥"
+    echo $! > /tmp/recording_pid
+    update_icon "🎥"
 }
 
 webcam() {
@@ -154,8 +153,8 @@ webcam() {
         -video_size 640x480 \
         "$HOME/webcam-$(date "+$date_fmt").mp4" &
 
-    echo $! > /tmp/recordingpid
-    updateicon "🎥"
+    echo $! > /tmp/recording_pid
+    update_icon "🎥"
 }
 
 audio() {
@@ -164,13 +163,13 @@ audio() {
         -c:a flac \
         "$HOME/audio-$(date "+$date_fmt").flac" &
 
-    echo $! > /tmp/recordingpid
-    updateicon "🎙️"
+    echo $! > /tmp/recording_pid
+    update_icon "🎙️"
 }
 
 # Main
 
-askrecording() {
+ask_recording() {
     choices="\
 video selected
 video selected (hi-def)
@@ -186,37 +185,37 @@ webcam (hi-def)"
         screencast) screencast ;;
         audio) audio ;;
         video) video ;;
-        "video selected") videoselected ;;
-        "video selected (hi-def)") videoselected_hidef ;;
+        "video selected") video_selected ;;
+        "video selected (hi-def)") video_selected_hidef ;;
         webcam) webcam ;;
-        "webcam (hi-def)") webcamhidef ;;
+        "webcam (hi-def)") webcam_hidef ;;
     esac
 
     # dunstctl set-paused true
 }
 
-asktoend() {
+ask_to_end() {
     response=$(printf "Yes\\nNo" | dmenu -i -p "End active recording?") \
         && [ "$response" = "Yes" ] \
-        && killrecording
+        && kill_recording
 }
 
 case "$1" in
     screencast) screencast ;;
     audio) audio ;;
     video) video ;;
-    *selected) videoselected ;;
-    kill) killrecording ;;
+    *selected) video_selected ;;
+    kill) kill_recording ;;
     *)
         # Sleep to avoid the notification from appearing in the video
         # TODO: instead of unpausing, revert to the status that was active before
         # the recording
-        ([ -f /tmp/recordingpid ] \
-            && asktoend \
+        ([ -f /tmp/recording_pid ] \
+            && ask_to_end \
             && sleep 0.3 \
             && dunstctl set-paused false \
-            && notify-send "Recording saved" "Recording was saved at '$(sed "s|$HOME|~|g" /tmp/recordingpath)'." \
-            && exit) || askrecording
+            && notify-send "Recording saved" "Recording was saved at '$(sed "s|$HOME|~|g" /tmp/recording_path)'." \
+            && exit) || ask_recording
         ;;
 
 esac
