@@ -121,6 +121,10 @@ rules = [
         "edit",
         "edit_new_win",
     ] },
+    { mime = "application/octet-stream", use = [
+        "edit",
+        "edit_new_win",
+    ] },
     # JSON
     { mime = "application/{json,ndjson}", use = [
         "edit",
