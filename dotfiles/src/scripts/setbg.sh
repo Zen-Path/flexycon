@@ -41,4 +41,5 @@ fi
 
 xwallpaper --clear --zoom "$bgloc"
 # If running, dwm hit the key to refresh the color scheme.
-pidof dwm > /dev/null && xdotool key super+F5
+# TODO: Update dwm to add a "refresh color scheme" bind
+# pidof dwm > /dev/null && xdotool key super+F5
