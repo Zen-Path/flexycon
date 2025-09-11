@@ -103,6 +103,10 @@ extract = [
     { run = 'ya pub extract --list %*', desc = "Extract here", for = "windows" },
 ]
 
+set_wallpaper = [
+    { run = 'setbg "$@"', desc = "Set image as wallpaper", for = "linux" },
+]
+
 [open]
 
 # Note: every rule is checked against, and items in "use" are pooled.
@@ -145,6 +149,7 @@ rules = [
         "open",
         "open_new_win",
         "edit_image",
+        "set_wallpaper",
     ] },
     # Media
     { mime = "{audio,video}/*", use = [
