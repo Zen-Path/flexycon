@@ -118,13 +118,15 @@ class ClipboardUtility(ABC):
 
     command: str  # Command to execute the clipboard utility
 
+    @classmethod
     @abstractmethod
-    def text(self, text: str):
+    def text(cls, text: str):
         """Copy text to the clipboard."""
         pass
 
+    @classmethod
     @abstractmethod
-    def file(self, file_path: str):
+    def file(cls, file_path: str):
         """Copy a file to the clipboard."""
         pass
 
@@ -146,12 +148,14 @@ class ClipboardUtility(ABC):
 class XClip(ClipboardUtility):
     command = "xclip"
 
-    def text(self, text: str):
-        subprocess.run([self.command, "-sel", "clip"], input=text.encode(), check=True)
+    @classmethod
+    def text(cls, text: str):
+        subprocess.run([cls.command, "-sel", "clip"], input=text.encode(), check=True)
 
-    def file(self, file_path: str):
+    @classmethod
+    def file(cls, file_path: str):
         subprocess.run(
-            [self.command, "-sel", "clip", "-t", "image/png", "-i", file_path],
+            [cls.command, "-sel", "clip", "-t", "image/png", "-i", file_path],
             check=True,
         )
 
@@ -159,10 +163,12 @@ class XClip(ClipboardUtility):
 class XSel(ClipboardUtility):
     command = "xsel"
 
-    def text(self, text: str):
+    @classmethod
+    def text(cls, text: str):
         subprocess.run(
-            [self.command, "--clipboard", "--input"], input=text.encode(), check=True
+            [cls.command, "--clipboard", "--input"], input=text.encode(), check=True
         )
 
-    def file(self, file_path: str):
-        subprocess.run([self.command, "--clipboard", "--input", file_path], check=True)
+    @classmethod
+    def file(cls, file_path: str):
+        subprocess.run([cls.command, "--clipboard", "--input", file_path], check=True)
