@@ -348,9 +348,9 @@ dotfiles:
         dst: ~/.local/bin/env_cmd_runner
         chmod: "755"
 
-    f_kbselect:
-        src: src/scripts/kbselect.py
-        dst: ~/.local/bin/kbselect
+    f_keyboard_select:
+        src: src/scripts/py-run.sh
+        dst: ~/.local/bin/keyboard_select
         chmod: "755"
 
     f_mounter:
@@ -604,7 +604,7 @@ profiles:
             - f_dmenupass
             - f_dmenurecord
             - f_env_cmd_runner
-            - f_kbselect
+            - f_keyboard_select
             - f_mounter
             - f_unmounter
             - f_nsxiv_rifle
