@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from common.helpers import notify, run_command
+from common.logger import logger
 from statusbar.shared import (
     EDITOR,
     STATUSBAR,
@@ -59,6 +60,12 @@ def main():
     volume_info = run_command(
         ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
     ).output.strip()
+
+    logger.debug(f"Volume info: {volume_info}")
+
+    if volume_info.startswith("Could not connect to"):
+        print("⛔ Connection")
+        return
 
     volume_int = round(float(volume_info.split(" ")[1]) * 100)
 
