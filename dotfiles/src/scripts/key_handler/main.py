@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from common.helpers import notify, run_command
+from common.helpers import XClip, notify, run_command
 from common.logger import logger, setup_logging
 
 
@@ -100,16 +100,13 @@ def action_update_wallpaper(paths):
     result = run_command(["setbg", str(paths[0])])
 
 
-def action_copy_to_clipboard(paths):
-    subprocess.Popen(
-        ["xclip", "-selection", "clipboard", "-t", "image/png", "-i", str(paths[0])]
-    )
-
+def action_copy_image(paths):
+    XClip.file(str(paths[0]))
     notify("Image copied", f"Image {paths[0]} copied to clipboard")
 
 
 def action_copy_path(paths):
-    subprocess.run(["xclip", "-selection", "clipboard"], input=str(paths[0]), text=True)
+    XClip.text(str(paths[0]))
     notify("Path copied", f"Path {paths[0]} copied to clipboard")
 
 
@@ -155,8 +152,8 @@ ACTIONS = {
         "func": action_update_wallpaper,
     },
     "y": {
-        "desc": "Copy to clipboard",
-        "func": action_copy_to_clipboard,
+        "desc": "Copy image to clipboard",
+        "func": action_copy_image,
     },
     "Y": {
         "desc": "Copy path to clipboard",
