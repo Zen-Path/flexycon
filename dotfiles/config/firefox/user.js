@@ -64,15 +64,11 @@ user_pref("layout.css.prefers-color-scheme.content-override", 0);
 user_pref("browser.display.use_document_fonts", 1);
 
 // Fonts selection
-// {%@@ if os == "darwin" @@%}
+// {%@@- if os == "darwin" +@@%}
 user_pref("font.name.monospace.x-western", "Menlo");
 user_pref("font.name.sans-serif.x-western", "Menlo");
 user_pref("font.name.serif.x-western", "Menlo");
-// {%@@ elif os == "linux" @@%}
-user_pref("font.name.monospace.x-western", "monospace");
-user_pref("font.name.sans-serif.x-western", "monospace");
-user_pref("font.name.serif.x-western", "monospace");
-// {%@@ endif @@%}
+// {%@@- endif +@@%}
 
 // === Zoom ===
 

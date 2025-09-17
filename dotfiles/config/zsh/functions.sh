@@ -151,11 +151,7 @@ function fzfopen() {
     \
     case "$mime_type" in \
         inode/directory) \
-            {%@@ if os == "linux" @@%}
-            ls -A -hN --color=always --group-directories-first {} ;; \
-            {%@@ elif os == "darwin" @@%}
             ls -A -h --color=always {} \
-            {%@@ endif @@%}
             ;; \
         text/*) \
             bat --color=always --style=numbers --line-range=:50 {} 2> /dev/null ;; \

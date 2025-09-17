@@ -1,9 +1,0 @@
-Xft.dpi: 120
-
-!! Transparency (0.0 - 1.0):
-*.alpha: 0.8
-
-!! Default font and size:
-*.font: monospace:size=14
-
-!! #include "themes/base16-gruvbox-dark-medium-256.Xresources"

@@ -23,14 +23,8 @@ export GRAPHICAL_EDITOR='code'
 export BROWSER='firefox'
 export FILE_MANAGER='yazi'
 
-# {%@@- if os == "linux" +@@%}
-export STATUSBAR='dwmblocks'
-# {%@@- endif +@@%}
-
 # {%@@- if os == "darwin" +@@%}
 export TERMINAL='kitty'
-# {%@@- elif os == "linux" +@@%}
-export TERMINAL='alacritty'
 # {%@@- endif +@@%}
 
 # FILES
@@ -49,22 +43,12 @@ export XDG_PICTURES_DIR="$HOME/Pictures"
 
 # {%@@- if os == "darwin" +@@%}
 export XDG_VIDEOS_DIR="$HOME/Movies"
-# {%@@- elif os == "linux" +@@%}
-export XDG_VIDEOS_DIR="$HOME/Videos"
 # {%@@- endif +@@%}
 
 export XDG_PUBLICSHARE_DIR="$HOME/Public"
 export XDG_DESKTOP_DIR="$HOME/Desktop"
 
-# {%@@- if os == "linux" +@@%}
-export XDG_TEMPLATES_DIR="$HOME/"
-# {%@@- endif +@@%}
-
 ## $HOME Clean-up
-# {%@@- if os == "linux" +@@%}
-export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
-# {%@@- endif -@@%}
-
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
@@ -89,15 +73,8 @@ export FLEXYCON_HOME="$HOME/.local/src/flexycon"
 
 # PROGRAM SETTINGS
 
-# {%@@- if os == "linux" +@@%}
-export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
-# {%@@- endif -@@%}
 export BAT_THEME='gruvbox-dark'
 # export PASTEL_COLOR_MODE='24bit'
-
-# {%@@- if os == "linux" +@@%}
-export _JAVA_AWT_WM_NONREPARENTING='1' # Fix for Java applications in dwm
-# {%@@- endif -@@%}
 
 # export MOZ_USE_XINPUT2='1' # Mozilla smooth scrolling/touchpads.
 
@@ -109,39 +86,8 @@ export LESS='--RAW-CONTROL-CHARS --quit-if-one-screen'
 export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .git/ --exclude node_modules/ --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/rustup'
 export FZF_DEFAULT_OPTS='--multi --extended'
 
-#{%@@ if "work" in profile +@@%}
-export JAVA_HOME="/opt/homebrew/opt/openjdk"
-
-## Android Studio
-# TODO: change path to actual android home
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-
-## Appium
-# https://appium.io/docs/en/2.1/cli/env-vars
-
-# This is where drivers and plugins are installed
-# By default, it will create a '.appium' dir in '~'
-# export APPIUM_HOME="$XDG_DATA_HOME/appium"
-
-# Use system 'unzip' binary instead of JS lib.
-# If 'unzip' fails, it will use the lib as fallback though.
-export APPIUM_PREFER_SYSTEM_UNZIP='1'
-#{%@@ endif +@@%}
-
 ## ENV SETTINGS
-
-# {%@@- if os == "linux" +@@%}
-
-[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && setsid user_shortcuts > /dev/null 2>&1
-# {%@@- elif os == "darwin" +@@%}
+# {%@@- if os == "darwin" +@@%}
 
 [ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && user_shortcuts
-# {%@@- endif +@@%}
-
-# {%@@- if os == "linux" +@@%}
-# Start graphical server on user's current tty if not already running.
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg > /dev/null 2>&1 && startx "$XINITRC"
-
-# Switch escape and caps if tty and no passwd required:
-sudo -n loadkeys "$XDG_DATA_HOME"/larbs/ttymaps.kmap 2> /dev/null
 # {%@@- endif +@@%}
