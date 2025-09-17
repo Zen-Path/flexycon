@@ -61,13 +61,7 @@ user_pref("layout.css.prefers-color-scheme.content-override", 0);
 // === Fonts ===
 
 // Allow pages to choose their own fonts
-// {%@@ if _dotfile_key == "f_firefox_user_front_end" @@%}
-
 user_pref("browser.display.use_document_fonts", 1);
-// {%@@ else @@%}
-
-user_pref("browser.display.use_document_fonts", 0);
-// {%@@ endif @@%}
 
 // Fonts selection
 // {%@@ if os == "darwin" @@%}
@@ -79,7 +73,6 @@ user_pref("font.name.monospace.x-western", "monospace");
 user_pref("font.name.sans-serif.x-western", "monospace");
 user_pref("font.name.serif.x-western", "monospace");
 // {%@@ endif @@%}
-
 
 // === Zoom ===
 
@@ -136,13 +129,7 @@ user_pref("widget.gtk.overlay-scrollbars.enabled", true);
 user_pref("accessibility.browsewithcaret", false);
 
 // Always underline links
-// {%@@ if _dotfile_key == "f_firefox_user_front_end" @@%}
-
-user_pref("layout.css.always_underline_links", "false");
-// {%@@ else @@%}
-
 user_pref("layout.css.always_underline_links", "true");
-// {%@@ endif @@%}
 
 // Search for text when you start typing
 user_pref("accessibility.typeaheadfind", false);

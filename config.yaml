@@ -146,10 +146,6 @@ dotfiles:
         src: "{{@@ d_firefox_chrome_src @@}}"
         dst: "{{@@ d_firefox_profiles @@}}/Work/chrome"
 
-    d_firefox_chrome_front_end:
-        src: "{{@@ d_firefox_chrome_src @@}}"
-        dst: "{{@@ d_firefox_profiles @@}}/Front-End/chrome"
-
     ## User profiles
     f_firefox_user_personal:
         src: "{{@@ f_firefox_user_src @@}}"
@@ -158,10 +154,6 @@ dotfiles:
     f_firefox_user_work:
         src: "{{@@ f_firefox_user_src @@}}"
         dst: "{{@@ d_firefox_profiles @@}}/Work/user.js"
-
-    f_firefox_user_front_end:
-        src: "{{@@ f_firefox_user_src @@}}"
-        dst: "{{@@ d_firefox_profiles @@}}/Front-End/user.js"
 
     # Media
     f_mpv_config:
@@ -565,19 +557,12 @@ profiles:
             # Scripts
             - f_avds
 
-    meta_front_end:
-        dotfiles:
-            # Config
-            - d_firefox_chrome_front_end
-            - f_firefox_user_front_end
-
     # Actual Profiles
 
     linux_home:
         include:
             - meta_linux
             - meta_personal
-            - meta_front_end
             - meta_mpv
         dotfiles:
             # Config
