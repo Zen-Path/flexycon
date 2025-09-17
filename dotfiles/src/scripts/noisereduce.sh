@@ -6,11 +6,11 @@ usage() {
 }
 
 # Tests for requirements
-ifinstalled ffmpeg || {
+if_installed ffmpeg || {
     echo >&2 "We require 'ffmpeg' but it's not installed."
     exit 1
 }
-ifinstalled sox || {
+if_installed sox || {
     echo >&2 "We require 'ffmpeg' but it's not installed."
     exit 1
 }

@@ -211,9 +211,9 @@ dotfiles:
         dst: ~/.local/bin/git_logs
         chmod: "755"
 
-    f_ifinstalled:
-        src: src/scripts/ifinstalled.sh
-        dst: ~/.local/bin/ifinstalled
+    f_if_installed:
+        src: src/scripts/if_installed.sh
+        dst: ~/.local/bin/if_installed
         chmod: "755"
 
     f_imgconv:
@@ -349,7 +349,7 @@ profiles:
             - f_continuous_diff
             - f_getkeys
             - f_git_logs
-            - f_ifinstalled
+            - f_if_installed
             - f_imgconv
             - f_jsonc_to_json
             - f_media_server
