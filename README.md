@@ -23,3 +23,7 @@ cd flexycon
 make setup
 make install
 ```
+
+# Screenshots
+
+![Full Screen](./docs/static/mac-full-screen.png "Full Screen")
