@@ -26,4 +26,18 @@ make install
 
 # Screenshots
 
+## Mac
+
 ![Full Screen](./docs/static/mac-full-screen.png "Full Screen")
+
+## Linux
+
+The Linux config is found in the `linux-android-profiles` branch.
+
+Tile Layout:
+
+![Tile Layout](./docs/static/full-screen_tile.png "Tile Layout")
+
+Centered Master Layout:
+
+![Centered Master Layout](./docs/static/full-screen_centered-master.png "Centered Master Layout")
