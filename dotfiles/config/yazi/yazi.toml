@@ -50,7 +50,7 @@ edit = [
 ]
 
 edit_image = [
-    { run = '${TERMINAL} -e gimp "$@"', orphan = true, desc = "Edit image", for = "unix" },
+    { run = 'gimp "$@"', orphan = true, desc = "Edit image", for = "unix" },
 ]
 
 edit_new_win = [
