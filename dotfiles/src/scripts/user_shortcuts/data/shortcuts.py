@@ -93,15 +93,15 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="f",
-        path_parts=["$HOME", "University", "Timetable.pdf"],
+        path_parts=["$HOME", "University", "Timetable"],
         aliases={"default": ["u", "n", "i", "t"], YAZI.name: ["u", "t"]},
         description="university timetable",
     ),
     Bookmark(
         type="d",
-        path_parts=["$HOME", "University", "Semester"],
+        path_parts=["$HOME", "University", "Y1_S1"],
         aliases={"default": ["u", "n", "i", "s"], YAZI.name: ["u", "s"]},
-        description="university semester",
+        description="university current semester",
     ),
     # Configs
     Bookmark(
