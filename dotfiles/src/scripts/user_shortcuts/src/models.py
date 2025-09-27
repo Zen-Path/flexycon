@@ -57,7 +57,7 @@ class BookmarkRenderer(ABC):
                 logger.debug(f"- Added alias '{alias_str}' for bookmark {i}")
                 count += 1
             else:
-                logger.debug(f"- Skipped bookmark {i} (no alias)")
+                logger.debug(f"- Skipped bookmark {i} due to missing alias")
 
         logger.info(f"[{self.name}] Processed {count} bookmark(s)")
 
