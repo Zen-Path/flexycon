@@ -15,6 +15,7 @@ class Bookmark:
     path_parts: List[str]
     aliases: Dict[str, List[str]]
     description: Optional[str] = None
+    condition: bool = True
 
     @property
     def resolved_path(self) -> str:
@@ -42,6 +43,10 @@ class BookmarkRenderer(ABC):
         count = 0
 
         for i, bookmark in enumerate(bookmarks):
+            if not bookmark.condition:
+                logger.debug(f"- Skipped bookmark {i} due to condition not being met")
+                continue
+
             alias_value = bookmark.aliases.get(
                 self.name, bookmark.aliases.get("default", False)
             )

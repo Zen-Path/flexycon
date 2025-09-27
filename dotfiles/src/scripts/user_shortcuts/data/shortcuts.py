@@ -1,7 +1,10 @@
+import platform
 from typing import List
 
 from scripts.user_shortcuts.src.models import Bookmark
 from scripts.user_shortcuts.src.renderers import YAZI
+
+system = platform.system()
 
 flex_home = ["$FLEXYCON_HOME"]
 flex_dotfiles = flex_home + ["dotfiles"]
@@ -79,6 +82,7 @@ shortcuts: List[Bookmark] = [
         path_parts=["$HOME", "Library"],
         aliases={"default": ["l", "i", "b"], YAZI.name: ["L"]},
         description="library",
+        condition=system == "Darwin",
     ),
     # University
     Bookmark(
@@ -201,6 +205,7 @@ shortcuts: List[Bookmark] = [
         path_parts=["$HOME", "Library", "Application Support", "Firefox"],
         aliases={"default": ["l", "i", "b", "f"], YAZI.name: ["l", "f"]},
         description="firefox library",
+        condition=system == "Darwin",
     ),
     Bookmark(
         type="f",
@@ -289,11 +294,13 @@ shortcuts: List[Bookmark] = [
         path_parts=["/", "mnt"],
         aliases={"default": ["m", "n"], YAZI.name: ["M"]},
         description="mount",
+        condition=system == "Linux",
     ),
     Bookmark(
         type="d",
         path_parts=["/", "Volumes"],
         aliases={"default": ["v", "o", "l"], YAZI.name: ["V"]},
         description="volumes",
+        condition=system == "Darwin",
     ),
 ]
