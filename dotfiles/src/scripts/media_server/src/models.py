@@ -10,7 +10,7 @@ load_dotenv()
 
 
 class Gallery:
-    BASE_DIR = Path(os.getenv("DOWNLOAD_DIR", "Downloads"))
+    BASE_DIR = Path(os.getenv("DOWNLOAD_DIR") or Path.home() / "Downloads")
     GALLERIES_DIR = BASE_DIR / "Galleries"
     FILES_DIR = BASE_DIR / "Files"
 
