@@ -31,6 +31,8 @@ function downloadMedia(urls, type) {
         onload: function (response) {
             const data = JSON.parse(response.responseText);
 
+            // Remove terminal codes from the command's output
+            // for example: '\n\u001b[1;33m[download][warning] OSError'
             const output_fmt = data.output
                 .replace(/\u001b\[[0-9;]*m/g, "")
                 .trim();
