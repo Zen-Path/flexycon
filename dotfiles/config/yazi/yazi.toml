@@ -72,8 +72,8 @@ open_in_browser = [
     { run = '${BROWSER} "$1"', orphan = true, desc = "Open in browser", for = "unix" },
 ]
 
-open_in_graphical_editor = [
-    { run = '${GRAPHICAL_EDITOR} "$1"', orphan = true, desc = "Open in graphical editor", for = "unix" },
+open_in_visual_editor = [
+    { run = '${VISUAL} "$1"', orphan = true, desc = "Open in graphical editor", for = "unix" },
 ]
 
 # Play
@@ -116,7 +116,7 @@ rules = [
     { name = "*/", use = [
         "cd",
         "open",
-        "open_in_graphical_editor",
+        "open_in_visual_editor",
         "reveal",
     ] },
 

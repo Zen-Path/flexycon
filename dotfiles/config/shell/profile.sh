@@ -19,7 +19,7 @@ unsetopt PROMPT_SP
 # DEFAULT PROGRAMS
 
 export EDITOR='nvim'
-export GRAPHICAL_EDITOR='code'
+export VISUAL='code'
 export BROWSER='firefox'
 export FILE_MANAGER='yazi'
 

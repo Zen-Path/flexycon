@@ -14,7 +14,7 @@ unset command
 
 # Abbreviations
 alias e='$EDITOR'
-alias E='$GRAPHICAL_EDITOR'
+alias E='$VISUAL' # visual Editor
 alias g='git'
 alias t='task'
 alias ka='killall'
