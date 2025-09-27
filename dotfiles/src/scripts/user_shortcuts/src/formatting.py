@@ -1,5 +1,4 @@
 import os
-from textwrap import shorten
 
 from scripts.user_shortcuts.src.models import Bookmark
 
