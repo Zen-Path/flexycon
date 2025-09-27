@@ -241,18 +241,6 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="d",
-        path_parts=["$XDG_SRC_HOME", "wis"],
-        aliases={"default": ["w", "i", "s"], YAZI.name: ["s", "w"]},
-        description="wis source",
-    ),
-    Bookmark(
-        type="d",
-        path_parts=["$XDG_SRC_HOME", "md-scripts"],
-        aliases={"default": ["m", "d", "d"], YAZI.name: ["s", "m", "d"]},
-        description="mobile department scripts",
-    ),
-    Bookmark(
-        type="d",
         path_parts=["$XDG_SRC_HOME", "private"],
         aliases={"default": ["p", "r", "v"], YAZI.name: ["P"]},
         description="private source",
