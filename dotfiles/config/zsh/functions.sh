@@ -2,13 +2,6 @@
 
 # NOTE: Keep the main file content AFTER this line for templating purposes!
 
-function src_short() {
-    shortcuts > /dev/null
-    source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc
-    source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc
-    echo "Sourced shell shortcuts."
-}
-
 # Run a command on every 'Enter' (e.g. `run_loop cargo run`)
 function run_loop() {
     while true; do
