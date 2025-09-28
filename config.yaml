@@ -170,10 +170,6 @@ dotfiles:
         trans_install: jsonc_to_json
 
     # Programs
-    d_zathura:
-        src: config/zathura
-        dst: ~/.config/zathura
-
     d_newsraft:
         src: config/newsraft
         dst: ~/.config/newsraft
