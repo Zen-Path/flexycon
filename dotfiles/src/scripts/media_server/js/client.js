@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.3.12
+// @version         1.3.14
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL     https://raw.githubusercontent.com/Zen-Path/flexycon/refs/heads/main/dotfiles/src/scripts/media_server/js/client.js
@@ -29,7 +29,21 @@ function downloadMedia(urls, type) {
             alert("Download failed.");
         },
         onload: function (response) {
+            console.log(":: Response info", response);
+
+            if (response.status !== 200) {
+                alert(
+                    `Download failed. Response status is ${response.status}.`
+                );
+                return;
+            }
+
             const data = JSON.parse(response.responseText);
+
+            if (data.return_code !== 0) {
+                alert(`Download failed. Return code is ${data.return_code}.`);
+                return;
+            }
 
             // Remove terminal codes from the command's output
             // for example: '\n\u001b[1;33m[download][warning] OSError'
@@ -45,12 +59,8 @@ function downloadMedia(urls, type) {
 - output:\n${output_fmt}`
             );
 
-            if (
-                data.return_code !== 0 ||
-                response.status !== 200 ||
-                output_fmt.includes("[ytdl][error]")
-            ) {
-                alert("Download failed.");
+            if (output_fmt.includes("[ytdl][error]")) {
+                alert("Download failed. Output includes error.");
                 return;
             }
 
