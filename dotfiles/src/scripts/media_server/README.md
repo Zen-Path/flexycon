@@ -2,6 +2,13 @@
 
 A script that handles download requests for URLs.
 
+## Dependencies
+
+- `gallery-dl` - for image downloads
+- `yt-dlp` - for video downloads and gallery-dl fallback
+
+Both are installed in the venv by default. Outside the venv, only `yt-dlp` needs to be installed system-wide, because `gallery-dl` can use it as a fallback (if you've configured it), so we can't call it directly from the venv like with `gallery-dl`.
+
 ## Installation
 
 1. Install the `ViolentMonkey` extension (guide [here](https://violentmonkey.github.io/get-it/))
