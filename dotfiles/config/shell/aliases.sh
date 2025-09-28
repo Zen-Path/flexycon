@@ -81,12 +81,6 @@ alias rc_cd='rc_c --dry-run'
 alias rc_s='rclone sync --progress --create-empty-src-dirs --track-renames --exclude "No_Backup/**" --exclude ".git/"'
 alias rc_sd='rc_s --dry-run'
 
-# Taskwarrior
-# TODO: use a similar approach to 'open_journal_entry' instead of
-# only 'yesterday' and 'today'.
-alias t-done-y='task end.after:yesterday end.before:today completed'
-alias t-done-t='task end.after:today completed'
-
 # YouTube
 alias yt='yt-dlp'
 alias ytt='yt --skip-download --write-thumbnail'

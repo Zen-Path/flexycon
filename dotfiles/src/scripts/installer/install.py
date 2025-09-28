@@ -36,7 +36,6 @@ install_packages = [
 # clang
 # mpv
 # newsraft
-# taskwarrior-tui
 # unrar
 # zip
 # unzip
@@ -65,6 +64,7 @@ install_packages = [
 # xorg-xev
 # xorg-xinit
 # xwallpaper
+# taskwarrior-tui
 # gruvbox-dark-gtk
 # trash-cli
 # zathura-pdf-poppler

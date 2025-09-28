@@ -170,10 +170,6 @@ dotfiles:
         trans_install: jsonc_to_json
 
     # Programs
-    d_task_warrior:
-        src: config/task
-        dst: ~/.config/task
-
     d_zathura:
         src: config/zathura
         dst: ~/.config/zathura
@@ -340,7 +336,6 @@ profiles:
             - d_python
             - d_yt_dlp
             - f_gallery_config
-            - d_task_warrior
             - d_newsraft
             - d_bottom
 
