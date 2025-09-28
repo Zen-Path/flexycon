@@ -1,8 +1,9 @@
 import os
+import shutil
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-from common.helpers import CommandResult, run_command
+from common.helpers import CommandResult, resolve_path, run_command
 from common.logger import logger
 from dotenv import load_dotenv
 
@@ -22,7 +23,19 @@ class Gallery:
 
     @staticmethod
     def build_command(urls: List[str], range_: Optional[Tuple[int, int]]) -> List[str]:
-        command = ["gallery-dl", "-o", f"base-directory={Gallery.GALLERIES_DIR}", *urls]
+        gallery_dl_cmd = (
+            "gallery-dl"
+            if shutil.which("gallery-dl")
+            else resolve_path(["$FLEXYCON_HOME", "venv", "bin", "gallery-dl"])
+        )
+        logger.debug(f"Gallery-dl command: {gallery_dl_cmd}")
+
+        command = [
+            gallery_dl_cmd,
+            "-o",
+            f"base-directory={Gallery.GALLERIES_DIR}",
+            *urls,
+        ]
 
         if range_:
             command += ["--range", f"{range_[0]}-{range_[1]}"]
