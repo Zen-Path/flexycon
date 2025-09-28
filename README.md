@@ -24,7 +24,7 @@ make setup
 make install
 ```
 
-# Screenshots
+# Gallery
 
 ## Mac
 
