@@ -55,22 +55,22 @@ alias adbpac='adb shell cmd package list packages'
 alias py='python3'
 
 # {%@@- if os == "darwin" +@@%}
-# [Py]thon [B]rew
+# PYthon Brew
 alias pyb='/opt/homebrew/bin/python3'
 # {%@@- endif +@@%}
 
-# [Python] Virtual [Env]ironment [C]reate
+# Python ENVironment Create
 # {%@@- if os == "darwin" +@@%}
 alias penvc='pyb -m venv venv'
 # {%@@- endif +@@%}
 
-# [Python] Virtual [Env]ironment [D]eactivate
+# Python ENVironment Deactivate
 alias penvd='deactivate && echo "Deactivated python environment."'
 
-# [P]ip [F]reeze to [R]equirements
+# Pip Freeze to Requirements
 alias pfr='pip freeze | grep -v "^-e" > requirements.txt'
 
-# [P]ip [I]nstall from [R]equirements
+# Pip Install from Requirements
 alias pir='pip install -r requirements.txt'
 
 # Rclone
@@ -96,20 +96,18 @@ alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(play
 
 # General
 
-# [F]ile [M]anager
+# File Manager
 # alias fm='$FILE_MANAGER'
 
-# [P]ackage [M]anager
+# Package Manager
 # {%@@- if os == "darwin" +@@%}
 alias pm='brew'
 # {%@@- endif +@@%}
 
 # {%@@- if "home" in profile +@@%}
-# [J]ournal [E]ntry
 alias je='journal_entry'
 # {%@@- endif +@@%}
 
-# [G]allery [D]ownload
 alias gld='gallery-dl'
 
 alias tess='tesseract --oem 3 --psm 6 -l eng'

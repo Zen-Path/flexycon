@@ -180,7 +180,7 @@ function find_by_md5() {
 
 # DEVELOPMENT
 
-# [Python] Virtual [Env]ironment [A]ctivate
+# Python ENVironment Activate
 function penva() {
     local env_dirs=("venv" ".venv" "env")
     local activate_script=""

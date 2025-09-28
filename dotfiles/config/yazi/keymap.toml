@@ -105,29 +105,29 @@ keymap = [
     { on = [
         "r",
         "i",
-    ], run = "rename --hovered --cursor=start", desc = "Rename - [i]nsert at the start" },
+    ], run = "rename --hovered --cursor=start", desc = "Rename - Insert at the start" },
     { on = [
         "r",
         "a",
-    ], run = "rename --hovered --cursor=end", desc = "Rename - [a]ppend to the end" },
+    ], run = "rename --hovered --cursor=end", desc = "Rename - Append to the end" },
     { on = [
         "r",
         "x",
-    ], run = "rename --hovered --cursor=before_ext", desc = "Rename - put cursor before e[x]tension" },
+    ], run = "rename --hovered --cursor=before_ext", desc = "Rename - put cursor before eXtension" },
 
     ## Replace parts
     { on = [
         "r",
         "r",
-    ], run = "rename --hovered --cursor=start --empty=stem", desc = "Rename - replace [r]oot" },
+    ], run = "rename --hovered --cursor=start --empty=stem", desc = "Rename - replace Root" },
     { on = [
         "r",
         "e",
-    ], run = "rename --hovered --cursor=end --empty=ext", desc = "Rename - replace [e]xtension" },
+    ], run = "rename --hovered --cursor=end --empty=ext", desc = "Rename - replace Extension" },
     { on = [
         "r",
         "w",
-    ], run = "rename --hovered --empty=all", desc = "Rename - replace [w]hole" },
+    ], run = "rename --hovered --empty=all", desc = "Rename - replace Whole" },
 
     { on = "t", run = "tab_create --current", desc = "Create a new tab with CWD" },
     { on = "T", run = "plugin toggle-pane max-preview", desc = "Maximize or restore preview" },
@@ -142,7 +142,7 @@ keymap = [
 
     # { on = "i",     run = "noop", desc = "" },
     { on = "I", run = "noop", desc = "" },
-    { on = "<C-i>", run = "toggle_all --state=none", desc = "[I]nvert selection of all files" },
+    { on = "<C-i>", run = "toggle_all --state=none", desc = "Invert selection of all files" },
 
     { on = "o", run = "open", desc = "Open selected files" },
     { on = "O", run = "open --interactive", desc = "Open selected files interactively" },

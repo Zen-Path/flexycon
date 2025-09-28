@@ -45,18 +45,18 @@ hs.hotkey.bind(mods1, "return", function()
     hs.application.launchOrFocus("kitty")
 end)
 
--- Launch a [w]eb browser instance
+-- Launch a web browser instance
 hs.hotkey.bind(mods1, "W", function()
     local app = getBrowserAppName()
     launchApp(app)
 end)
 
--- Open firefox's ([w]eb browser) profile selector
+-- Open firefox's (Web browser) profile selector
 hs.hotkey.bind(mods2, "W", function()
     hs.execute([[open -na "Firefox" --args -P]])
 end)
 
--- [Q]uit the frontmost window
+-- Quit the front-most window
 hs.hotkey.bind(mods1, "Q", function()
     local win = hs.window.frontmostWindow()
     win:close() -- equivalent to ⌘-W
@@ -65,7 +65,7 @@ hs.hotkey.bind(mods1, "Q", function()
     )
 end)
 
--- [Q]uit the frontmost app
+-- Quit the front-most app
 hs.hotkey.bind({ "ctrl", "cmd", "shift" }, "Q", function()
     local app = hs.application.frontmostApplication()
     local name = app:name()
