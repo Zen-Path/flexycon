@@ -257,7 +257,7 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
     # Copy
     { on = [
         "c",
-        "c",
+        "p",
     ], run = "copy path", desc = "Copy the file path" },
     { on = [
         "c",
