@@ -2,13 +2,13 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.3.11
+// @version         1.3.12
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL     https://raw.githubusercontent.com/Zen-Path/flexycon/refs/heads/main/dotfiles/src/scripts/media_server/js/client.js
 // @supportURL      https://github.com/Zen-Path/flexycon/tree/main/dotfiles/src/scripts/media_server
 // @homepageURL     https://github.com/Zen-Path/flexycon
-// @icon            https://www.svgrepo.com/show/190446/cloud-computing-download.svg
+// @icon            https://www.svgrepo.com/show/230395/download.svg
 // @grant           GM_registerMenuCommand
 // @grant           GM_xmlhttpRequest
 // @noframes
