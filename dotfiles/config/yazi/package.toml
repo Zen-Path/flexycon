@@ -1,31 +1,31 @@
 [[plugin.deps]]
-hash = "6094c7e7def6d131323e53d641f1bddd"
-rev  = "aeca767"
+hash = "4c49c446328c4553a4ccab7facc10b21"
+rev  = "d1c8baa"
 use  = "yazi-rs/plugins:mime-ext"
 
 [[plugin.deps]]
-hash = "bf6f074cd41ee33c3360341d168f9733"
-rev  = "aeca767"
+hash = "63b6c222bf2103b3023389dde5e2ecfe"
+rev  = "d1c8baa"
 use  = "yazi-rs/plugins:git"
 
 [[plugin.deps]]
 hash = "3996fc74044bc44144b323686f887e1"
-rev  = "aeca767"
+rev  = "d1c8baa"
 use  = "yazi-rs/plugins:full-border"
 
 [[plugin.deps]]
-hash = "277ba273e5d3d647feb5808d0fe4e4e0"
-rev  = "aeca767"
+hash = "435a2af56ecfb3d05755fd5e24977d8b"
+rev  = "d1c8baa"
 use  = "yazi-rs/plugins:mount"
 
 [[plugin.deps]]
-hash = "d5d4f3527592da5fbe77fd6f51815f80"
-rev  = "aeca767"
+hash = "8a7c58225816a163a6e8730c0adafbc8"
+rev  = "d1c8baa"
 use  = "yazi-rs/plugins:toggle-pane"
 
 [[plugin.deps]]
-hash = "70898957e9e4c1ca291ff26e8fdc434"
-rev  = "aeca767"
+hash = "4ee57085277d616acfa0ef1fef37dc00"
+rev  = "d1c8baa"
 use  = "yazi-rs/plugins:vcs-files"
 
 [[plugin.deps]]
