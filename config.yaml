@@ -253,7 +253,6 @@ dotfiles:
         dst: ~/.local/bin/tag
         chmod: "755"
 
-    # Linux / Home
     f_dmenuhandler:
         src: src/scripts/dmenuhandler.sh
         dst: ~/.local/bin/dmenuhandler
