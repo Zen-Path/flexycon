@@ -24,6 +24,21 @@ make setup
 make install
 ```
 
+To install the dotfiles in the correct location, follow these steps:
+
+```sh
+# From the top level of this repository:
+dotdrop install
+
+# Open a new terminal or source your updated shell configuration:
+user_shortcuts
+
+# Re-run the installation to apply the generated user shortcuts:
+dotdrop install
+```
+
+When testing changes to the venv, or just needing a clean slate, you can use `make clean` and it will clean up the project a bit.
+
 # Gallery
 
 ## Mac
