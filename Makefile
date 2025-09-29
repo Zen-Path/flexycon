@@ -31,7 +31,9 @@ CLEAN_TARGETS = \
 	.DS_Store
 
 clean:
-	@echo "Cleaning up project..."
+	@echo "🧹 Cleaning up project..."
+
+	@echo "Removing clean targets..."
 	@for dir in $(CLEAN_TARGETS); do \
 		find . -name "$$dir" -exec rm -rf {} +; \
 	done
@@ -45,7 +47,7 @@ clean:
 		@$(VENV_BIN)/pre-commit clean; \
 	fi
 
-	@echo "Full cleanup complete."
+	@echo "🧹 Full cleanup complete."
 
 setup:
 	@$(MAKE) init-submodules
