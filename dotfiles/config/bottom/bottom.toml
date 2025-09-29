@@ -32,13 +32,10 @@ whole_word = false
 # Whether to make process searching use regex by default.
 regex = true
 
-# The temperature unit. One of the following, defaults to "c" for Celsius:
+# The temperature unit.
+# Options: "c" | "celsius" | "k" | "kelvin" | "f" | "fahrenheit"
+# Default: "c"
 temperature_type = "c"
-##temperature_type = "k"
-##temperature_type = "f"
-##temperature_type = "kelvin"
-##temperature_type = "fahrenheit"
-##temperature_type = "celsius"
 
 # The default time interval (in milliseconds).
 default_time_value = "60s"
@@ -102,9 +99,13 @@ enable_gpu = false
 enable_cache_memory = false
 # How much data is stored at once in terms of time.
 retention = "10m"
-# Where to place the legend for the memory widget. One of "none", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom", "bottom-right".
+
+# Where to place the legend for the memory widget.
+# Options: "none", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom", "bottom-right"
 memory_legend = "top-right"
-# Where to place the legend for the network widget. One of "none", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom", "bottom-right".
+
+# Where to place the legend for the network widget.
+# Options: "none", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom", "bottom-right"
 network_legend = "top-right"
 
 # Processes widget configuration
@@ -115,7 +116,8 @@ columns = ["PID", "Name", "CPU%", "Mem%", "R/s", "W/s", "User", "State", "GPU%"]
 
 # CPU widget configuration
 [cpu]
-# One of "all" (default), "average"/"avg"
+# Options: "all" | "avg" | "average"
+# Default: "all"
 default = "all"
 
 # Disk widget configuration
@@ -156,14 +158,8 @@ whole_word      = false
 # will depend on terminal support.
 [styles] # Uncomment if you want to use custom styling
 
-# Built-in themes. Valid values are:
-# - "default"
-# - "default-light"
-# - "gruvbox"
-# - "gruvbox-light"
-# - "nord"
-# - "nord-light".
-#
+# Built-in themes.
+# Options: "default" | "default-light" | "gruvbox" | "gruvbox-light" | "nord" | "nord-light"
 # This will have the lowest precedence if a custom colour palette is set,
 # or overridden if the command-line flag for a built-in theme is set.
 theme = "gruvbox"
