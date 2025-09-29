@@ -36,6 +36,10 @@ clean:
 		find . -name "$$dir" -exec rm -rf {} +; \
 	done
 
+	@count_empty_dirs=$$(find . -type d -empty | wc -l | tr -d ' '); \
+	echo "Removing $$count_empty_dirs empty directories..."; \
+	find . -type d -empty -delete
+
 	@echo "Cleaning up pre-commit hooks..."
 	@if [ -d "$(VENV_DIR)" ]; then \
 		@$(VENV_BIN)/pre-commit clean; \
