@@ -191,7 +191,7 @@ dotfiles:
 
     # Scripts
     f_compiler:
-        src: src/scripts/compiler.sh
+        src: bin/compiler.sh
         dst: ~/.local/bin/compiler
         chmod: "755"
 
@@ -201,7 +201,7 @@ dotfiles:
         chmod: "755"
 
     f_getkeys:
-        src: src/scripts/getkeys.sh
+        src: bin/getkeys.sh
         dst: ~/.local/bin/getkeys
         chmod: "755"
 
@@ -211,12 +211,12 @@ dotfiles:
         chmod: "755"
 
     f_if_installed:
-        src: src/scripts/if_installed.sh
+        src: bin/if_installed.sh
         dst: ~/.local/bin/if_installed
         chmod: "755"
 
     f_imgconv:
-        src: src/scripts/imgconv.sh
+        src: bin/imgconv.sh
         dst: ~/.local/bin/imgconv
         chmod: "755"
 
@@ -236,7 +236,7 @@ dotfiles:
         chmod: "755"
 
     f_noisereduce:
-        src: src/scripts/noisereduce.sh
+        src: bin/noisereduce.sh
         dst: ~/.local/bin/noisereduce
         chmod: "755"
 
@@ -246,7 +246,7 @@ dotfiles:
         chmod: "755"
 
     f_sdir:
-        src: src/scripts/sdir.sh
+        src: bin/sdir.sh
         dst: ~/.local/bin/sdir
         chmod: "755"
 
@@ -256,22 +256,22 @@ dotfiles:
         chmod: "755"
 
     f_tag:
-        src: src/scripts/tag.sh
+        src: bin/tag.sh
         dst: ~/.local/bin/tag
         chmod: "755"
 
     f_dmenuhandler:
-        src: src/scripts/dmenuhandler.sh
+        src: bin/dmenuhandler.sh
         dst: ~/.local/bin/dmenuhandler
         chmod: "755"
 
     f_pkgsize:
-        src: src/scripts/pkgsize.sh
+        src: bin/pkgsize.sh
         dst: ~/.local/bin/pkgsize
         chmod: "755"
 
     f_sysact:
-        src: src/scripts/sysact.sh
+        src: bin/sysact.sh
         dst: ~/.local/bin/sysact
         chmod: "755"
 
@@ -365,7 +365,7 @@ profiles:
             - meta_common
         variables:
             d_vscode_dst: "~/Library/Application\ Support/Code/User"
-            f_py_run_src: "src/scripts/py-run.sh"
+            f_py_run_src: "bin/py-run.sh"
         dotfiles:
             # Config
             - d_kitty
