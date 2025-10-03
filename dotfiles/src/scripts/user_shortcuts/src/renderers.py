@@ -70,7 +70,10 @@ class YaziBookmarkRenderer(BookmarkRenderer):
         return f'{self.indentation}{{ on = {alias_segments}, run = {command}, desc = "{description_fmt}" }},'
 
     def compose_file(self) -> str:
-        # Add newline so we can comment out the import statement in keymap.toml
+        # The shortcuts file will be imported in the keymap.toml file, and we've
+        # commented out the import statement to keep the file TOML valid, but
+        # this means we need a newline in the shortcuts file so it's not
+        # commented out as well.
         return f"\n{self.indentation}# SHORTCUTS\n{self.compose_bookmarks()}\n"
 
 
