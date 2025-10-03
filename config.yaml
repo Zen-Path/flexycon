@@ -196,7 +196,7 @@ dotfiles:
         chmod: "755"
 
     f_continuous_diff:
-        src: src/scripts/py-run.sh
+        src: "{{@@ f_py_run_src @@}}"
         dst: ~/.local/bin/continuous_diff
         chmod: "755"
 
@@ -206,7 +206,7 @@ dotfiles:
         chmod: "755"
 
     f_git_logs:
-        src: src/scripts/py-run.sh
+        src: "{{@@ f_py_run_src @@}}"
         dst: ~/.local/bin/git_logs
         chmod: "755"
 
@@ -221,17 +221,17 @@ dotfiles:
         chmod: "755"
 
     f_journal_entry:
-        src: src/scripts/py-run.sh
+        src: "{{@@ f_py_run_src @@}}"
         dst: ~/.local/bin/journal_entry
         chmod: "755"
 
     f_jsonc_to_json:
-        src: src/scripts/py-run.sh
+        src: "{{@@ f_py_run_src @@}}"
         dst: ~/.local/bin/jsonc_to_json
         chmod: "755"
 
     f_media_server:
-        src: src/scripts/py-run.sh
+        src: "{{@@ f_py_run_src @@}}"
         dst: ~/.local/bin/media_server
         chmod: "755"
 
@@ -241,7 +241,7 @@ dotfiles:
         chmod: "755"
 
     f_rclone_fmt:
-        src: src/scripts/py-run.sh
+        src: "{{@@ f_py_run_src @@}}"
         dst: ~/.local/bin/rcfmt
         chmod: "755"
 
@@ -251,7 +251,7 @@ dotfiles:
         chmod: "755"
 
     f_user_shortcuts:
-        src: src/scripts/py-run.sh
+        src: "{{@@ f_py_run_src @@}}"
         dst: ~/.local/bin/user_shortcuts
         chmod: "755"
 
@@ -365,6 +365,7 @@ profiles:
             - meta_common
         variables:
             d_vscode_dst: "~/Library/Application\ Support/Code/User"
+            f_py_run_src: "src/scripts/py-run.sh"
         dotfiles:
             # Config
             - d_kitty
