@@ -42,7 +42,7 @@ def process_line(line):
 
 def build_parser():
     parser = argparse.ArgumentParser(
-        description="Process log files and output skipped operations."
+        description="Process rclone output and display a structured report on changes and operations."
     )
 
     parser.add_argument(
