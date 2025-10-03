@@ -44,7 +44,7 @@ ZSH = ZshBookmarkRenderer(
 class NVimBookmarkRenderer(BookmarkRenderer):
     def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         description_fmt = f'" {bookmark.description}\n' if bookmark.description else ""
-        return f'{description_fmt}cmap ;{''.join(alias_segments)} "{self._get_path(bookmark)}"'
+        return f'{description_fmt}cmap ;{''.join(alias_segments)} "{shlex.quote(bookmark.resolved_path)}"'
 
 
 NVIM = NVimBookmarkRenderer("NeoVim", ["$XDG_CONFIG_HOME", "nvim", "shortcuts.vim"])
@@ -62,10 +62,9 @@ class YaziBookmarkRenderer(BookmarkRenderer):
 
         # All yazi bookmarks should start with 'b'.
         alias_segments = ["b"] + alias_segments
+        path = shlex.quote(bookmark.resolved_path)
         command = (
-            f'"cd {self._get_path(bookmark)}"'
-            if bookmark.type == "d"
-            else f'["reveal {self._get_path(bookmark)}", "open"]'
+            f'"cd {path}"' if bookmark.type == "d" else f'["reveal {path}", "open"]'
         )
 
         return f'{self.indentation}{{ on = {alias_segments}, run = {command}, desc = "{description_fmt}" }},'
