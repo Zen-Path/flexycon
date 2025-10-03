@@ -240,6 +240,7 @@ dotfiles:
         dst: ~/.local/bin/noisereduce
         chmod: "755"
 
+    # Note: the dotfile key NEEDS to match the script name (without the prefix, of course)
     f_rclone_fmt:
         src: "{{@@ f_py_run_src @@}}"
         dst: ~/.local/bin/rcfmt
