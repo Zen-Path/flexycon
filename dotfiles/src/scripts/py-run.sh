@@ -1,12 +1,8 @@
 #!/usr/bin/env sh
 
-SCRIPT_NAME="$(basename "$0")"
-SCRIPT_MODULE="$(echo "$SCRIPT_NAME" | sed 's/-/_/g')"
-
 PROJECT_DIR="$FLEXYCON_HOME"
-VENV="$PROJECT_DIR/venv"
-PYTHON="$VENV/bin/python"
-TARGET_SCRIPT="$PROJECT_DIR/dotfiles/src/scripts/$SCRIPT_MODULE/main.py"
+PYTHON="$PROJECT_DIR/venv/bin/python"
+TARGET_SCRIPT="$PROJECT_DIR/dotfiles/src/scripts/{{@@ _dotfile_abs_dst.split('/')[-1] @@}}/main.py"
 
 if [ ! -x "$PYTHON" ]; then
     echo "Error: Python not found at $PYTHON" >&2
