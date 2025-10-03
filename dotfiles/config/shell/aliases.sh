@@ -75,7 +75,6 @@ alias pir='pip install -r requirements.txt'
 
 # Rclone
 alias rc='rclone'
-alias rcfmt='rclone_fmt'
 alias rc_c='rclone copy --progress --create-empty-src-dirs --exclude "No_Backup/**" --exclude ".git/"'
 alias rc_cd='rc_c --dry-run'
 alias rc_s='rclone sync --progress --create-empty-src-dirs --track-renames --exclude "No_Backup/**" --exclude ".git/"'
