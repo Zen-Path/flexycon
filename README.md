@@ -2,6 +2,14 @@
 
 Flexible programmatic configuration.
 
+- [flexycon](#flexycon)
+- [Setup](#setup)
+    - [Dependencies](#dependencies)
+    - [Installation](#installation)
+- [Gallery](#gallery)
+    - [Mac](#mac)
+    - [Linux](#linux)
+
 # Setup
 
 ## Dependencies

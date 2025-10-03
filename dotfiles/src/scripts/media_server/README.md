@@ -2,6 +2,13 @@
 
 A script that handles download requests for URLs.
 
+- [Media Server](#media-server)
+    - [Dependencies](#dependencies)
+    - [Installation](#installation)
+    - [Usage](#usage)
+    - [Tips](#tips)
+        - [DownThemAll](#downthemall)
+
 ## Dependencies
 
 - `gallery-dl` - for image downloads

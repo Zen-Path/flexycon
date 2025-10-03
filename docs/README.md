@@ -1,4 +1,14 @@
-# Tips
+# Extra
+
+- [Extra](#extra)
+    - [Tips](#tips)
+        - [Mac](#mac)
+        - [Monday as first day of the week](#monday-as-first-day-of-the-week)
+        - [Check available locales](#check-available-locales)
+        - [Check current locale settings](#check-current-locale-settings)
+        - [Extract only matches using rg](#extract-only-matches-using-rg)
+
+## Tips
 
 ### Mac
 
