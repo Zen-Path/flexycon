@@ -185,8 +185,8 @@ conds = [
     { if = "!dir", text = "󰈔" },
 ]
 dirs = [
-    { name = ".config", text = "" },
-    { name = ".git", text = "" },
+    { name = ".cache", text = "󱘿" },
+    { name = ".Trash", text = "" },
     { name = "Desktop", text = "" },
     { name = "Development", text = "" },
     { name = "Documents", text = "" },
@@ -197,6 +197,22 @@ dirs = [
     { name = "Pictures", text = "" },
     { name = "Public", text = "" },
     { name = "Videos", text = "" },
+    # Custom
+    { name = "University", text = "" },
+    # Development
+    { name = ".git", text = "", fg = "#EE7950" },
+    { name = "src", text = "", fg = "#67AD5C" },
+    { name = "bin", text = "", fg = "#D77976" },
+    { name = "common", text = "󰉋", fg = "#9F4DB7" },
+    ## Programming Languages
+    { name = ".npm", text = "" },
+    { name = "node_modules", text = "", fg = "#41535b" },
+    { name = ".venv", text = "", fg = "#41535b" },
+    { name = "venv", text = "", fg = "#41535b" },
+    # Config
+    { name = "flexycon", text = "󰿗", fg = "#F4BA61" },
+    { name = ".config", text = "" },
+    { name = ".vscode", text = "" },
 ]
 exts = [
     { name = "3gp", text = "", fg = "#fd971f" },
