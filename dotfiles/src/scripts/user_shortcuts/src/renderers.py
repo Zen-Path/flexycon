@@ -61,7 +61,7 @@ ZSH = ZshBookmarkRenderer(
 class NVimBookmarkRenderer(BookmarkRenderer):
     def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         description_fmt = f'" {bookmark.description}\n' if bookmark.description else ""
-        return f'{description_fmt}cmap ;{alias_segments} "{self._get_path(bookmark)}"'
+        return f'{description_fmt}cmap ;{''.join(alias_segments)} "{self._get_path(bookmark)}"'
 
 
 NVIM = NVimBookmarkRenderer("NeoVim", ["$XDG_CONFIG_HOME", "nvim", "shortcuts.vim"])
