@@ -1,56 +1,39 @@
 import platform
+import shlex
 from typing import List
 
 from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
 
-
-def get_target_command(bookmark):
-    if bookmark.type == "d":
-        return "cd"
-
-    system = platform.system()
-    commands = {
-        "Darwin": "open",
-        "Linux": "xdg-open",
-    }
-
-    # Default to $EDITOR if defined, otherwise "vi"
-    return commands.get(system, "$EDITOR")
+OPEN_COMMANDS = {
+    "Darwin": "open",
+    "Linux": "xdg-open",
+}
 
 
 class ZshBookmarkRenderer(BookmarkRenderer):
     def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
-        description_fmt = f"# {bookmark.description}\n" if bookmark.description else ""
+        """
+        Target:
+        # downloads
+        alias dwn="cd /Users/user/Downloads && ls -A"
+        hash -d dwn=/Users/user/Downloads
+
+        """
+        result = []
+        if bookmark.description:
+            result.append(f"# {bookmark.description}")
 
         alias_name = "".join(alias_segments)
+        path = shlex.quote(bookmark.resolved_path)
+        command = OPEN_COMMANDS.get(platform.system(), "$EDITOR")
 
-        # Shell keywords
-        alias_keyword = "alias"
-        hash_keyword = "hash -d"
+        if bookmark.type == "d":
+            result.append(f'alias {alias_name}="cd {path} && ls -A"')
+            result.append(f"hash -d {alias_name}={path}")
+        else:
+            result.append(f'alias {alias_name}="{command} {path}"')
 
-        # Determine max width so the '=' line up
-        max_keyword_len = max(len(alias_keyword), len(hash_keyword))
-
-        alias_header = f"{alias_keyword:<{max_keyword_len}} {alias_name}"
-        hash_header = f"{hash_keyword:<{max_keyword_len}} {alias_name}"
-
-        target_command = get_target_command(bookmark)
-
-        ls_command = " && ls -A"
-        alias_definition = f'{alias_header}="{target_command} {self._get_path(bookmark)}{ls_command if bookmark.type == "d" else ""}"'
-
-        hash_definition = (
-            f'\n{hash_header}="{bookmark.resolved_path}"'
-            if bookmark.type == "d"
-            else ""
-        )
-
-        # Example:
-        # # home
-        # alias   dwn="cd '$XDG_DOWNLOAD_DIR' && ls -A"
-        # hash -d dwn="/Users/home/Downloads"
-
-        return f"{description_fmt}{alias_definition}{hash_definition}\n"
+        return "\n".join(result) + "\n"
 
 
 ZSH = ZshBookmarkRenderer(
