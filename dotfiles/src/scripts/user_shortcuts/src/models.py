@@ -42,9 +42,17 @@ class BookmarkRenderer(ABC):
         logger.info(f"[{self.name}] Processing bookmarks...")
         count = 0
 
-        for i, bookmark in enumerate(bookmarks):
+        for bookmark in bookmarks:
+            name = (
+                bookmark.description
+                if bookmark.description
+                else f"[{''.join(bookmark.path_parts)}]"
+            )
+
             if not bookmark.condition:
-                logger.debug(f"- Skipped bookmark {i} due to condition not being met")
+                logger.warning(
+                    f"- Skipped bookmark '{name}' due to condition not being met"
+                )
                 continue
 
             alias_value = bookmark.aliases.get(
@@ -54,12 +62,12 @@ class BookmarkRenderer(ABC):
                 alias_str = "".join(alias_value)
                 self.processed_bookmarks.append((alias_value, bookmark))
 
-                logger.debug(f"- Added alias '{alias_str}' for bookmark {i}")
+                logger.debug(f"- Added alias '{alias_str}' for bookmark '{name}'")
                 count += 1
             else:
-                logger.debug(f"- Skipped bookmark {i} due to missing alias")
+                logger.warning(f"- Skipped bookmark '{name}' due to missing alias")
 
-        logger.info(f"[{self.name}] Processed {count} bookmark(s)")
+        logger.info(f"[{self.name}] Processed {count} bookmarks")
 
         content = self.compose_file()
         self._write_output(content)
