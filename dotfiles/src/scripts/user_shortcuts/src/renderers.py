@@ -54,7 +54,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
 
 
 ZSH = ZshBookmarkRenderer(
-    "ZSH", ["$XDG_CONFIG_HOME", "shell", "shortcuts.sh"], escape_path=True
+    "Zsh", ["$XDG_CONFIG_HOME", "shell", "shortcuts.sh"], escape_path=True
 )
 
 
