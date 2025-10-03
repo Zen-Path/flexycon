@@ -26,9 +26,9 @@ def build_parser():
         "-l",
         "--list-shortcuts",
         action="store_true",
-        help="List shortcuts in a human-friendly way.",
+        help="list shortcuts in a human-friendly way",
     )
-    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
+    parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
     return parser
 

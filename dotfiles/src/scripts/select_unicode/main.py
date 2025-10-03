@@ -40,17 +40,17 @@ def build_parser():
     )
 
     parser.add_argument(
-        "-i", "--insert-char", action="store_true", help="Insert the selected char"
+        "-i", "--insert-char", action="store_true", help="insert the selected char"
     )
     parser.add_argument(
-        "--no-copy", action="store_true", help="Do not copy the selected char"
+        "--no-copy", action="store_true", help="do not copy the selected char"
     )
     parser.add_argument(
         "--no-notify",
         action="store_true",
-        help="Do not notify user of the selected char",
+        help="do not notify user of the selected char",
     )
-    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
+    parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
     return parser
 

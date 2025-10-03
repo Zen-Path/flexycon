@@ -168,9 +168,9 @@ def build_parser():
     parser.add_argument(
         "action",
         choices=sorted(ACTIONS.keys(), key=str.lower),
-        help="Action to perform. " + get_help_text(),
+        help="action to perform. " + get_help_text(),
     )
-    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
+    parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
     return parser
 

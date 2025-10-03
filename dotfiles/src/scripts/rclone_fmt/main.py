@@ -50,9 +50,9 @@ def build_parser():
         nargs="?",
         type=argparse.FileType("r"),
         default=sys.stdin,
-        help="File to process (default: stdin)",
+        help="file to process (default: stdin)",
     )
-    parser.add_argument("--verbose", action="store_true", help="Enable debug output")
+    parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
     return parser
 

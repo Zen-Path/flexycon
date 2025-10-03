@@ -119,28 +119,28 @@ def build_parser():
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     diff_parser = subparsers.add_parser(
-        "diff", help="Generate diff between two databases"
+        "diff", help="generate diff between two databases"
     )
-    diff_parser.add_argument("old_db", help="Path to the old database")
-    diff_parser.add_argument("new_db", help="Path to the new database")
-    diff_parser.add_argument("output_dir", help="Directory to save the diff")
+    diff_parser.add_argument("old_db", help="path to the old database")
+    diff_parser.add_argument("new_db", help="path to the new database")
+    diff_parser.add_argument("output_dir", help="directory to save the diff")
 
     restore_parser = subparsers.add_parser(
-        "restore", help="Restore database from base schema and diffs"
+        "restore", help="restore database from base schema and diffs"
     )
-    restore_parser.add_argument("base_schema", help="Path to the base schema SQL file")
-    restore_parser.add_argument("diffs_dir", help="Directory containing diff SQL files")
-    restore_parser.add_argument("output_db", help="Output database path")
+    restore_parser.add_argument("base_schema", help="path to the base schema SQL file")
+    restore_parser.add_argument("diffs_dir", help="directory containing diff SQL files")
+    restore_parser.add_argument("output_db", help="output database path")
 
     test_parser = subparsers.add_parser(
-        "generate-test-data", help="Generate test data and diffs"
+        "generate-test-data", help="generate test data and diffs"
     )
     test_parser.add_argument(
-        "output_dir", help="Directory to save the test databases and diffs"
+        "output_dir", help="directory to save the test databases and diffs"
     )
-    test_parser.add_argument("base_db", help="Path to the base database")
+    test_parser.add_argument("base_db", help="path to the base database")
     test_parser.add_argument(
-        "--num-backups", type=int, default=10, help="Number of backups to generate"
+        "--num-backups", type=int, default=10, help="number of backups to generate"
     )
 
     return parser
