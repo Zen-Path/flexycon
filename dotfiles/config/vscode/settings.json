@@ -33,6 +33,7 @@
         "**/*.egg-info": true,
         "**/.git": false,
         "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
         "**/.venv": true,
         "**/__pycache__": true,
         "**/node_modules": true,
