@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.3.15
+// @version         1.4.3
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL     https://raw.githubusercontent.com/Zen-Path/flexycon/refs/heads/main/dotfiles/src/scripts/media_server/js/client.js
@@ -16,8 +16,12 @@
 
 const SERVER_PORT = "5000";
 
-function downloadMedia(urls, type) {
-    const requestData = JSON.stringify({ urls, type });
+function downloadMedia(urls, type, range) {
+    const payload = { urls, type };
+    if (range !== undefined) {
+        payload.range = range;
+    }
+    const requestData = JSON.stringify(payload);
 
     GM_xmlhttpRequest({
         method: "POST",
@@ -74,6 +78,13 @@ function main() {
         const currentUrl = window.location.href;
         downloadMedia([currentUrl], "gallery");
     });
+
+    GM_registerMenuCommand("Download Gallery Range", () => {
+        const range = prompt("Type the range (start:end).");
+        const currentUrl = window.location.href;
+        downloadMedia([currentUrl], "gallery", range);
+    });
+
     GM_registerMenuCommand("Download Galleries", () => {
         const userInput = prompt("Paste the gallery urls.");
         const galleryUrls = userInput.split(" ");

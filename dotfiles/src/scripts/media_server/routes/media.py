@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from common.helpers import parse_range
 from flask import Blueprint, current_app, jsonify, request
 from scripts.media_server.src.history import HistoryEntry
 from scripts.media_server.src.models import Gallery
@@ -12,6 +13,7 @@ def download_media():
     data = request.get_json(silent=True) or {}
     urls = data.get("urls")
     type_ = data.get("type")
+    range_raw = data.get("range")
 
     # Validation
     if (
@@ -24,9 +26,18 @@ def download_media():
     if not type_ or not isinstance(type_, str):
         return jsonify({"error": "'type_' must be a non-empty string."}), 400
 
+    range_parts = None
+    if range_raw:
+        range_parts, error = parse_range(range_raw)
+        if error:
+            return jsonify({"error": error}), 400
+
     match type_:
         case "gallery":
-            cmd_result = Gallery.download(urls)
+            # Pass range_parts only if present
+            kwargs = {"range_": range_parts} if range_parts else {}
+            cmd_result = Gallery.download(urls, **kwargs)
+
         case _:
             return jsonify({"error": "'type_' is unknown."}), 400
 
