@@ -1,5 +1,6 @@
 import os
 import shutil
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import List, Optional, Tuple
 
@@ -10,19 +11,26 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class Gallery:
+class Media(ABC):
     BASE_DIR = Path(os.getenv("DOWNLOAD_DIR") or Path.home() / "Downloads")
-    GALLERIES_DIR = BASE_DIR / "Galleries"
+    DOWNLOAD_DIR: Path
     FILES_DIR = BASE_DIR / "Files"
 
-    @staticmethod
-    def ensure_directories() -> None:
-        if not Gallery.FILES_DIR.exists():
-            Gallery.FILES_DIR.mkdir(parents=True, exist_ok=True)
-            logger.info(f"Directory '{Gallery.FILES_DIR}' created.")
+    @classmethod
+    @abstractmethod
+    def download(
+        cls, urls: List[str], range_parts: Optional[Tuple[int, int]] = None
+    ) -> CommandResult:
+        pass
 
-    @staticmethod
-    def build_command(urls: List[str], range_: Optional[Tuple[int, int]]) -> List[str]:
+
+class Gallery(Media):
+    DOWNLOAD_DIR = Media.BASE_DIR / "Galleries"
+
+    @classmethod
+    def _build_command(
+        cls, urls: List[str], range_parts: Optional[Tuple[int, int]] = None
+    ) -> List[str]:
         gallery_dl_cmd = (
             "gallery-dl"
             if shutil.which("gallery-dl")
@@ -34,30 +42,28 @@ class Gallery:
         command = [
             gallery_dl_cmd,
             "-o",
-            f"base-directory={Gallery.GALLERIES_DIR}",
+            f"base-directory={cls.DOWNLOAD_DIR}",
+            "--no-colors",
             *urls,
         ]
 
-        if range_:
-            command += ["--range", f"{range_[0]}-{range_[1]}"]
+        if range_parts:
+            command += ["--range", f"{range_parts[0]}-{range_parts[1]}"]
 
         exec_cmd = (
-            f"mkdir -p {Gallery.FILES_DIR}; "
-            f'if [ -f "{Gallery.FILES_DIR}/{{_filename}}" ]; then rm {{_path}}; '
-            f"else mv {{_path}} {Gallery.FILES_DIR}; fi && "
-            f"ln -s {Gallery.FILES_DIR}/{{_filename}} {{_directory}}"
+            f"mkdir -p {cls.FILES_DIR}; "
+            f'if [ -f "{cls.FILES_DIR}/{{_filename}}" ]; then rm {{_path}}; '
+            f"else mv {{_path}} {cls.FILES_DIR}; fi && "
+            f"ln -s {cls.FILES_DIR}/{{_filename}} {{_directory}}"
         )
 
         # command += ["--exec", exec_cmd]
 
         return command
 
-    @staticmethod
+    @classmethod
     def download(
-        urls: List[str], range_: Optional[Tuple[int, int]] = None
+        cls, urls: List[str], range_parts: Optional[Tuple[int, int]] = None
     ) -> CommandResult:
-        # Gallery.ensure_directories()
-
-        command = Gallery.build_command(urls, range_)
-
+        command = cls._build_command(urls, range_parts)
         return run_command(command)
