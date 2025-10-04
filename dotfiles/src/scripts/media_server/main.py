@@ -1,12 +1,14 @@
 import argparse
+import atexit
 import json
 import logging
+from datetime import datetime
 
 from colorama import Fore, Style
 from common.logger import logger, setup_logging
-from flask import Flask, g, jsonify, request
+from flask import Flask, current_app, g, jsonify, request
 from flask_cors import CORS
-from scripts.media_server.src.history import log_history_entry
+from scripts.media_server.src.history import HistoryEntry, HistoryLogger
 from scripts.media_server.src.models import Gallery
 
 # Flask setup
@@ -81,7 +83,9 @@ def download_media():
             case _:
                 return jsonify({"error": "'type_' is unknown."}), 400
 
-        log_history_entry(urls)
+        current_app.extensions["history_logger"].queue_for_saving(
+            [HistoryEntry(urls, type_, datetime.now())]
+        )
 
         return jsonify(
             {
@@ -109,6 +113,9 @@ def main():
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+
+    app.extensions["history_logger"] = HistoryLogger()
+    atexit.register(lambda: app.extensions["history_logger"].flush())
 
     app.run(port=5000, debug=True)
 
