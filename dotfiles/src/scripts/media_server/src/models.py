@@ -28,7 +28,8 @@ class Gallery:
             if shutil.which("gallery-dl")
             else resolve_path(["$FLEXYCON_HOME", "venv", "bin", "gallery-dl"])
         )
-        logger.debug(f"Gallery-dl command: {gallery_dl_cmd}")
+        if gallery_dl_cmd != "gallery-dl":
+            logger.debug(f"Gallery-dl command: {gallery_dl_cmd}")
 
         command = [
             gallery_dl_cmd,
