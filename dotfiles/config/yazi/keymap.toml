@@ -220,7 +220,8 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
         "<Space>",
     ], run = "cd --interactive", desc = "Jump interactively" },
 
-    # {%@@ include 'config/yazi/shortcuts.toml' @@%}
+    # Shortcuts
+    # {{@@ "\n" @@}}{%@@ include 'config/yazi/shortcuts.toml' @@%}
 
     { on = "h", run = "leave", desc = "Go back to the parent directory" },
     { on = "H", run = "back", desc = "Go back to the previous directory. Useful when combined with bookmarks" },
