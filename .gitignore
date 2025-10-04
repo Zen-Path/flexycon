@@ -2,6 +2,7 @@
 uservariables.yaml
 dotfiles/config/yazi/shortcuts.toml
 dotfiles/config/zsh/shortcuts.sh
+dotfiles/config/nvim/shortcuts.lua
 
 dotfiles/scripts/git_logs/src/repos.py
 

@@ -173,8 +173,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- Load command shortcuts generated from bm-dirs and bm-files via user shortcuts script.
-local shortcuts_file = vim.fn.expand("~/.config/nvim/shortcuts.vim")
-if vim.fn.filereadable(shortcuts_file) == 1 then
-    vim.cmd("silent! source " .. shortcuts_file)
-end
+-- SHORTCUTS
+-- Typing ':e ;csp' fast enough will expand into ':e /home/<user>/.zprofile'
+-- {{@@ "\n" @@}}{%@@ include 'config/nvim/shortcuts.lua' @@%}

@@ -42,11 +42,27 @@ ZSH = ZshBookmarkRenderer(
 
 class NVimBookmarkRenderer(BookmarkRenderer):
     def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
-        description_fmt = f'" {bookmark.description}\n' if bookmark.description else ""
-        return f'{description_fmt}cmap ;{''.join(alias_segments)} "{self._get_path(bookmark)}"'
+        result = []
+        if bookmark.description:
+            result.append(f"-- {bookmark.description}")
+
+        result.append(
+            f"""vim.api.nvim_set_keymap(
+    "c",
+    ";{"".join(alias_segments)}",
+    "{self._get_path(bookmark)}",
+    {{ noremap = true }}
+)"""
+        )
+
+        return "\n".join(result) + "\n"
 
 
-NVIM = NVimBookmarkRenderer("NeoVim", ["$XDG_CONFIG_HOME", "nvim", "shortcuts.vim"])
+NVIM = NVimBookmarkRenderer(
+    "NeoVim",
+    ["$FLEXYCON_HOME", "dotfiles", "config", "nvim", "shortcuts.lua"],
+    escape_path=False,
+)
 
 
 class YaziBookmarkRenderer(BookmarkRenderer):
