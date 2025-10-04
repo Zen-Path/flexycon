@@ -12,3 +12,4 @@ streetsidesoftware.code-spell-checker
 tamasfe.even-better-toml
 timonwong.shellcheck
 yandeu.five-server
+yzhang.markdown-all-in-one
