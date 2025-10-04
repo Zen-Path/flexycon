@@ -37,6 +37,7 @@ def main():
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+    logger.debug(args)
 
     # Flask setup
     app = Flask(__name__)
