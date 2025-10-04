@@ -88,6 +88,5 @@ export FZF_DEFAULT_OPTS='--multi --extended'
 
 ## ENV SETTINGS
 # {%@@- if os == "darwin" +@@%}
-
-[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && user_shortcuts
+[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && user_shortcuts --renderer 'zsh'
 # {%@@- endif +@@%}
