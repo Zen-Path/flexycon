@@ -172,3 +172,18 @@ class XSel(ClipboardUtility):
     @classmethod
     def file(cls, file_path: str):
         subprocess.run([cls.command, "--clipboard", "--input", file_path], check=True)
+
+
+def parse_range(range_raw: str) -> Tuple[Optional[Tuple[int, int]], Optional[str]]:
+    """Parse 'start:end' string into two integers."""
+    if not range_raw or ":" not in range_raw:
+        return None, "'range' must be a non-empty string of the form 'start:end'"
+
+    parts = range_raw.split(":")
+    if len(parts) != 2:
+        return None, "'range' must be of the form 'start:end'"
+
+    try:
+        return (int(parts[0]), int(parts[1])), None
+    except ValueError:
+        return None, "'range' values must be integers"
