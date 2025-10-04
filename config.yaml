@@ -334,6 +334,7 @@ profiles:
             - meta_yazi
             - meta_vscode
             - meta_firefox
+            - meta_mpv
         dotfiles:
             # Config
             - f_shell_aliases
