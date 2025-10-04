@@ -1,6 +1,8 @@
 import argparse
 import atexit
 import logging
+import os
+from pathlib import Path
 
 from common.logger import logger, setup_logging
 from flask import Flask
@@ -9,6 +11,10 @@ from scripts.media_server.routes.media import media_bp
 from scripts.media_server.src.history import HistoryLogger
 from scripts.media_server.src.logging_middleware import register_logging
 
+DATA_HOME_DIR = (
+    Path(os.getenv("XDG_DATA_HOME", Path.home() / ".local/share")) / "flexycon"
+)
+
 
 def build_parser():
     parser = argparse.ArgumentParser(
@@ -16,6 +22,13 @@ def build_parser():
     )
 
     parser.add_argument("--verbose", action="store_true", help="enable debug output")
+
+    parser.add_argument(
+        "--history-path",
+        type=Path,
+        default=DATA_HOME_DIR / "history.json",
+        help="Path to the config file",
+    )
 
     return parser
 
@@ -32,7 +45,7 @@ def main():
 
     CORS(app)  # Enable CORS for all routes
 
-    app.extensions["history_logger"] = HistoryLogger()
+    app.extensions["history_logger"] = HistoryLogger(args.history_path)
     atexit.register(lambda: app.extensions["history_logger"].flush())
 
     app.run(port=5000, debug=True)

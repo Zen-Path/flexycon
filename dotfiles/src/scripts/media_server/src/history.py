@@ -1,5 +1,4 @@
 import json
-import os
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -8,10 +7,6 @@ from typing import Any, List
 
 from common.helpers import ensure_directories_exist
 from common.logger import logger
-
-DATA_HOME_DIR = (
-    Path(os.getenv("XDG_DATA_HOME", Path.home() / ".local/share")) / "flexycon"
-)
 
 DEFAULT_QUEUE_SIZE = 10  # flush after this many entries
 
@@ -31,10 +26,8 @@ class HistoryEntry:
 
 
 class HistoryLogger:
-    def __init__(self, history_path: Path | None = None):
-        self.history_path = (
-            Path(history_path) if history_path else DATA_HOME_DIR / "history.json"
-        )
+    def __init__(self, history_path: Path):
+        self.history_path = Path(history_path)
 
         self.lock = Lock()
         self.queue: List[dict[str, Any]] = []
