@@ -5,8 +5,8 @@ from scripts.user_shortcuts.src.renderers import ZshBookmarkRenderer
 
 
 class DummyBookmark:
-    def __init__(self, resolved_path, type="d", description=None):
-        self.resolved_path = resolved_path
+    def __init__(self, path_parts, type="d", description=None):
+        self.path_parts = path_parts
         self.type = type
         self.description = description
 
@@ -16,7 +16,9 @@ class DummyBookmark:
     [
         # Directory with description
         (
-            DummyBookmark("/Users/user/Downloads", type="d", description="downloads"),
+            DummyBookmark(
+                ["/", "Users", "user", "Downloads"], type="d", description="downloads"
+            ),
             ["dwn"],
             "Darwin",
             "# downloads\n"
@@ -25,7 +27,7 @@ class DummyBookmark:
         ),
         # Directory without description
         (
-            DummyBookmark("/Users/user/Documents", type="d"),
+            DummyBookmark(["/", "Users", "user", "Documents"], type="d"),
             ["docs"],
             "Linux",
             'alias docs="cd /Users/user/Documents && ls -A"\n'
@@ -33,28 +35,30 @@ class DummyBookmark:
         ),
         # File with description
         (
-            DummyBookmark("/tmp/file.txt", type="f", description="a file"),
+            DummyBookmark(["/", "tmp", "file.txt"], type="f", description="a file"),
             ["f1"],
             "Linux",
             "# a file\n" 'alias f1="xdg-open /tmp/file.txt"\n',
         ),
         # File without description
         (
-            DummyBookmark("/etc/hosts", type="f"),
+            DummyBookmark(["/", "etc", "hosts"], type="f"),
             ["hosts"],
             "Linux",
             'alias hosts="xdg-open /etc/hosts"\n',
         ),
         # Windows platform
         (
-            DummyBookmark("/etc/hosts", type="f"),
+            DummyBookmark(["/", "etc", "hosts"], type="f"),
             ["hosts"],
             "Windows",
             'alias hosts="$EDITOR /etc/hosts"\n',
         ),
         # Path that requires quoting (contains spaces)
         (
-            DummyBookmark("/Users/user/My Folder", type="d", description="spaced dir"),
+            DummyBookmark(
+                ["/", "Users", "user", "My Folder"], type="d", description="spaced dir"
+            ),
             ["mf"],
             "Linux",
             "# spaced dir\n"

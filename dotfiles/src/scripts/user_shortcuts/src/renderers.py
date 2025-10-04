@@ -1,5 +1,4 @@
 import platform
-import shlex
 from typing import List
 
 from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
@@ -24,7 +23,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
             result.append(f"# {bookmark.description}")
 
         alias_name = "".join(alias_segments)
-        path = shlex.quote(bookmark.resolved_path)
+        path = self._get_path(bookmark)
         command = OPEN_COMMANDS.get(platform.system(), "$EDITOR")
 
         if bookmark.type == "d":
@@ -36,15 +35,13 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         return "\n".join(result) + "\n"
 
 
-ZSH = ZshBookmarkRenderer(
-    "Zsh", ["$XDG_CONFIG_HOME", "shell", "shortcuts.sh"], escape_path=True
-)
+ZSH = ZshBookmarkRenderer("Zsh", ["$XDG_CONFIG_HOME", "shell", "shortcuts.sh"])
 
 
 class NVimBookmarkRenderer(BookmarkRenderer):
     def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         description_fmt = f'" {bookmark.description}\n' if bookmark.description else ""
-        return f'{description_fmt}cmap ;{''.join(alias_segments)} "{shlex.quote(bookmark.resolved_path)}"'
+        return f'{description_fmt}cmap ;{''.join(alias_segments)} "{self._get_path(bookmark)}"'
 
 
 NVIM = NVimBookmarkRenderer("NeoVim", ["$XDG_CONFIG_HOME", "nvim", "shortcuts.vim"])
@@ -62,7 +59,7 @@ class YaziBookmarkRenderer(BookmarkRenderer):
 
         # All yazi bookmarks should start with 'b'.
         alias_segments = ["b"] + alias_segments
-        path = shlex.quote(bookmark.resolved_path)
+        path = self._get_path(bookmark)
         command = (
             f'"cd {path}"' if bookmark.type == "d" else f'["reveal {path}", "open"]'
         )
