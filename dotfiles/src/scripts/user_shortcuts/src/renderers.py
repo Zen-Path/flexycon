@@ -35,7 +35,9 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         return "\n".join(result) + "\n"
 
 
-ZSH = ZshBookmarkRenderer("Zsh", ["$XDG_CONFIG_HOME", "shell", "shortcuts.sh"])
+ZSH = ZshBookmarkRenderer(
+    "Zsh", ["$FLEXYCON_HOME", "dotfiles", "config", "zsh", "shortcuts.sh"]
+)
 
 
 class NVimBookmarkRenderer(BookmarkRenderer):

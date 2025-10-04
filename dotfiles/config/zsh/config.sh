@@ -21,8 +21,7 @@ SAVEHIST=100000
 HISTFILE="$XDG_CACHE_HOME/zsh/history"
 setopt appendhistory
 
-# Load aliases and shortcuts if existent.
-[ -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && source "$XDG_CONFIG_HOME/shell/shortcuts.sh"
+# Load aliases if they exist.
 [ -f "$XDG_CONFIG_HOME/shell/aliases.sh" ] && source "$XDG_CONFIG_HOME/shell/aliases.sh"
 
 # Basic auto/tab complete:
@@ -90,6 +89,9 @@ fi
 if command -v starship > /dev/null 2>&1; then
     eval "$(starship init zsh)"
 fi
+
+# SHORTCUTS
+# {{@@ "\n" @@}}{%@@ include 'config/zsh/shortcuts.sh' @@%}
 
 # Load syntax highlighting; should be last.
 # {%@@- if os == "darwin" +@@%}
