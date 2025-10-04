@@ -2,6 +2,7 @@
 
 - [Firefox](#firefox)
     - [Extensions](#extensions)
+        - [DownThemAll](#downthemall)
 
 ## Extensions
 
@@ -37,4 +38,12 @@ for addon in data['addons']:
     id = f"[link](https://addons.mozilla.org/en-US/firefox/addon/{addon["id"]})"
 
     print("|", " | ".join([name, description, id]), "|")
+```
+
+### DownThemAll
+
+I found this mask pretty useful:
+
+```
+*y*-*m*-*d*-*hh*-*mm*-*ss*_*flathost*_*flatname*.*ext*
 ```

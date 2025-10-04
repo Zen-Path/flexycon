@@ -6,8 +6,6 @@ A script that handles download requests for URLs.
     - [Dependencies](#dependencies)
     - [Installation](#installation)
     - [Usage](#usage)
-    - [Tips](#tips)
-        - [DownThemAll](#downthemall)
 
 ## Dependencies
 
@@ -32,16 +30,4 @@ To launch the app:
 cd $FLEXYCON_HOME
 source venv/bin/activate
 media_server --verb
-```
-
-## Tips
-
-### DownThemAll
-
-The [DownThemAll](https://www.downthemall.org/) extension provides an easy way to download files with a structured filename, and in bulk.
-
-I found this mask pretty useful:
-
-```
-*y*-*m*-*d*-*hh*-*mm*-*ss*_*flathost*_*flatname*.*ext*
 ```
