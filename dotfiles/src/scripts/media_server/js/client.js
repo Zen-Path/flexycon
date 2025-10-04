@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.4.3
+// @version         1.4.4
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL     https://raw.githubusercontent.com/Zen-Path/flexycon/refs/heads/main/dotfiles/src/scripts/media_server/js/client.js
@@ -49,11 +49,7 @@ function downloadMedia(urls, type, range) {
                 return;
             }
 
-            // Remove terminal codes from the command's output
-            // for example: '\n\u001b[1;33m[download][warning] OSError'
-            const output_fmt = data.output
-                .replace(/\u001b\[[0-9;]*m/g, "")
-                .trim();
+            const output_fmt = data.output.trim();
 
             console.log(
                 ":: Download info",
