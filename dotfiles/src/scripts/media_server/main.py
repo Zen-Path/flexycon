@@ -1,22 +1,13 @@
 import argparse
 import atexit
-import json
 import logging
-from datetime import datetime
 
-from colorama import Fore, Style
 from common.logger import logger, setup_logging
-from flask import Flask, current_app, g, jsonify, request
+from flask import Flask
 from flask_cors import CORS
-from scripts.media_server.src.history import HistoryEntry, HistoryLogger
-from scripts.media_server.src.models import Gallery
+from scripts.media_server.routes.media import media_bp
+from scripts.media_server.src.history import HistoryLogger
 from scripts.media_server.src.logging_middleware import register_logging
-
-# Flask setup
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
-
-
 
 
 def build_parser():
@@ -33,6 +24,13 @@ def main():
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+
+    # Flask setup
+    app = Flask(__name__)
+    app.register_blueprint(media_bp)
+    register_logging(app)
+
+    CORS(app)  # Enable CORS for all routes
 
     app.extensions["history_logger"] = HistoryLogger()
     atexit.register(lambda: app.extensions["history_logger"].flush())

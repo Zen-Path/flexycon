@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.3.14
+// @version         1.3.15
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL     https://raw.githubusercontent.com/Zen-Path/flexycon/refs/heads/main/dotfiles/src/scripts/media_server/js/client.js
@@ -21,7 +21,7 @@ function downloadMedia(urls, type) {
 
     GM_xmlhttpRequest({
         method: "POST",
-        url: `http://localhost:${SERVER_PORT}/downloadMedia`,
+        url: `http://localhost:${SERVER_PORT}/media/download`,
         headers: { "Content-Type": "application/json" },
         data: requestData,
         onerror: function (error) {
