@@ -107,6 +107,7 @@ alias tess='tesseract --oem 3 --psm 6 -l eng'
 
 alias dot='dotdrop'
 alias doti='dotdrop install'
+alias dotc='dotdrop compare'
 
 alias pc='pre-commit'
 alias pcr='pre-commit run'
