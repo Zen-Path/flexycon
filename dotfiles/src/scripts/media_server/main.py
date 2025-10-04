@@ -49,7 +49,7 @@ def main():
     app.extensions["history_logger"] = HistoryLogger(args.history_path)
     atexit.register(lambda: app.extensions["history_logger"].flush())
 
-    app.run(port=5000, debug=True)
+    app.run(port=5000, debug=False)
 
 
 if __name__ == "__main__":
