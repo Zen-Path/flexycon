@@ -33,12 +33,15 @@ def register_logging(app):
             else:
                 data = request.data.decode("utf-8") if request.data else None
 
-        logger.info(
-            f"""{Fore.LIGHTBLUE_EX}REQUEST{Fore.LIGHTBLACK_EX}:
-params: {json.dumps(params, indent=4)}
-data: {json.dumps(data, indent=4) if isinstance(data, (dict, list)) else data}
-{Style.RESET_ALL}"""
+        output_lines = []
+        output_lines.append(f"{Fore.LIGHTBLUE_EX}REQUEST{Fore.LIGHTBLACK_EX}:")
+        if params:
+            output_lines.append(f"params: {json.dumps(params, indent=4)}")
+        output_lines.append(
+            f"data: {json.dumps(data, indent=4) if isinstance(data, (dict, list)) else data}{Style.RESET_ALL}"
         )
+
+        logger.info("\n".join(output_lines))
 
     @app.after_request
     def log_response(response):
