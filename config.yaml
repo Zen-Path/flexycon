@@ -19,7 +19,8 @@ config:
         - uservariables.yaml:optional
 
 actions:
-    generate_user_shortcuts: user_shortcuts
+    pre:
+        generate_user_shortcuts_for_renderer: user_shortcuts --renderer '{0}'
     post:
         yazi_plugins_upgrade: ya pack --upgrade
         vscode_extensions_save: code --list-extensions | sort > "{{@@ f_vscode_extensions @@}}"
@@ -289,8 +290,8 @@ profiles:
             - d_yazi_plugin_custom_rename
             - d_yazi_plugin_custom_search
             - d_yazi_plugin_parent_arrow
-        # actions:
-        # - yazi_plugins_upgrade
+        actions:
+            - generate_user_shortcuts_for_renderer 'yazi'
 
     meta_vscode:
         variables:
