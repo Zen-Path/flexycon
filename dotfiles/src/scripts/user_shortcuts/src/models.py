@@ -27,8 +27,8 @@ class BookmarkRenderer(ABC):
         self,
         name: str,
         path_parts: List[str],
-        expand_vars: bool = False,
-        escape_path: bool = False,
+        expand_vars: bool = True,
+        escape_path: bool = True,
         indentation_level: int = 4,
     ):
         self.name = name
