@@ -1,3 +1,4 @@
+dotdrop==1.15.0         # [bin] for dotfile management
 colorama==0.4.6         # [util] for colored text
 python-dotenv==1.1.1    # [util] for loading env variables
 Flask==3.1.1            # [script] for media_server
