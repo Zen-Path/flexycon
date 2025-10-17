@@ -46,7 +46,7 @@ def run_command(command: List[str]) -> CommandResult:
         if process.stdout is not None:
             for line in process.stdout:
                 output.append(line)
-                logger.info(line.strip())
+                logger.debug(line.strip())
 
         return_code = process.wait()
 
