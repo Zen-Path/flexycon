@@ -44,6 +44,9 @@ clean:
 		@$(VENV_BIN)/pre-commit clean; \
 	fi
 
+	@echo "Removing flexycon local data directory..."; \
+	rm -rf "$(HOME)/.local/share/flexycon"
+
 	@echo "🧹 Full cleanup complete."
 
 setup:
