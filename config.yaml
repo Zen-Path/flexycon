@@ -352,6 +352,7 @@ profiles:
             - f_gallery_config
             - d_newsraft
             - d_bottom
+            - f_flex_sync
 
             # Scripts
             - f_compiler
