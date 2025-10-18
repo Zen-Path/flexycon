@@ -1,0 +1,20 @@
+{
+    "com.apple.AppleMultitouchTrackpad": {
+        "Clicking": 0
+    },
+    "com.apple.HIToolbox": {
+        "AppleFnUsageType": 2
+    },
+    "com.apple.dock": {
+        "autohide": "true",
+        "autohide-delay": 0.1,
+        "autohide-time-modifier": 0.35,
+        "mineffect": "scale",
+        "orientation": "left",
+        "show-recents": "false",
+        "tilesize": 53
+    },
+    "com.apple.finder": {
+        "CreateDesktop": "false"
+    }
+}
