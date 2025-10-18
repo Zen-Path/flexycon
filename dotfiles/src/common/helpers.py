@@ -1,4 +1,4 @@
-import logging
+import json
 import os
 import secrets
 import shutil
@@ -187,6 +187,18 @@ def parse_range(range_raw: str) -> Tuple[Optional[Tuple[int, int]], Optional[str
         return (int(parts[0]), int(parts[1])), None
     except ValueError:
         return None, "'range' values must be integers"
+
+
+def load_json(path):
+    """Load a JSON file if it exists."""
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(e)
+        return None
 
 
 def truncate(
