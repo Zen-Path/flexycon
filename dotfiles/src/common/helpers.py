@@ -187,3 +187,28 @@ def parse_range(range_raw: str) -> Tuple[Optional[Tuple[int, int]], Optional[str
         return (int(parts[0]), int(parts[1])), None
     except ValueError:
         return None, "'range' values must be integers"
+
+
+def truncate(
+    text: str, max_length: int, placeholder: str = "…", truncate_start: bool = False
+) -> str:
+    """
+    Truncate a string to max_length.
+
+    Parameters:
+    - text: the original string
+    - max_length: maximum length including placeholder
+    - placeholder: string to indicate truncation
+    - truncate_start: if True, truncate the start; else truncate the end
+
+    Returns:
+    - truncated string with placeholder if necessary
+    """
+    if len(text) <= max_length:
+        return text
+
+    truncated_length = max_length - len(placeholder)
+    if truncate_start:
+        return placeholder + text[-truncated_length:]
+    else:
+        return text[:truncated_length] + placeholder

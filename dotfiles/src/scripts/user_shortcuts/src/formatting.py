@@ -1,5 +1,6 @@
 import os
 
+from common.helpers import truncate
 from scripts.user_shortcuts.src.models import Bookmark
 
 # Column widths
@@ -23,11 +24,6 @@ def format_aliases(aliases: dict[str, list[str]]) -> str:
 def get_default_alias(bm) -> str:
     """Return the first default alias (for sorting)."""
     return bm.aliases.get("default", [""])[0]
-
-
-def truncate(text: str, width: int) -> str:
-    """Truncate text to fit into `width`, appending '…' if needed."""
-    return text if len(text) <= width else text[: width - 1] + "…"
 
 
 def format_bookmarks(bookmarks) -> str:
