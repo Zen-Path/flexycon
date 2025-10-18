@@ -75,10 +75,7 @@ alias pir='pip install -r requirements.txt'
 
 # Rclone
 alias rc='rclone'
-alias rc_c='rclone copy --progress --create-empty-src-dirs --exclude "No_Backup/**" --exclude ".git/"'
-alias rc_cd='rc_c --dry-run'
-alias rc_s='rclone sync --progress --create-empty-src-dirs --track-renames --exclude "No_Backup/**" --exclude ".git/"'
-alias rc_sd='rc_s --dry-run'
+alias rcw='rclone_wrapper'
 
 # YouTube
 alias yt='yt-dlp'

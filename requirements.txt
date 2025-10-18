@@ -7,6 +7,8 @@ gallery_dl==1.30.7      # [script] for media_server
 yt-dlp==2025.8.20       # [script] for media_server
 GitPython==3.1.44       # [script] for git_logs
 tabulate==0.9.0         # [script] for rclone_fmt
+humanize==4.14.0        # [script] for rclone_fmt
+pydantic==2.12.3        # [script] for rclone_fmt
 commentjson==0.9.0      # [script] for jsonc_to_json
 pre_commit==4.2.0       # [dev] for pre-commit git hooks
 black==25.1.0           # [dev] for formatting

@@ -190,7 +190,13 @@ dotfiles:
         src: config/hammerspoon/init.lua
         dst: ~/.config/hammerspoon/init.lua
 
+    # Flexycon
+    f_flex_sync:
+        src: config/flexycon/sync/config.json
+        dst: ~/.config/flexycon/sync/config.json
+
     # Scripts
+    # Note: the dotfile key NEEDS to match the script name (without the prefix, of course)
     f_compiler:
         src: bin/compiler.sh
         dst: ~/.local/bin/compiler
@@ -241,10 +247,9 @@ dotfiles:
         dst: ~/.local/bin/noisereduce
         chmod: "755"
 
-    # Note: the dotfile key NEEDS to match the script name (without the prefix, of course)
-    f_rclone_fmt:
+    f_rclone_wrapper:
         src: "{{@@ f_py_run_src @@}}"
-        dst: ~/.local/bin/rcfmt
+        dst: ~/.local/bin/rclone_wrapper
         chmod: "755"
 
     f_sdir:
@@ -355,7 +360,7 @@ profiles:
             - f_media_server
             - f_noisereduce
             - f_pkgsize
-            - f_rclone_fmt
+            - f_rclone_wrapper
             - f_sdir
             - f_user_shortcuts
             - f_tag
