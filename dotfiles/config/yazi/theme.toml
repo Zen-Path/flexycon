@@ -502,6 +502,7 @@ exts = [
     { name = "pot", text = "", fg = "#2596be" },
     { name = "pp", text = "", fg = "#ffa61a" },
     { name = "ppt", text = "󰈧", fg = "#cb4a32" },
+    { name = "pptx", text = "󰈧", fg = "#cb4a32" },
     { name = "prisma", text = "", fg = "#5a67d8" },
     { name = "pro", text = "", fg = "#e4b854" },
     { name = "ps1", text = "󰨊", fg = "#4273ca" },
