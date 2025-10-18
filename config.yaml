@@ -41,14 +41,17 @@ dotfiles:
         # `ln -s .config/dotdrop/.zprofile .`
         src: config/shell/profile.sh
         dst: ~/.zprofile
+        link: nolink
 
     f_shell_inputrc:
         src: config/shell/inputrc
         dst: ~/.config/shell/inputrc
+        link: nolink
 
     f_zsh_config:
         src: config/zsh/config.sh
         dst: ~/.config/zsh/.zshrc
+        link: nolink
 
     d_git:
         src: config/git
@@ -58,6 +61,7 @@ dotfiles:
     f_shell_aliases:
         src: config/shell/aliases.sh
         dst: ~/.config/shell/aliases.sh
+        link: nolink
 
     d_starship:
         src: config/starship
