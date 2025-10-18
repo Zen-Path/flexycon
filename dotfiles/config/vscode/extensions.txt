@@ -9,6 +9,7 @@ pkief.material-icon-theme
 remisa.shellman
 rpinski.shebang-snippets
 streetsidesoftware.code-spell-checker
+takumii.markdowntable
 tamasfe.even-better-toml
 timonwong.shellcheck
 yandeu.five-server
