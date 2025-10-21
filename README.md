@@ -73,8 +73,6 @@ When testing changes to the venv, or just needing a clean slate, you can use `ma
 
 ## Linux
 
-The Linux config is found in the `linux-android-profiles` branch.
-
 Tile Layout:
 
 ![Tile Layout](./docs/static/full-screen_tile.png "Tile Layout")
