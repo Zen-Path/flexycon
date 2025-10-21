@@ -1,14 +1,35 @@
 # Extra
 
-- [Extra](#extra)
-    - [Tips](#tips)
-        - [Mac](#mac)
-        - [Monday as first day of the week](#monday-as-first-day-of-the-week)
-        - [Check available locales](#check-available-locales)
-        - [Check current locale settings](#check-current-locale-settings)
-        - [Extract only matches using rg](#extract-only-matches-using-rg)
+Here you can find more details about my dotfiles.
 
-## Tips
+- [Extra](#extra)
+- [Setup](#setup)
+    - [Linux](#linux)
+        - [Dunst](#dunst)
+- [Tips](#tips)
+    - [Mac](#mac)
+    - [Monday as first day of the week](#monday-as-first-day-of-the-week)
+    - [Check available locales](#check-available-locales)
+    - [Check current locale settings](#check-current-locale-settings)
+    - [Extract only matches using rg](#extract-only-matches-using-rg)
+
+# Setup
+
+## Linux
+
+### Dunst
+
+![Urgency Levels](./static/dunst-urgency-levels.png "Urgency Levels")
+
+Result of running:
+
+```sh
+notify-send "Low" -u low
+notify-send "Normal" -u normal
+notify-send "Critical" -u critical
+```
+
+# Tips
 
 ### Mac
 
