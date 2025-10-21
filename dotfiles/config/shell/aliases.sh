@@ -20,9 +20,20 @@ alias t='task'
 alias ka='killall'
 alias sql='sqlite3'
 
-# {%@@- if os == "darwin" +@@%}
+# {%@@- if os == "linux" +@@%}
+alias p='pacman'
+# {%@@- endif +@@%}
+
+# {%@@- if os == "linux" +@@%}
+alias o='xdg-open'
+# {%@@- elif os == "darwin" +@@%}
 alias o='open'
 # {%@@- endif +@@%}
+
+# {%@@- if os == "linux" +@@%}
+alias z='zathura'
+# {%@@- endif +@@%}
+
 # Verbosity and common settings.
 alias cp='cp -iv'
 alias mv='mv -iv'
@@ -35,7 +46,9 @@ alias mkd='mkdir -pv'
 alias ffmpeg='ffmpeg -hide_banner'
 alias shfmt='shfmt --indent 4 --binary-next-line --case-indent --space-redirects --write'
 
-# {%@@- if os == "darwin" +@@%}
+# {%@@- if os == "linux" +@@%}
+alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
+# {%@@- elif os == "darwin" +@@%}
 alias ls='ls -A -h --color=auto'
 # {%@@- endif +@@%}
 
@@ -60,7 +73,9 @@ alias pyb='/opt/homebrew/bin/python3'
 # {%@@- endif +@@%}
 
 # Python ENVironment Create
-# {%@@- if os == "darwin" +@@%}
+# {%@@- if os == "linux" +@@%}
+alias penvc='py -m venv venv'
+# {%@@- elif os == "darwin" +@@%}
 alias penvc='pyb -m venv venv'
 # {%@@- endif +@@%}
 
@@ -90,7 +105,11 @@ alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(play
 # alias fm='$FILE_MANAGER'
 
 # Package Manager
-# {%@@- if os == "darwin" +@@%}
+# {%@@- if os == "linux" +@@%}
+# {%@@- if "arch" in distro_like +@@%}
+alias pm='yay'
+# {%@@- endif +@@%}
+# {%@@- elif os == "darwin" +@@%}
 alias pm='brew'
 # {%@@- endif +@@%}
 

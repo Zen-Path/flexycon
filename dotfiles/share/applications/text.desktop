@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Text Editor
+Exec={{@@ env["HOME"] @@}}/.local/bin/env_cmd_runner $EDITOR %F

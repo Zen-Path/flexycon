@@ -68,7 +68,11 @@ user_pref("browser.display.use_document_fonts", 1);
 user_pref("font.name.monospace.x-western", "Menlo");
 user_pref("font.name.sans-serif.x-western", "Menlo");
 user_pref("font.name.serif.x-western", "Menlo");
-// {%@@- endif +@@%}
+// {%@@- elif os == "linux" +@@%}
+user_pref("font.name.monospace.x-western", "monospace");
+user_pref("font.name.sans-serif.x-western", "monospace");
+user_pref("font.name.serif.x-western", "monospace");
+// {%@@- endif @@%}
 
 // === Zoom ===
 
