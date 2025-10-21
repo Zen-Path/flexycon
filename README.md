@@ -1,7 +1,7 @@
 <div align="center">
     <img src="./docs/static/logo.svg" width=200 height=200>
     <h1>Flexycon</h1>
-    🧩 Where configuration meets automation 💡
+    <p>🧩 Where configuration meets automation 💡</p>
 </div>
 
 Flexycon (from _flexible_ + _configuration_) is my personal configuration ecosystem — a unified system
