@@ -528,8 +528,6 @@ profiles:
             - f_sdir
             - f_user_shortcuts
             - f_tag
-        variables:
-            f_py_run_src: "bin/py-run.sh"
         #actions:
         #    - generate_user_shortcuts
 
