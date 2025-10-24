@@ -1,3 +1,5 @@
+#!{{@@ env['FLEXYCON_HOME'] @@}}/venv/bin/python
+
 import json
 import sys
 

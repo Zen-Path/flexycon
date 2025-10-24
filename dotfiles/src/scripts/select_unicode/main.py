@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!{{@@ env['FLEXYCON_HOME'] @@}}/venv/bin/python
 
 import argparse
 import logging
