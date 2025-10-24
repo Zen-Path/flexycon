@@ -14,7 +14,7 @@ export PATH
 
 unsetopt PROMPT_SP
 
-# {{@@ "\n" @@}}export DOTDROP_PROFILE={{@@ "'" + _vars["active_dotdrop_profile"] + "'" @@}}
+export DOTDROP_PROFILE='{{@@ _vars["active_dotdrop_profile"] @@}}'
 
 # DEFAULT PROGRAMS
 
