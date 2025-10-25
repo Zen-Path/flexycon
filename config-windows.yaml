@@ -1,0 +1,92 @@
+uservariables:
+    active_dotdrop_profile: "Active dotdrop profile"
+    git_email: "Git email"
+    git_username: "Git username"
+
+config:
+    backup: false
+    banner: false
+    create: true
+    dotpath: dotfiles
+    keepdot: false
+    link_dotfile_default: nolink
+    link_on_import: nolink
+    longkey: false
+    import_variables:
+        - uservariables.yaml:optional
+
+actions:
+    post:
+        vscode_extensions_save: code --list-extensions | sort > "{{@@ f_vscode_extensions @@}}"
+        vscode_extensions_install: cat "{{@@ f_vscode_extensions @@}}" | xargs -n 1 code --install-extension
+
+dotfiles:
+    # Shell
+    f_bash_profile:
+        src: config/shell/profile.sh
+        dst: ~/.bash_profile
+
+    f_bash_config:
+        src: config/bash/profile.sh
+        dst: ~/.bashrc
+
+    # VSCode
+    f_vscode_settings:
+        src: "{{@@ d_vscode_src @@}}/settings.json"
+        dst: "{{@@ d_vscode_dst @@}}/settings.json"
+
+    f_vscode_keybindings:
+        src: "{{@@ d_vscode_src @@}}/keybindings.json"
+        dst: "{{@@ d_vscode_dst @@}}/keybindings.json"
+
+    # Browser
+
+    d_firefox_chrome:
+        src: "{{@@ d_firefox_chrome_src @@}}"
+        dst: "{{@@ d_firefox_profiles @@}}/chrome"
+
+    f_firefox_user:
+        src: "{{@@ f_firefox_user_src @@}}"
+        dst: "{{@@ d_firefox_profiles @@}}/user.js"
+
+    # Other
+    f_git_config:
+        src: config/git/config.ini
+        dst: ~/.gitconfig
+
+profiles:
+    # Programs
+
+    meta_vscode:
+        variables:
+            d_vscode_src: "config/vscode"
+        dynvariables:
+            f_vscode_extensions: "echo $FLEXYCON_HOME/dotfiles/{{@@ d_vscode_src @@}}/extensions.txt"
+        dotfiles:
+            - f_vscode_settings
+            - f_vscode_keybindings
+
+    meta_firefox:
+        dynvariables:
+            # We're only looking for the default profile until we find the first result,
+            # then we convert it to Windows-style paths
+            d_firefox_profiles: find ~/AppData/Roaming/Mozilla/Firefox/Profiles -name '*\.default-release' -print -quit | xargs cygpath -w
+        variables:
+            d_firefox_chrome_src: "config/firefox/chrome"
+            f_firefox_user_src: "config/firefox/user.js"
+        dotfiles:
+            - d_firefox_chrome
+            - f_firefox_user
+
+    # Actual Profiles
+
+    windows_home:
+        include:
+            - meta_vscode
+            - meta_firefox
+        variables:
+            d_vscode_dst: "~/AppData/Roaming/Code/User"
+        dotfiles:
+            - f_bash_profile
+            - f_bash_config
+            - f_git_config

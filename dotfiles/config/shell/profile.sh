@@ -9,10 +9,15 @@
 PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 # {%@@- endif +@@%}
 
+# {%@@- if os != "windows" +@@%}
 PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
+# {%@@- endif +@@%}
+
+# {%@@- if os != "windows" +@@%}
 export PATH
 
 unsetopt PROMPT_SP
+# {%@@- endif +@@%}
 
 export DOTDROP_PROFILE='{{@@ _vars["active_dotdrop_profile"] @@}}'
 
