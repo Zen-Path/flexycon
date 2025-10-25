@@ -73,11 +73,20 @@ class BookmarkRenderer(ABC):
         self._write_output(content)
 
     def _get_path(self, bookmark: Bookmark) -> str:
-        path_str = os.path.join(*bookmark.path_parts)
+        path_parts = []
 
-        if self.expand_vars:
-            path_str = os.path.expandvars(path_str)
+        for part in bookmark.path_parts:
+            # Expand environment variables in each part
+            if self.expand_vars:
+                part = os.path.expandvars(part)
+            # Normalize backslashes to forward slashes
+            part = part.replace("\\", "/")
+            path_parts.append(part)
 
+        # Join all parts with forward slash
+        path_str = "/".join(path_parts)
+
+        # Optionally escape for shell
         if self.escape_path:
             path_str = shlex.quote(path_str)
 

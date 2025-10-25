@@ -54,6 +54,40 @@ dotfiles:
         src: config/git/config.ini
         dst: ~/.gitconfig
 
+    # File Manager
+    f_yazi_config:
+        src: config/yazi/yazi.toml
+        dst: "{{@@ d_app_data @@}}/yazi/config/yazi.toml"
+
+    f_yazi_keymap:
+        src: config/yazi/keymap.toml
+        dst: "{{@@ d_app_data @@}}/yazi/config/keymap.toml"
+
+    f_yazi_theme:
+        src: config/yazi/theme.toml
+        dst: "{{@@ d_app_data @@}}/yazi/config/theme.toml"
+
+    f_yazi_package:
+        src: config/yazi/package.toml
+        dst: "{{@@ d_app_data @@}}/yazi/config/package.toml"
+
+    f_yazi_init:
+        src: config/yazi/init.lua
+        dst: "{{@@ d_app_data @@}}/yazi/config/init.lua"
+
+    d_yazi_plugin_custom_rename:
+        src: config/yazi/plugins/custom-rename.yazi
+        dst: "{{@@ d_app_data @@}}/yazi/plugins/custom-rename.yazi"
+
+    d_yazi_plugin_custom_search:
+        src: config/yazi/plugins/custom-search.yazi
+        dst: "{{@@ d_app_data @@}}/yazi/plugins/custom-search.yazi"
+
+    d_yazi_plugin_parent_arrow:
+        src: config/yazi/plugins/parent-arrow.yazi
+        dst: "{{@@ d_app_data @@}}/yazi/plugins/parent-arrow.yazi"
+
+
 profiles:
     # Programs
 
@@ -78,13 +112,27 @@ profiles:
             - d_firefox_chrome
             - f_firefox_user
 
+    meta_yazi:
+        dotfiles:
+            - f_yazi_config
+            - f_yazi_keymap
+            - f_yazi_theme
+            - f_yazi_package
+            - f_yazi_init
+            - d_yazi_plugin_custom_rename
+            - d_yazi_plugin_custom_search
+            - d_yazi_plugin_parent_arrow
+
+
     # Actual Profiles
 
     windows_home:
         include:
             - meta_vscode
             - meta_firefox
+            - meta_yazi
         variables:
+            d_app_data: "~/AppData/Roaming"
             d_vscode_dst: "~/AppData/Roaming/Code/User"
         dotfiles:
             - f_bash_profile
