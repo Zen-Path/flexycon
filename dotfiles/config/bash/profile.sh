@@ -9,4 +9,4 @@ fi
 echo "$XDG_CONFIG_HOME/shell/aliases.sh"
 
 # SHORTCUTS
-# {{@@ "\n" @@}}{%@@ include 'config/shell/shortcuts.sh' @@%}
+# {{@@ "\n" @@}}{%@@ include 'config/shell/shortcuts.sh' ignore missing @@%}

@@ -179,4 +179,4 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- SHORTCUTS
 -- Typing ':e ;csp' fast enough will expand into ':e /home/<user>/.zprofile'
--- {{@@ "\n" @@}}{%@@ include 'config/nvim/shortcuts.lua' @@%}
+-- {{@@ "\n" @@}}{%@@ include 'config/nvim/shortcuts.lua' ignore missing @@%}

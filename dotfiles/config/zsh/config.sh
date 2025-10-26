@@ -91,7 +91,7 @@ if command -v starship > /dev/null 2>&1; then
 fi
 
 # SHORTCUTS
-# {{@@ "\n" @@}}{%@@ include 'config/zsh/shortcuts.sh' @@%}
+# {{@@ "\n" @@}}{%@@ include 'config/shell/shortcuts.sh' ignore missing @@%}
 
 # Load syntax highlighting; should be last.
 # {%@@- if os == "darwin" +@@%}
