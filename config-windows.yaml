@@ -32,11 +32,6 @@ dotfiles:
         dst: ~/.bashrc
         link: nolink
 
-    f_shell_aliases:
-        src: config/shell/aliases.sh
-        dst: ~/.config/shell/aliases.sh
-        link: nolink
-
     # VSCode
     f_vscode_settings:
         src: "{{@@ d_vscode_src @@}}/settings.json"
@@ -155,7 +150,6 @@ profiles:
         dotfiles:
             - f_bash_interactive
             - f_bash_login
-            - f_shell_aliases
             - f_git_config
             - f_alacritty_config
             - f_nvim_init
