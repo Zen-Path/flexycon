@@ -9,8 +9,8 @@ config:
     create: true
     dotpath: dotfiles
     keepdot: false
-    link_dotfile_default: nolink
-    link_on_import: nolink
+    link_dotfile_default: absolute
+    link_on_import: absolute
     longkey: false
     import_variables:
         - uservariables.yaml:optional
@@ -25,10 +25,12 @@ dotfiles:
     f_bash_profile:
         src: config/shell/profile.sh
         dst: ~/.bash_profile
+        link: nolink
 
     f_bash_config:
         src: config/bash/profile.sh
         dst: ~/.bashrc
+        link: nolink
 
     # VSCode
     f_vscode_settings:
