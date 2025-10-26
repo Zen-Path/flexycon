@@ -1,11 +1,15 @@
 vim.g.mapleader = ","
 
 local fn = vim.fn
-local install_path = fn.stdpath("config") .. "/autoload/plug.vim"
 
+local install_dir = fn.stdpath("config") .. "/autoload"
+local install_path = install_dir .. "/plug.vim"
 if fn.empty(fn.glob(install_path)) > 0 then
     print("Downloading junegunn/vim-plug to manage plugins...")
-    fn.system({ "mkdir", "-p", vim.fn.stdpath("config") .. "/autoload" })
+    if fn.isdirectory(install_dir) == 0 then
+        vim.fn.mkdir(install_dir, "p")
+    end
+
     fn.system({
         "curl",
         "-fLo",

@@ -46,6 +46,11 @@ dotfiles:
         src: "{{@@ d_vscode_src @@}}/keybindings.json"
         dst: "{{@@ d_vscode_dst @@}}/keybindings.json"
 
+    # Text Editor
+    f_nvim_init:
+        src: config/nvim/init.lua
+        dst: ~/.config/nvim/init.lua
+
     # Browser
 
     d_firefox_chrome:
@@ -153,3 +158,4 @@ profiles:
             - f_shell_aliases
             - f_git_config
             - f_alacritty_config
+            - f_nvim_init
