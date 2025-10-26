@@ -125,6 +125,10 @@ alias tess='tesseract --oem 3 --psm 6 -l eng'
 
 alias dot='dotdrop'
 alias doti='dotdrop install'
+# TODO: Remove once config is unified
+# {%@@- if os == "windows" +@@%}
+alias dotiw='dotdrop install --cfg config-windows.yaml'
+# {%@@- endif +@@%}
 alias dotc='dotdrop compare'
 
 alias pc='pre-commit'
