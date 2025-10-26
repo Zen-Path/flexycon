@@ -9,13 +9,12 @@
 PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 # {%@@- endif +@@%}
 
-# {%@@- if os != "windows" +@@%}
 PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
-# {%@@- endif +@@%}
 
-# {%@@- if os != "windows" +@@%}
 export PATH
 
+# {%@@- if os != "windows" +@@%}
+# TODO: change to exclude 'bash' instead of 'windows'
 unsetopt PROMPT_SP
 # {%@@- endif +@@%}
 
