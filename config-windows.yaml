@@ -55,6 +55,7 @@ dotfiles:
     f_git_config:
         src: config/git/config.ini
         dst: ~/.gitconfig
+        link: nolink
 
     # File Manager
     f_yazi_config:
