@@ -46,10 +46,12 @@ alias mkd='mkdir -pv'
 alias ffmpeg='ffmpeg -hide_banner'
 alias shfmt='shfmt --indent 4 --binary-next-line --case-indent --space-redirects --write'
 
-# {%@@- if os == "linux" +@@%}
-alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
-# {%@@- elif os == "darwin" +@@%}
+# {%@@- if os == "darwin" +@@%}
 alias ls='ls -A -h --color=auto'
+# {%@@- elif os == "linux" +@@%}
+alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
+# {%@@- elif os == "windows" +@@%}
+alias ls='ls --almost-all --human-readable --color=auto --group-directories-first --classify'
 # {%@@- endif +@@%}
 
 # Use colored output

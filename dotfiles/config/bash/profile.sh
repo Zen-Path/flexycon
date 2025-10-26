@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-test -f ~/.profile && . ~/.profile
-test -f ~/.bashrc && . ~/.bashrc
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi
 
-# Load aliases if they exist.
 [ -f "$XDG_CONFIG_HOME/shell/aliases.sh" ] && source "$XDG_CONFIG_HOME/shell/aliases.sh"
 
+echo "$XDG_CONFIG_HOME/shell/aliases.sh"
+
 # SHORTCUTS
-# {{ @@ "\n" @@}}{% @@ include 'config/zsh/shortcuts.sh' @@%}
+# {{@@ "\n" @@}}{%@@ include 'config/shell/shortcuts.sh' @@%}

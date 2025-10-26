@@ -1,7 +1,7 @@
 import platform
 
 import pytest
-from scripts.user_shortcuts.src.renderers import ZshBookmarkRenderer
+from scripts.user_shortcuts.src.renderers import ShellBookmarkRenderer
 
 
 class DummyBookmark:
@@ -70,7 +70,7 @@ class DummyBookmark:
 def test_compose_bookmark(
     monkeypatch, bookmark, alias_segments, platform_name, expected
 ):
-    renderer = ZshBookmarkRenderer(
+    renderer = ShellBookmarkRenderer(
         "Zsh", ["$XDG_CONFIG_HOME", "shell", "shortcuts.sh"], escape_path=True
     )
     # Make platform.system predictable

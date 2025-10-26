@@ -54,7 +54,7 @@ export XDG_PICTURES_DIR="$HOME/Pictures"
 
 # {%@@- if os == "darwin" +@@%}
 export XDG_VIDEOS_DIR="$HOME/Movies"
-# {%@@- elif os == "linux" +@@%}
+# {%@@- else +@@%}
 export XDG_VIDEOS_DIR="$HOME/Videos"
 # {%@@- endif +@@%}
 

@@ -46,7 +46,7 @@ reveal = [
 edit = [
     { run = '${EDITOR:-vi} "$@"', block = true, desc = "Edit", for = "unix" },
     { run = 'code %*', orphan = true, desc = "Edit", for = "windows" },
-    { run = 'code -w %*', block = true, desc = "Edit (block)", for = "windows" },
+    { run = 'nvim -w "%*"', block = true, desc = "Edit (block)", for = "windows" },
 ]
 
 edit_image = [

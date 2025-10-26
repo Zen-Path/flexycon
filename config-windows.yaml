@@ -22,14 +22,19 @@ actions:
 
 dotfiles:
     # Shell
-    f_bash_profile:
-        src: config/shell/profile.sh
+    f_bash_interactive:
+        src: config/bash/profile.sh
         dst: ~/.bash_profile
         link: nolink
 
-    f_bash_config:
-        src: config/bash/profile.sh
+    f_bash_login:
+        src: config/shell/profile.sh
         dst: ~/.bashrc
+        link: nolink
+
+    f_shell_aliases:
+        src: config/shell/aliases.sh
+        dst: ~/.config/shell/aliases.sh
         link: nolink
 
     # VSCode
@@ -143,7 +148,8 @@ profiles:
             d_vscode_dst: "~/AppData/Roaming/Code/User"
             d_yazi_config: "{{@@ d_app_data @@}}/yazi/config"
         dotfiles:
-            - f_bash_profile
-            - f_bash_config
+            - f_bash_interactive
+            - f_bash_login
+            - f_shell_aliases
             - f_git_config
             - f_alacritty_config

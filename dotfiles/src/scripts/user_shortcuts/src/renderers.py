@@ -9,7 +9,7 @@ OPEN_COMMANDS = {
 }
 
 
-class ZshBookmarkRenderer(BookmarkRenderer):
+class ShellBookmarkRenderer(BookmarkRenderer):
     def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         """
         Target:
@@ -35,8 +35,8 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         return "\n".join(result) + "\n"
 
 
-ZSH = ZshBookmarkRenderer(
-    "Zsh", ["$FLEXYCON_HOME", "dotfiles", "config", "zsh", "shortcuts.sh"]
+SHELL = ShellBookmarkRenderer(
+    "Shell", ["$FLEXYCON_HOME", "dotfiles", "config", "shell", "shortcuts.sh"]
 )
 
 
