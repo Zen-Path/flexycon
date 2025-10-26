@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 
 # NOTE: Keep the main file content AFTER this line for templating purposes!
 
@@ -185,7 +185,11 @@ function penva() {
 
     while :; do
         for env in "${env_dirs[@]}"; do
+            # {%@@- if os == "linux" or os == "darwin" +@@%}
             local candidate="$dir/$env/bin/activate"
+            # {%@@- elif os == "windows" +@@%}
+            local candidate="$dir/$env/Scripts/activate"
+            # {%@@- endif +@@%}
             if [[ -f "$candidate" ]]; then
                 activate_script="$candidate"
                 break 2 # Exit both loops

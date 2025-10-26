@@ -77,7 +77,7 @@ function preexec() {
 
 # USER FUNCTIONS
 
-# {%@@ include 'config/zsh/functions.sh' @@%}
+# {%@@ include 'config/shell/functions.sh' @@%}
 
 bindkey -s '^f' 'fzfopen\n'
 

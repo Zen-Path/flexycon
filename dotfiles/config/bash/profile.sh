@@ -8,5 +8,8 @@ fi
 
 echo "$XDG_CONFIG_HOME/shell/aliases.sh"
 
+# USER FUNCTIONS
+# {%@@ include 'config/shell/functions.sh' @@%}
+
 # SHORTCUTS
 # {{@@ "\n" @@}}{%@@ include 'config/shell/shortcuts.sh' ignore missing @@%}
