@@ -62,6 +62,11 @@ dotfiles:
         dst: ~/.gitconfig
         link: nolink
 
+    f_bottom_config:
+        src: config/bottom/bottom.toml
+        dst: "{{@@ d_app_data @@}}/bottom/bottom.toml"
+
+
     # File Manager
     f_yazi_config:
         src: config/yazi/yazi.toml
@@ -158,6 +163,7 @@ profiles:
             - f_bash_interactive
             - f_bash_login
             - f_git_config
+            - f_bottom_config
             - f_alacritty_config
             - f_nvim_init
 
