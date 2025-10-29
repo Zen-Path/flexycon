@@ -49,7 +49,6 @@ Make sure you have the following installed:
 
 - `git`
 - `python >= 3.13`
-- `make`
 
 ## Installation
 
@@ -58,12 +57,15 @@ To install and initialize the project:
 ```sh
 git clone "https://github.com/Zen-Path/flexycon"
 cd flexycon
-make setup
-make install
-dotdrop install
+./bootstrap.sh
 ```
 
-When testing changes to the venv, or just needing a clean slate, you can use `make clean` and it will clean up the project a bit.
+Later on, when you've made some changes to your config and want to apply them, run `./flexycon.py install`.
+
+When testing changes to the venv, or just need a clean slate, run `./flexycon.py clean` and it will do just that.
+
+NOTE: the recommended location for installing flexycon is `~/.local/src/flexycon`, but if you've installed it
+somewhere else, update the `FLEXYCON_HOME` environmental variable.
 
 # Gallery
 

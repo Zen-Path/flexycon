@@ -10,9 +10,18 @@ from pathlib import Path
 
 from common.helpers import run_command
 from common.logger import logger, setup_logging
+from scripts.installer.data.packages import packages
+from scripts.installer.main import process_packages
+from scripts.user_shortcuts.data.shortcuts import shortcuts
+from scripts.user_shortcuts.main import AVAILABLE_RENDERERS
 
 VENV_DIR = Path("venv")
 VENV_BIN = VENV_DIR / ("Scripts" if platform.system() == "Windows" else "bin")
+PIP_BIN = str(VENV_BIN / "pip")
+PYTHON_BIN = shutil.which("python3") or "python"
+
+REQUIREMENTS_FILE = Path("requirements.txt")
+USER_VARIABLES_PATH = Path("uservariables.yaml")
 
 UNINSTALL_TARGETS = [
     ".venv",
@@ -31,6 +40,36 @@ CLEAN_TARGETS = [
 ]
 
 EMPTY_EXCLUDE_TARGETS = [".git"]
+
+
+# === HELPER ===
+
+
+# Registry to store all decorated functions
+TARGETS = {}
+
+
+def target(name=None, description=None):
+    """Decorator to mark functions as CLI targets."""
+
+    def decorator(func):
+        target_name = (name or func.__name__).replace(" ", "_")
+
+        description_fmt = (description or func.__doc__ or "").strip()
+        if description_fmt:
+            description_fmt = description_fmt[:1].lower() + description_fmt[1:]
+
+        if target_name in TARGETS:
+            raise ValueError(f"Duplicate target name: {target_name}")
+
+        TARGETS[target_name] = {
+            "name": target_name,
+            "description": description_fmt,
+            "fn": func,
+        }
+        return func
+
+    return decorator
 
 
 def remove_targets(targets):
@@ -93,44 +132,128 @@ def remove_empty_dirs():
             logger.warning(e)
 
 
+def init_submodules():
+    if not Path(".gitmodules").exists():
+        logger.error("No git submodules found. Skipping.")
+        return
+
+    logger.info("Initializing submodules...")
+    run_command(["git", "submodule", "init"])
+
+    logger.info("Updating submodules...")
+    run_command(["git", "submodule", "update", "--recursive", "--remote"])
+
+
+# === TARGETS ===
+
+
+@target()
+def setup_virtual_env():
+    """Create and setup a virtual environment"""
+    logger.info("⚙️ Create virtual environment if it doesn't exist...")
+
+    if not VENV_DIR.exists():
+        logger.info(f"🐍 Creating Python venv in '{VENV_DIR}'...")
+        run_command([PYTHON_BIN, "-m", "venv", "VENV_DIR"])
+
+    logger.info("♻️ Updating pip...")
+    run_command([PIP_BIN, "install", "--upgrade", "pip"])
+
+    logger.info("📦 Installing Python dependencies...")
+    if REQUIREMENTS_FILE.exists():
+        run_command([PIP_BIN, "install", "-r", str(REQUIREMENTS_FILE)])
+    else:
+        logger.warning("Python dependencies not found.")
+
+    logger.info("🔧 Installing current project in editable mode...")
+    run_command([PIP_BIN, "install", "-e", "."])
+
+
+@target()
 def setup():
-    """Setup project and init git submodules"""
-    pass
+    """Setup project and install dependencies"""
+    logger.info("📦 Installing system packages...")
+
+    system = platform.system()
+    if system == "Darwin" and shutil.which("brew") is None:
+        logger.warning(
+            "Homebrew is not installed. Please install it from https://brew.sh/"
+        )
+    else:
+        process_packages(packages)
+
+    logger.info("⑂ Initializing git submodules...")
+    init_submodules()
+
+    setup_virtual_env()
+
+    logger.info("📦 Installing npm packages...")
+    if shutil.which("npm"):
+        run_command(["npm", "install"])
+    else:
+        logger.warning("npm not found. Skipping npm installation.")
+
+    logger.info("📦 Installing pre-commit hooks...")
+    precommit_bin = VENV_BIN / "pre-commit"
+    if precommit_bin.exists():
+        run_command([str(precommit_bin), "install", "--install-hooks"])
+    else:
+        logger.warning("pre-commit not found. Skipping hook installation.")
 
 
+@target()
 def install():
-    """Create Python venv, install Python, project dependencies"""
-    pass
+    """Install and apply configuration"""
+    import yaml
+
+    if not VENV_DIR.exists():
+        logger.error(f"Missing venv at '{VENV_DIR}'. Run the 'setup' target first.")
+        return
+
+    logger.info("⚙️ Generating shortcuts...")
+    for renderer in AVAILABLE_RENDERERS:
+        renderer.process(shortcuts)
+
+    logger.info("⚙️ Installing configuration...")
+
+    # When installing for the first, flexycon's env vars will not be
+    # set, but we can extract the profile from the user variables file
+    dotdrop_profile = os.getenv("DOTDROP_PROFILE")
+    if not dotdrop_profile and USER_VARIABLES_PATH.exists():
+        with open(USER_VARIABLES_PATH) as f:
+            data = yaml.safe_load(f)
+            dotdrop_profile = data["variables"]["active_dotdrop_profile"]
+
+    if dotdrop_profile:
+        logger.debug(f"Active dotdrop profile: {dotdrop_profile}")
+        subprocess.run(["dotdrop", "install", "--profile", dotdrop_profile])
+
+    # TODO: Apply macOS default here
 
 
-def uninstall():
-    """Remove all flexycon config and data"""
-    logger.info("🧹 Removing clean targets...")
-    remove_targets(CLEAN_TARGETS)
-
-    logger.info("🔪 Removing uninstall targets...")
-    remove_targets(UNINSTALL_TARGETS)
-
-    clean_precommit()
-    remove_flexycon_data()
-
-
+@target()
 def clean():
-    """Remove temporary/project files and venv"""
+    """Remove caches and temporary files"""
     logger.info("🧹 Removing clean targets...")
     remove_targets(CLEAN_TARGETS)
 
     remove_empty_dirs()
 
 
-def describe_functions(functions):
-    return {
-        f.__name__: {
-            "description": (f.__doc__ or "").strip(),
-            "fn": f,
-        }
-        for f in functions
-    }
+@target()
+def uninstall():
+    """Clean project and remove flexycon's data"""
+    clean()
+
+    clean_precommit()
+
+    logger.info("🔪 Removing uninstall targets...")
+    remove_targets(UNINSTALL_TARGETS)
+
+    remove_flexycon_data()
+
+
+# === MAIN ===
 
 
 def build_parser(targets):
@@ -148,14 +271,12 @@ def build_parser(targets):
 
 
 def main():
-    targets = describe_functions([setup, install, uninstall, clean])
-
-    args = build_parser(targets).parse_args()
+    args = build_parser(TARGETS).parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
 
-    if args.command in targets:
-        targets[args.command]["fn"]()
+    if args.command in TARGETS:
+        TARGETS[args.command]["fn"]()
 
 
 if __name__ == "__main__":

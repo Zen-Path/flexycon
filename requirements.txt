@@ -1,6 +1,7 @@
 dotdrop==1.15.0         # [bin] for dotfile management
 colorama==0.4.6         # [util] for colored text
 python-dotenv==1.1.1    # [util] for loading env variables
+PyYAML==6.0.3           # [util] for parsing yaml files
 Flask==3.1.1            # [script] for media_server
 flask-cors==6.0.0       # [script] for media_server
 gallery_dl==1.30.7      # [script] for media_server
@@ -13,6 +14,7 @@ commentjson==0.9.0      # [script] for jsonc_to_json
 pre_commit==4.2.0       # [dev] for pre-commit git hooks
 black==25.1.0           # [dev] for formatting
 mypy==1.16.1            # [dev] for type checking
+types-PyYAML==6.0.12.20250915       # [dev] mypy types
 types-colorama==0.4.15.20240311     # [dev] mypy types
 types-Flask-Cors==6.0.0.20250520    # [dev] mypy types
 types-psutil==7.0.0.20250601        # [dev] mypy types
