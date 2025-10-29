@@ -54,6 +54,18 @@ class Yay(PackageManager):
         )
 
 
+class Chocolatey(PackageManager):
+    PLATFORM = "Windows"
+
+    @classmethod
+    def install(cls, identifiers: List[str]) -> None:
+        run_command(["choco", "install", *identifiers])
+
+    @classmethod
+    def uninstall(cls, identifiers: List[str]) -> None:
+        run_command(["choco", "uninstall", *identifiers])
+
+
 @dataclass
 class Package:
     """Represents a software package with metadata."""
