@@ -22,7 +22,7 @@ def main():
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
 
     for package in packages:
-        if not platform.system() == package.manager.PLATFORM:
+        if not platform.system() == package.managers[0].PLATFORM:
             logger.warning(
                 f"Skipped package '{package.name}' due to unsupported platform."
             )
@@ -33,9 +33,9 @@ def main():
             continue
 
         logger.info(
-            f"Installing package '{package.name}' with manager {package.manager.__name__}."
+            f"Installing package '{package.name}' with manager {package.managers[0].__name__}."
         )
-        package.manager.install(package)
+        package.managers[0].install(package)
 
 
 if __name__ == "__main__":

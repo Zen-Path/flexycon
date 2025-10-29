@@ -1,7 +1,7 @@
 import shutil
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional, Type
+from typing import List, Optional, Type
 
 
 class ClipboardUtility(ABC):
@@ -41,7 +41,7 @@ class Package:
     """Represents a software package with metadata."""
 
     identifier: str
-    manager: Type["PackageManager"]
+    managers: List[Type[PackageManager]]
     name: Optional[str] = None
     description: Optional[str] = None
     is_gui: Optional[bool] = False
