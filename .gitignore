@@ -1,5 +1,5 @@
 # Config
-uservariables.yaml
+user_variables.yaml
 dotfiles/config/yazi/shortcuts.toml
 dotfiles/config/zsh/shortcuts.sh
 dotfiles/config/nvim/shortcuts.lua

@@ -21,7 +21,7 @@ PIP_BIN = str(VENV_BIN / "pip")
 PYTHON_BIN = shutil.which("python3") or "python"
 
 REQUIREMENTS_FILE = Path("requirements.txt")
-USER_VARIABLES_PATH = Path("uservariables.yaml")
+USER_VARIABLES_PATH = Path("user_variables.yaml")
 
 UNINSTALL_TARGETS = [
     ".venv",

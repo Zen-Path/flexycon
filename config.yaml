@@ -16,7 +16,7 @@ config:
     link_on_import: absolute
     longkey: false
     import_variables:
-        - uservariables.yaml:optional
+        - user_variables.yaml:optional
 
 actions:
     pre:
