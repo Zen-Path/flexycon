@@ -1,6 +1,6 @@
 import os
 
-from scripts.installer.src.models import Brew, Package, Yay
+from common.packages.package_managers import Brew, Package, Yay
 
 packages = [
     Package(
