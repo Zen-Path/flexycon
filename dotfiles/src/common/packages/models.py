@@ -4,7 +4,10 @@ import platform
 import shutil
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List, Optional, Type
+
+from common.helpers import resolve_path
 
 
 class ClipboardUtility(ABC):
@@ -48,11 +51,16 @@ class Package:
     name: Optional[str] = None
     description: Optional[str] = None
     is_gui: Optional[bool] = False
+    destination: Optional[List[str]] = None
     condition: bool = True
 
     def __post_init__(self):
         if self.name is None:
             self.name = self.identifier
+
+    @property
+    def resolved_path(self) -> Optional[str]:
+        return resolve_path(self.destination) if self.destination else None
 
 
 class PackageManager(ABC):
