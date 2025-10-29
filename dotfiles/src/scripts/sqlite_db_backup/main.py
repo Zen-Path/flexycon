@@ -1,3 +1,7 @@
+#!{{@@ env['FLEXYCON_HOME'] @@}}/{{@@ d_venv_bin @@}}/python
+
+# {{@@ header() @@}}
+
 import argparse
 import os
 import shutil

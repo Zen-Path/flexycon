@@ -1,4 +1,6 @@
-#!{{@@ env['FLEXYCON_HOME'] @@}}/venv/bin/python
+#!{{@@ env['FLEXYCON_HOME'] @@}}/{{@@ d_venv_bin @@}}/python
+
+# {{@@ header() @@}}
 
 import argparse
 import logging

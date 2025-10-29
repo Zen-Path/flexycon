@@ -186,7 +186,7 @@ dotfiles:
         link: link_children
 
     f_nsxiv_exec_key_handler:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/key_handler/main.py
         dst: ~/.config/nsxiv/exec/key-handler
 
     d_yt_dlp:
@@ -264,7 +264,7 @@ dotfiles:
         chmod: "755"
 
     f_continuous_diff:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/continuous_diff/main.py
         dst: ~/.local/bin/continuous_diff
         chmod: "755"
 
@@ -274,7 +274,7 @@ dotfiles:
         chmod: "755"
 
     f_git_logs:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/git_logs/main.py
         dst: ~/.local/bin/git_logs
         chmod: "755"
 
@@ -289,17 +289,17 @@ dotfiles:
         chmod: "755"
 
     f_journal_entry:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/journal_entry/main.py
         dst: ~/.local/bin/journal_entry
         chmod: "755"
 
     f_jsonc_to_json:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/jsonc_to_json/main.py
         dst: ~/.local/bin/jsonc_to_json
         chmod: "755"
 
     f_media_server:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/media_server/main.py
         dst: ~/.local/bin/media_server
         chmod: "755"
 
@@ -309,7 +309,7 @@ dotfiles:
         chmod: "755"
 
     f_rclone_wrapper:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/rclone_wrapper/main.py
         dst: ~/.local/bin/rclone_wrapper
         chmod: "755"
 
@@ -319,7 +319,7 @@ dotfiles:
         chmod: "755"
 
     f_user_shortcuts:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/user_shortcuts/main.py
         dst: ~/.local/bin/user_shortcuts
         chmod: "755"
 
@@ -354,7 +354,7 @@ dotfiles:
         chmod: "755"
 
     f_keyboard_select:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/keyboard_select/main.py
         dst: ~/.local/bin/keyboard_select
         chmod: "755"
 
@@ -389,12 +389,12 @@ dotfiles:
         chmod: "755"
 
     f_screenshot_utility:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/screenshot_utility/main.py
         dst: ~/.local/bin/screenshot_utility
         chmod: "755"
 
     f_select_unicode:
-        src: "{{@@ f_py_run_src @@}}"
+        src: src/scripts/select_unicode/main.py
         dst: ~/.local/bin/select_unicode
         chmod: "755"
 
@@ -528,21 +528,25 @@ profiles:
             - f_sdir
             - f_user_shortcuts
             - f_tag
-        variables:
-            f_py_run_src: "bin/py-run.sh"
         #actions:
         #    - generate_user_shortcuts
 
     ## OS
+    meta_unix:
+        variables:
+            d_venv_bin: "venv/bin"
+
     meta_linux:
         include:
             - meta_common
+            - meta_unix
         variables:
             d_vscode_dst: "~/.config/Code - OSS/User"
 
     meta_mac:
         include:
             - meta_common
+            - meta_unix
         variables:
             d_vscode_dst: "~/Library/Application\ Support/Code/User"
         dotfiles:
@@ -550,6 +554,10 @@ profiles:
             - d_kitty
             - f_amethyst
             - f_hammerspoon_init
+
+    meta_windows:
+        variables:
+            d_venv_bin: "venv/Scripts"
 
     ## Environment
     meta_personal:
