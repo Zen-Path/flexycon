@@ -1,3 +1,5 @@
+import shutil
+
 from common.helpers import run_command
 from common.packages.models import Package, PackageManager
 
@@ -64,3 +66,24 @@ class Chocolatey(PackageManager):
     @classmethod
     def update_all(cls) -> None:
         run_command([cls.COMMAND, "upgrade", "all"])
+
+
+class Git(PackageManager):
+    PLATFORM = None
+    COMMAND = "git"
+
+    @classmethod
+    def install(cls, package: Package) -> None:
+        cmd = [cls.COMMAND, "clone", package.identifier]
+        if package.resolved_path:
+            cmd.append(str(package.resolved_path))
+        run_command(cmd)
+
+    @classmethod
+    def uninstall(cls, package: Package) -> None:
+        if package.resolved_path:
+            shutil.rmtree(package.resolved_path)
+
+    @classmethod
+    def update_all(cls) -> None:
+        pass

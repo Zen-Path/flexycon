@@ -1,7 +1,7 @@
 import os
 
 from common.helpers import get_display_server
-from common.packages.package_managers import Brew, Package, Yay
+from common.packages.package_managers import Brew, Git, Package, Yay
 
 display_server = get_display_server()
 
@@ -279,5 +279,53 @@ packages = [
         identifier="zathura-pdf-poppler",
         managers=[Yay],
         description="PDF support for zathura (poppler backend)",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/flexycon-private",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "flexycon-private"],
+        description="Private config",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/dwm-flexipatch",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "dwm-flexipatch"],
+        description="A dwm build with preprocessor directives to decide which patches to include during build time.",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/dwmblocks-async",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "dwmblocks-async"],
+        description="An efficient, lean, and asynchronous status feed generator for dwm.",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/dmenu-flexipatch",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "dmenu-flexipatch"],
+        description="A dmenu build with preprocessor directives to decide which patches to include during build time.",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/slock-flexipatch",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "slock-flexipatch"],
+        description="An slock build with preprocessor directives to decide which patches to include during build time.",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/nsxiv",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "nsxiv"],
+        description="Neo Simple X Image Viewer https://nsxiv.codeberg.page.",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/nsxiv-extra",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "nsxiv-extra"],
+        description="Community patches, scripts, tips and tricks for nsxiv.",
+        condition=display_server == "X11",
     ),
 ]
