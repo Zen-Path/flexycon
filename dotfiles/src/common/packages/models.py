@@ -1,3 +1,4 @@
+import platform
 import shutil
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -55,6 +56,13 @@ class Package:
 class PackageManager(ABC):
     COMMAND: str
     PLATFORM: str
+
+    @classmethod
+    def check_availability(cls) -> bool:
+        """Check if the package manager is available on the system."""
+        return (
+            platform.system() == cls.PLATFORM and shutil.which(cls.COMMAND) is not None
+        )
 
     @classmethod
     @abstractmethod

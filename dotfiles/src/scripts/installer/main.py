@@ -21,21 +21,32 @@ def main():
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
 
+    managers_cache: dict[str, bool] = {}
+
     for package in packages:
-        if not platform.system() == package.managers[0].PLATFORM:
-            logger.warning(
-                f"Skipped package '{package.name}' due to unsupported platform."
-            )
-            continue
-
         if not package.condition:
-            logger.warning(f"Skipped package '{package.name}' due to unmet condition.")
+            logger.warning(f"Skipping '{package.name}': unmet condition.")
             continue
 
-        logger.info(
-            f"Installing package '{package.name}' with manager {package.managers[0].__name__}."
-        )
-        package.managers[0].install(package)
+        # Find the first available manager
+        available_manager = None
+        for manager_cls in package.managers:
+            manager_name = manager_cls.__name__
+
+            # Cache manager availability checks
+            if manager_name not in managers_cache:
+                managers_cache[manager_name] = manager_cls.check_availability()
+
+            if managers_cache[manager_name]:
+                available_manager = manager_cls
+                break
+
+        if not available_manager:
+            logger.warning(f"Skipping '{package.name}': no available manager found.")
+            continue
+
+        logger.info(f"Installing '{package.name}' using {available_manager.__name__}.")
+        available_manager.install(package)
 
 
 if __name__ == "__main__":
