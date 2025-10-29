@@ -35,7 +35,7 @@ def main():
         logger.info(
             f"Installing package '{package.name}' with manager {package.manager.__name__}."
         )
-        package.manager.install([package.identifier])
+        package.manager.install(package)
 
 
 if __name__ == "__main__":
