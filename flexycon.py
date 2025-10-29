@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import os
 import platform
 import shutil
 import subprocess
@@ -28,6 +29,8 @@ CLEAN_TARGETS = [
     "node_modules",
     ".DS_Store",
 ]
+
+EMPTY_EXCLUDE_TARGETS = [".git"]
 
 
 def remove_targets(targets):
@@ -72,9 +75,16 @@ def clean_precommit():
 def remove_empty_dirs():
     logger.info("🧹 Removing empty directories.")
 
-    empty_dirs = [
-        p for p in Path(".").rglob("*") if p.is_dir() and not any(p.iterdir())
-    ]
+    empty_dirs = []
+    for root, dirs, files in os.walk(".", topdown=True):
+        # modify dirs in-place to prevent walking excluded folders
+        dirs[:] = [d for d in dirs if d not in EMPTY_EXCLUDE_TARGETS]
+
+        for d in dirs:
+            dir_path = Path(root) / d
+            if not any(dir_path.iterdir()):
+                empty_dirs.append(dir_path)
+
     for d in empty_dirs:
         try:
             d.rmdir()
