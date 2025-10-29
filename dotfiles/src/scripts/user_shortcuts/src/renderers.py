@@ -16,21 +16,27 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         # downloads
         alias dwn="cd /Users/user/Downloads && ls -A"
         hash -d dwn=/Users/user/Downloads
-
         """
         result = []
         if bookmark.description:
             result.append(f"# {bookmark.description}")
 
-        alias_name = "".join(alias_segments)
         path = self._get_path(bookmark)
         command = OPEN_COMMANDS.get(platform.system(), "$EDITOR")
 
+        alias_name = "".join(alias_segments)
+        alias_value = (
+            f"cd {path} && ls -A" if bookmark.type == "d" else f"{command} {path}"
+        )
+
+        if bookmark.activate_python_env:
+            # Shell function name
+            alias_value += " && penva"
+
+        result.append(f'alias {alias_name}="{alias_value}"')
+
         if bookmark.type == "d":
-            result.append(f'alias {alias_name}="cd {path} && ls -A"')
             result.append(f"hash -d {alias_name}={path}")
-        else:
-            result.append(f'alias {alias_name}="{command} {path}"')
 
         return "\n".join(result) + "\n"
 

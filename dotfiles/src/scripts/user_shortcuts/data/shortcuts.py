@@ -89,6 +89,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$HOME", "University"],
         aliases={"default": ["u", "n", "i"], YAZI.name: ["U"]},
+        activate_python_env=True,
         description="university",
     ),
     Bookmark(
@@ -243,6 +244,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$XDG_SRC_HOME", "private"],
         aliases={"default": ["p", "r", "v"], YAZI.name: ["P"]},
+        activate_python_env=True,
         description="private source",
     ),
     # Flexycon
@@ -250,18 +252,21 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=[*flex_home],
         aliases={"default": ["f", "l", "x"], YAZI.name: ["F"]},
+        activate_python_env=True,
         description="flexycon home",
     ),
     Bookmark(
         type="d",
         path_parts=[*flex_config],
         aliases={"default": ["f", "l", "x", "c"], YAZI.name: ["f", "c"]},
+        activate_python_env=True,
         description="flexycon config",
     ),
     Bookmark(
         type="d",
         path_parts=[*flex_scripts],
         aliases={"default": ["f", "l", "x", "s"], YAZI.name: ["f", "s"]},
+        activate_python_env=True,
         description="flexycon scripts",
     ),
     Bookmark(

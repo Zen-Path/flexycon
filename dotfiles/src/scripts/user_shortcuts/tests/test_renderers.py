@@ -5,10 +5,13 @@ from scripts.user_shortcuts.src.renderers import ZshBookmarkRenderer
 
 
 class DummyBookmark:
-    def __init__(self, path_parts, type="d", description=None):
+    def __init__(
+        self, path_parts, type="d", description=None, activate_python_env=False
+    ):
         self.path_parts = path_parts
         self.type = type
         self.description = description
+        self.activate_python_env = activate_python_env
 
 
 @pytest.mark.parametrize(
