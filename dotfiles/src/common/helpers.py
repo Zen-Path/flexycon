@@ -161,3 +161,20 @@ def truncate(
         return placeholder + text[-truncated_length:]
     else:
         return text[:truncated_length] + placeholder
+
+
+def get_display_server() -> str:
+    """
+    Returns the display server currently in use.
+
+    Possible return values:
+    - 'X11'     : Running on X11
+    - 'Wayland' : Running on Wayland
+    - 'None'    : No graphical session detected
+    """
+    if os.environ.get("WAYLAND_DISPLAY"):
+        return "Wayland"
+    elif os.environ.get("DISPLAY"):
+        return "X11"
+    else:
+        return "None"

@@ -1,21 +1,24 @@
 import os
 
+from common.helpers import get_display_server
 from common.packages.package_managers import Brew, Package, Yay
+
+display_server = get_display_server()
 
 packages = [
     Package(
         identifier="bat",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="cat(1) clone with syntax highlighting and Git integration",
     ),
     Package(
         identifier="bottom",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Yet another cross-platform graphical process/system monitor",
     ),
     Package(
         identifier="dust",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="More intuitive version of du in rust",
     ),
     Package(
@@ -25,23 +28,23 @@ packages = [
     ),
     Package(
         identifier="fd",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Simple, fast and user-friendly alternative to find",
     ),
     Package(
         identifier="ffmpeg",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Play, record, convert, and stream audio and video",
     ),
     Package(
         identifier="firefox",
-        managers=[Brew],
+        managers=[Brew, Yay],
         is_gui=True,
         description="Free and open source web browser",
     ),
     Package(
         identifier="fzf",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Fuzzy finder in the terminal",
     ),
     Package(
@@ -51,7 +54,7 @@ packages = [
     ),
     Package(
         identifier="git",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Distributed revision control system",
     ),
     Package(
@@ -67,68 +70,68 @@ packages = [
     ),
     Package(
         identifier="mpv",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Media player based on MPlayer and mplayer2",
     ),
     Package(
         name="NeoVim",
         identifier="neovim",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Ambitious Vim-fork focused on extensibility and agility",
     ),
     Package(
         identifier="newsraft",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Terminal feed reader",
     ),
     Package(
         identifier="node",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="JS platform built on V8 to build network applications",
     ),
     Package(
         identifier="prettier",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML",
     ),
     Package(
         identifier="rclone",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Rsync for cloud storage",
     ),
     Package(
         identifier="ripgrep",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Search tool like grep and The Silver Searcher",
     ),
     Package(
         identifier="ripgrep-all",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Wrapper around ripgrep that adds multiple rich file types",
     ),
     Package(
         identifier="shfmt",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Autoformat shell script source code",
     ),
     Package(
         identifier="sqlite",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Command-line interface for SQLite",
     ),
     Package(
         identifier="starship",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Cross-shell prompt for astronauts",
     ),
     Package(
         identifier="stylua",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Opinionated Lua code formatter",
     ),
     Package(
         identifier="taplo",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="TOML toolkit written in Rust",
     ),
     Package(
@@ -139,9 +142,10 @@ packages = [
     ),
     Package(
         identifier="tree",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Display directories as trees (with optional color/HTML output)",
     ),
+    # TODO: implement per-manager identifiers
     Package(
         name="Visual Studio Code",
         identifier="visual-studio-code",
@@ -150,44 +154,125 @@ packages = [
         description="GUI code editor developed by Microsoft",
     ),
     Package(
+        name="Visual Studio Code",
+        identifier="code",
+        managers=[Yay],
+        is_gui=True,
+        description="GUI code editor developed by Microsoft",
+    ),
+    Package(
         identifier="yazi",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Blazing fast terminal file manager written in Rust, based on async I/O",
     ),
     Package(
         identifier="yt-dlp",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Feature-rich command-line audio/video downloader",
     ),
     Package(
         identifier="zip",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Compression and file packaging/archive utility",
     ),
     Package(
-        identifier="zsh-fast-syntax-highlighting?",
+        name="Zsh Fast Syntax Highlighting",
+        identifier="zsh-syntax-highlighting",
         managers=[Brew],
         description="Feature-rich syntax highlighting for Zsh",
         condition=os.environ["SHELL"] == "/bin/zsh",
     ),
-    Package(identifier="dunst", managers=[Yay]),
-    Package(identifier="gruvbox-dark-gtk", managers=[Yay]),
-    Package(identifier="maim", managers=[Yay]),
-    Package(identifier="pamixer", managers=[Yay]),
-    Package(identifier="pulsemixer", managers=[Yay]),
-    Package(identifier="taskwarrior-tui", managers=[Yay]),
-    Package(identifier="trash-cli", managers=[Yay]),
-    Package(identifier="ueberzugpp", managers=[Yay]),
+    Package(
+        name="Zsh Fast Syntax Highlighting",
+        identifier="zsh-fast-syntax-highlighting-git",
+        managers=[Yay],
+        description="Feature-rich syntax highlighting for Zsh",
+        condition=os.environ["SHELL"] == "/bin/zsh",
+    ),
+    Package(
+        identifier="dunst",
+        managers=[Yay],
+        description="A highly configurable and lightweight notification daemon",
+    ),
+    Package(
+        identifier="gruvbox-dark-gtk",
+        managers=[Yay],
+        description="A gruvbox dark theme. Supports GTK 2.0 and 3.0",
+    ),
+    Package(
+        identifier="maim",
+        managers=[Yay],
+        description="maim (make image) makes an image out of the given area on the given X screen. Defaults to the whole screen",
+    ),
+    Package(
+        identifier="pamixer",
+        managers=[Yay],
+        description="Pulseaudio command-line mixer like amixer",
+    ),
+    Package(
+        identifier="pulsemixer",
+        managers=[Yay],
+        description="cli and curses mixer for pulseaudio",
+    ),
+    Package(
+        identifier="taskwarrior-tui",
+        managers=[Yay],
+        description="a terminal user interface for taskwarrior",
+    ),
+    Package(
+        identifier="trash-cli",
+        managers=[Yay],
+        description="a cli system trash manager, alternative to rm and trash-cli",
+    ),
+    Package(
+        identifier="ueberzugpp",
+        managers=[Yay],
+        description="Display images in the terminal (drop-in replacement for ueberzug written in C++)",
+    ),
     Package(
         identifier="unzip",
         managers=[Yay],
         description="Extraction utility for .zip compressed archives",
     ),
-    Package(identifier="xcompmgr", managers=[Yay]),
-    Package(identifier="xdotool", managers=[Yay]),
-    Package(identifier="xorg-server", managers=[Yay]),
-    Package(identifier="xorg-xev", managers=[Yay]),
-    Package(identifier="xorg-xinit", managers=[Yay]),
-    Package(identifier="xwallpaper", managers=[Yay]),
-    Package(identifier="zathura-pdf-poppler", managers=[Yay]),
+    Package(
+        identifier="xcompmgr",
+        managers=[Yay],
+        description="The X Compositing Manager fresh from freedesktop.org repositories",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="xdotool",
+        managers=[Yay],
+        description="Command-line X11 automation tool",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="xorg-server",
+        managers=[Yay],
+        description="Xorg X server",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="xorg-xev",
+        managers=[Yay],
+        description="Catch X11 events and print them",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="xorg-xinit",
+        managers=[Yay],
+        description="X.Org initialization program",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="xwallpaper",
+        managers=[Yay],
+        description="Wallpaper setting utility for X",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="zathura-pdf-poppler",
+        managers=[Yay],
+        description="PDF support for zathura (poppler backend)",
+    ),
 ]
