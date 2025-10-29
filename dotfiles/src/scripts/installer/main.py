@@ -16,12 +16,16 @@ def build_parser():
         description="Generate bookmarks for various tools."
     )
 
+    parser.add_argument(
+        "--dry-run", action="store_true", help="preview packages to be installed"
+    )
+
     parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
     return parser
 
 
-def process_packages(packages: List[Package]):
+def process_packages(packages: List[Package], dry_run: bool = False):
     managers_cache: dict[str, bool] = {}
 
     for package in packages:
@@ -47,7 +51,8 @@ def process_packages(packages: List[Package]):
             continue
 
         logger.info(f"Installing '{package.name}' using {available_manager.__name__}.")
-        available_manager.install(package)
+        if not dry_run:
+            available_manager.install(package)
 
 
 def main():
@@ -55,7 +60,7 @@ def main():
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
 
-    process_packages(packages)
+    process_packages(packages, args.dry_run)
 
 
 if __name__ == "__main__":
