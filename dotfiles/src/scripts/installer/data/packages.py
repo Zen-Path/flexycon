@@ -7,6 +7,11 @@ display_server = get_display_server()
 
 packages = [
     Package(
+        identifier="alacritty",
+        managers=[Yay],
+        description="A cross-platform, GPU-accelerated terminal emulator",
+    ),
+    Package(
         identifier="bat",
         managers=[Brew, Yay],
         description="cat(1) clone with syntax highlighting and Git integration",
@@ -23,7 +28,7 @@ packages = [
     ),
     Package(
         identifier="exiftool",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Perl lib for reading and writing EXIF metadata",
     ),
     Package(
@@ -49,7 +54,7 @@ packages = [
     ),
     Package(
         identifier="ghostscript",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Interpreter for PostScript and PDF",
     ),
     Package(
@@ -59,7 +64,7 @@ packages = [
     ),
     Package(
         identifier="imagemagick",
-        managers=[Brew],
+        managers=[Brew, Yay],
         description="Tools and libraries to manipulate images in many formats",
     ),
     Package(
@@ -154,7 +159,7 @@ packages = [
         description="GUI code editor developed by Microsoft",
     ),
     Package(
-        name="Visual Studio Code",
+        name="Visual Studio Code Linux",
         identifier="code",
         managers=[Yay],
         is_gui=True,
@@ -183,11 +188,11 @@ packages = [
         condition=os.environ["SHELL"] == "/bin/zsh",
     ),
     Package(
-        name="Zsh Fast Syntax Highlighting",
+        name="Zsh Fast Syntax Highlighting Linux",
         identifier="zsh-fast-syntax-highlighting-git",
         managers=[Yay],
         description="Feature-rich syntax highlighting for Zsh",
-        condition=os.environ["SHELL"] == "/bin/zsh",
+        condition=os.environ["SHELL"] == "/usr/bin/zsh",
     ),
     Package(
         identifier="dunst",
