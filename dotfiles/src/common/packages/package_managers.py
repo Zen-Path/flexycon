@@ -4,10 +4,11 @@ from common.packages.models import Package, PackageManager
 
 class Brew(PackageManager):
     PLATFORM = "Darwin"
+    COMMAND = "brew"
 
     @classmethod
     def install(cls, package: Package) -> None:
-        command = ["brew", "install"]
+        command = [cls.COMMAND, "install"]
         if package.is_gui:
             command.append("--cask")
         command.append(package.identifier)
@@ -15,25 +16,26 @@ class Brew(PackageManager):
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
-        run_command(["brew", "uninstall", package.identifier])
+        run_command([cls.COMMAND, "uninstall", package.identifier])
 
     @classmethod
     def update_all(cls) -> None:
-        run_command(["brew", "upgrade"])
+        run_command([cls.COMMAND, "upgrade"])
 
 
 class Yay(PackageManager):
     PLATFORM = "Linux"
+    COMMAND = "yay"
 
     @classmethod
     def install(cls, package: Package) -> None:
-        run_command(["yay", "--sync", "--noconfirm", package.identifier])
+        run_command([cls.COMMAND, "--sync", "--noconfirm", package.identifier])
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
         run_command(
             [
-                "yay",
+                cls.COMMAND,
                 "--remove",
                 "--cascade",
                 "--recursive",
@@ -44,20 +46,21 @@ class Yay(PackageManager):
 
     @classmethod
     def update_all(cls) -> None:
-        run_command(["yay", "--sync", "--refresh", "--sysupgrade"])
+        run_command([cls.COMMAND, "--sync", "--refresh", "--sysupgrade"])
 
 
 class Chocolatey(PackageManager):
     PLATFORM = "Windows"
+    COMMAND = "choco"
 
     @classmethod
     def install(cls, package: Package) -> None:
-        run_command(["choco", "install", package.identifier])
+        run_command([cls.COMMAND, "install", package.identifier])
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
-        run_command(["choco", "uninstall", package.identifier])
+        run_command([cls.COMMAND, "uninstall", package.identifier])
 
     @classmethod
     def update_all(cls) -> None:
-        run_command(["choco", "upgrade", "all"])
+        run_command([cls.COMMAND, "upgrade", "all"])

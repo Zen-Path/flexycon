@@ -53,6 +53,7 @@ class Package:
 
 
 class PackageManager(ABC):
+    COMMAND: str
     PLATFORM: str
 
     @classmethod
