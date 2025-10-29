@@ -65,14 +65,14 @@ class Package:
 
 class PackageManager(ABC):
     COMMAND: str
-    PLATFORM: str
+    # When platform is None, it means it's available on all platforms
+    PLATFORM: str | None
 
     @classmethod
     def check_availability(cls) -> bool:
         """Check if the package manager is available on the system."""
-        return (
-            platform.system() == cls.PLATFORM and shutil.which(cls.COMMAND) is not None
-        )
+        is_platform_same = cls.PLATFORM is None or platform.system() == cls.PLATFORM
+        return is_platform_same and shutil.which(cls.COMMAND) is not None
 
     @classmethod
     @abstractmethod
