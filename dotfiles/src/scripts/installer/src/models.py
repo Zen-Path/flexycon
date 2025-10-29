@@ -74,6 +74,7 @@ class Package:
     manager: Type["PackageManager"]
     name: Optional[str] = None
     description: Optional[str] = None
+    is_gui: Optional[bool] = False
     condition: bool = True
 
     def __post_init__(self):

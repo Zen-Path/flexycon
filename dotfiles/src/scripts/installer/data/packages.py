@@ -36,6 +36,7 @@ packages = [
     Package(
         identifier="firefox",
         manager=Brew,
+        is_gui=True,
         description="Free and open source web browser",
     ),
     Package(
@@ -61,6 +62,7 @@ packages = [
     Package(
         identifier="kitty",
         manager=Brew,
+        is_gui=True,
         description="GPU-based terminal emulator",
     ),
     Package(
@@ -132,6 +134,7 @@ packages = [
     Package(
         identifier="telegram",
         manager=Brew,
+        is_gui=True,
         description="Messaging app with a focus on speed and security",
     ),
     Package(
@@ -143,6 +146,7 @@ packages = [
         name="Visual Studio Code",
         identifier="visual-studio-code",
         manager=Brew,
+        is_gui=True,
         description="GUI code editor developed by Microsoft",
     ),
     Package(
