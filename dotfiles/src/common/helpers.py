@@ -1,10 +1,8 @@
 import json
 import os
 import secrets
-import shutil
 import subprocess
 import sys
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
@@ -111,67 +109,6 @@ def ensure_directories_exist(file_path):
     directory = os.path.dirname(file_path)
     if directory:
         os.makedirs(directory, exist_ok=True)
-
-
-class ClipboardUtility(ABC):
-    """Abstract class for clipboard utilities."""
-
-    command: str  # Command to execute the clipboard utility
-
-    @classmethod
-    @abstractmethod
-    def text(cls, text: str):
-        """Copy text to the clipboard."""
-        pass
-
-    @classmethod
-    @abstractmethod
-    def file(cls, file_path: str):
-        """Copy a file to the clipboard."""
-        pass
-
-    @classmethod
-    def can_handle(cls) -> bool:
-        """Check if this utility is available on the system."""
-        return shutil.which(cls.command) is not None
-
-    @classmethod
-    def get_instance(cls):
-        """Detect the available clipboard utility and return an instance."""
-        for subclass in cls.__subclasses__():
-            if subclass.can_handle():
-                return subclass()
-
-        raise EnvironmentError("No known clipboard utility is available.")
-
-
-class XClip(ClipboardUtility):
-    command = "xclip"
-
-    @classmethod
-    def text(cls, text: str):
-        subprocess.run([cls.command, "-sel", "clip"], input=text.encode(), check=True)
-
-    @classmethod
-    def file(cls, file_path: str):
-        subprocess.run(
-            [cls.command, "-sel", "clip", "-t", "image/png", "-i", file_path],
-            check=True,
-        )
-
-
-class XSel(ClipboardUtility):
-    command = "xsel"
-
-    @classmethod
-    def text(cls, text: str):
-        subprocess.run(
-            [cls.command, "--clipboard", "--input"], input=text.encode(), check=True
-        )
-
-    @classmethod
-    def file(cls, file_path: str):
-        subprocess.run([cls.command, "--clipboard", "--input", file_path], check=True)
 
 
 def parse_range(range_raw: str) -> Tuple[Optional[Tuple[int, int]], Optional[str]]:

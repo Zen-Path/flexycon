@@ -9,8 +9,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from common.helpers import XClip, notify, run_command
+from common.helpers import notify, run_command
 from common.logger import logger, setup_logging
+from common.packages.clipboard_utilities import XClip
 
 
 def prompt_dmenu(prompt: str, options: Optional[list[str]] = None) -> Optional[str]:

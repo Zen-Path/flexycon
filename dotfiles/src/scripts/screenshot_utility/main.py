@@ -5,7 +5,8 @@ import os
 import subprocess
 from datetime import datetime
 
-from common.helpers import ClipboardUtility, ensure_directories_exist
+from common.helpers import ensure_directories_exist
+from common.packages.models import ClipboardUtility
 
 
 class MaimUtility:
