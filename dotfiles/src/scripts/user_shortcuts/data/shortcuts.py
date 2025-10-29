@@ -1,12 +1,12 @@
 import platform
 from typing import List
 
+from common.variables import flex_home
 from scripts.user_shortcuts.src.models import Bookmark
 from scripts.user_shortcuts.src.renderers import YAZI
 
 system = platform.system()
 
-flex_home = ["$FLEXYCON_HOME"]
 flex_dotfiles = flex_home + ["dotfiles"]
 flex_config = flex_dotfiles + ["config"]
 flex_scripts = flex_dotfiles + ["src", "scripts"]
