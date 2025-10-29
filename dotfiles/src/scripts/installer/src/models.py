@@ -20,6 +20,12 @@ class PackageManager(ABC):
         """Uninstall package using manager."""
         pass
 
+    @classmethod
+    @abstractmethod
+    def update_all(cls) -> None:
+        """Update all packages."""
+        pass
+
 
 class Brew(PackageManager):
     PLATFORM = "Darwin"
@@ -35,6 +41,10 @@ class Brew(PackageManager):
     @classmethod
     def uninstall(cls, package: Package) -> None:
         run_command(["brew", "uninstall", package.identifier])
+
+    @classmethod
+    def update_all(cls) -> None:
+        run_command(["brew", "upgrade"])
 
 
 class Yay(PackageManager):
@@ -57,6 +67,10 @@ class Yay(PackageManager):
             ]
         )
 
+    @classmethod
+    def update_all(cls) -> None:
+        run_command(["yay", "--sync", "--refresh", "--sysupgrade"])
+
 
 class Chocolatey(PackageManager):
     PLATFORM = "Windows"
@@ -68,6 +82,10 @@ class Chocolatey(PackageManager):
     @classmethod
     def uninstall(cls, package: Package) -> None:
         run_command(["choco", "uninstall", package.identifier])
+
+    @classmethod
+    def update_all(cls) -> None:
+        run_command(["choco", "upgrade", "all"])
 
 
 @dataclass
