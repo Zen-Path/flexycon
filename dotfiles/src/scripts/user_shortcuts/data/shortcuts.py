@@ -89,7 +89,6 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$HOME", "University"],
         aliases={"default": ["u", "n", "i"], YAZI.name: ["U"]},
-        activate_python_env=True,
         description="university",
     ),
     Bookmark(
