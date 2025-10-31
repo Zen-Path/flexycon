@@ -241,7 +241,7 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="d",
-        path_parts=["$XDG_SRC_HOME", "private"],
+        path_parts=["$XDG_SRC_HOME", "flexycon-private"],
         aliases={"default": ["p", "r", "v"], YAZI.name: ["P"]},
         activate_python_env=True,
         description="private source",
