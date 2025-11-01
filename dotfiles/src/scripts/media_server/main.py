@@ -5,10 +5,10 @@
 import argparse
 import atexit
 import logging
-import os
 from pathlib import Path
 
 from common.logger import logger, setup_logging
+from common.variables import flex_data_path
 from flask import Flask, abort, request
 from flask_cors import CORS
 from scripts.media_server.routes.media import media_bp
@@ -16,10 +16,6 @@ from scripts.media_server.src.history import HistoryLogger
 from scripts.media_server.src.logging_middleware import register_logging
 
 app = Flask(__name__)
-
-DATA_HOME_DIR = (
-    Path(os.getenv("XDG_DATA_HOME", Path.home() / ".local/share")) / "flexycon"
-)
 
 API_KEY = "{{@@ _vars['media_server_key'] @@}}"
 
@@ -41,7 +37,7 @@ def build_parser():
     parser.add_argument(
         "--history-path",
         type=Path,
-        default=DATA_HOME_DIR / "history.json",
+        default=flex_data_path / "history.json",
         help="Path to the config file",
     )
 

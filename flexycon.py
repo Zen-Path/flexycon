@@ -10,6 +10,7 @@ from pathlib import Path
 
 from common.helpers import run_command
 from common.logger import logger, setup_logging
+from common.variables import flex_data_path
 from scripts.installer.data.packages import packages
 from scripts.installer.main import process_packages
 from scripts.user_shortcuts.data.shortcuts import shortcuts
@@ -88,10 +89,9 @@ def remove_targets(targets):
 def remove_flexycon_data():
     logger.info("💀 Removing flexycon data...")
 
-    flexycon_data_path = Path.home() / ".local" / "share" / "flexycon"
-    if flexycon_data_path.exists():
+    if flex_data_path.exists():
         try:
-            shutil.rmtree(flexycon_data_path, ignore_errors=True)
+            shutil.rmtree(flex_data_path, ignore_errors=True)
             logger.info("Removed flexycon local data directory")
         except Exception as e:
             logger.warning(e)
