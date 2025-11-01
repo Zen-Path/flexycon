@@ -113,10 +113,10 @@ export JAVA_HOME="/opt/homebrew/opt/openjdk"
 
 ## ENV SETTINGS
 
-# {%@@- if os == "linux" +@@%}
-[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && setsid user_shortcuts --renderer 'zsh' > /dev/null 2>&1
-# {%@@- elif os == "darwin" +@@%}
+# {%@@- if os == "darwin" +@@%}
 [ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && user_shortcuts --renderer 'zsh'
+# {%@@- elif os == "linux" +@@%}
+[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && setsid user_shortcuts --renderer 'zsh' > /dev/null 2>&1
 # {%@@- endif +@@%}
 
 # {%@@- if os == "linux" +@@%}

@@ -135,10 +135,10 @@ keymap = [
     { on = "y", run = "yank", desc = "Yank selected files (copy)" },
     { on = "Y", run = "unyank", desc = "Cancel the yank status" },
 
-    # {%@@- if os == "linux" +@@%}
-    { on = "u", run = "shell 'trash-restore' --block", desc = "Restore files" },
-    # {%@@- elif os == "darwin" +@@%}
+    # {%@@- if os == "darwin" +@@%}
     { on = "u", run = "noop", desc = "" },
+    # {%@@- elif os == "linux" +@@%}
+    { on = "u", run = "shell 'trash-restore' --block", desc = "Restore files" },
     # {%@@- endif +@@%}
     { on = "U", run = "noop", desc = "" },
     { on = "<C-u>", run = "arrow -50%", desc = "Move cursor up half page" },

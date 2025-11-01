@@ -144,10 +144,10 @@ function fzfopen() {
     \
     case "$mime_type" in \
         inode/directory) \
-            {%@@ if os == "linux" @@%}
-            ls -A -hN --color=always --group-directories-first {} ;; \
-            {%@@ elif os == "darwin" @@%}
+            {%@@ if os == "darwin" @@%}
             ls -A -h --color=always {} \
+            {%@@ elif os == "linux" @@%}
+            ls -A -hN --color=always --group-directories-first {} ;; \
             {%@@ endif @@%}
             ;; \
         text/*) \

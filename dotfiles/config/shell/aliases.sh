@@ -24,10 +24,10 @@ alias sql='sqlite3'
 alias p='pacman'
 # {%@@- endif +@@%}
 
-# {%@@- if os == "linux" +@@%}
-alias o='xdg-open'
-# {%@@- elif os == "darwin" +@@%}
+# {%@@- if os == "darwin" +@@%}
 alias o='open'
+# {%@@- elif os == "linux" +@@%}
+alias o='xdg-open'
 # {%@@- endif +@@%}
 
 # {%@@- if os == "linux" +@@%}
@@ -46,10 +46,10 @@ alias mkd='mkdir -pv'
 alias ffmpeg='ffmpeg -hide_banner'
 alias shfmt='shfmt --indent 4 --binary-next-line --case-indent --space-redirects --write'
 
-# {%@@- if os == "linux" +@@%}
-alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
-# {%@@- elif os == "darwin" +@@%}
+# {%@@- if os == "darwin" +@@%}
 alias ls='ls -A -h --color=auto'
+# {%@@- elif os == "linux" +@@%}
+alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
 # {%@@- endif +@@%}
 
 # Use colored output
@@ -73,10 +73,10 @@ alias pyb='/opt/homebrew/bin/python3'
 # {%@@- endif +@@%}
 
 # Python ENVironment Create
-# {%@@- if os == "linux" +@@%}
-alias penvc='py -m venv venv'
-# {%@@- elif os == "darwin" +@@%}
+# {%@@- if os == "darwin" +@@%}
 alias penvc='pyb -m venv venv'
+# {%@@- elif os == "linux" +@@%}
+alias penvc='py -m venv venv'
 # {%@@- endif +@@%}
 
 # Python ENVironment Deactivate
@@ -105,12 +105,12 @@ alias ytap='yt --extract-audio --format bestaudio/best --yes-playlist -o "%(play
 # alias fm='$FILE_MANAGER'
 
 # Package Manager
-# {%@@- if os == "linux" +@@%}
-# {%@@- if "arch" in distro_like +@@%}
-alias pm='yay'
-# {%@@- endif +@@%}
-# {%@@- elif os == "darwin" +@@%}
+# {%@@- if os == "darwin" +@@%}
 alias pm='brew'
+# {%@@- elif os == "linux" +@@%}
+#   {%@@- if "arch" in distro_like +@@%}
+alias pm='yay'
+#   {%@@- endif +@@%}
 # {%@@- endif +@@%}
 
 # {%@@- if "home" in profile +@@%}
