@@ -17,7 +17,7 @@ Both are installed in the venv by default. Outside the venv, only `yt-dlp` needs
 ## Installation
 
 1. Install the `ViolentMonkey` extension (guide [here](https://violentmonkey.github.io/get-it/))
-2. Add the [client script](./js/client.js) to ViolentMonkey (guide [here](https://violentmonkey.github.io/guide/creating-a-userscript/))
+2. Add the [client script](./../../userscripts/mediaServerClient.js) to ViolentMonkey (guide [here](https://violentmonkey.github.io/guide/creating-a-userscript/))
 3. (Optional) Set up the environmental variables:
 
     Copy `example.env` to `.env` in `src/`. Paths should be absolute.
