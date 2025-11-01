@@ -21,7 +21,6 @@ VENV_BIN = VENV_DIR / ("Scripts" if platform.system() == "Windows" else "bin")
 PIP_BIN = str(VENV_BIN / "pip")
 PYTHON_BIN = shutil.which("python3") or "python"
 
-REQUIREMENTS_FILE = Path("requirements.txt")
 USER_VARIABLES_PATH = Path("uservariables.yaml")
 
 UNINSTALL_TARGETS = [
@@ -159,13 +158,7 @@ def setup_virtual_env():
     logger.info("♻️ Updating pip...")
     run_command([PIP_BIN, "install", "--upgrade", "pip"])
 
-    logger.info("📦 Installing Python dependencies...")
-    if REQUIREMENTS_FILE.exists():
-        run_command([PIP_BIN, "install", "-r", str(REQUIREMENTS_FILE)])
-    else:
-        logger.warning("Python dependencies not found.")
-
-    logger.info("🔧 Installing current project in editable mode...")
+    logger.info("📦 Installing current project and dependencies...")
     run_command([PIP_BIN, "install", "-e", "."])
 
 

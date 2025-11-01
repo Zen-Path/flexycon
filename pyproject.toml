@@ -1,0 +1,57 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires      = ["setuptools>=61.0", "wheel"]
+
+[project]
+authors = [
+    { name = "Zen-Path", email = "zen.path@tuta.com" },
+]
+dependencies = [
+    "dotdrop==1.15.0", #  for dotfile management
+
+    # util
+    "colorama==0.4.6",      # for colored text
+    "python-dotenv==1.1.1", # for loading env variables
+    "PyYAML==6.0.3",        # for parsing yaml files
+
+    # script
+    "Flask==3.1.1",       # for media_server
+    "flask-cors==6.0.0",  # for media_server
+    "gallery_dl==1.30.7", # for media_server
+    "yt-dlp==2025.8.20",  # for media_server
+    "GitPython==3.1.44",  # for git_logs
+    "tabulate==0.9.0",    # for rclone_fmt
+    "humanize==4.14.0",   # for rclone_fmt
+    "pydantic==2.12.3",   # for rclone_fmt
+    "commentjson==0.9.0", # for jsonc_to_json
+
+    # dev
+    "pre_commit==4.2.0", # for pre-commit git hooks
+    "black==25.1.0",     # for formatting
+    "mypy==1.16.1",      # for type checking
+
+    # test
+    "pytest==8.4.2", # for unit testing
+
+    # mypy types
+    "types-PyYAML==6.0.12.20250915",
+    "types-colorama==0.4.15.20240311",
+    "types-Flask-Cors==6.0.0.20250520",
+    "types-psutil==7.0.0.20250601",
+    "types-setuptools==80.9.0.20250529",
+    "types-tabulate==0.9.0.20241207",
+]
+description = " Flexible programmatic configuration."
+name = "flexycon"
+readme = "README.md"
+requires-python = ">=3.12"
+version = "0.0.1"
+
+[tool.setuptools.packages.find]
+where = ["dotfiles/src"]
+
+[tool.mypy]
+explicit_package_bases = true
+ignore_missing_imports = true
+mypy_path              = "dotfiles/src"
+strict_optional        = true
