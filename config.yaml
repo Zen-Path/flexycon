@@ -444,6 +444,11 @@ dotfiles:
         dst: ~/.local/bin/statusbar/sb-recording
         chmod: "755"
 
+    # Userscripts
+    d_userscripts:
+        src: src/userscripts
+        dst: ~/.config/flexycon/userscripts
+        link: link_children
 
 profiles:
     # Programs
@@ -528,6 +533,8 @@ profiles:
             - f_sdir
             - f_user_shortcuts
             - f_tag
+
+            - d_userscripts
         #actions:
         #    - generate_user_shortcuts
 
