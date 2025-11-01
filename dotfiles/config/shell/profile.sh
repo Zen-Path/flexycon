@@ -85,7 +85,7 @@ export DOOMDIR="$XDG_CONFIG_HOME/doom"
 # {%@@- if "home" in profile +@@%}
 export JOURNAL_HOME="$XDG_DOCUMENTS_DIR/Journal"
 # {%@@- endif +@@%}
-export FLEXYCON_HOME="$HOME/.local/src/flexycon"
+export FLEXYCON_HOME="$XDG_SRC_HOME/flexycon"
 
 # PROGRAM SETTINGS
 
