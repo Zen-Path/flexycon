@@ -2,6 +2,7 @@ uservariables:
     active_dotdrop_profile: "Active dotdrop profile"
     git_email: "Git email"
     git_username: "Git username"
+    media_server_key: "Media server private key (a random string is fine)"
 
 trans_install:
     jsonc_to_json: jsonc_to_json "{0}" "{1}"
@@ -535,6 +536,9 @@ profiles:
             - f_tag
 
             - d_userscripts
+        variables:
+            media_server_port: 5000
+
         #actions:
         #    - generate_user_shortcuts
 

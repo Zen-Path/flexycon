@@ -5,7 +5,7 @@
 // @version         1.4.4
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
-// @downloadURL     https://raw.githubusercontent.com/Zen-Path/flexycon/refs/heads/main/dotfiles/src/scripts/media_server/js/client.js
+// @downloadURL
 // @supportURL      https://github.com/Zen-Path/flexycon/tree/main/dotfiles/src/scripts/media_server
 // @homepageURL     https://github.com/Zen-Path/flexycon
 // @icon            https://www.svgrepo.com/show/230395/download.svg
@@ -14,7 +14,7 @@
 // @noframes
 // ==/UserScript==
 
-const SERVER_PORT = "5000";
+const SERVER_PORT = "{{@@ _vars['media_server_port'] @@}}";
 
 function downloadMedia(urls, type, range) {
     const payload = { urls, type };
@@ -26,7 +26,10 @@ function downloadMedia(urls, type, range) {
     GM_xmlhttpRequest({
         method: "POST",
         url: `http://localhost:${SERVER_PORT}/media/download`,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "X-API-Key": "{{@@ _vars['media_server_key'] @@}}",
+        },
         data: requestData,
         onerror: function (error) {
             console.error(":: Download failed", error);
