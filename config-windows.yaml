@@ -59,7 +59,7 @@ dotfiles:
     # Other
     f_git_config:
         src: config/git/config.ini
-        dst: ~/.gitconfig
+        dst: ~/.config/git/config.ini
         link: nolink
 
     f_bottom_config:
