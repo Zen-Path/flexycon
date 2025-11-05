@@ -35,8 +35,8 @@ CONVERTERS = [
     ["-t", "--train-case", "Train-Case", to_train_case],
     ["-k", "--kebab-case", "kebab-case", to_kebab_case],
     ["-K", "--kebab-upper-case", "KEBAB-CASE", to_kebab_upper_case],
-    ["-f", "--flat-case", "flatcase", to_flat_case],
-    ["-F", "--flat-upper-case", "FLATCASE", to_flat_upper_case],
+    ["-f", "--flat-case", "flatcase (destructive)", to_flat_case],
+    ["-F", "--flat-upper-case", "FLATCASE (destructive)", to_flat_upper_case],
 ]
 
 
