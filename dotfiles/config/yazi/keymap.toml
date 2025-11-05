@@ -129,6 +129,68 @@ keymap = [
         "w",
     ], run = "rename --hovered --empty=all", desc = "Rename - replace Whole" },
 
+    ## Rename formats
+    { on = [
+        "r",
+        "f",
+        "c",
+    ], run = 'shell -- rename_file --camel-case "$@"', desc = "Rename - format camelCase" },
+    { on = [
+        "r",
+        "f",
+        "C",
+    ], run = 'shell -- rename_file --camel-snake-case "$@"', desc = "Rename - format Camel_Snake_Case" },
+    { on = [
+        "r",
+        "f",
+        "f",
+    ], run = 'shell -- rename_file --flat-case "$@"', desc = "Rename - format flatcase (destructive)" },
+    { on = [
+        "r",
+        "f",
+        "F",
+    ], run = 'shell -- rename_file --flat-upper-case "$@"', desc = "Rename - format FLATCASE (destructive)" },
+    { on = [
+        "r",
+        "f",
+        "k",
+    ], run = 'shell -- rename_file --kebab-case "$@"', desc = "Rename - format kebab-case" },
+    { on = [
+        "r",
+        "f",
+        "K",
+    ], run = 'shell -- rename_file --kebab-upper-case "$@"', desc = "Rename - format KEBAB-CASE" },
+    { on = [
+        "r",
+        "f",
+        "l",
+    ], run = 'shell -- rename_file --lower-case "$@"', desc = "Rename - format lower case" },
+    { on = [
+        "r",
+        "f",
+        "p",
+    ], run = 'shell -- rename_file --pascal-case "$@"', desc = "Rename - format PascalCase" },
+    { on = [
+        "r",
+        "f",
+        "s",
+    ], run = 'shell -- rename_file --snake-case "$@"', desc = "Rename - format snake_case" },
+    { on = [
+        "r",
+        "f",
+        "S",
+    ], run = 'shell -- rename_file --snake-upper-case "$@"', desc = "Rename - format SNAKE_UPPER" },
+    { on = [
+        "r",
+        "f",
+        "t",
+    ], run = 'shell -- rename_file --train-case "$@"', desc = "Rename - format Train-Case" },
+    { on = [
+        "r",
+        "f",
+        "u",
+    ], run = 'shell -- rename_file --upper-case "$@"', desc = "Rename - format UPPER CASE" },
+
     { on = "t", run = "tab_create --current", desc = "Create a new tab with CWD" },
     { on = "T", run = "plugin toggle-pane max-preview", desc = "Maximize or restore preview" },
 
