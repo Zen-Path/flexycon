@@ -314,6 +314,11 @@ dotfiles:
         dst: ~/.local/bin/rclone_wrapper
         chmod: "755"
 
+    f_rename_file:
+        src: src/scripts/rename_file/main.py
+        dst: ~/.local/bin/rename_file
+        chmod: "755"
+
     f_sdir:
         src: bin/sdir.sh
         dst: ~/.local/bin/sdir
@@ -531,6 +536,7 @@ profiles:
             - f_noisereduce
             - f_pkgsize
             - f_rclone_wrapper
+            - f_rename_file
             - f_sdir
             - f_user_shortcuts
             - f_tag
