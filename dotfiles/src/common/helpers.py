@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import secrets
 import subprocess
 import sys
@@ -178,3 +179,85 @@ def get_display_server() -> str:
         return "X11"
     else:
         return "None"
+
+
+def split_acronyms(token: str) -> List[str]:
+    """
+    Handle acronyms.
+    If there's no uppercase letter, return the token as-is. Otherwise, detect
+    sequences of 2+ uppercase chars (acronyms). If an acronym is immediately followed by a lowercase letter, the last capital joins the lowercase word.
+
+    Examples:
+    - HTMLParser → HTML + Parser
+    - parseURLString → parse + URL + String
+    """
+    if not re.search(r"[A-Z]", token):
+        return [token]
+
+    parts = []
+    i = 0
+    n = len(token)
+
+    while i < n:
+        # Match acronym (2+ uppercase letters)
+        match = re.match(r"[A-Z]{2,}", token[i:])
+        if match:
+            acronym = match.group(0)
+            end = i + len(acronym)
+
+            # If next char exists and is lowercase, merge last capital with next word
+            if end < n and token[end].islower():
+                parts.append(acronym[:-1])
+                i = end - 1  # start new word from last uppercase
+            else:
+                parts.append(acronym)
+                i = end
+        else:
+            # Otherwise, grab the next "normal" word segment
+            match = re.match(r"[A-Z][a-z]+|[a-z]+|\d+", token[i:])
+            if match:
+                parts.append(match.group(0))
+                i += len(match.group(0))
+            else:
+                # fallback: add single char (rare, safety net)
+                parts.append(token[i])
+                i += 1
+
+    return parts
+
+
+def split_into_words(name: str, boundaries: List[str] = [" ", "-", "_"]) -> List[str]:
+    """
+    Split a string into words in multiple stages.
+    """
+    if not name:
+        return []
+
+    tokens: List[str]
+    if boundaries:
+        pattern = "|".join(map(re.escape, boundaries))
+        tokens = [t for t in re.split(pattern, name) if t]
+    else:
+        tokens = [name]
+
+    def split_tokens(tokens: List[str], splitter) -> List[str]:
+        result = []
+        for token in tokens:
+            result.extend(splitter(token))
+        return [t for t in result if t]
+
+    def split_numbers(token: str) -> List[str]:
+        # Split between digit and non-digit boundaries
+        return re.split(r"(?<=\D)(?=\d)|(?<=\d)(?=\D)", token)
+
+    tokens = split_tokens(tokens, split_numbers)
+
+    def split_camel_case(token: str) -> List[str]:
+        # Insert space between lowercase and uppercase letter boundaries
+        return re.split(r"(?<=[a-z])(?=[A-Z])", token)
+
+    tokens = split_tokens(tokens, split_camel_case)
+
+    tokens = split_tokens(tokens, split_acronyms)
+
+    return tokens
