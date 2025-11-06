@@ -7,22 +7,23 @@ from datetime import datetime, timedelta
 
 def parse_abs_date(date_str: str) -> datetime:
     """
-    Parse a date string containing exactly three runs of digits—
-    interpreted as YYYY, MM, DD—in that order.
-    Accepts any separators (non-digits are ignored).
-    Raises ValueError if you don't get exactly 3 groups or
-    if they don't form a valid YYYY-MM-DD date.
+    Parse a date string containing exactly three runs of digits, interpreted
+    as YYYY<sep>MM<sep>DD — in that order. Separator can be any non-digit char.
+    Raises ValueError if you don't get exactly 3 groups of digits or if they
+    don't form a valid YYYY-MM-DD date.
     """
     parts = re.findall(r"\d+", date_str)
     if len(parts) != 3:
         raise ArgumentTypeError(
-            f"Invalid date format: {date_str!r} (expected exactly 3 groups: YYYY, MM, DD)"
+            f"Invalid date format in {date_str!r}: found {len(parts)} numeric groups, "
+            "but expected exactly 3 (YYYY, MM, DD)."
         )
 
     year, month, day = parts
     if len(year) != 4:
         raise ArgumentTypeError(
-            f"Invalid year '{year}' in {date_str!r}; year must be four digits"
+            f"Invalid year component {year!r} in {date_str!r}: "
+            f"year must have exactly 4 digits, but has {len(year)}."
         )
 
     try:
