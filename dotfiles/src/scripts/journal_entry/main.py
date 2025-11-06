@@ -39,12 +39,11 @@ def open_journal_entry(target_date):
     month_num = f"{target_date.month:02}"
     day = f"{target_date.day:02}"
 
-    journal_home_dir = os.getenv("JOURNAL_HOME")
-
-    if not journal_home_dir:
+    journal_home_path = os.getenv("JOURNAL_HOME")
+    if not journal_home_path:
         raise EnvironmentError("JOURNAL_HOME environment variable is not set.")
 
-    journal_year_dir = os.path.join(journal_home_dir, year)
+    journal_year_dir = os.path.join(journal_home_path, year)
     journal_month_dir = os.path.join(journal_year_dir, month_num)
 
     ensure_directory_interactive(journal_year_dir)
@@ -60,14 +59,12 @@ def open_journal_entry(target_date):
 
 
 def get_journal_entry_path(target_date) -> Optional[Path]:
-    journal_home_var = os.getenv("JOURNAL_HOME")
-    if not journal_home_var:
-        logger.warning(f"Missing environment variable 'JOURNAL_HOME'")
-
-    journal_home = journal_home_var or (Path.home() / "Documents" / "Journal")
+    journal_home_path = os.getenv("JOURNAL_HOME")
+    if not journal_home_path:
+        raise EnvironmentError("JOURNAL_HOME environment variable is not set.")
 
     return (
-        Path(journal_home)
+        Path(journal_home_path)
         / target_date.strftime("%Y")
         / target_date.strftime("%m")
         / f"{target_date.strftime('%m.%d')}.md"
