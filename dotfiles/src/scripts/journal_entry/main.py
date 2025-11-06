@@ -10,7 +10,6 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from common.args import format_help_choices
 from common.date_args import add_date_args, resolve_date
 from common.helpers import ensure_directory_interactive
 from common.logger import logger, setup_logging
@@ -22,7 +21,7 @@ def build_parser():
         "If no $EDITOR is found, it defaults to 'vim'."
     )
 
-    add_date_args(parser, format_help_choices)
+    add_date_args(parser)
 
     parser.add_argument(
         "--get-journal-entry-path",

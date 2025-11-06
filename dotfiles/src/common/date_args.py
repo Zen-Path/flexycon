@@ -32,7 +32,11 @@ def parse_abs_date(date_str: str) -> datetime:
         raise ArgumentTypeError(f"Invalid date components in {date_str!r}: {ve}")
 
 
-def add_date_args(parser, format_help_choices):
+def format_help_choices(choices):
+    return " | ".join([f"'{str(choice).replace('%', '%%')}'" for choice in choices])
+
+
+def add_date_args(parser):
     """
     Wire up:
       - a mutually exclusive -r/--relative  vs.  -a/--absolute
