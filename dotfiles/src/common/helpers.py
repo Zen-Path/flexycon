@@ -140,7 +140,10 @@ def load_json(path):
 
 
 def truncate(
-    text: str, max_length: int, placeholder: str = "…", truncate_start: bool = False
+    text: str,
+    max_length: int,
+    placeholder: str = "…",
+    truncate_from_end: bool = True,
 ) -> str:
     """
     Truncate a string to max_length.
@@ -157,11 +160,17 @@ def truncate(
     if len(text) <= max_length:
         return text
 
+    if max_length == 0:
+        return ""
+
+    if len(placeholder) >= max_length:
+        return truncate(placeholder, max_length, "", truncate_from_end)
+
     truncated_length = max_length - len(placeholder)
-    if truncate_start:
-        return placeholder + text[-truncated_length:]
-    else:
+    if truncate_from_end:
         return text[:truncated_length] + placeholder
+    else:
+        return placeholder + text[-truncated_length:]
 
 
 def get_display_server() -> Optional[Literal["X11", "Wayland"]]:

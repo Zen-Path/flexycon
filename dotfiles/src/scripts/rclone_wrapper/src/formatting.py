@@ -68,7 +68,7 @@ def format_operations(
         row = [
             ACTIONS_FMT.get(op_type, Fore.LIGHTBLACK_EX) + op_type + Style.RESET_ALL,
             Fore.WHITE
-            + truncate(op_file, filename_max_size, truncate_start=True)
+            + truncate(op_file, filename_max_size, truncate_from_end=False)
             + Style.RESET_ALL,
             Fore.MAGENTA + humanize.naturalsize(op_size) + Style.RESET_ALL,
             size_color + str(op_size) + Style.RESET_ALL,
