@@ -5,7 +5,7 @@ import secrets
 import subprocess
 import sys
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import List, Literal, Optional, Tuple
 
 from common.logger import logger
 
@@ -164,21 +164,17 @@ def truncate(
         return text[:truncated_length] + placeholder
 
 
-def get_display_server() -> str:
+def get_display_server() -> Optional[Literal["X11", "Wayland"]]:
     """
-    Returns the display server currently in use.
-
-    Possible return values:
-    - 'X11'     : Running on X11
-    - 'Wayland' : Running on Wayland
-    - 'None'    : No graphical session detected
+    Returns the display server currently in use, or ``None`` if it can't
+    be detected.
     """
     if os.environ.get("WAYLAND_DISPLAY"):
         return "Wayland"
     elif os.environ.get("DISPLAY"):
         return "X11"
     else:
-        return "None"
+        return None
 
 
 def split_acronyms(token: str) -> List[str]:
