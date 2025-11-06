@@ -58,24 +58,40 @@ def add_date_args(parser: ArgumentParser):
     )
 
 
-def resolve_date(args) -> datetime:
-    target_date = None
+def resolve_date(args: Namespace) -> datetime:
+    """
+    Determine the target date from parsed command-line arguments.
 
+    This function expects the provided Namespace to define both
+    `date_value` and `is_date_absolute` attributes.
+
+    - If `args.date_value` is ``None``, the current date and time are used.
+    - If `args.is_date_absolute` is ``True``, the value is parsed as an
+      absolute date string.
+    - Otherwise, the value is interpreted as a relative day offset from now.
+      For example, ``-1`` means yesterday, and ``3`` means three
+      days from today.
+    """
+    required_attrs = ("date_value", "is_date_absolute")
+    missing = [name for name in required_attrs if not hasattr(args, name)]
+    if missing:
+        raise ArgumentTypeError(
+            f"Missing required argument attributes on Namespace: {', '.join(missing)}. "
+        )
+
+    target_date = None
     if args.date_value is None:
         target_date = datetime.now()
-    elif args.use_absolute:
+    elif args.is_date_absolute:
         target_date = parse_abs_date(args.date_value)
     else:
-        # Default to relative mode if neither flag was passed
-        if not args.use_relative and not args.use_absolute:
-            args.use_relative = True
-
+        # Default to relative mode
         try:
-            offset = int(args.date_value)
-            target_date = datetime.now() + timedelta(days=offset)
+            target_date = datetime.now() + timedelta(days=int(args.date_value))
         except ValueError:
             raise ArgumentTypeError(
-                f"invalid relative offset: {args.date_value!r} (must be integer)"
+                f"Invalid relative offset {args.date_value!r}: expected an integer, "
+                "such as -1 for yesterday or 3 for three days from now."
             )
 
     return target_date
