@@ -71,7 +71,6 @@ def get_journal_entry_path(target_date) -> Optional[Path]:
     )
 
 
-# TODO: add tests
 def main():
     args = build_parser().parse_args()
 
