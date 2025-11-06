@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import re
-from argparse import ArgumentTypeError
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from datetime import datetime, timedelta
 
 
@@ -33,35 +33,19 @@ def parse_abs_date(date_str: str) -> datetime:
         raise ArgumentTypeError(f"Invalid date components in {date_str!r}: {ve}")
 
 
-def format_help_choices(choices):
-    return " | ".join([f"'{str(choice).replace('%', '%%')}'" for choice in choices])
-
-
-def add_date_args(parser):
+def add_date_args(parser: ArgumentParser):
     """
-    Wire up:
-      - a mutually exclusive -r/--relative  vs.  -a/--absolute
-      - a single positional DATE (nargs='?', default=None)
+    Add an --absolute flag and a required positional DATE argument.
     """
-    mode_group = parser.add_mutually_exclusive_group()
-    mode_group.add_argument(
-        "-r",
-        "--relative",
-        action="store_true",
-        dest="use_relative",
-        help=(
-            "interpret DATE as a relative integer offset (default). "
-            f"Format: {format_help_choices(['-int','int'])}. Example: '-1', '3'"
-        ),
-    )
-    mode_group.add_argument(
+    parser.add_argument(
         "-a",
         "--absolute",
         action="store_true",
-        dest="use_absolute",
+        dest="is_date_absolute",
         help=(
             "interpret DATE as an absolute date. "
-            "Format: YYYY<sep>MM<sep>DD. Example: '2025-01-01'"
+            "Format: YYYY<sep>MM<sep>DD. <sep> is any non-digit char. "
+            "Example: '2025-01-01'"
         ),
     )
 
@@ -70,7 +54,7 @@ def add_date_args(parser):
         nargs="?",
         default=None,
         metavar="DATE",
-        help="an absolute or relative date. If omitted, uses today's date",
+        help="an absolute or relative date. If omitted, uses the current date",
     )
 
 
