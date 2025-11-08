@@ -18,10 +18,6 @@ class Bookmark:
     activate_python_env: bool = False
     condition: bool = True
 
-    @property
-    def resolved_path(self) -> str:
-        return resolve_path(self.path_parts)
-
 
 class BookmarkRenderer(ABC):
     def __init__(
