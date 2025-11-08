@@ -15,7 +15,7 @@ class Bookmark:
     path_parts: List[str]
     aliases: Dict[str, List[str]]
     description: Optional[str] = None
-    activate_python_env: Optional[bool] = False
+    activate_python_env: bool = False
     condition: bool = True
 
     @property
