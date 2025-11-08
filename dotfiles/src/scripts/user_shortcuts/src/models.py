@@ -1,7 +1,7 @@
 import os
 import shlex
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple
 
@@ -17,6 +17,14 @@ class Bookmark:
     description: Optional[str] = None
     activate_python_env: bool = False
     condition: bool = True
+    name: str = field(init=False)
+
+    def __post_init__(self):
+        """Compute the bookmark's display name after initialization."""
+        if self.description:
+            self.name = self.description
+        else:
+            self.name = f"[{''.join(self.path_parts)}]"
 
 
 class BookmarkRenderer(ABC):
