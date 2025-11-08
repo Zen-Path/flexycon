@@ -25,7 +25,7 @@ class DummyBookmark:
             ["dwn"],
             "Darwin",
             "# downloads\n"
-            'alias dwn="cd /Users/user/Downloads && ls -A"\n'
+            'alias dwn="cd /Users/user/Downloads && ls"\n'
             "hash -d dwn=/Users/user/Downloads\n",
         ),
         # Directory without description
@@ -33,7 +33,7 @@ class DummyBookmark:
             DummyBookmark(["/", "Users", "user", "Documents"], type="d"),
             ["docs"],
             "Linux",
-            'alias docs="cd /Users/user/Documents && ls -A"\n'
+            'alias docs="cd /Users/user/Documents && ls"\n'
             "hash -d docs=/Users/user/Documents\n",
         ),
         # File with description
@@ -65,7 +65,7 @@ class DummyBookmark:
             ["mf"],
             "Linux",
             "# spaced dir\n"
-            "alias mf=\"cd '/Users/user/My Folder' && ls -A\"\n"
+            "alias mf=\"cd '/Users/user/My Folder' && ls\"\n"
             "hash -d mf='/Users/user/My Folder'\n",
         ),
     ],

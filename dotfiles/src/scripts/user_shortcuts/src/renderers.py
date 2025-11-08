@@ -15,7 +15,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         """
         Target:
         # downloads
-        alias dwn="cd /Users/user/Downloads && ls -A"
+        alias dwn="cd /Users/user/Downloads && ls"
         hash -d dwn=/Users/user/Downloads
         """
         result = []
@@ -27,7 +27,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
 
         alias_name = "".join(alias_segments)
         alias_value = (
-            f"cd {path} && ls -A" if bookmark.type == "d" else f"{command} {path}"
+            f"cd {path} && ls" if bookmark.type == "d" else f"{command} {path}"
         )
 
         if bookmark.activate_python_env:
