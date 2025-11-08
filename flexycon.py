@@ -219,7 +219,7 @@ def install():
 
     if dotdrop_profile:
         logger.debug(f"Active dotdrop profile: {dotdrop_profile}")
-        subprocess.run(["dotdrop", "install", "--profile", dotdrop_profile])
+        subprocess.run([VENV_BIN / "dotdrop", "install", "--profile", dotdrop_profile])
 
     # TODO: Apply macOS default here
 
