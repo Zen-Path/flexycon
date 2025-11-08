@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple
 
-from common.helpers import resolve_path
+from common.helpers import resolve_path, write_to_file
 from common.logger import logger
 
 
@@ -87,14 +87,6 @@ class BookmarkRenderer(ABC):
             path_str = shlex.quote(path_str)
 
         return path_str
-
-    def _write_output(self, content: str) -> None:
-        path = Path(resolve_path(self.path_parts))
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content, encoding="utf-8")
-
-        logger.info(f"[{self.name}] Wrote file to {path}")
-
     def compose_bookmarks(self) -> str:
         lines = []
         for [alias_segments, bookmark] in self.processed_bookmarks:

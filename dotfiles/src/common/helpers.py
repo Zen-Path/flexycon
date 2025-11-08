@@ -5,6 +5,7 @@ import secrets
 import subprocess
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List, Literal, Optional, Tuple
 
 from common.logger import logger
@@ -54,6 +55,13 @@ def run_command(command: List[str]) -> CommandResult:
     )
 
     return CommandResult(return_code=return_code, output="\n".join(output))
+
+
+def write_to_file(content: str, path: Path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+    logger.debug(f"Wrote contents {content[:20].replace("\n", " ")!r} to file {path!r}")
 
 
 def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
