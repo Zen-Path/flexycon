@@ -89,7 +89,7 @@ class YaziBookmarkRenderer(BookmarkRenderer):
             f'"cd {path}"' if bookmark.type == "d" else f'["reveal {path}", "open"]'
         )
 
-        return f'{self.indentation}{{ on = {alias_segments}, run = {command}, desc = "{description_fmt}" }},'
+        return f'    {{ on = {alias_segments}, run = {command}, desc = "{description_fmt}" }},'
 
 
 YAZI = YaziBookmarkRenderer(

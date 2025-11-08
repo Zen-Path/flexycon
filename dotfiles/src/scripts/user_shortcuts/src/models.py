@@ -2,7 +2,6 @@ import os
 import shlex
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple
 
 from common.helpers import resolve_path, write_to_file
@@ -31,51 +30,46 @@ class BookmarkRenderer(ABC):
     def __init__(
         self,
         name: str,
-        path_parts: List[str],
+        output_path_parts: List[str],
         expand_vars: bool = True,
         escape_path: bool = True,
-        indentation_level: int = 4,
     ):
         self.name = name
-        self.path_parts = path_parts
+        self.output_path = resolve_path(output_path_parts)
         self.expand_vars = expand_vars
         self.escape_path = escape_path
-        self.processed_bookmarks: List[Tuple[List[str], Bookmark]] = []
-        self.indentation = " " * indentation_level
 
     def process(self, bookmarks: List[Bookmark]) -> None:
         logger.info(f"[{self.name}] Processing bookmarks...")
-        count = 0
 
+        processed_bookmarks = []
         for bookmark in bookmarks:
-            name = (
-                bookmark.description
-                if bookmark.description
-                else f"[{''.join(bookmark.path_parts)}]"
-            )
-
             if not bookmark.condition:
                 logger.warning(
-                    f"- Skipped bookmark '{name}' due to condition not being met"
+                    f"- Skipped bookmark {bookmark.name!r} due to condition not being met"
                 )
                 continue
 
-            alias_value = bookmark.aliases.get(
-                self.name, bookmark.aliases.get("default", False)
+            alias = self.resolve_alias(bookmark)
+            if not alias:
+                logger.warning(
+                    f"- Skipped bookmark {bookmark.name!r} due to missing alias"
+                )
+                continue
+
+            processed_bookmarks.append((alias, bookmark))
+
+            logger.debug(
+                f"- Added alias {"".join(alias)!r} for bookmark {bookmark.name!r}"
             )
-            if isinstance(alias_value, list):
-                alias_str = "".join(alias_value)
-                self.processed_bookmarks.append((alias_value, bookmark))
 
-                logger.debug(f"- Added alias '{alias_str}' for bookmark '{name}'")
-                count += 1
-            else:
-                logger.warning(f"- Skipped bookmark '{name}' due to missing alias")
+        logger.info(f"[{self.name}] Processed {len(processed_bookmarks)} bookmarks")
 
-        logger.info(f"[{self.name}] Processed {count} bookmarks")
+        content = self.compose_output_file(processed_bookmarks)
+        write_to_file(content, self.output_path)
 
-        content = self.compose_file()
-        self._write_output(content)
+    def resolve_alias(self, bookmark: Bookmark) -> Optional[List[str]]:
+        return bookmark.aliases.get(self.name, bookmark.aliases.get("default"))
 
     def _get_path(self, bookmark: Bookmark) -> str:
         path_str = os.path.join(*bookmark.path_parts)
@@ -87,15 +81,18 @@ class BookmarkRenderer(ABC):
             path_str = shlex.quote(path_str)
 
         return path_str
-    def compose_bookmarks(self) -> str:
-        lines = []
-        for [alias_segments, bookmark] in self.processed_bookmarks:
-            lines += [self.compose_bookmark(alias_segments, bookmark)]
-        return "\n".join(lines)
-
-    def compose_file(self) -> str:
-        return self.compose_bookmarks()
 
     @abstractmethod
     def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
         pass
+
+    def compose_bookmarks(self, bookmarks: List[Tuple[List[str], Bookmark]]) -> str:
+        return "\n".join(
+            [
+                self.compose_bookmark(alias_segments, bookmark)
+                for [alias_segments, bookmark] in bookmarks
+            ]
+        )
+
+    def compose_output_file(self, bookmarks) -> str:
+        return self.compose_bookmarks(bookmarks)
