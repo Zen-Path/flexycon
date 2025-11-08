@@ -2,6 +2,7 @@ asvetliakov.vscode-neovim
 cstrap.python-snippets
 esbenp.prettier-vscode
 jdinhlife.gruvbox
+ms-python.black-formatter
 ms-python.debugpy
 ms-python.python
 ms-python.vscode-pylance

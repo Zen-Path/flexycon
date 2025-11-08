@@ -6,7 +6,7 @@
         "editor.defaultFormatter": "vscode.html-language-features"
     },
     "[python]": {
-        "editor.defaultFormatter": "mikoz.black-py"
+        "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "[xml]": {
         "editor.defaultFormatter": "DotJoshJohnson.xml"
