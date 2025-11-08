@@ -59,7 +59,7 @@ class Package:
             self.name = self.identifier
 
     @property
-    def resolved_path(self) -> Optional[str]:
+    def resolved_path(self) -> Optional[Path]:
         return resolve_path(self.destination) if self.destination else None
 
 

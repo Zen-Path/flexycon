@@ -24,9 +24,9 @@ class CommandResult:
         return self.output
 
 
-def resolve_path(path_parts: List[str]) -> str:
-    """Resolve a list of path parts into a single expanded string path."""
-    return os.path.expandvars(os.path.join(*path_parts))
+def resolve_path(path_parts: List[str]) -> Path:
+    """Resolve a list of path parts into a single expanded path."""
+    return Path(os.path.expandvars(os.path.join(*path_parts)))
 
 
 def run_command(command: List[str]) -> CommandResult:
