@@ -551,7 +551,7 @@ profiles:
     ## OS
     meta_unix:
         variables:
-            d_venv_bin: "venv/bin"
+            d_venv_bin: ".venv/bin"
 
     meta_linux:
         include:
@@ -574,7 +574,7 @@ profiles:
 
     meta_windows:
         variables:
-            d_venv_bin: "venv/Scripts"
+            d_venv_bin: ".venv/Scripts"
 
     ## Environment
     meta_personal:

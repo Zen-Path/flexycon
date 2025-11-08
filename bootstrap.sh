@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-VENV_DIR="venv"
+VENV_DIR=".venv"
 VENV_BIN="$VENV_DIR/bin"
 VENV_PIP="$VENV_BIN/pip"
 VENV_PYTHON="$VENV_BIN/python"

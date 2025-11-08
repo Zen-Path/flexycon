@@ -16,7 +16,7 @@ from scripts.installer.main import process_packages
 from scripts.user_shortcuts.data.shortcuts import shortcuts
 from scripts.user_shortcuts.main import AVAILABLE_RENDERERS
 
-VENV_DIR = Path("venv")
+VENV_DIR = Path(".venv")
 VENV_BIN = VENV_DIR / ("Scripts" if platform.system() == "Windows" else "bin")
 PIP_BIN = str(VENV_BIN / "pip")
 PYTHON_BIN = shutil.which("python3") or "python"

@@ -74,9 +74,9 @@ alias pyb='/opt/homebrew/bin/python3'
 
 # Python ENVironment Create
 # {%@@- if os == "darwin" +@@%}
-alias penvc='pyb -m venv venv'
+alias penvc='pyb -m venv .venv'
 # {%@@- elif os == "linux" +@@%}
-alias penvc='py -m venv venv'
+alias penvc='py -m venv .venv'
 # {%@@- endif +@@%}
 
 # Python ENVironment Deactivate
