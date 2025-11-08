@@ -203,10 +203,10 @@ function penva() {
     done
 
     if [[ -z "$activate_script" ]]; then
-        echo "Error: no virtualenv activate script found from '$(pwd)' upwards to '$HOME'" >&2
+        echo "Error: No virtual env activation script found from '$(pwd)' upwards to \$HOME." >&2
         return 1
     fi
 
     source "$activate_script"
-    printf "➜ Activated %s\n" "$activate_script"
+    printf "Virtual environment activated; found at '%s'.\n" "$activate_script"
 }
