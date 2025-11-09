@@ -28,6 +28,12 @@ actions:
         vscode_extensions_install: cat "{{@@ f_vscode_extensions @@}}" | xargs -n 1 code --install-extension
 
 dotfiles:
+    # Avoid links for essential config files, since if something were to go
+    # wrong with the flexycon repo, such as checking out a bad state or work
+    # in progress branch, or simply deleting the code by accident, the environment
+    # will not be affected unless you install the changes.
+    # In short, use 'link: nolink' for essentials!
+
     f_fake_profile_actions_trigger:
         # "Fake" files are always considered installed, so we can use this
         # to trick dotdrop into always running a profile's actions, so we
