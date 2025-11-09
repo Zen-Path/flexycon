@@ -172,6 +172,10 @@ def setup():
         logger.warning(
             "Homebrew is not installed. Please install it from https://brew.sh/"
         )
+    elif system == "Windows" and shutil.which("choco") is None:
+        logger.warning(
+            "Chocolatey is not installed. Please install it from https://chocolatey.org/install"
+        )
     else:
         process_packages(packages)
 
