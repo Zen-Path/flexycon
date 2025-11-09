@@ -221,9 +221,23 @@ def install():
             data = yaml.safe_load(f)
             dotdrop_profile = data["variables"]["active_dotdrop_profile"]
 
+    # TODO: add windows and other shells support
+    try:
+        logger.info("Installing mandatory config.")
+        subprocess.run([VENV_BIN / "dotdrop", "install", "--profile", "mandatory"])
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Command failed with exit code {e.returncode}")
+        return
+
     if dotdrop_profile:
         logger.debug(f"Active dotdrop profile: {dotdrop_profile}")
-        subprocess.run([VENV_BIN / "dotdrop", "install", "--profile", dotdrop_profile])
+        logger.info("Installing the rest of the config.")
+        subprocess.run(
+            f'zsh -c "set -e; source ~/.zprofile && {VENV_BIN}/dotdrop install --profile {dotdrop_profile!r}"',
+            shell=True,
+            check=True,
+        )
 
     # TODO: Apply macOS default here
 

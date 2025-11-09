@@ -42,10 +42,19 @@ dotfiles:
         dst:
 
     # MANDATORY
+    # Config that deals directly with the environment. Should be installed
+    # before anything else.
+    #
+    # Imagine a situation where we're adding a new env var and using it in
+    # our script. When installing, we're going to update both the shell
+    # config, and the script. However, when running the script, we see that
+    # the env var is not defined, since we haven't sourced the new shell config,
+    # and this might lead to a bad state config.
+    #
+    # To prevent this, we first install the mandatory config, then we source it,
+    # then we install everything else, which guarantees that the latest env
+    # is used.
     f_shell_profile:
-        # Using a link since accidentally deleting this file would be a
-        # PITA to restore without a shell config. This way, we can run:
-        # `ln -s .config/dotdrop/.zprofile .`
         src: config/shell/profile.sh
         dst: ~/.zprofile
         link: nolink
@@ -55,16 +64,19 @@ dotfiles:
         dst: ~/.config/shell/inputrc
         link: nolink
 
+    # Whilst important, we're not going to include this in mandatory, since
+    # we're using some env vars in its templates.
+    d_git:
+        src: config/git
+        dst: ~/.config/git
+        link: nolink
+
+    # Shell
     f_zsh_config:
         src: config/zsh/config.sh
         dst: ~/.config/zsh/.zshrc
         link: nolink
 
-    d_git:
-        src: config/git
-        dst: ~/.config/git
-
-    # Shell
     f_shell_aliases:
         src: config/shell/aliases.sh
         dst: ~/.config/shell/aliases.sh
@@ -504,24 +516,18 @@ profiles:
 
     # Meta Profiles
 
-    meta_mandatory:
-        dotfiles:
-            - f_shell_profile
-            - f_shell_inputrc
-            - f_zsh_config
-            - d_git
-
     meta_common:
         include:
-            - meta_mandatory
             - meta_yazi
             - meta_vscode
             - meta_firefox
             - meta_mpv
         dotfiles:
             # Config
+            - f_zsh_config
             - f_shell_aliases
             - d_starship
+            - d_git
             - f_nvim_init
             - d_python
             - d_yt_dlp
@@ -598,8 +604,12 @@ profiles:
             - d_firefox_chrome_work
             - f_firefox_user_work
 
-
     # Actual Profiles
+
+    mandatory:
+        dotfiles:
+            - f_shell_profile
+            - f_shell_inputrc
 
     linux_home:
         include:
