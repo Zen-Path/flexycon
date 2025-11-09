@@ -8,7 +8,7 @@ import sys
 
 from common.helpers import notify, run_command
 from common.logger import logger
-from statusbar.shared import (
+from common.statusbar import (
     EDITOR,
     STATUSBAR,
     TERMINAL,

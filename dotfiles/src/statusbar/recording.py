@@ -17,7 +17,7 @@ from common.helpers import (
     set_notifications_status,
 )
 from common.logger import logger, setup_logging
-from statusbar.shared import (
+from common.statusbar import (
     EDITOR,
     TERMINAL,
     MouseButton,

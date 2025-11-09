@@ -6,7 +6,7 @@ import os
 import subprocess
 
 from common.helpers import notify
-from statusbar.shared import EDITOR, TERMINAL, MouseButton
+from common.statusbar import EDITOR, TERMINAL, MouseButton
 
 # Environment variables
 NEWS_DIR = os.path.join(
