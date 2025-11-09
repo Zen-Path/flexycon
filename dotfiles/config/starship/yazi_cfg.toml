@@ -135,7 +135,7 @@ style  = "bg:color_blue"
 symbol = ""
 
 [python]
-format             = '[[ $symbol( $version) (\($virtualenv\)) ](fg:color_fg0 bg:color_blue)]($style)'
+format             = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 pyenv_version_name = false
 style              = "bg:color_blue"
 symbol             = ""
