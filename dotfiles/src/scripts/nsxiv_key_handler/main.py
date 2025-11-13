@@ -9,7 +9,7 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from common.helpers import notify, run_command
 from common.logger import logger, setup_logging
@@ -33,7 +33,7 @@ def get_help_text():
     )
 
 
-def action_interactive_trash(paths):
+def action_interactive_trash(paths: List[Path]):
     for path in paths:
         choice = prompt_dmenu(f"Really trash '{path}'?", ["Yes", "No", "Cancel"])
 
@@ -45,21 +45,21 @@ def action_interactive_trash(paths):
             notify("Trash complete", f"{path} trashed.")
 
 
-def action_trash(paths):
+def action_trash(paths: List[Path]):
     run_command(["trash-put", *[str(path) for path in paths]])
 
 
-def action_open_editor(paths):
+def action_open_editor(paths: List[Path]):
     if shutil.which("gimp"):
-        run_command(["gimp", str(path)])
+        run_command(["gimp", *[str(path) for path in paths]])
 
 
-def action_flip(paths):
+def action_flip(paths: List[Path]):
     for path in paths:
         run_command(["magick", str(path), "-flop", str(path)])
 
 
-def action_group(paths):
+def action_group(paths: List[Path]):
     default_name = datetime.now().strftime("%F_%T")
     choice = prompt_dmenu("Group file(s) where?", [default_name])
     if not choice:
@@ -81,7 +81,7 @@ def action_group(paths):
         )
 
 
-def action_show_help(paths):
+def action_show_help(paths: List[Path]):
     notify("nsxiv actions", get_help_text())
 
 
@@ -94,21 +94,21 @@ def action_get_info(paths):
     notify("File information", "\n".join(formatted))
 
 
-def action_rotate(paths, degrees: int = 90):
+def action_rotate(paths: List[Path], degrees: int = 90):
     for path in paths:
         run_command(["magick", str(path), "-rotate", str(degrees), str(path)])
 
 
-def action_update_wallpaper(paths):
+def action_update_wallpaper(paths: List[Path]):
     result = run_command(["setbg", str(paths[0])])
 
 
-def action_copy_image(paths):
+def action_copy_image(paths: List[Path]):
     XClip.file(str(paths[0]))
     notify("Image copied", f"Image {paths[0]} copied to clipboard")
 
 
-def action_copy_path(paths):
+def action_copy_path(paths: List[Path]):
     XClip.text(str(paths[0]))
     notify("Path copied", f"Path {paths[0]} copied to clipboard")
 
