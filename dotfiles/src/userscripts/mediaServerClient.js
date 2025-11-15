@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.4.4
+// @version         1.4.5
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -15,6 +15,11 @@
 // ==/UserScript==
 
 const SERVER_PORT = "{{@@ _vars['media_server_port'] @@}}";
+
+const DOWNLOAD_FAILURE_PATTERNS = [
+    "[ytdl][error]",
+    "[downloader.http][warning] File size larger",
+];
 
 function downloadMedia(urls, type, range) {
     const payload = { urls, type };
@@ -62,7 +67,11 @@ function downloadMedia(urls, type, range) {
 - output:\n${output_fmt}`
             );
 
-            if (output_fmt.includes("[ytdl][error]")) {
+            if (
+                !DOWNLOAD_FAILURE_PATTERNS.every(
+                    (pattern) => !output_fmt.includes(pattern)
+                )
+            ) {
                 alert("Download failed. Output includes error.");
                 return;
             }
