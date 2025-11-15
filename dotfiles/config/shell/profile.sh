@@ -113,10 +113,7 @@ export _JAVA_AWT_WM_NONREPARENTING='1' # Fix for Java applications in dwm
 export SUDO_ASKPASS="$XDG_BIN_HOME/dmenupass"
 
 # Start graphical server on user's current tty if not already running.
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg > /dev/null 2>&1 && startx "$XINITRC"
-
-# Switch escape and caps if tty and no passwd required:
-if [ -t 0 ] && sudo -n true 2> /dev/null; then
-    sudo -n loadkeys "$XDG_DATA_HOME/larbs/ttymaps.kmap"
+if [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg > /dev/null 2>&1; then
+    startx "$XINITRC"
 fi
 # {%@@- endif +@@%}
