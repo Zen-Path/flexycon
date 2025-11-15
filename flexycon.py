@@ -275,7 +275,7 @@ def install():
 
     # TODO: add windows and other shells support
     cmd = (
-        f'zsh -c "set -e; source ~/.zprofile && '
+        f'zsh -c "source ~/.zprofile && '
         f"{VENV_BIN}/dotdrop compare --profile {profile!r} ; "
         f'{VENV_BIN}/dotdrop install --profile {profile!r}"'
     )
