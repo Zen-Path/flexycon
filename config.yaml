@@ -28,20 +28,21 @@ actions:
         vscode_extensions_install: cat "{{@@ f_vscode_extensions @@}}" | xargs -n 1 code --install-extension
 
 dotfiles:
+    # TODO: Update the info from here:
+
     # Avoid links for essential config files, since if something were to go
     # wrong with the flexycon repo, such as checking out a bad state or work
     # in progress branch, or simply deleting the code by accident, the environment
     # will not be affected unless you install the changes.
     # In short, use 'link: nolink' for essentials!
 
-    f_fake_profile_actions_trigger:
+    f_fake_profile:
         # "Fake" files are always considered installed, so we can use this
         # to trick dotdrop into always running a profile's actions, so we
         # can update, refresh, install stuff etc. Idea is still WIP.
         src:
         dst:
 
-    # MANDATORY
     # Config that deals directly with the environment. Should be installed
     # before anything else.
     #
@@ -524,6 +525,8 @@ profiles:
             - meta_mpv
         dotfiles:
             # Config
+            - f_shell_profile
+            - f_shell_inputrc
             - f_zsh_config
             - f_shell_aliases
             - d_starship
@@ -606,10 +609,9 @@ profiles:
 
     # Actual Profiles
 
-    mandatory:
+    bootstrap:
         dotfiles:
-            - f_shell_profile
-            - f_shell_inputrc
+            - f_fake_profile
 
     linux_home:
         include:

@@ -4,9 +4,11 @@ import argparse
 import logging
 import os
 import platform
+import re
 import shutil
 import subprocess
 from pathlib import Path
+from typing import Optional
 
 from common.helpers import run_command
 from common.logger import logger, setup_logging
@@ -143,6 +145,54 @@ def init_submodules():
     run_command(["git", "submodule", "update", "--recursive", "--remote"])
 
 
+def get_dotdrop_profile() -> Optional[str]:
+    """Resolve the active dotdrop profile from the environment or user variables file."""
+    profile = os.getenv("DOTDROP_PROFILE")
+    if profile:
+        return profile
+
+    if not USER_VARIABLES_PATH.exists():
+        logger.info("Installing bootstrap profile to generate user variables file.")
+        subprocess.run(
+            [VENV_BIN / "dotdrop", "install", "--profile", "bootstrap"], check=True
+        )
+
+    if USER_VARIABLES_PATH.exists():
+        with USER_VARIABLES_PATH.open() as f:
+            import yaml
+
+            data = yaml.safe_load(f)
+            profile = data.get("variables", {}).get("active_dotdrop_profile")
+
+    if not profile:
+        logger.error("Could not resolve dotdrop profile.")
+        return None
+
+    logger.debug(f"Active dotdrop profile: {profile}")
+    return profile
+
+
+def install_temp_profile() -> Path:
+    """Install dotdrop profile to a temporary directory and return the temp path."""
+    output = run_command([f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"]).output
+    match = re.search(r'installed to tmp "([^"]+)"', output)
+    if not match:
+        raise RuntimeError("Could not find temporary install path in output.")
+
+    temp_path = Path(match.group(1))
+    logger.debug(f"Temp path: {temp_path}")
+    return temp_path
+
+
+def copy_shell_profile_from_temp(temp_path: Path):
+    """Copy .zprofile from the temporary dotdrop install to the user's home."""
+    home = Path.home()
+    src = temp_path / home.relative_to(home.anchor) / ".zprofile"
+    dst = home / ".zprofile"
+    shutil.copy2(src, dst)
+    logger.debug(f"Copied {src} → {dst}")
+
+
 # === TARGETS ===
 
 
@@ -201,7 +251,6 @@ def setup():
 @target()
 def install():
     """Install and apply configuration"""
-    import yaml
 
     if not VENV_DIR.exists():
         logger.error(f"Missing venv at '{VENV_DIR}'. Run the 'setup' target first.")
@@ -213,31 +262,24 @@ def install():
 
     logger.info("⚙️ Installing configuration...")
 
-    # When installing for the first, flexycon's env vars will not be
-    # set, but we can extract the profile from the user variables file
-    dotdrop_profile = os.getenv("DOTDROP_PROFILE")
-    if not dotdrop_profile and USER_VARIABLES_PATH.exists():
-        with open(USER_VARIABLES_PATH) as f:
-            data = yaml.safe_load(f)
-            dotdrop_profile = data["variables"]["active_dotdrop_profile"]
-
-    # TODO: add windows and other shells support
-    try:
-        logger.info("Installing mandatory config.")
-        subprocess.run([VENV_BIN / "dotdrop", "install", "--profile", "mandatory"])
-
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Command failed with exit code {e.returncode}")
+    profile = get_dotdrop_profile()
+    if not profile:
         return
 
-    if dotdrop_profile:
-        logger.debug(f"Active dotdrop profile: {dotdrop_profile}")
-        logger.info("Installing the rest of the config.")
-        subprocess.run(
-            f'zsh -c "set -e; source ~/.zprofile && {VENV_BIN}/dotdrop install --profile {dotdrop_profile!r}"',
-            shell=True,
-            check=True,
-        )
+    # We have 2 choices: either we first install profile that only contains the
+    # shell profile, or we install the full profile to a temporary directory
+    # and manually copy the shell config to the right place. The latter
+    # has the advantage that we can set per-profile config in the shell config.
+    temp_path = install_temp_profile()
+    copy_shell_profile_from_temp(temp_path)
+
+    # TODO: add windows and other shells support
+    cmd = (
+        f'zsh -c "set -e; source ~/.zprofile && '
+        f"{VENV_BIN}/dotdrop compare --profile {profile!r} ; "
+        f'{VENV_BIN}/dotdrop install --profile {profile!r}"'
+    )
+    subprocess.run(cmd, shell=True, check=True)
 
     # TODO: Apply macOS default here
 
