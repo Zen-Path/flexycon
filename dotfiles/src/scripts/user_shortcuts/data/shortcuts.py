@@ -259,6 +259,13 @@ shortcuts: List[Bookmark] = [
         activate_python_env=True,
         description="private source",
     ),
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_SRC_HOME", "docs"],
+        aliases={"default": ["s", "r", "c", "d"]},
+        activate_python_env=True,
+        description="source documents",
+    ),
     # Flexycon
     Bookmark(
         type="d",
