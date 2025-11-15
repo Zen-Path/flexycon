@@ -113,12 +113,6 @@ export JAVA_HOME="/opt/homebrew/opt/openjdk"
 
 ## ENV SETTINGS
 
-# {%@@- if os == "darwin" +@@%}
-[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && user_shortcuts --renderer 'zsh'
-# {%@@- elif os == "linux" +@@%}
-[ ! -f "$XDG_CONFIG_HOME/shell/shortcuts.sh" ] && setsid user_shortcuts --renderer 'zsh' > /dev/null 2>&1
-# {%@@- endif +@@%}
-
 # {%@@- if os == "linux" +@@%}
 # Start graphical server on user's current tty if not already running.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg > /dev/null 2>&1 && startx "$XINITRC"
