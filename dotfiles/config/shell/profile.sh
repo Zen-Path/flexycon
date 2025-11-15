@@ -124,5 +124,7 @@ export JAVA_HOME="/opt/homebrew/opt/openjdk"
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg > /dev/null 2>&1 && startx "$XINITRC"
 
 # Switch escape and caps if tty and no passwd required:
-sudo -n loadkeys "$XDG_DATA_HOME"/larbs/ttymaps.kmap 2> /dev/null
+if [ -t 0 ] && sudo -n true 2> /dev/null; then
+    sudo -n loadkeys "$XDG_DATA_HOME/larbs/ttymaps.kmap"
+fi
 # {%@@- endif +@@%}
