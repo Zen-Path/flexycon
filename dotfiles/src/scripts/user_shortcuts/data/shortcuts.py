@@ -129,6 +129,19 @@ shortcuts: List[Bookmark] = [
         aliases={"default": ["c", "s", "p"]},
         description="shell profile",
     ),
+    ## Flexycon
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_CONFIG_HOME", "flexycon"],
+        aliases={"default": ["c", "f", "d"]},
+        description="flexycon user config",
+    ),
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_CONFIG_HOME", "flexycon", "userscripts"],
+        aliases={"default": ["c", "f", "u"]},
+        description="flexycon userscripts",
+    ),
     ## Git
     Bookmark(
         type="d",
@@ -259,14 +272,14 @@ shortcuts: List[Bookmark] = [
         path_parts=[*flex_config],
         aliases={"default": ["f", "l", "x", "c"], YAZI.name: ["f", "c"]},
         activate_python_env=True,
-        description="flexycon config",
+        description="flexycon dotfiles config",
     ),
     Bookmark(
         type="d",
         path_parts=[*flex_scripts],
         aliases={"default": ["f", "l", "x", "s"], YAZI.name: ["f", "s"]},
         activate_python_env=True,
-        description="flexycon scripts",
+        description="flexycon dotfiles scripts",
     ),
     Bookmark(
         type="f",
