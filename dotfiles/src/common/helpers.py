@@ -33,7 +33,7 @@ def run_command(command: List[str]) -> CommandResult:
     """Run a shell command and return its result."""
     cmd_identifier = secrets.token_hex(5)  # 8 hex chars
 
-    logger.info(f"Running {command} with id '{cmd_identifier}'")
+    logger.debug(f"Running {command} with id '{cmd_identifier}'")
 
     output = []
     with subprocess.Popen(
@@ -50,7 +50,7 @@ def run_command(command: List[str]) -> CommandResult:
 
         return_code = process.wait()
 
-    logger.info(
+    logger.debug(
         f"Command with id '{cmd_identifier}' finished with return code {return_code}"
     )
 
