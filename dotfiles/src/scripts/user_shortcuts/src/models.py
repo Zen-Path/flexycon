@@ -57,6 +57,11 @@ class BookmarkRenderer(ABC):
                 )
                 continue
 
+            if not resolve_path(bookmark.path_parts).exists():
+                logger.warning(
+                    f"- Bookmark {bookmark.name!r} doesn't point to a real file"
+                )
+
             processed_bookmarks.append((alias, bookmark))
 
             logger.debug(
