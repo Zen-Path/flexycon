@@ -12,7 +12,7 @@ A script that handles download requests for URLs.
 - `gallery-dl` - for image downloads
 - `yt-dlp` - for video downloads and gallery-dl fallback
 
-Both are installed in the venv by default. Outside the venv, only `yt-dlp` needs to be installed system-wide, because `gallery-dl` can use it as a fallback (if you've configured it), so we can't call it directly from the venv like with `gallery-dl`.
+If configured, `gallery-dl` can use `yt-dlp` as a fallback, so it needs to be installed system-wide, not in the venv.
 
 ## Installation
 
