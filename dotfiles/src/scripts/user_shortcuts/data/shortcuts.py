@@ -50,25 +50,6 @@ shortcuts: List[Bookmark] = [
         aliases={"default": ["v", "i", "d"], YAZI.name: ["v"]},
         description="videos",
     ),
-    ## Custom
-    Bookmark(
-        type="d",
-        path_parts=["$HOME", "Archive"],
-        aliases={"default": ["a", "r", "c"], YAZI.name: ["a"]},
-        description="archive",
-    ),
-    Bookmark(
-        type="d",
-        path_parts=["$HOME", "Entertainment"],
-        aliases={"default": ["e", "n", "t"], YAZI.name: ["e"]},
-        description="entertainment",
-    ),
-    Bookmark(
-        type="d",
-        path_parts=["$HOME", "Nerdy"],
-        aliases={"default": ["n", "r", "d"], YAZI.name: ["n"]},
-        description="nerdy",
-    ),
     ## Extra
     Bookmark(
         type="d",
