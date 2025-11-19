@@ -48,7 +48,7 @@ function fzfopen() {
             true ;; \
     esac')"
 
-    [ -z "$target_path" ] && exit 1
+    [ -z "$target_path" ] && return 1
 
     fm "$target_path"
 }
