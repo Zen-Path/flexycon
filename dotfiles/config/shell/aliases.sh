@@ -45,6 +45,7 @@ alias rsync='rsync -vrPlu'
 alias mkd='mkdir -pv'
 alias ffmpeg='ffmpeg -hide_banner'
 alias shfmt='shfmt --indent 4 --binary-next-line --case-indent --space-redirects --write'
+alias sdn='shutdown -h now' # -h for halted
 
 # {%@@- if os == "darwin" +@@%}
 alias ls='ls -A -h --color=auto'
