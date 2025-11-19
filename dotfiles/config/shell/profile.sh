@@ -95,7 +95,41 @@ export LESS='--RAW-CONTROL-CHARS --quit-if-one-screen'
 export LESSOPEN='| /usr/bin/highlight -O ansi %s 2>/dev/null'
 
 ## Fzf
-export FZF_DEFAULT_COMMAND='fd . --hidden --no-ignore --exclude .cache --exclude .git/ --exclude node_modules/ --exclude .local/lib/ --exclude .local/share/cargo --exclude .local/share/rustup'
+# To troubleshoot, run: `eval $FZF_DEFAULT_COMMAND`
+export FZF_DEFAULT_COMMAND='
+# Common excludes
+EXCLUDES=(
+    --exclude .git/
+    --exclude .venv/
+    --exclude venv/
+    --exclude __pycache__/
+    --exclude "*.egg-info/"
+    --exclude .mypy_cache/
+    --exclude .pytest_cache/
+    --exclude node_modules/
+    --exclude .DS_Store
+)
+
+# Extra excludes if in $HOME
+if [ "$PWD" = "$HOME" ]; then
+    EXCLUDES+=(
+        --exclude .cache/
+        --exclude .config/nvim/plugged/
+        --exclude .local/share/nvim/
+        --exclude .local/lib/
+        --exclude .gradle/
+        --exclude .vscode/extensions/
+        --exclude "Library/Application Scripts/"
+        --exclude Library/Caches/
+        --exclude Library/Containers/
+        --exclude Library/Logs/
+        --exclude "Library/Group Containers/"
+        --exclude "Pictures/Photos Library.photoslibrary/"
+    )
+fi
+
+fd . --hidden --no-ignore --max-depth 10 "${EXCLUDES[@]}"
+'
 export FZF_DEFAULT_OPTS='--multi --extended'
 
 # Java
