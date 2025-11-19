@@ -48,7 +48,9 @@ function fzfopen() {
             true ;; \
     esac')"
 
-    [ -z "$target_path" ] && return 1
+    [ -z "$target_path" ] && echo "No file was selected." && return 1
+
+    echo "$target_path"
 
     fm "$target_path"
 }
