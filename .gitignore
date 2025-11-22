@@ -9,6 +9,9 @@ dotfiles/scripts/git_logs/src/repos.py
 # MacOS files
 .DS_Store
 
+# Databases
+*.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
