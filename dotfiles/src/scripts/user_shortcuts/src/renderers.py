@@ -1,7 +1,7 @@
 import platform
 from typing import List
 
-from common.variables import flex_home
+from common.variables import flex_home_parts
 from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
 
 OPEN_COMMANDS = {
@@ -43,7 +43,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
 
 
 ZSH = ZshBookmarkRenderer(
-    "Zsh", [*flex_home, "dotfiles", "config", "zsh", "shortcuts.sh"]
+    "Zsh", [*flex_home_parts, "dotfiles", "config", "zsh", "shortcuts.sh"]
 )
 
 
@@ -67,7 +67,7 @@ class NVimBookmarkRenderer(BookmarkRenderer):
 
 NVIM = NVimBookmarkRenderer(
     "NeoVim",
-    [*flex_home, "dotfiles", "config", "nvim", "shortcuts.lua"],
+    [*flex_home_parts, "dotfiles", "config", "nvim", "shortcuts.lua"],
     escape_path=False,
 )
 
@@ -93,5 +93,5 @@ class YaziBookmarkRenderer(BookmarkRenderer):
 
 
 YAZI = YaziBookmarkRenderer(
-    "Yazi", [*flex_home, "dotfiles", "config", "yazi", "shortcuts.toml"]
+    "Yazi", [*flex_home_parts, "dotfiles", "config", "yazi", "shortcuts.toml"]
 )

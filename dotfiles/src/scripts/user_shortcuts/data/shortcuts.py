@@ -1,13 +1,13 @@
 import platform
 from typing import List
 
-from common.variables import flex_home
+from common.variables import flex_home_parts
 from scripts.user_shortcuts.src.models import Bookmark
 from scripts.user_shortcuts.src.renderers import YAZI
 
 system = platform.system()
 
-flex_dotfiles = flex_home + ["dotfiles"]
+flex_dotfiles = flex_home_parts + ["dotfiles"]
 flex_config = flex_dotfiles + ["config"]
 flex_scripts = flex_dotfiles + ["src", "scripts"]
 
@@ -250,7 +250,7 @@ shortcuts: List[Bookmark] = [
     # Flexycon
     Bookmark(
         type="d",
-        path_parts=[*flex_home],
+        path_parts=[*flex_home_parts],
         aliases={"default": ["f", "l", "x"], YAZI.name: ["F"]},
         activate_python_env=True,
         description="flexycon home",
