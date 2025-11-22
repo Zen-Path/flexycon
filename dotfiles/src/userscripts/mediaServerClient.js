@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.4.5
+// @version         1.5.1
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -16,13 +16,20 @@
 
 const SERVER_PORT = "{{@@ _vars['media_server_port'] @@}}";
 
+const MEDIA_TYPES = {
+    IMAGE: "image",
+    VIDEO: "video",
+    GALLERY: "gallery",
+    UNKNOWN: "unknown",
+};
+
 const DOWNLOAD_FAILURE_PATTERNS = [
     "[ytdl][error]",
     "[downloader.http][warning] File size larger",
 ];
 
-function downloadMedia(urls, type, range) {
-    const payload = { urls, type };
+function downloadMedia(urls, mediaType, range) {
+    const payload = { urls, media_type: mediaType };
     if (range !== undefined) {
         payload.range = range;
     }
@@ -43,38 +50,39 @@ function downloadMedia(urls, type, range) {
         onload: function (response) {
             console.log(":: Response info", response);
 
-            if (response.status !== 200) {
-                alert(
-                    `Download failed. Response status is ${response.status}.`
-                );
-                return;
-            }
+            // TODO: Improve error handling
+            // if (response.status !== 200) {
+            //     alert(
+            //         `Download failed. Response status is ${response.status}.`
+            //     );
+            //     return;
+            // }
 
-            const data = JSON.parse(response.responseText);
+            // const data = JSON.parse(response.responseText);
 
-            if (data.return_code !== 0) {
-                alert(`Download failed. Return code is ${data.return_code}.`);
-                return;
-            }
+            // if (data.return_code !== 0) {
+            //     alert(`Download failed. Return code is ${data.return_code}.`);
+            //     return;
+            // }
 
-            const output_fmt = data.output.trim();
+            // const output_fmt = data.output.trim();
 
-            console.log(
-                ":: Download info",
-                `
-- request_status: ${response.status}
-- process_return_code: ${data.return_code}
-- output:\n${output_fmt}`
-            );
+            // console.log(
+            //     ":: Download info",
+            //     `
+            // - request_status: ${response.status}
+            // - process_return_code: ${data.return_code}
+            // - output:\n${output_fmt}`
+            // );
 
-            if (
-                !DOWNLOAD_FAILURE_PATTERNS.every(
-                    (pattern) => !output_fmt.includes(pattern)
-                )
-            ) {
-                alert("Download failed. Output includes error.");
-                return;
-            }
+            // if (
+            //     !DOWNLOAD_FAILURE_PATTERNS.every(
+            //         (pattern) => !output_fmt.includes(pattern)
+            //     )
+            // ) {
+            //     alert("Download failed. Output includes error.");
+            //     return;
+            // }
 
             alert("Download successful!");
         },
@@ -82,21 +90,33 @@ function downloadMedia(urls, type, range) {
 }
 
 function main() {
-    GM_registerMenuCommand("Download Gallery", () => {
+    GM_registerMenuCommand("Download Media", () => {
         const currentUrl = window.location.href;
-        downloadMedia([currentUrl], "gallery");
+        downloadMedia([currentUrl], MEDIA_TYPES.UNKNOWN);
+    });
+
+    GM_registerMenuCommand("Download (Specify Type)", () => {
+        const currentUrl = window.location.href;
+        const mediaType = prompt(
+            `Insert media type. Must be one of ${Object.values(MEDIA_TYPES).join(", ")}`
+        );
+        if (Object.values(MEDIA_TYPES).includes(mediaType)) {
+            downloadMedia([currentUrl], MEDIA_TYPES.UNKNOWN);
+        } else {
+            alert(`Error: Unknown media type: ${mediaType}.`);
+        }
     });
 
     GM_registerMenuCommand("Download Gallery Range", () => {
-        const range = prompt("Type the range (start:end).");
         const currentUrl = window.location.href;
-        downloadMedia([currentUrl], "gallery", range);
+        const range = prompt("Type the range (start:end).");
+        downloadMedia([currentUrl], MEDIA_TYPES.GALLERY, range);
     });
 
     GM_registerMenuCommand("Download Galleries", () => {
         const userInput = prompt("Paste the gallery urls.");
         const galleryUrls = userInput.split(" ");
-        downloadMedia(galleryUrls, "gallery");
+        downloadMedia(galleryUrls, MEDIA_TYPES.GALLERY);
     });
 }
 

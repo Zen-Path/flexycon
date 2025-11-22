@@ -6,9 +6,10 @@ from typing import List, Optional, Tuple
 
 from common.helpers import CommandResult, resolve_path, run_command
 from common.logger import logger
+from common.variables import flex_scripts
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(flex_scripts / "media_server" / ".env")
 
 
 class Media(ABC):
@@ -31,6 +32,8 @@ class Gallery(Media):
     def _build_command(
         cls, urls: List[str], range_parts: Optional[Tuple[int, int]] = None
     ) -> List[str]:
+        logger.debug(cls.DOWNLOAD_DIR)
+
         gallery_dl_cmd = (
             "gallery-dl"
             if shutil.which("gallery-dl")

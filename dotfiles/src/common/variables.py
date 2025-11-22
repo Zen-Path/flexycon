@@ -10,6 +10,10 @@ flex_home_parts = (
     else ["$HOME", ".local", "src", "flexycon"]
 )
 
+flex_home = Path(os.getenv("FLEXYCON_HOME", Path.home() / ".local/share" / "flexycon"))
+
+flex_scripts = flex_home / "dotfiles" / "src" / "scripts"
+
 flex_data_path = (
     Path(os.getenv("XDG_DATA_HOME", Path.home() / ".local/share")) / "flexycon"
 )

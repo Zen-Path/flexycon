@@ -558,7 +558,7 @@ profiles:
 
             - d_userscripts
         variables:
-            media_server_port: 5000
+            media_server_port: 5001
 
         #actions:
         #    - generate_user_shortcuts
