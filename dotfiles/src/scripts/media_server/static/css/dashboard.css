@@ -1,9 +1,99 @@
+:root {
+    /* --- GRUVBOX PALETTE PRIMITIVES --- */
+    --gb-bg-hard: #f9f5d7;
+    --gb-bg-soft: #f2e5bc;
+    --gb-bg-0: #fbf1c7;
+    --gb-bg-1: #ebdbb2;
+    --gb-bg-2: #d5c4a1;
+
+    --gb-fg-0: #282828;
+    --gb-fg-1: #3c3836;
+    --gb-fg-2: #504945;
+    --gb-fg-3: #665c54;
+    --gb-fg-4: #7c6f64;
+
+    --gb-red: #cc241d;
+    --gb-red-dark: #9d0006;
+    --gb-green: #98971a;
+    --gb-yellow: #d79921;
+    --gb-blue: #458588;
+    --gb-blue-dark: #076678;
+    --gb-purple: #b16286;
+    --gb-aqua: #689d6a;
+    --gb-orange: #d65d0e;
+    --gb-orange-dark: #af3a03;
+
+    /* Backgrounds */
+    --bg-body: var(--gb-bg-hard);
+    --bg-surface: var(--gb-bg-0); /* Tables, Cards */
+    --bg-header: var(--gb-bg-1); /* Table Headers */
+    --bg-hover: var(--gb-bg-soft); /* Row Hovers */
+    --bg-input: #ffffff; /* Keep inputs bright for UX */
+
+    /* Text */
+    --text-main: var(--gb-fg-1);
+    --text-muted: var(--gb-fg-4);
+    --text-inverse: var(--gb-bg-0);
+
+    /* Borders & Lines */
+    --border-main: var(--gb-bg-2);
+    --border-subtle: var(--gb-bg-1);
+
+    /* Actions & Accents */
+    --clr-primary: var(--gb-blue);
+    --clr-primary-hover: var(--gb-blue-dark);
+
+    --clr-danger: var(--gb-red);
+    --clr-danger-hover: var(--gb-red-dark);
+
+    --clr-warning: var(--gb-orange);
+    --clr-success: var(--gb-green);
+
+    /* Interactive */
+    --focus-ring: var(--gb-blue);
+}
+
+/* Override variables when the body has the 'dark-mode' class */
+body.dark-mode {
+    /* Primitives */
+    --gb-bg-hard: #1d2021;
+    --gb-bg-soft: #32302f;
+    --gb-bg-0: #282828;
+    --gb-bg-1: #3c3836;
+    --gb-bg-2: #504945;
+
+    --gb-fg-0: #fbf1c7;
+    --gb-fg-1: #ebdbb2;
+    --gb-fg-4: #a89984;
+
+    /* Semantic Remapping */
+    --bg-body: var(--gb-bg-hard);
+    --bg-surface: var(--gb-bg-0);
+    --bg-header: var(--gb-bg-1);
+    --bg-hover: var(--gb-bg-soft);
+    --bg-input: var(--gb-bg-1);
+
+    --text-main: var(--gb-fg-1);
+    --text-muted: var(--gb-fg-4);
+    --text-inverse: var(--gb-bg-0);
+
+    --border-main: var(--gb-bg-2);
+    --border-subtle: var(--gb-bg-1);
+
+    /* Brighter accents for dark mode readability */
+    --clr-primary: #83a598;
+    --gb-blue-dark: #779c9f;
+    --clr-danger: #fb4934;
+    --clr-warning: #fabd2f;
+}
+
 body {
     font-family: "Segoe UI", sans-serif;
     padding: 20px;
-    max-width: 1200px;
+    max-width: min(80vw, 1700px);
     margin: 0 auto;
-    background-color: #f4f6f8;
+    background-color: var(--bg-body);
+    color: var(--text-main);
 }
 
 /* Header */
@@ -26,8 +116,15 @@ body {
     width: 100%;
     padding: 10px 35px 10px 10px;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-main);
+    background-color: var(--bg-input);
+    color: var(--text-main);
     box-sizing: border-box;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: var(--focus-ring);
 }
 
 /* The X Button */
@@ -37,13 +134,12 @@ body {
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    color: #999;
+    color: var(--text-muted);
     display: none;
-    /* Hidden by default */
 }
 
 .clear-search:hover {
-    color: #333;
+    color: var(--text-main);
 }
 
 /* Button Group */
@@ -54,7 +150,7 @@ body {
 
 /* Base Button Style */
 .btn-base {
-    color: white;
+    color: var(--text-inverse);
     border: none;
     padding: 10px 15px;
     border-radius: 4px;
@@ -68,20 +164,45 @@ body {
 
 /* Delete Visible Button */
 .danger-btn {
-    background-color: #e74c3c;
+    background-color: var(--clr-danger);
 }
 
 .danger-btn:hover {
-    background-color: #c0392b;
+    background-color: var(--clr-danger-hover);
 }
 
 /* Copy URLs Button */
 .copy-btn {
-    background-color: #3498db;
+    background-color: var(--clr-primary);
 }
 
 .copy-btn:hover {
-    background-color: #2980b9;
+    background-color: var(--clr-primary-hover);
+}
+
+/* Theme Toggle Button Style */
+.theme-toggle {
+    background: transparent;
+    border: 1px solid var(--border-main);
+    color: var(--text-main);
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+    background-color: var(--bg-hover);
+    color: var(--clr-primary);
+    border-color: var(--clr-primary);
 }
 
 /* --- Table --- */
@@ -89,27 +210,29 @@ table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    background: white;
+    background: var(--bg-surface);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 2px 10px rgba(60, 56, 54, 0.05); /* slightly brownish shadow */
 }
 
 th {
     text-align: left;
     padding: 15px;
-    color: #555;
+    color: var(--text-main);
     cursor: pointer;
     user-select: none;
-    background: #fafafa;
-    border-bottom: 2px solid #eee;
+    background: var(--bg-header);
+    border-bottom: 2px solid var(--border-main);
     position: relative;
 }
 
 td {
     padding: 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-subtle);
     vertical-align: middle;
+    color: var(--text-main);
 }
 
 /* Hover Effect */
@@ -118,7 +241,7 @@ tr.data-row {
 }
 
 tr.data-row:hover {
-    background-color: #eef2f7;
+    background-color: var(--bg-hover);
 }
 
 /* Sorting: Hidden unless active */
@@ -133,28 +256,26 @@ th::after {
 /* Only show arrow when class is present */
 th.asc::after {
     content: "\f0de";
-    color: #3498db;
+    color: var(--clr-primary);
 }
 
 /* Up Arrow */
 th.desc::after {
     content: "\f0dd";
-    color: #3498db;
+    color: var(--clr-primary);
 }
-
-/* Down Arrow */
 
 /* Highlight active column header */
 th.active {
-    color: #2c3e50;
+    color: var(--gb-fg-0); /* Darker text */
     font-weight: bold;
-    background-color: #f1f1f1;
+    background-color: var(--gb-bg-2); /* Slightly darker header bg */
 }
 
 /* --- Columns --- */
 .col-id {
     width: 50px;
-    color: #aaa;
+    color: var(--text-muted);
     font-size: 0.9em;
 }
 
@@ -168,15 +289,14 @@ th.active {
 
 .col-time {
     font-family: "Consolas", monospace;
-    color: #d35400;
-    /* TODO: When implementing the help message, set cursor back to help */
-    /* cursor: help; */
-    width: 180px;
+    color: var(--text-muted);
+    width: 120px;
 }
 
 .col-actions {
     width: 100px;
     text-align: center;
+    cursor: default;
 }
 
 /* --- Action Buttons --- */
@@ -194,11 +314,11 @@ th.active {
 }
 
 .btn-edit {
-    color: #f39c12;
+    color: var(--clr-warning);
 }
 
 .btn-delete {
-    color: #e74c3c;
+    color: var(--clr-danger);
 }
 
 /* --- Type Icons --- */
@@ -216,26 +336,25 @@ th.active {
 }
 
 .type-image {
-    color: #2980b9;
+    color: var(--gb-blue);
 }
 
 .type-video {
-    color: #c0392b;
+    color: var(--gb-red);
 }
 
 .type-gallery {
-    color: #27ae60;
+    color: var(--gb-green);
 }
 
 .type-unknown {
-    color: #7f8c8d;
+    color: var(--text-muted);
 }
 
 .title-text {
     display: block;
     font-weight: 600;
-    color: #2c3e50;
-    /* max-width: 450px; */
+    color: var(--text-main);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -244,7 +363,7 @@ th.active {
 .url-subtext {
     display: block;
     font-size: 0.8em;
-    color: #95a5a6;
+    color: var(--text-muted);
     margin-top: 4px;
 }
 
@@ -259,9 +378,8 @@ a {
 
 @keyframes flash {
     from {
-        background-color: #fffcdd;
+        background-color: var(--gb-yellow);
     }
-
     to {
         background-color: transparent;
     }
@@ -274,7 +392,8 @@ a {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    /* Darkened Gruvbox background for overlay */
+    background: rgba(40, 40, 40, 0.7);
     display: none;
     justify-content: center;
     align-items: center;
@@ -282,16 +401,17 @@ a {
 }
 
 .modal {
-    background: white;
+    background: var(--bg-surface);
     padding: 25px;
     border-radius: 8px;
     width: 400px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-main);
 }
 
 .modal h3 {
     margin-top: 0;
-    color: #333;
+    color: var(--gb-fg-0);
 }
 
 .form-group {
@@ -302,14 +422,16 @@ a {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #555;
+    color: var(--text-main);
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-main);
+    background-color: var(--bg-input);
+    color: var(--text-main);
     border-radius: 4px;
     box-sizing: border-box;
 }
@@ -320,6 +442,7 @@ a {
 }
 
 .modal-btn {
+    color: var(--text-inverse);
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
@@ -328,19 +451,17 @@ a {
 }
 
 .btn-save {
-    background: #3498db;
-    color: white;
+    background: var(--clr-primary);
 }
 
 .btn-save:hover {
-    background: #2980b9;
+    background: var(--clr-primary-hover);
 }
 
 .btn-cancel {
-    background: #eee;
-    color: #333;
+    background: var(--clr-danger);
 }
 
 .btn-cancel:hover {
-    background: #ddd;
+    background: var(--clr-danger-hover);
 }

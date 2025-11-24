@@ -270,6 +270,41 @@ function deleteVisible() {
         });
 }
 
+function handleColorScheme() {
+    const themeToggleBtn = document.getElementById("themeToggle");
+    const themeIcon = themeToggleBtn.querySelector("i");
+
+    // Check LocalStorage or System Preference on Load
+    const currentTheme = localStorage.getItem("theme");
+    const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    ).matches;
+
+    if (currentTheme === "dark" || (!currentTheme && systemPrefersDark)) {
+        document.body.classList.add("dark-mode");
+        themeIcon.classList.replace("fa-moon", "fa-sun"); // Change icon if needed
+    }
+
+    themeToggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+
+        let theme = "light";
+
+        // If dark mode is now active
+        if (document.body.classList.contains("dark-mode")) {
+            theme = "dark";
+            themeIcon.classList.replace("fa-moon", "fa-sun");
+        } else {
+            themeIcon.classList.replace("fa-sun", "fa-moon");
+        }
+
+        themeToggleBtn.title = `Toggle ${theme === "dark" ? "Light" : "Dark"} Mode`;
+
+        // Save preference to localStorage
+        localStorage.setItem("theme", theme);
+    });
+}
+
 // MAIN
 
 const tableBody = document.getElementById("table-body");
@@ -280,6 +315,8 @@ let currentSortDir = -1; // -1 = DESC
 const apiKey = window.MEDIA_SERVER_KEY;
 
 document.addEventListener("DOMContentLoaded", () => {
+    handleColorScheme();
+
     // Initial Load
     fetch("/api/history", {
         headers: { "X-API-Key": apiKey },
