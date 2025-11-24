@@ -141,7 +141,9 @@ packages = [
     ),
     Package(
         identifier="telegram",
-        managers=[Brew],
+        # TODO: Installing telegram through the website results in Telegram Desktop,
+        # which has more features than Telegram for Mac
+        managers=[],
         is_gui=True,
         description="Messaging app with a focus on speed and security",
     ),
