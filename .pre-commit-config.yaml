@@ -22,6 +22,7 @@ repos:
       rev: 1.0.0
       hooks:
           - id: pytest
+            entry: pytest -m "not ui and not slow"
             language: system
             pass_filenames: false
             always_run: true

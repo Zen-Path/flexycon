@@ -54,3 +54,9 @@ explicit_package_bases = true
 ignore_missing_imports = true
 mypy_path              = "dotfiles/src"
 strict_optional        = true
+
+[tool.pytest.ini_options]
+markers = [
+    "ui: checks that require a browser/playwright",
+    "slow: marks tests as slow",
+]
