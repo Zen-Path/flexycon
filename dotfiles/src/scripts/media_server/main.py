@@ -18,6 +18,7 @@ from scripts.media_server.src.logging_middleware import register_logging
 app = Flask(
     __name__,
     template_folder=Path(flex_scripts / "media_server" / "templates"),
+    static_folder=Path(flex_scripts / "media_server" / "static"),
 )
 
 app.register_blueprint(api_bp)

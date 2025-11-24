@@ -1,0 +1,346 @@
+body {
+    font-family: "Segoe UI", sans-serif;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f4f6f8;
+}
+
+/* Header */
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+/* Search Bar */
+.search-container {
+    position: relative;
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px 35px 10px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* The X Button */
+.clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+    display: none;
+    /* Hidden by default */
+}
+
+.clear-search:hover {
+    color: #333;
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* Base Button Style */
+.btn-base {
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+/* Delete Visible Button */
+.danger-btn {
+    background-color: #e74c3c;
+}
+
+.danger-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Copy URLs Button */
+.copy-btn {
+    background-color: #3498db;
+}
+
+.copy-btn:hover {
+    background-color: #2980b9;
+}
+
+/* --- Table --- */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+th {
+    text-align: left;
+    padding: 15px;
+    color: #555;
+    cursor: pointer;
+    user-select: none;
+    background: #fafafa;
+    border-bottom: 2px solid #eee;
+    position: relative;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+/* Hover Effect */
+tr.data-row {
+    transition: background-color 0.2s ease;
+}
+
+tr.data-row:hover {
+    background-color: #eef2f7;
+}
+
+/* Sorting: Hidden unless active */
+th::after {
+    content: none;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 10px;
+}
+
+/* Only show arrow when class is present */
+th.asc::after {
+    content: "\f0de";
+    color: #3498db;
+}
+
+/* Up Arrow */
+th.desc::after {
+    content: "\f0dd";
+    color: #3498db;
+}
+
+/* Down Arrow */
+
+/* Highlight active column header */
+th.active {
+    color: #2c3e50;
+    font-weight: bold;
+    background-color: #f1f1f1;
+}
+
+/* --- Columns --- */
+.col-id {
+    width: 50px;
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.col-type {
+    width: 120px;
+}
+
+.col-title {
+    max-width: 500px;
+}
+
+.col-time {
+    font-family: "Consolas", monospace;
+    color: #d35400;
+    /* TODO: When implementing the help message, set cursor back to help */
+    /* cursor: help; */
+    width: 180px;
+}
+
+.col-actions {
+    width: 100px;
+    text-align: center;
+}
+
+/* --- Action Buttons --- */
+.action-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.1em;
+    transition: transform 0.1s;
+}
+
+.action-btn:hover {
+    transform: scale(1.2);
+}
+
+.btn-edit {
+    color: #f39c12;
+}
+
+.btn-delete {
+    color: #e74c3c;
+}
+
+/* --- Type Icons --- */
+.type-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+.icon-box {
+    width: 24px;
+    text-align: center;
+}
+
+.type-image {
+    color: #2980b9;
+}
+
+.type-video {
+    color: #c0392b;
+}
+
+.type-gallery {
+    color: #27ae60;
+}
+
+.type-unknown {
+    color: #7f8c8d;
+}
+
+.title-text {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    /* max-width: 450px; */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.url-subtext {
+    display: block;
+    font-size: 0.8em;
+    color: #95a5a6;
+    margin-top: 4px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.new-row {
+    animation: flash 1s ease-out;
+}
+
+@keyframes flash {
+    from {
+        background-color: #fffcdd;
+    }
+
+    to {
+        background-color: transparent;
+    }
+}
+
+/* --- Modal Styles --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.modal-actions {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.modal-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.btn-save {
+    background: #3498db;
+    color: white;
+}
+
+.btn-save:hover {
+    background: #2980b9;
+}
+
+.btn-cancel {
+    background: #eee;
+    color: #333;
+}
+
+.btn-cancel:hover {
+    background: #ddd;
+}
