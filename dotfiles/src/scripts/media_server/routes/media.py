@@ -95,4 +95,4 @@ def download_media():
         msg = f"data: {data}\n\n"
         current_app.config["ANNOUNCER"].announce(msg)
 
-    return jsonify({"status": "downloaded"})
+    return jsonify({"status": "downloaded", "count": len(urls)})

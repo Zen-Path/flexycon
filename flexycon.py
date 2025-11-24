@@ -234,6 +234,9 @@ def setup():
 
     setup_virtual_env()
 
+    # Install playwright resources
+    run_command(["playwright", "install"])
+
     logger.info("📦 Installing npm packages...")
     if shutil.which("npm"):
         run_command(["npm", "install"])

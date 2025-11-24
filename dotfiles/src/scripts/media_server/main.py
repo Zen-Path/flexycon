@@ -20,6 +20,9 @@ app = Flask(
     template_folder=Path(flex_scripts / "media_server" / "templates"),
 )
 
+app.register_blueprint(api_bp)
+app.register_blueprint(media_bp)
+
 
 @app.route("/")
 def index():
@@ -36,14 +39,14 @@ def build_parser():
         description="Media server to download files from the web."
     )
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
-
     parser.add_argument(
         "--db-path",
         type=Path,
         default=flex_data_path / "media.db",
         help="Path to the database",
     )
+
+    parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
     return parser
 
@@ -53,10 +56,6 @@ def main():
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
     logger.debug(args)
-
-    # Flask setup
-    app.register_blueprint(api_bp)
-    app.register_blueprint(media_bp)
 
     register_logging(app)
 

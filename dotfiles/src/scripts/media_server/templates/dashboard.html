@@ -159,7 +159,8 @@
             .col-time {
                 font-family: "Consolas", monospace;
                 color: #d35400;
-                cursor: help;
+                /* TODO: When implementing the help message, set cursor back to help */
+                /* cursor: help; */
                 width: 180px;
             }
 
@@ -345,7 +346,7 @@
                 <input
                     type="text"
                     id="searchInput"
-                    onkeyup="filterTable()"
+                    oninput="filterTable()"
                     placeholder="Search title or URL..." />
                 <i
                     class="fa-solid fa-times clear-search"
