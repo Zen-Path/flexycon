@@ -56,9 +56,14 @@
                 color: #333;
             }
 
-            /* Delete Visible Button */
-            .danger-btn {
-                background-color: #e74c3c;
+            /* Button Group */
+            .button-group {
+                display: flex;
+                gap: 10px;
+            }
+
+            /* Base Button Style */
+            .btn-base {
                 color: white;
                 border: none;
                 padding: 10px 15px;
@@ -68,10 +73,23 @@
                 display: flex;
                 align-items: center;
                 gap: 8px;
+                transition: background-color 0.2s;
             }
 
+            /* Delete Visible Button */
+            .danger-btn {
+                background-color: #e74c3c;
+            }
             .danger-btn:hover {
                 background-color: #c0392b;
+            }
+
+            /* Copy URLs Button */
+            .copy-btn {
+                background-color: #3498db;
+            }
+            .copy-btn:hover {
+                background-color: #2980b9;
             }
 
             /* --- Table --- */
@@ -354,10 +372,15 @@
                     onclick="clearSearch()"></i>
             </div>
 
-            <!-- Delete Visible Button -->
-            <button class="danger-btn" onclick="deleteVisible()">
-                <i class="fa-solid fa-trash-can"></i> Delete Visible
-            </button>
+            <div class="button-group">
+                <button class="btn-base copy-btn" onclick="copyVisibleUrls()">
+                    <i class="fa-solid fa-copy"></i> Copy URLs
+                </button>
+
+                <button class="btn-base danger-btn" onclick="deleteVisible()">
+                    <i class="fa-solid fa-trash-can"></i> Delete Visible
+                </button>
+            </div>
         </div>
 
         <table id="dataTable">
@@ -446,6 +469,42 @@
             function addRowToData(item, isNew) {
                 item.isNew = isNew;
                 allData.unshift(item);
+            }
+
+            // Copy Logic ---
+            function copyVisibleUrls() {
+                // Calculate currently visible items (Reuse search logic)
+                const searchTerm = document
+                    .getElementById("searchInput")
+                    .value.toLowerCase();
+
+                const visibleItems = allData.filter((row) => {
+                    const displayText = (row.title || row.url).toLowerCase();
+                    return displayText.includes(searchTerm);
+                });
+
+                if (visibleItems.length === 0) {
+                    alert("No visible URLs to copy.");
+                    return;
+                }
+
+                // Extract URLs and join with newline
+                const urlList = visibleItems.map((item) => item.url).join("\n");
+
+                // Copy to clipboard
+                navigator.clipboard
+                    .writeText(urlList)
+                    .then(() => {
+                        alert(
+                            `Copied ${visibleItems.length} URLs to clipboard!`
+                        );
+                    })
+                    .catch((err) => {
+                        console.error("Failed to copy: ", err);
+                        alert(
+                            "Failed to copy to clipboard. See console for error."
+                        );
+                    });
             }
 
             // --- DELETE LOGIC ---
