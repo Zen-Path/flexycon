@@ -203,7 +203,7 @@ def setup_virtual_env():
 
     if not VENV_DIR.exists():
         logger.info(f"🐍 Creating Python venv in '{VENV_DIR}'...")
-        run_command([PYTHON_BIN, "-m", "venv", "VENV_DIR"])
+        run_command([PYTHON_BIN, "-m", "venv", str(VENV_DIR)])
 
     logger.info("♻️ Updating pip...")
     run_command([PIP_BIN, "install", "--upgrade", "pip"])
