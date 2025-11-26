@@ -12,7 +12,11 @@ PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
 export PATH
 
+# Bash doesn't support 'unsetopt'
+# $SHELL could be '/usr/bin/bash' or 'C:\Program Files\Git\usr\bin\bash.exe'
+# {%@@- if "bash" not in env['SHELL'] +@@%}
 unsetopt PROMPT_SP
+# {%@@- endif +@@%}
 
 export DOTDROP_PROFILE='{{@@ _vars["active_dotdrop_profile"] @@}}'
 
@@ -63,7 +67,6 @@ export GIT_CONFIG_GLOBAL="$XDG_CONFIG_HOME/git/config.ini"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export HISTFILE="$XDG_DATA_HOME/history"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
-export LESSHISTFILE='/dev/null'
 export npm_config_cache="$XDG_CACHE_HOME/npm"
 # export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
@@ -93,6 +96,12 @@ export BAT_THEME='gruvbox-dark'
 ## Less
 export LESS='--RAW-CONTROL-CHARS --quit-if-one-screen'
 export LESSOPEN='| /usr/bin/highlight -O ansi %s 2>/dev/null'
+
+# {%@@- if os == "windows" +@@%}
+export LESSHISTFILE='-'
+# {%@@- else +@@%}
+export LESSHISTFILE='/dev/null'
+# {%@@- endif +@@%}
 
 ## Fzf
 # To troubleshoot, run: `eval $FZF_DEFAULT_COMMAND`
