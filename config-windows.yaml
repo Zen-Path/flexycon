@@ -1,0 +1,170 @@
+uservariables:
+    active_dotdrop_profile: "Active dotdrop profile"
+    git_email: "Git email"
+    git_username: "Git username"
+
+config:
+    backup: false
+    banner: false
+    create: true
+    dotpath: dotfiles
+    keepdot: false
+    link_dotfile_default: absolute
+    link_on_import: absolute
+    longkey: false
+    import_variables:
+        - uservariables.yaml:optional
+
+actions:
+    post:
+        vscode_extensions_save: code --list-extensions | sort > "{{@@ f_vscode_extensions @@}}"
+        vscode_extensions_install: cat "{{@@ f_vscode_extensions @@}}" | xargs -n 1 code --install-extension
+
+dotfiles:
+    # Shell
+    f_bash_interactive:
+        src: config/bash/profile.sh
+        dst: ~/.bash_profile
+        link: nolink
+
+    f_bash_login:
+        src: config/shell/profile.sh
+        dst: ~/.bashrc
+        link: nolink
+
+    # VSCode
+    f_vscode_settings:
+        src: "{{@@ d_vscode_src @@}}/settings.json"
+        dst: "{{@@ d_vscode_dst @@}}/settings.json"
+
+    f_vscode_keybindings:
+        src: "{{@@ d_vscode_src @@}}/keybindings.json"
+        dst: "{{@@ d_vscode_dst @@}}/keybindings.json"
+
+    # Text Editor
+    f_nvim_init:
+        src: config/nvim/init.lua
+        dst: ~/.config/nvim/init.lua
+
+    # Browser
+
+    d_firefox_chrome:
+        src: "{{@@ d_firefox_chrome_src @@}}"
+        dst: "{{@@ d_firefox_profiles @@}}/chrome"
+
+    f_firefox_user:
+        src: "{{@@ f_firefox_user_src @@}}"
+        dst: "{{@@ d_firefox_profiles @@}}/user.js"
+
+    # Other
+    f_git_config:
+        src: config/git/config.ini
+        dst: ~/.config/git/config.ini
+        link: nolink
+
+    f_bottom_config:
+        src: config/bottom/bottom.toml
+        dst: "{{@@ d_app_data @@}}/bottom/bottom.toml"
+
+
+    # File Manager
+    f_yazi_config:
+        src: config/yazi/yazi.toml
+        dst: "{{@@ d_yazi_config @@}}/yazi.toml"
+
+    f_yazi_keymap:
+        src: config/yazi/keymap.toml
+        dst: "{{@@ d_yazi_config @@}}/keymap.toml"
+
+    f_yazi_theme:
+        src: config/yazi/theme.toml
+        dst: "{{@@ d_yazi_config @@}}/theme.toml"
+
+    f_yazi_package:
+        src: config/yazi/package.toml
+        dst: "{{@@ d_yazi_config @@}}/package.toml"
+
+    f_yazi_init:
+        src: config/yazi/init.lua
+        dst: "{{@@ d_yazi_config @@}}/init.lua"
+
+    d_yazi_plugin_custom_rename:
+        src: config/yazi/plugins/custom-rename.yazi
+        dst: "{{@@ d_yazi_config @@}}/plugins/custom-rename.yazi"
+
+    d_yazi_plugin_custom_search:
+        src: config/yazi/plugins/custom-search.yazi
+        dst: "{{@@ d_yazi_config @@}}/plugins/custom-search.yazi"
+
+    d_yazi_plugin_parent_arrow:
+        src: config/yazi/plugins/parent-arrow.yazi
+        dst: "{{@@ d_yazi_config @@}}/plugins/parent-arrow.yazi"
+
+    # Terminal
+    f_alacritty_config:
+        src: config/alacritty/alacritty.toml
+        dst: "{{@@ d_app_data @@}}/alacritty/alacritty.toml"
+
+    # SCRIPTS
+    f_user_shortcuts:
+        src: "{{@@ f_py_run_src @@}}"
+        dst: ~/.local/bin/user_shortcuts
+        chmod: "755"
+
+profiles:
+    # Programs
+
+    meta_vscode:
+        variables:
+            d_vscode_src: "config/vscode"
+        dynvariables:
+            f_vscode_extensions: "echo $FLEXYCON_HOME/dotfiles/{{@@ d_vscode_src @@}}/extensions.txt"
+        dotfiles:
+            - f_vscode_settings
+            - f_vscode_keybindings
+
+    meta_firefox:
+        dynvariables:
+            # We're only looking for the default profile until we find the first result,
+            # then we convert it to Windows-style paths
+            d_firefox_profiles: find ~/AppData/Roaming/Mozilla/Firefox/Profiles -name '*\.default-release' -print -quit | xargs cygpath -w
+        variables:
+            d_firefox_chrome_src: "config/firefox/chrome"
+            f_firefox_user_src: "config/firefox/user.js"
+        dotfiles:
+            - d_firefox_chrome
+            - f_firefox_user
+
+    meta_yazi:
+        dotfiles:
+            - f_yazi_config
+            - f_yazi_keymap
+            - f_yazi_theme
+            - f_yazi_package
+            - f_yazi_init
+            - d_yazi_plugin_custom_rename
+            - d_yazi_plugin_custom_search
+            - d_yazi_plugin_parent_arrow
+
+
+    # Actual Profiles
+
+    windows_home:
+        include:
+            - meta_vscode
+            - meta_firefox
+            - meta_yazi
+        variables:
+            d_app_data: "~/AppData/Roaming"
+            d_vscode_dst: "~/AppData/Roaming/Code/User"
+            d_yazi_config: "{{@@ d_app_data @@}}/yazi/config"
+            f_py_run_src: "bin/py-run.sh"
+        dotfiles:
+            - f_bash_interactive
+            - f_bash_login
+            - f_git_config
+            - f_bottom_config
+            - f_alacritty_config
+            - f_nvim_init
+
+            - f_user_shortcuts
