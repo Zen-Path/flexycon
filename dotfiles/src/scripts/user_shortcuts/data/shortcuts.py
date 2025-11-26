@@ -327,4 +327,11 @@ shortcuts: List[Bookmark] = [
         description="volumes",
         condition=system == "Darwin",
     ),
+    Bookmark(
+        type="d",
+        path_parts=["$APPDATA"],
+        aliases={"default": ["a", "p", "p", "d"], YAZI.name: ["A"]},
+        description="app data",
+        condition=system == "Windows",
+    ),
 ]
