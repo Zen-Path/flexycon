@@ -84,7 +84,11 @@ function penva() {
 
     while :; do
         for env in "${env_dirs[@]}"; do
+            # {%@@- if os == "windows" +@@%}
+            local candidate="$dir/$env/Scripts/activate"
+            # {%@@- else +@@%}
             local candidate="$dir/$env/bin/activate"
+            # {%@@- endif +@@%}
             if [[ -f "$candidate" ]]; then
                 activate_script="$candidate"
                 break 2 # Exit both loops
