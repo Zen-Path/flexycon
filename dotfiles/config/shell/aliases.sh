@@ -51,6 +51,8 @@ alias sdn='shutdown -h now' # -h for halted
 alias ls='ls -A -h --color=auto'
 # {%@@- elif os == "linux" +@@%}
 alias ls='ls --almost-all --human-readable --color=auto --group-directories-first'
+# {%@@- elif os == "windows" +@@%}
+alias ls='ls --almost-all --human-readable --color=auto --group-directories-first --classify'
 # {%@@- endif +@@%}
 
 # Use colored output
@@ -112,6 +114,8 @@ alias pm='brew'
 #   {%@@- if "arch" in distro_like +@@%}
 alias pm='yay'
 #   {%@@- endif +@@%}
+# {%@@- elif os == "windows" +@@%}
+alias pm='choco'
 # {%@@- endif +@@%}
 
 # {%@@- if "home" in profile +@@%}
