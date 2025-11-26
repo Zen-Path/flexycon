@@ -7,7 +7,8 @@ authors = [
     { name = "Zen-Path", email = "zen.path@tuta.com" },
 ]
 dependencies = [
-    "dotdrop==1.15.0", #  for dotfile management
+    "dotdrop==1.15.0",          #  for dotfile management
+    "python-magic-bin==0.4.14", # for dotdrop on windows
 
     # util
     "colorama==0.4.6",      # for colored text
