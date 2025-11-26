@@ -80,6 +80,7 @@ class BookmarkRenderer(ABC):
         path_str = os.path.join(*bookmark.path_parts)
 
         if self.expand_vars:
+            # TODO: expanded vars may not be valid on Windows
             path_str = os.path.expandvars(path_str)
 
         if self.escape_path:
