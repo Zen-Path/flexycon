@@ -96,6 +96,6 @@ fi
 # Load syntax highlighting; should be last.
 # {%@@- if os == "darwin" +@@%}
 source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-# {%@@- else +@@%}
+# {%@@- elif os == "linux" +@@%}
 source '/usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh' 2> /dev/null
 # {%@@- endif +@@%}
