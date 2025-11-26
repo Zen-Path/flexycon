@@ -1,9 +1,31 @@
+# {{@@ header() @@}}
+
 [font]
 size = 11.0
 
 [window]
 opacity = 0.90
 
-[window.padding]
-x = 10
-y = 10
+    [window.padding]
+    x = 10
+    y = 10
+
+[general]
+# Paths should either be absolute, starting with '/' or relative to the user's
+# home dir. For example: '/home/user/Downloads' or 'Downloads'.
+
+# {%@@- if os == "windows" +@@%}
+working_directory = "{{@@ env['HOME'].replace('\\', '\\\\') @@}}"
+# {%@@- else +@@%}
+working_directory = "{{@@ env['HOME'] @@}}"
+# {%@@- endif +@@%}
+
+[terminal]
+# {%@@- if os == "windows" +@@%}
+shell = { program = "C:\\Program Files\\Git\\bin\\bash.exe", args = [
+    "--login",
+    "-i",
+] }
+# {%@@- else +@@%}
+shell = { program = "{{@@ env['SHELL'] @@}}" }
+# {%@@- endif +@@%}
