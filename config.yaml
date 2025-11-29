@@ -470,10 +470,9 @@ dotfiles:
         chmod: "755"
 
     # Userscripts
-    d_userscripts:
-        src: src/userscripts
-        dst: ~/.config/flexycon/userscripts
-        link: link_children
+    f_media_server_client:
+        src: "{{@@ d_userscripts_src @@}}/media_server_client/main.js"
+        dst: "{{@@ d_userscripts_dst @@}}/mediaServerClient.js"
 
 profiles:
     # Programs
@@ -556,9 +555,12 @@ profiles:
             - f_user_shortcuts
             - f_tag
 
-            - d_userscripts
+            # Userscripts
+            - f_media_server_client
         variables:
             media_server_port: 5001
+            d_userscripts_src: "src/userscripts"
+            d_userscripts_dst: "~/.config/flexycon/userscripts"
 
         #actions:
         #    - generate_user_shortcuts
