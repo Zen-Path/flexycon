@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.5.3
+// @version         1.6.0
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -11,6 +11,7 @@
 // @icon            https://www.svgrepo.com/show/230395/download.svg
 // @grant           GM_registerMenuCommand
 // @grant           GM_xmlhttpRequest
+// @grant           GM_openInTab
 // @noframes
 // ==/UserScript==
 
@@ -120,6 +121,11 @@ function main() {
         const userInput = prompt("Paste the gallery urls.");
         const galleryUrls = userInput.split(" ");
         downloadMedia(galleryUrls, MEDIA_TYPES.GALLERY);
+    });
+
+    GM_registerMenuCommand("Open Dashboard", () => {
+        // { active: true } ensures the new tab gets focus immediately
+        GM_openInTab(`${BASE_URL}/dashboard`, { active: true });
     });
 }
 
