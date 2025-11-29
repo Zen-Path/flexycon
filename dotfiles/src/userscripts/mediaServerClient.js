@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.5.1
+// @version         1.5.2
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -13,6 +13,8 @@
 // @grant           GM_xmlhttpRequest
 // @noframes
 // ==/UserScript==
+
+"use strict";
 
 const SERVER_PORT = "{{@@ _vars['media_server_port'] @@}}";
 
