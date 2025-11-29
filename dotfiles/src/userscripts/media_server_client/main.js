@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.6.0
+// @version         2.0.3
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -12,6 +12,8 @@
 // @grant           GM_registerMenuCommand
 // @grant           GM_xmlhttpRequest
 // @grant           GM_openInTab
+// @grant           GM_addStyle
+// @grant           GM_addElement
 // @noframes
 // ==/UserScript==
 
@@ -55,42 +57,17 @@ function downloadMedia(urls, mediaType, range) {
             console.log(":: Response info", response);
 
             // TODO: Improve error handling
-            // if (response.status !== 200) {
-            //     alert(
-            //         `Download failed. Response status is ${response.status}.`
-            //     );
-            //     return;
-            // }
-
-            // const data = JSON.parse(response.responseText);
-
-            // if (data.return_code !== 0) {
-            //     alert(`Download failed. Return code is ${data.return_code}.`);
-            //     return;
-            // }
-
-            // const output_fmt = data.output.trim();
-
-            // console.log(
-            //     ":: Download info",
-            //     `
-            // - request_status: ${response.status}
-            // - process_return_code: ${data.return_code}
-            // - output:\n${output_fmt}`
-            // );
-
-            // if (
-            //     !DOWNLOAD_FAILURE_PATTERNS.every(
-            //         (pattern) => !output_fmt.includes(pattern)
-            //     )
-            // ) {
-            //     alert("Download failed. Output includes error.");
-            //     return;
-            // }
-
             alert("Download successful!");
         },
     });
+}
+
+const STYLES = `
+{%@@ include 'src/userscripts/media_server_client/style.css' @@%}
+`;
+
+function createDownloadForm() {
+    // {%@@ include 'src/userscripts/media_server_client/createDownloadForm.js' @@%}
 }
 
 function main() {
@@ -99,28 +76,17 @@ function main() {
         downloadMedia([currentUrl], MEDIA_TYPES.UNKNOWN);
     });
 
-    GM_registerMenuCommand("Download (Specify Type)", () => {
-        const currentUrl = window.location.href;
-        const mediaType = prompt(
-            `Insert media type. Must be one of ${Object.values(MEDIA_TYPES).join(", ")}`
+    GM_registerMenuCommand("Open Download Form", async () => {
+        const formData = await createDownloadForm();
+        console.log("Download Form Data:", formData);
+
+        if (!formData) return;
+
+        downloadMedia(
+            formData.urls,
+            formData.mediaType,
+            formData.range === ":" ? null : formData.range
         );
-        if (Object.values(MEDIA_TYPES).includes(mediaType)) {
-            downloadMedia([currentUrl], MEDIA_TYPES.UNKNOWN);
-        } else {
-            alert(`Error: Unknown media type: ${mediaType}.`);
-        }
-    });
-
-    GM_registerMenuCommand("Download Gallery Range", () => {
-        const currentUrl = window.location.href;
-        const range = prompt("Type the range (start:end).");
-        downloadMedia([currentUrl], MEDIA_TYPES.GALLERY, range);
-    });
-
-    GM_registerMenuCommand("Download Galleries", () => {
-        const userInput = prompt("Paste the gallery urls.");
-        const galleryUrls = userInput.split(" ");
-        downloadMedia(galleryUrls, MEDIA_TYPES.GALLERY);
     });
 
     GM_registerMenuCommand("Open Dashboard", () => {
