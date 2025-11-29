@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         1.5.2
+// @version         1.5.3
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -17,6 +17,7 @@
 "use strict";
 
 const SERVER_PORT = "{{@@ _vars['media_server_port'] @@}}";
+const BASE_URL = `http://localhost:${SERVER_PORT}`;
 
 const MEDIA_TYPES = {
     IMAGE: "image",
@@ -39,7 +40,7 @@ function downloadMedia(urls, mediaType, range) {
 
     GM_xmlhttpRequest({
         method: "POST",
-        url: `http://localhost:${SERVER_PORT}/media/download`,
+        url: `${BASE_URL}/media/download`,
         headers: {
             "Content-Type": "application/json",
             "X-API-Key": "{{@@ _vars['media_server_key'] @@}}",
