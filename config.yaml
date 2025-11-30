@@ -394,7 +394,7 @@ dotfiles:
         chmod: "755"
 
     f_nsxiv_rifle:
-        src: ../src/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle.sh
+        src: deps/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle.sh
         dst: ~/.local/bin/nsxiv-rifle
         chmod: "755"
 
