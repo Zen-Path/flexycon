@@ -125,9 +125,13 @@ dotfiles:
         dst: "{{@@ d_vscode_dst @@}}/keybindings.json"
 
     # Window management
-    f_amethyst:
-        src: config/amethyst/amethyst.yml
-        dst: ~/.config/amethyst/amethyst.yml
+    f_skhd:
+        src: config/skhd/config.conf
+        dst: ~/.config/skhd/skhdrc
+
+    f_yabai:
+        src: config/yabai/config.conf
+        dst: ~/.config/yabai/yabairc
 
     # Programming
     d_python:
@@ -252,10 +256,6 @@ dotfiles:
     d_blugon:
         src: config/blugon
         dst: ~/.config/blugon
-
-    f_hammerspoon_init:
-        src: config/hammerspoon/init.lua
-        dst: ~/.config/hammerspoon/init.lua
 
     # Flexycon
     f_flex_sync:
@@ -586,8 +586,8 @@ profiles:
         dotfiles:
             # Config
             - d_kitty
-            - f_amethyst
-            - f_hammerspoon_init
+            - f_skhd
+            - f_yabai
 
     meta_windows:
         variables:
