@@ -26,6 +26,8 @@ actions:
         yazi_plugins_upgrade: ya pack --upgrade
         vscode_extensions_save: code --list-extensions | sort > "{{@@ f_vscode_extensions @@}}"
         vscode_extensions_install: cat "{{@@ f_vscode_extensions @@}}" | xargs -n 1 code --install-extension
+        yabai_restart: yabai --restart-server
+        skhd_restart: skhd --restart-server
 
 dotfiles:
     # TODO: Update the info from here:
@@ -128,10 +130,14 @@ dotfiles:
     f_skhd:
         src: config/skhd/config.conf
         dst: ~/.config/skhd/skhdrc
+        actions:
+            - skhd_restart
 
     f_yabai:
         src: config/yabai/config.conf
         dst: ~/.config/yabai/yabairc
+        actions:
+            - yabai_restart
 
     # Programming
     d_python:
