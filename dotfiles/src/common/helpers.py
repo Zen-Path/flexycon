@@ -186,9 +186,11 @@ def get_display_server() -> Optional[Literal["X11", "Wayland"]]:
     Returns the display server currently in use, or ``None`` if it can't
     be detected.
     """
+    display_env_val = os.environ.get("DISPLAY")
+
     if os.environ.get("WAYLAND_DISPLAY"):
         return "Wayland"
-    elif os.environ.get("DISPLAY"):
+    elif display_env_val and display_env_val != "needs-to-be-defined":
         return "X11"
     else:
         return None
