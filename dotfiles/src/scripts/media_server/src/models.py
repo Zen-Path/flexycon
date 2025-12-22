@@ -32,7 +32,7 @@ class Gallery(Media):
     def _build_command(
         cls, urls: List[str], range_parts: Optional[Tuple[int, int]] = None
     ) -> List[str]:
-        logger.debug(cls.DOWNLOAD_DIR)
+        # logger.debug(cls.DOWNLOAD_DIR)
 
         gallery_dl_cmd = (
             "gallery-dl"
