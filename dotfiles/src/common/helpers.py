@@ -81,15 +81,30 @@ def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
 
 
 def notify(title: str, message: Optional[str] = None, icon: Optional[str] = None):
-    """Send a desktop notification."""
+    """
+    Send a desktop notification.
+    If an icon is provided, adds an action to open the image file.
+    """
     cmd = ["notify-send", title]
+
     if message:
-        cmd.extend([message])
+        cmd.append(message)
 
     if icon:
         cmd.extend(["-i", icon])
+        # Add the action. Format: "action_token=Label"
+        cmd.append("--action=open_image=Open Image Location")
 
-    return run_command(cmd)
+    try:
+        # We use check_output to capture the action string returned by notify-send
+        # This will block until the notification is clicked or expires
+        result = subprocess.check_output(cmd, text=True).strip()
+
+        if result == "open_image" and icon:
+            subprocess.Popen(["xdg-open", icon])
+
+    except Exception as e:
+        logger.error(f"Notification failed: {e}")
 
 
 def get_notifications_paused_status():
