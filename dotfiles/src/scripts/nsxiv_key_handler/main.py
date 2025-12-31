@@ -13,7 +13,7 @@ from typing import List, Optional
 
 from common.helpers import notify, run_command
 from common.logger import logger, setup_logging
-from common.packages.clipboard_utilities import XClip
+from common.packages.clipboard_utilities import copy_file, copy_text
 
 
 def prompt_dmenu(prompt: str, options: Optional[list[str]] = None) -> Optional[str]:
@@ -104,12 +104,12 @@ def action_update_wallpaper(paths: List[Path]):
 
 
 def action_copy_image(paths: List[Path]):
-    XClip.file(str(paths[0]))
+    copy_file(paths[0])
     notify("Image copied", f"Image {paths[0]} copied to clipboard")
 
 
 def action_copy_path(paths: List[Path]):
-    XClip.text(str(paths[0]))
+    copy_text(str(paths[0]))
     notify("Path copied", f"Path {paths[0]} copied to clipboard")
 
 

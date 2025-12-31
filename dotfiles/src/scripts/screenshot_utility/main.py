@@ -7,8 +7,8 @@ import os
 import subprocess
 from datetime import datetime
 
-from common.helpers import ensure_directories_exist
-from common.packages.models import ClipboardUtility
+from common.helpers import ensure_directories_exist, notify
+from common.packages.clipboard_utilities import copy_file
 
 
 class MaimUtility:
@@ -71,11 +71,9 @@ class ScreenshotUtility:
     def __init__(
         self,
         maim=None,
-        clipboard=None,
         output_dir=None,
     ):
         self.maim = maim or MaimUtility()
-        self.clipboard = clipboard or ClipboardUtility.get_instance()
         self.output_dir = os.path.expanduser(
             output_dir or f"{os.getenv("XDG_PICTURES_DIR", "~/Pictures")}/Screenshots"
         )
@@ -84,7 +82,8 @@ class ScreenshotUtility:
         response = self.maim.run(output_path, select)
 
         if response and copy_output:
-            self.clipboard.file(output_path)
+            copy_file(output_path)
+            notify("Screenshot captured", f"Saved at {output_path!r}", icon=output_path)
 
     def compose_output_path(self, capture_type, name=None, ext="png"):
         """Generate a file path to the output directory with the current timestamp."""
