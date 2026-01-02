@@ -4,12 +4,57 @@ from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
-from common.helpers import parse_range
+from common.helpers import parse_range, run_command
+from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
 from scripts.media_server.src.core import require_api_key
 from scripts.media_server.src.models import Gallery
 
 media_bp = Blueprint("media", __name__, url_prefix="/media")
+
+
+def expand_collection_urls(url):
+    """
+    Determines if a URL is a collection based on Level Homogeneity. (best effort)
+    """
+    try:
+        cmd = ["gallery-dl", "-s", "-j", url]
+        result = run_command(cmd)
+        data = json.loads(result.output)
+
+        if not data:
+            return [url]
+
+        # Extract levels, ignoring level 1 (which is a generic metadata block)
+        levels = [entry[0] for entry in data if entry[0] > 1]
+
+        if not levels:
+            return [url]
+
+        unique_levels = set(levels)
+
+        # If there is only ONE unique level (e.g., all are level 6), it is probably
+        # a collection of gallery links.
+        if len(unique_levels) == 1:
+            child_urls = []
+            for entry in data:
+                # Ensure we only grab strings that look like URLs
+                if (
+                    len(entry) >= 2
+                    and isinstance(entry[1], str)
+                    and entry[1].startswith("http")
+                ):
+                    child_urls.append(entry[1])
+
+            if child_urls:
+                return list(dict.fromkeys(child_urls))
+
+        return [url]
+
+    except Exception as e:
+        # Fallback to the original URL if anything goes wrong
+        logger.error(f"Expansion error for {url}: {e}")
+        return [url]
 
 
 @media_bp.route("/download", methods=["POST"])
@@ -44,8 +89,17 @@ def download_media():
         if error:
             return jsonify({"error": error}), 400
 
+    # Expansion Logic
+    final_urls = []
+    if media_type in ["gallery", "unknown"]:
+        for url in urls:
+            expanded = expand_collection_urls(url)
+            final_urls.extend(expanded)
+    else:
+        final_urls = urls
+
     # Processing
-    for url in urls:
+    for url in final_urls:
         start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         title = "No Title Found"
 
@@ -95,4 +149,4 @@ def download_media():
         msg = f"data: {data}\n\n"
         current_app.config["ANNOUNCER"].announce(msg)
 
-    return jsonify({"status": "downloaded", "count": len(urls)})
+    return jsonify({"status": "downloaded", "count": len(final_urls)})
