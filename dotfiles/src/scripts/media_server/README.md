@@ -6,6 +6,7 @@ A script that handles download requests for URLs.
     - [Dependencies](#dependencies)
     - [Installation](#installation)
     - [Usage](#usage)
+    - [Technical Notes](#technical-notes)
 
 ## Dependencies
 
@@ -30,4 +31,40 @@ To launch the app:
 cd $FLEXYCON_HOME
 source venv/bin/activate
 media_server --verb
+```
+
+## Technical Notes
+
+The expansion logic utilizes **Level Homogeneity** to differentiate between single galleries and collections based on `gallery-dl` JSON output.
+
+1. Single Gallery
+
+Direct galleries produce a nested hierarchy. Metadata is followed by individual media files.
+
+```sh
+gallery-dl 'https://site.com/chapter/1' -j -s
+# Example: https://dynasty-scans.com/chapters/tonari_no_robot_ch01
+```
+
+```json
+[
+  [2, {"author": "Nishi Uko", "title": "Ch.1"}], // Metadata
+  [3, "https://site.com/img_01.webp", {...}]     // Image File
+]
+```
+
+2. Collection
+
+Collections produce a flat list of sub-galleries.
+
+```sh
+gallery-dl 'https://site.com/series/manga_name' -s -j
+# Example: https://dynasty-scans.com/series/tonari_no_robot
+```
+
+```json
+[
+    [6, "https://site.com/chapter/1", { "subcategory": "manga" }],
+    [6, "https://site.com/chapter/2", { "subcategory": "manga" }]
+]
 ```
