@@ -205,6 +205,66 @@ body {
     border-color: var(--clr-primary);
 }
 
+/* Dropdown Container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Hide content by default */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: var(--bg-secondary, #fff); /* Use your variable or hex */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    border-radius: 4px;
+    padding: 8px 0;
+    border: 1px solid var(--border-color, #ddd);
+}
+
+/* Show class */
+.dropdown-content.show {
+    display: block;
+}
+
+/* Individual Items */
+.menu-item {
+    color: var(--text-primary, #333);
+    padding: 10px 16px;
+    text-decoration: none;
+    display: flex; /* Changed to flex for better icon alignment */
+    align-items: center;
+    justify-content: flex-start; /* Ensure left alignment */
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left; /* Explicit left align */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.menu-item i {
+    width: 18px; /* Fixed width for icons creates a vertical "line" */
+    margin-right: 12px;
+    text-align: center;
+}
+
+.menu-item:hover {
+    background-color: var(--hover-color, #f1f1f1);
+}
+
+.menu-item.danger {
+    color: #ff4d4d;
+}
+
+.dropdown hr {
+    margin: 4px 0;
+    border: 0;
+    border-top: 1px solid var(--border-color, #ddd);
+}
+
 /* --- Table --- */
 table {
     width: 100%;

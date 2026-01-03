@@ -6,11 +6,9 @@
         <link
             rel="stylesheet"
             href="{{ url_for('static', filename='css/dashboard.css') }}" />
-        <!-- FontAwesome for Icons -->
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        <!-- From https://img.icons8.com/?size=100&id=64097&format=png&color=000000 -->
         <link
             rel="icon"
             type="image/png"
@@ -21,7 +19,6 @@
         <div class="header-row">
             <h2>Download History</h2>
 
-            <!-- Search with X button -->
             <div class="search-container">
                 <input
                     type="text"
@@ -31,17 +28,42 @@
                 <i
                     class="fa-solid fa-times clear-search"
                     id="clearBtn"
+                    style="display: none"
                     onclick="clearSearch()"></i>
             </div>
 
             <div class="button-group">
-                <button class="btn-base copy-btn" onclick="copyVisibleUrls()">
-                    <i class="fa-solid fa-copy"></i> Copy Selected
-                </button>
-
-                <button class="btn-base danger-btn" onclick="deleteVisible()">
-                    <i class="fa-solid fa-trash-can"></i> Delete Selected
-                </button>
+                <div class="dropdown">
+                    <button class="btn-base menu-trigger" title="Bulk Actions">
+                        <i class="fa-solid fa-layer-group"></i> Bulk Actions
+                    </button>
+                    <div class="dropdown-content">
+                        <a
+                            href="#"
+                            class="menu-item"
+                            onclick="openBulkEditModal()"
+                            ><i class="fa-solid fa-pen"></i> Edit Selected</a
+                        >
+                        <a
+                            href="#"
+                            class="menu-item"
+                            onclick="bulkCopy('title')"
+                            ><i class="fa-solid fa-quote-left"></i> Copy
+                            Titles</a
+                        >
+                        <a href="#" class="menu-item" onclick="bulkCopy('url')"
+                            ><i class="fa-solid fa-link"></i> Copy URLs</a
+                        >
+                        <hr />
+                        <a
+                            href="#"
+                            class="menu-item danger"
+                            onclick="deleteVisible()"
+                            ><i class="fa-solid fa-trash"></i> Delete
+                            Selected</a
+                        >
+                    </div>
+                </div>
 
                 <button id="themeToggle" class="btn-base theme-toggle">
                     <i class="fas fa-moon"></i>
@@ -59,35 +81,29 @@
                             onclick="toggleSelectAll(this.checked)" />
                     </th>
                     <th id="th-id" onclick="sortTable('id')">ID</th>
-                    <th id="th-media_type" onclick="sortTable('media_type')">
+                    <th id="th-mediaType" onclick="sortTable('mediaType')">
                         Type
                     </th>
                     <th id="th-title" onclick="sortTable('title')">
                         Title / URL
                     </th>
-                    <th id="th-start_time" onclick="sortTable('start_time')">
+                    <th id="th-startTime" onclick="sortTable('startTime')">
                         Start Time
                     </th>
-                    <!-- Actions Column (No sorting) -->
                     <th class="col-actions">Actions</th>
                 </tr>
             </thead>
-            <tbody id="table-body">
-                <!-- Rows go here -->
-            </tbody>
+            <tbody id="table-body"></tbody>
         </table>
 
-        <!-- Edit Modal -->
         <div class="modal-overlay" id="editModal">
             <div class="modal">
                 <h3>Edit Entry</h3>
                 <input type="hidden" id="editId" />
-
                 <div class="form-group">
                     <label>Title</label>
                     <input type="text" id="editTitle" />
                 </div>
-
                 <div class="form-group">
                     <label>Media Type</label>
                     <select id="editMediaType">
@@ -97,7 +113,6 @@
                         <option value="unknown">Unknown</option>
                     </select>
                 </div>
-
                 <div class="modal-actions">
                     <button class="modal-btn btn-cancel" onclick="closeModal()">
                         Cancel
@@ -109,13 +124,10 @@
             </div>
         </div>
 
-        <!-- Inject config variables here -->
         <script>
             window.MEDIA_SERVER_KEY =
                 "{{ config.get('MEDIA_SERVER_KEY', '') }}";
         </script>
-
-        <!-- Link to external JS -->
         <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     </body>
 </html>

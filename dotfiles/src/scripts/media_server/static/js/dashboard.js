@@ -1,181 +1,240 @@
-function addRowToData(item, isNew) {
-    item.isNew = isNew;
-    item.selected = false; // Initialize selection state
-    allData.unshift(item);
-}
+/**
+ * REPRESENTS A SINGLE ROW IN THE TABLE
+ */
+class EntryRow {
+    constructor(data) {
+        // Data Properties
+        this.id = data.id;
+        this.url = data.url;
+        this.title = data.title;
+        this.mediaType = data.media_type;
+        this.startTime = data.start_time;
+        this.endTime = data.endTime;
 
-// TABLE RENDER
-function getIconHtml(type) {
-    const map = {
-        image: {
-            icon: "fa-image",
-            class: "type-image",
-            label: "Image",
-        },
-        video: {
-            icon: "fa-film",
-            class: "type-video",
-            label: "Video",
-        },
-        gallery: {
-            icon: "fa-layer-group",
-            class: "type-gallery",
-            label: "Gallery",
-        },
-        unknown: {
-            icon: "fa-circle-question",
-            class: "type-unknown",
-            label: "Unknown",
-        },
-    };
-    const t = map[type] || map["unknown"];
-    return `<div class="type-badge ${t.class}">
-            <div class="icon-box"><i class="fa-solid ${t.icon}"></i></div>
-            <span>${t.label}</span>
-        </div>`;
-}
+        // State
+        this.isSelected = false;
+        this.isVisible = true;
 
-function renderTable() {
-    const searchTerm = document
-        .getElementById("searchInput")
-        .value.toLowerCase();
-    tableBody.innerHTML = "";
+        // DOM References
+        this.dom = {
+            row: document.createElement("tr"),
+            checkbox: null,
+            typeCell: null,
+            titleCell: null,
+        };
 
-    // Sort logic
-    allData.sort((a, b) => {
-        let valA = a[currentSortCol];
-        let valB = b[currentSortCol];
-
-        if (currentSortCol === "title") {
-            valA = (a.title || a.url).toLowerCase();
-            valB = (b.title || b.url).toLowerCase();
-        }
-        if (valA < valB) return -1 * currentSortDir;
-        if (valA > valB) return 1 * currentSortDir;
-        return 0;
-    });
-
-    // Render Loop
-    allData.forEach((row) => {
-        const displayText = (row.title || row.url).toLowerCase();
-        if (!displayText.includes(searchTerm)) return;
-
-        const tr = document.createElement("tr");
-        tr.classList.add("data-row");
-        if (row.isNew) {
-            tr.classList.add("new-row");
-            row.isNew = false;
-        }
-
-        const titleDisplay =
-            row.title && row.title !== "No Title Found"
-                ? `<span class="title-text" title="${row.title}">${row.title}</span><span class="url-subtext">${row.url}</span>`
-                : `<span class="title-text">${row.url}</span>`;
-
-        tr.innerHTML = `
-        <td class="col-check">
-            <input type="checkbox" class="row-checkbox" ${row.selected ? "checked" : ""} onchange="toggleRowSelect(${row.id}, this.checked)">
-        </td>
-        <td class="col-id">#${row.id}</td>
-        <td class="col-type">${getIconHtml(row.media_type)}</td>
-        <td class="col-title"><a href="${row.url}" target="_blank">${titleDisplay}</a></td>
-        <td class="col-time">${row.start_time}</td>
-        <td class="col-actions">
-            <button class="action-btn btn-edit" onclick="openEditModal(${row.id})" title="Edit">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="action-btn btn-delete" onclick="deleteEntry(${row.id})" title="Delete">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        </td>
-    `;
-        tableBody.appendChild(tr);
-    });
-}
-
-// SELECTION LOGIC
-function toggleRowSelect(id, isChecked) {
-    const item = allData.find((r) => r.id === id);
-    if (item) item.selected = isChecked;
-
-    // Uncheck header "select all" if any row is unchecked manually
-    if (!isChecked) {
-        document.getElementById("selectAll").checked = false;
+        this.createElement();
     }
-}
 
-function toggleSelectAll(isChecked) {
-    const searchTerm = document
-        .getElementById("searchInput")
-        .value.toLowerCase();
+    createElement() {
+        this.dom.row.className = "data-row";
+        this.dom.row.dataset.id = this.id;
 
-    allData.forEach((row) => {
-        const displayText = (row.title || row.url).toLowerCase();
-        // Only affect rows that are currently visible in the search
-        if (displayText.includes(searchTerm)) {
-            row.selected = isChecked;
+        // Checkbox
+        const tdCheck = document.createElement("td");
+        tdCheck.className = "col-check";
+        this.dom.checkbox = document.createElement("input");
+        this.dom.checkbox.type = "checkbox";
+        this.dom.checkbox.onchange = (e) => this.setSelected(e.target.checked);
+        tdCheck.appendChild(this.dom.checkbox);
+
+        // ID
+        const tdId = document.createElement("td");
+        tdId.className = "col-id";
+        tdId.textContent = `#${this.id}`;
+
+        // Type Icon
+        this.dom.typeCell = document.createElement("td");
+        this.dom.typeCell.className = "col-type";
+        this.updateTypeIcon();
+
+        // Title/URL
+        this.dom.titleCell = document.createElement("td");
+        this.dom.titleCell.className = "col-title";
+        this.renderTitleCell();
+
+        // Time
+        const tdTime = document.createElement("td");
+        tdTime.className = "col-time";
+        tdTime.textContent = this.startTime;
+
+        // Actions (Dropdown Menu)
+        const tdActions = document.createElement("td");
+        tdActions.className = "col-actions";
+        tdActions.innerHTML = `
+            <div class="dropdown">
+                <button class="action-btn menu-trigger" title="Actions">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" class="menu-item edit-item"><i class="fa-solid fa-pen"></i> Edit</a>
+                    <a href="#" class="menu-item copy-title-item"><i class="fa-solid fa-quote-left"></i> Copy Title</a>
+                    <a href="#" class="menu-item copy-url-item"><i class="fa-solid fa-link"></i> Copy URL</a>
+                    <hr>
+                    <a href="#" class="menu-item delete-item danger"><i class="fa-solid fa-trash"></i> Delete</a>
+                </div>
+            </div>
+        `;
+
+        const trigger = tdActions.querySelector(".menu-trigger");
+        const content = tdActions.querySelector(".dropdown-content");
+
+        // Toggle dropdown
+        trigger.onclick = (e) => {
+            e.stopPropagation();
+            // Close other open dropdowns first
+            document.querySelectorAll(".dropdown-content.show").forEach((d) => {
+                if (d !== content) d.classList.remove("show");
+            });
+            content.classList.toggle("show");
+        };
+
+        // Assign Actions
+        tdActions.querySelector(".edit-item").onclick = () =>
+            window.openEditModal(this.id);
+        tdActions.querySelector(".copy-title-item").onclick = () =>
+            this.copyToClipboard(this.title, "Title");
+        tdActions.querySelector(".copy-url-item").onclick = () =>
+            this.copyToClipboard(this.url, "URL");
+        tdActions.querySelector(".delete-item").onclick = () =>
+            window.deleteEntry(this.id);
+
+        this.dom.row.append(
+            tdCheck,
+            tdId,
+            this.dom.typeCell,
+            this.dom.titleCell,
+            tdTime,
+            tdActions
+        );
+
+        this.dom.row.append(
+            tdCheck,
+            tdId,
+            this.dom.typeCell,
+            this.dom.titleCell,
+            tdTime,
+            tdActions
+        );
+    }
+
+    renderTitleCell() {
+        const hasTitle = this.title && this.title !== "No Title Found";
+        const link = document.createElement("a");
+        link.href = this.url;
+        link.target = "_blank";
+
+        if (hasTitle) {
+            link.innerHTML = `<span class="title-text" title="${this.title}">${this.title}</span><span class="url-subtext">${this.url}</span>`;
+        } else {
+            link.innerHTML = `<span class="title-text">${this.url}</span>`;
         }
-    });
-    renderTable();
+        this.dom.titleCell.innerHTML = "";
+        this.dom.titleCell.appendChild(link);
+    }
+
+    updateTypeIcon() {
+        const map = {
+            image: { icon: "fa-image", class: "type-image", label: "Image" },
+            video: { icon: "fa-film", class: "type-video", label: "Video" },
+            gallery: {
+                icon: "fa-layer-group",
+                class: "type-gallery",
+                label: "Gallery",
+            },
+            unknown: {
+                icon: "fa-circle-question",
+                class: "type-unknown",
+                label: "Unknown",
+            },
+        };
+        const t = map[this.mediaType] || map["unknown"];
+        this.dom.typeCell.innerHTML = `
+            <div class="type-badge ${t.class}">
+                <div class="icon-box"><i class="fa-solid ${t.icon}"></i></div>
+                <span>${t.label}</span>
+            </div>`;
+    }
+
+    copyToClipboard(text, label) {
+        navigator.clipboard.writeText(text).then(() => {
+            console.log(`${label} copied to clipboard`);
+            // Optional: You could trigger a small toast notification here
+        });
+    }
+
+    // --- Instance API ---
+    update(newData) {
+        if (newData.title !== undefined) {
+            this.title = newData.title;
+            this.renderTitleCell();
+        }
+        if (newData.mediaType !== undefined) {
+            this.mediaType = newData.mediaType;
+            this.updateTypeIcon();
+        }
+    }
+
+    setSelected(state) {
+        this.isSelected = state;
+        this.dom.checkbox.checked = state;
+        this.dom.row.classList.toggle("selected-row", state);
+    }
+
+    setVisibility(visible) {
+        this.isVisible = visible;
+        this.dom.row.style.display = visible ? "" : "none";
+    }
+
+    markAsNew() {
+        this.dom.row.classList.add("new-row");
+        setTimeout(() => this.dom.row.classList.remove("new-row"), 3000);
+    }
+
+    remove() {
+        this.dom.row.remove();
+    }
 }
 
 /**
- * Helper to get items to act upon.
- * Priorities: 1. Checked items, 2. Visible items (if nothing checked)
+ * GLOBAL CONTROLLER
  */
-function getProcessableItems() {
-    const selectedItems = allData.filter((row) => row.selected);
-    if (selectedItems.length > 0) return selectedItems;
+const entryMap = new Map();
+const tableBody = document.getElementById("table-body");
+let currentSortCol = "id";
+let currentSortDir = -1;
+const apiKey = window.MEDIA_SERVER_KEY;
 
-    const searchTerm = document
-        .getElementById("searchInput")
-        .value.toLowerCase();
-    return allData.filter((row) => {
-        const displayText = (row.title || row.url).toLowerCase();
-        return displayText.includes(searchTerm);
-    });
+// HELPER: Determine which items to act on (Selected OR Visible)
+function getActiveEntries() {
+    const selected = Array.from(entryMap.values()).filter((e) => e.isSelected);
+    if (selected.length > 0) return selected;
+    return Array.from(entryMap.values()).filter((e) => e.isVisible);
 }
 
-// SORTING
-function sortTable(key) {
-    if (currentSortCol === key) {
-        currentSortDir *= -1; // Toggle
+function addEntry(data, isNew = false) {
+    if (entryMap.has(data.id)) return;
+    const entry = new EntryRow(data);
+    entryMap.set(data.id, entry);
+    if (isNew) {
+        tableBody.prepend(entry.dom.row);
+        entry.markAsNew();
     } else {
-        currentSortCol = key;
-        currentSortDir = 1; // Default ASC
-    }
-    updateSortHeaders();
-    renderTable();
-}
-
-function updateSortHeaders() {
-    // 1. Reset all headers
-    document.querySelectorAll("th").forEach((th) => {
-        th.classList.remove("asc", "desc", "active");
-    });
-
-    // 2. Apply classes to active header
-    const activeTh = document.getElementById(`th-${currentSortCol}`);
-    if (activeTh) {
-        activeTh.classList.add("active");
-        activeTh.classList.add(currentSortDir === 1 ? "asc" : "desc");
+        tableBody.appendChild(entry.dom.row);
     }
 }
 
-// SEARCH
 function filterTable() {
-    const input = document.getElementById("searchInput");
+    const term = document.getElementById("searchInput").value.toLowerCase();
     const clearBtn = document.getElementById("clearBtn");
-    // Reset select all check when filtering
-    document.getElementById("selectAll").checked = false;
+    clearBtn.style.display = term.length > 0 ? "block" : "none";
 
-    // Show X if text exists
-    if (input.value.length > 0) {
-        clearBtn.style.display = "block";
-    } else {
-        clearBtn.style.display = "none";
-    }
-    renderTable();
+    entryMap.forEach((entry) => {
+        const match =
+            entry.title.toLowerCase().includes(term) ||
+            entry.url.toLowerCase().includes(term);
+        entry.setVisibility(match);
+    });
 }
 
 function clearSearch() {
@@ -185,38 +244,63 @@ function clearSearch() {
     input.focus();
 }
 
-// COPY
-function copyVisibleUrls() {
-    const itemsToCopy = getProcessableItems();
-
-    if (itemsToCopy.length === 0) {
-        alert("No URLs selected or visible to copy.");
-        return;
+function sortTable(col) {
+    if (currentSortCol === col) {
+        currentSortDir *= -1;
+    } else {
+        currentSortCol = col;
+        currentSortDir = 1;
     }
 
-    const urlList = itemsToCopy.map((item) => item.url).join("\n");
+    const sorted = Array.from(entryMap.values()).sort((a, b) => {
+        let valA = a[col];
+        let valB = b[col];
 
-    // Copy to clipboard
-    navigator.clipboard
-        .writeText(urlList)
-        .then(() => {
-            alert(`Copied ${itemsToCopy.length} URLs to clipboard!`);
-        })
-        .catch((err) => {
-            console.error("Failed to copy: ", err);
-            alert("Failed to copy to clipboard. See console for error.");
-        });
+        if (col === "title") {
+            valA = (a.title || a.url).toLowerCase();
+            valB = (b.title || b.url).toLowerCase();
+        }
+
+        if (valA < valB) return -1 * currentSortDir;
+        if (valA > valB) return 1 * currentSortDir;
+        return 0;
+    });
+
+    const fragment = document.createDocumentFragment();
+    sorted.forEach((entry) => fragment.appendChild(entry.dom.row));
+    tableBody.appendChild(fragment);
+
+    // Update header icons
+    document
+        .querySelectorAll("th")
+        .forEach((th) => th.classList.remove("active", "asc", "desc"));
+    const activeTh = document.getElementById(`th-${col}`);
+    if (activeTh) {
+        activeTh.classList.add("active", currentSortDir === 1 ? "asc" : "desc");
+    }
 }
 
-// EDIT
+function toggleSelectAll(checked) {
+    entryMap.forEach((entry) => {
+        if (entry.isVisible) entry.setSelected(checked);
+    });
+}
+
+function copyVisibleUrls() {
+    const targets = getActiveEntries();
+    if (targets.length === 0) return alert("Nothing to copy");
+    const text = targets.map((e) => e.url).join("\n");
+    navigator.clipboard
+        .writeText(text)
+        .then(() => alert(`Copied ${targets.length} URLs`));
+}
 
 function openEditModal(id) {
-    const item = allData.find((r) => r.id === id);
-    if (!item) return;
-
-    document.getElementById("editId").value = id;
-    document.getElementById("editTitle").value = item.title;
-    document.getElementById("editMediaType").value = item.media_type;
+    const entry = entryMap.get(id);
+    if (!entry) return;
+    document.getElementById("editId").value = entry.id;
+    document.getElementById("editTitle").value = entry.title;
+    document.getElementById("editMediaType").value = entry.mediaType;
     document.getElementById("editModal").style.display = "flex";
 }
 
@@ -231,152 +315,111 @@ function saveEdit() {
 
     fetch(`/api/entry/${id}`, {
         method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "X-API-Key": apiKey,
-        },
-        body: JSON.stringify({
-            title: newTitle,
-            media_type: newType,
-        }),
-    })
-        .then((res) => res.json())
-        .then(() => {
-            // Update local memory
-            const item = allData.find((r) => r.id === id);
-            if (item) {
-                item.title = newTitle;
-                item.media_type = newType;
-            }
-            closeModal();
-            renderTable();
-        });
+        headers: { "Content-Type": "application/json", "X-API-Key": apiKey },
+        body: JSON.stringify({ title: newTitle, media_type: newType }),
+    }).then(() => {
+        entryMap.get(id)?.update({ title: newTitle, mediaType: newType });
+        closeModal();
+    });
 }
 
-// DELETE
-
 function deleteEntry(id) {
-    if (!confirm("Are you sure you want to delete this entry?")) return;
-
+    if (!confirm("Delete this entry?")) return;
     fetch(`/api/entry/${id}`, {
         method: "DELETE",
-        headers: {
-            "X-API-Key": apiKey,
-        },
+        headers: { "X-API-Key": apiKey },
     }).then(() => {
-        // Remove from local array
-        allData = allData.filter((item) => item.id !== id);
-        renderTable();
+        entryMap.get(id)?.remove();
+        entryMap.delete(id);
     });
 }
 
 function deleteVisible() {
-    const itemsToDelete = getProcessableItems();
+    const targets = getActiveEntries();
+    if (targets.length === 0) return;
+    if (!confirm(`Delete ${targets.length} entries?`)) return;
 
-    if (itemsToDelete.length === 0) {
-        alert("No items selected or visible to delete.");
-        return;
-    }
-
-    if (
-        !confirm(
-            `Delete all ${itemsToDelete.length} selected/visible entries?  This cannot be undone.`
-        )
-    )
-        return;
-
-    const ids = itemsToDelete.map((item) => item.id);
-
+    const ids = targets.map((e) => e.id);
     fetch("/api/delete_bulk", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-API-Key": apiKey,
-        },
-        body: JSON.stringify({ ids: ids }),
-    })
-        .then((res) => res.json())
-        .then(() => {
-            // Remove deleted IDs from local memory
-            allData = allData.filter((item) => !ids.includes(item.id));
-            document.getElementById("selectAll").checked = false;
-            renderTable();
+        headers: { "Content-Type": "application/json", "X-API-Key": apiKey },
+        body: JSON.stringify({ ids }),
+    }).then(() => {
+        ids.forEach((id) => {
+            entryMap.get(id)?.remove();
+            entryMap.delete(id);
         });
-}
-
-function handleColorScheme() {
-    const themeToggleBtn = document.getElementById("themeToggle");
-    const themeIcon = themeToggleBtn.querySelector("i");
-
-    // Check LocalStorage or System Preference on Load
-    const currentTheme = localStorage.getItem("theme");
-    const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-    ).matches;
-
-    if (currentTheme === "dark" || (!currentTheme && systemPrefersDark)) {
-        document.body.classList.add("dark-mode");
-        themeIcon.classList.replace("fa-moon", "fa-sun"); // Change icon if needed
-    }
-
-    themeToggleBtn.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-
-        let theme = "light";
-
-        // If dark mode is now active
-        if (document.body.classList.contains("dark-mode")) {
-            theme = "dark";
-            themeIcon.classList.replace("fa-moon", "fa-sun");
-        } else {
-            themeIcon.classList.replace("fa-sun", "fa-moon");
-        }
-
-        themeToggleBtn.title = `Toggle ${theme === "dark" ? "Light" : "Dark"} Mode`;
-
-        // Save preference to localStorage
-        localStorage.setItem("theme", theme);
+        document.getElementById("selectAll").checked = false;
     });
 }
 
-// MAIN
+function handleColorScheme() {
+    const btn = document.getElementById("themeToggle");
+    const icon = btn.querySelector("i");
+    const current =
+        localStorage.getItem("theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
 
-const tableBody = document.getElementById("table-body");
-let allData = [];
-let currentSortCol = "id";
-let currentSortDir = -1; // -1 = DESC
+    if (current === "dark") document.body.classList.add("dark-mode");
 
-const apiKey = window.MEDIA_SERVER_KEY;
+    btn.onclick = () => {
+        const isDark = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        icon.className = isDark ? "fas fa-sun" : "fas fa-moon";
+    };
+}
 
+// MAIN INIT
 document.addEventListener("DOMContentLoaded", () => {
     handleColorScheme();
 
-    // Initial Load
-    fetch("/api/history", {
-        headers: { "X-API-Key": apiKey },
-    })
-        .then((response) => response.json())
+    fetch("/api/history", { headers: { "X-API-Key": apiKey } })
+        .then((res) => res.json())
         .then((data) => {
-            data.forEach((item) => addRowToData(item, false));
-            updateSortHeaders();
-            renderTable();
+            data.forEach((item) => addEntry(item));
+            sortTable("id");
         });
 
-    // Real-Time Listener
     const eventSource = new EventSource(`/api/stream?api_key=${apiKey}`);
-    eventSource.onmessage = function (event) {
-        const data = JSON.parse(event.data);
-        addRowToData(data, true);
-        renderTable();
+    eventSource.onmessage = (e) => addEntry(JSON.parse(e.data), true);
+
+    // Global click listener to close dropdowns
+    window.onclick = (event) => {
+        if (
+            !event.target.matches(".menu-trigger") &&
+            !event.target.closest(".menu-trigger")
+        ) {
+            document
+                .querySelectorAll(".dropdown-content")
+                .forEach((dropdown) => {
+                    dropdown.classList.remove("show");
+                });
+        }
     };
 
-    window.copyVisibleUrls = copyVisibleUrls;
-    window.deleteVisible = deleteVisible;
-    window.closeModal = closeModal;
-    window.saveEdit = saveEdit;
+    // Re-bind the new dropdown triggers for the header
+    const headerTrigger = document.querySelector(".button-group .menu-trigger");
+    const headerContent = document.querySelector(
+        ".button-group .dropdown-content"
+    );
+    if (headerTrigger) {
+        headerTrigger.onclick = (e) => {
+            e.stopPropagation();
+            headerContent.classList.toggle("show");
+        };
+    }
+
+    // BINDINGS
+    window.sortTable = sortTable;
     window.filterTable = filterTable;
     window.clearSearch = clearSearch;
-    window.sortTable = sortTable;
-    window.toggleRowSelect = toggleRowSelect;
     window.toggleSelectAll = toggleSelectAll;
+    window.copyVisibleUrls = copyVisibleUrls;
+    window.deleteVisible = deleteVisible;
+    window.openEditModal = openEditModal;
+    window.closeModal = closeModal;
+    window.saveEdit = saveEdit;
+    window.deleteEntry = deleteEntry;
 });
