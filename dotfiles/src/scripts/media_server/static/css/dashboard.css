@@ -273,6 +273,10 @@ th.active {
 }
 
 /* --- Columns --- */
+.col-check {
+    width: 25px;
+}
+
 .col-id {
     width: 50px;
     color: var(--text-muted);

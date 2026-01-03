@@ -1,5 +1,6 @@
 function addRowToData(item, isNew) {
     item.isNew = isNew;
+    item.selected = false; // Initialize selection state
     allData.unshift(item);
 }
 
@@ -72,6 +73,9 @@ function renderTable() {
                 : `<span class="title-text">${row.url}</span>`;
 
         tr.innerHTML = `
+        <td class="col-check">
+            <input type="checkbox" class="row-checkbox" ${row.selected ? "checked" : ""} onchange="toggleRowSelect(${row.id}, this.checked)">
+        </td>
         <td class="col-id">#${row.id}</td>
         <td class="col-type">${getIconHtml(row.media_type)}</td>
         <td class="col-title"><a href="${row.url}" target="_blank">${titleDisplay}</a></td>
@@ -86,6 +90,49 @@ function renderTable() {
         </td>
     `;
         tableBody.appendChild(tr);
+    });
+}
+
+// SELECTION LOGIC
+function toggleRowSelect(id, isChecked) {
+    const item = allData.find((r) => r.id === id);
+    if (item) item.selected = isChecked;
+
+    // Uncheck header "select all" if any row is unchecked manually
+    if (!isChecked) {
+        document.getElementById("selectAll").checked = false;
+    }
+}
+
+function toggleSelectAll(isChecked) {
+    const searchTerm = document
+        .getElementById("searchInput")
+        .value.toLowerCase();
+
+    allData.forEach((row) => {
+        const displayText = (row.title || row.url).toLowerCase();
+        // Only affect rows that are currently visible in the search
+        if (displayText.includes(searchTerm)) {
+            row.selected = isChecked;
+        }
+    });
+    renderTable();
+}
+
+/**
+ * Helper to get items to act upon.
+ * Priorities: 1. Checked items, 2. Visible items (if nothing checked)
+ */
+function getProcessableItems() {
+    const selectedItems = allData.filter((row) => row.selected);
+    if (selectedItems.length > 0) return selectedItems;
+
+    const searchTerm = document
+        .getElementById("searchInput")
+        .value.toLowerCase();
+    return allData.filter((row) => {
+        const displayText = (row.title || row.url).toLowerCase();
+        return displayText.includes(searchTerm);
     });
 }
 
@@ -119,6 +166,8 @@ function updateSortHeaders() {
 function filterTable() {
     const input = document.getElementById("searchInput");
     const clearBtn = document.getElementById("clearBtn");
+    // Reset select all check when filtering
+    document.getElementById("selectAll").checked = false;
 
     // Show X if text exists
     if (input.value.length > 0) {
@@ -138,29 +187,20 @@ function clearSearch() {
 
 // COPY
 function copyVisibleUrls() {
-    // Calculate currently visible items (Reuse search logic)
-    const searchTerm = document
-        .getElementById("searchInput")
-        .value.toLowerCase();
+    const itemsToCopy = getProcessableItems();
 
-    const visibleItems = allData.filter((row) => {
-        const displayText = (row.title || row.url).toLowerCase();
-        return displayText.includes(searchTerm);
-    });
-
-    if (visibleItems.length === 0) {
-        alert("No visible URLs to copy.");
+    if (itemsToCopy.length === 0) {
+        alert("No URLs selected or visible to copy.");
         return;
     }
 
-    // Extract URLs and join with newline
-    const urlList = visibleItems.map((item) => item.url).join("\n");
+    const urlList = itemsToCopy.map((item) => item.url).join("\n");
 
     // Copy to clipboard
     navigator.clipboard
         .writeText(urlList)
         .then(() => {
-            alert(`Copied ${visibleItems.length} URLs to clipboard!`);
+            alert(`Copied ${itemsToCopy.length} URLs to clipboard!`);
         })
         .catch((err) => {
             console.error("Failed to copy: ", err);
@@ -231,28 +271,21 @@ function deleteEntry(id) {
 }
 
 function deleteVisible() {
-    // 1. Calculate currently visible IDs
-    const searchTerm = document
-        .getElementById("searchInput")
-        .value.toLowerCase();
-    const visibleItems = allData.filter((row) => {
-        const displayText = (row.title || row.url).toLowerCase();
-        return displayText.includes(searchTerm);
-    });
+    const itemsToDelete = getProcessableItems();
 
-    if (visibleItems.length === 0) {
-        alert("No items visible to delete.");
+    if (itemsToDelete.length === 0) {
+        alert("No items selected or visible to delete.");
         return;
     }
 
     if (
         !confirm(
-            `Delete all ${visibleItems.length} visible entries? This cannot be undone.`
+            `Delete all ${itemsToDelete.length} selected/visible entries?  This cannot be undone.`
         )
     )
         return;
 
-    const ids = visibleItems.map((item) => item.id);
+    const ids = itemsToDelete.map((item) => item.id);
 
     fetch("/api/delete_bulk", {
         method: "POST",
@@ -263,9 +296,10 @@ function deleteVisible() {
         body: JSON.stringify({ ids: ids }),
     })
         .then((res) => res.json())
-        .then((data) => {
+        .then(() => {
             // Remove deleted IDs from local memory
             allData = allData.filter((item) => !ids.includes(item.id));
+            document.getElementById("selectAll").checked = false;
             renderTable();
         });
 }
@@ -343,4 +377,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.filterTable = filterTable;
     window.clearSearch = clearSearch;
     window.sortTable = sortTable;
+    window.toggleRowSelect = toggleRowSelect;
+    window.toggleSelectAll = toggleSelectAll;
 });
