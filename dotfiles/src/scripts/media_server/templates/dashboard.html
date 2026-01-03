@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Live Dashboard</title>
         <link
             rel="stylesheet"
@@ -14,7 +15,6 @@
             type="image/png"
             href="{{ url_for('static', filename='favicon.png') }}" />
     </head>
-
     <body>
         <div class="header-row">
             <h2>Download History</h2>
@@ -33,38 +33,6 @@
             </div>
 
             <div class="button-group">
-                <div class="dropdown">
-                    <button class="btn-base menu-trigger" title="Bulk Actions">
-                        <i class="fa-solid fa-layer-group"></i> Bulk Actions
-                    </button>
-                    <div class="dropdown-content">
-                        <a
-                            href="#"
-                            class="menu-item"
-                            onclick="openBulkEditModal()"
-                            ><i class="fa-solid fa-pen"></i> Edit Selected</a
-                        >
-                        <a
-                            href="#"
-                            class="menu-item"
-                            onclick="bulkCopy('title')"
-                            ><i class="fa-solid fa-quote-left"></i> Copy
-                            Titles</a
-                        >
-                        <a href="#" class="menu-item" onclick="bulkCopy('url')"
-                            ><i class="fa-solid fa-link"></i> Copy URLs</a
-                        >
-                        <hr />
-                        <a
-                            href="#"
-                            class="menu-item danger"
-                            onclick="deleteVisible()"
-                            ><i class="fa-solid fa-trash"></i> Delete
-                            Selected</a
-                        >
-                    </div>
-                </div>
-
                 <button id="themeToggle" class="btn-base theme-toggle">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -72,38 +40,70 @@
         </div>
 
         <table id="dataTable">
-            <thead>
-                <tr>
-                    <th class="col-check">
-                        <input
-                            type="checkbox"
-                            id="selectAll"
-                            onclick="toggleSelectAll(this.checked)" />
-                    </th>
-                    <th id="th-id" onclick="sortTable('id')">ID</th>
-                    <th id="th-mediaType" onclick="sortTable('mediaType')">
-                        Type
-                    </th>
-                    <th id="th-title" onclick="sortTable('title')">
-                        Title / URL
-                    </th>
-                    <th id="th-startTime" onclick="sortTable('startTime')">
-                        Start Time
-                    </th>
-                    <th class="col-actions">Actions</th>
-                </tr>
-            </thead>
+            <tr>
+                <th class="col-check">
+                    <input
+                        type="checkbox"
+                        id="selectAll"
+                        onclick="toggleSelectAll(this.checked)" />
+                </th>
+                <th id="th-id" onclick="sortTable('id')">ID</th>
+                <th id="th-mediaType" onclick="sortTable('mediaType')">Type</th>
+                <th id="th-title" onclick="sortTable('title')">Title / URL</th>
+                <th id="th-startTime" onclick="sortTable('startTime')">Time</th>
+                <th class="col-actions">
+                    <div class="dropdown">
+                        <button class="action-btn menu-trigger">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a
+                                href="#"
+                                class="menu-item"
+                                onclick="unifiedEdit(getActiveIds())"
+                                ><i class="fa-solid fa-pen"></i> Edit
+                                Selected</a
+                            >
+                            <a
+                                href="#"
+                                class="menu-item"
+                                onclick="unifiedCopy(getActiveIds(), 'title')"
+                                ><i class="fa-solid fa-quote-left"></i> Copy
+                                Titles</a
+                            >
+                            <a
+                                href="#"
+                                class="menu-item"
+                                onclick="unifiedCopy(getActiveIds(), 'url')"
+                                ><i class="fa-solid fa-link"></i> Copy URLs</a
+                            >
+                            <hr />
+                            <a
+                                href="#"
+                                class="menu-item danger"
+                                onclick="unifiedDelete(getActiveIds())"
+                                ><i class="fa-solid fa-trash"></i> Delete
+                                Selected</a
+                            >
+                        </div>
+                    </div>
+                </th>
+            </tr>
             <tbody id="table-body"></tbody>
         </table>
 
         <div class="modal-overlay" id="editModal">
             <div class="modal">
-                <h3>Edit Entry</h3>
-                <input type="hidden" id="editId" />
+                <div class="modal-header">
+                    <h3>Edit Entry</h3>
+                    <span id="affectedCount"></span>
+                </div>
+
                 <div class="form-group">
                     <label>Title</label>
                     <input type="text" id="editTitle" />
                 </div>
+
                 <div class="form-group">
                     <label>Media Type</label>
                     <select id="editMediaType">
@@ -113,12 +113,13 @@
                         <option value="unknown">Unknown</option>
                     </select>
                 </div>
+
                 <div class="modal-actions">
                     <button class="modal-btn btn-cancel" onclick="closeModal()">
                         Cancel
                     </button>
                     <button class="modal-btn btn-save" onclick="saveEdit()">
-                        Save
+                        Save Changes
                     </button>
                 </div>
             </div>
