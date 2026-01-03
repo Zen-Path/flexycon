@@ -1,17 +1,20 @@
 /**
- * REPRESENTS A SINGLE ROW COMPONENT
+ * REPRESENTS A SINGLE ROW COMPONENT (Retained-mode UI)
  */
 class EntryRow {
     constructor(data) {
+        // Explicit Data Properties
         this.id = data.id;
         this.url = data.url;
         this.title = data.title || "No Title Found";
         this.mediaType = data.media_type;
         this.startTime = data.start_time;
 
+        // State Properties
         this.isSelected = false;
         this.isVisible = true;
 
+        // Explicit DOM References
         this.dom = {
             row: document.createElement("tr"),
             checkbox: null,
@@ -26,7 +29,7 @@ class EntryRow {
         this.dom.row.className = "data-row";
         this.dom.row.dataset.id = this.id;
 
-        // 1. Checkbox
+        // 1. Checkbox Column
         const tdCheck = document.createElement("td");
         tdCheck.className = "col-check";
         this.dom.checkbox = document.createElement("input");
@@ -34,22 +37,22 @@ class EntryRow {
         this.dom.checkbox.onchange = (e) => this.setSelected(e.target.checked);
         tdCheck.appendChild(this.dom.checkbox);
 
-        // 2. ID
+        // 2. ID Column
         const tdId = document.createElement("td");
         tdId.className = "col-id";
         tdId.textContent = `#${this.id}`;
 
-        // 3. Type
+        // 3. Type Column (Icon)
         this.dom.typeCell = document.createElement("td");
         this.dom.typeCell.className = "col-type";
         this.updateTypeIcon();
 
-        // 4. Title/URL
+        // 4. Title/URL Column (Fluid)
         this.dom.titleCell = document.createElement("td");
         this.dom.titleCell.className = "col-title";
         this.renderTitleCell();
 
-        // 5. Time
+        // 5. Time Column
         const tdTime = document.createElement("td");
         tdTime.className = "col-time";
         tdTime.textContent = this.startTime;
@@ -59,7 +62,9 @@ class EntryRow {
         tdActions.className = "col-actions";
         tdActions.innerHTML = `
             <div class="dropdown">
-                <button class="action-btn menu-trigger"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                <button class="action-btn menu-trigger" title="Actions">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
                 <div class="dropdown-content">
                     <a href="#" class="menu-item js-edit"><i class="fa-solid fa-pen"></i> Edit</a>
                     <a href="#" class="menu-item js-copy-title"><i class="fa-solid fa-quote-left"></i> Copy Title</a>
@@ -69,6 +74,7 @@ class EntryRow {
                 </div>
             </div>`;
 
+        // Bind Unified Actions (Pass ID as an array [id])
         tdActions.querySelector(".js-edit").onclick = () =>
             window.unifiedEdit([this.id]);
         tdActions.querySelector(".js-copy-title").onclick = () =>
@@ -92,10 +98,13 @@ class EntryRow {
         const link = document.createElement("a");
         link.href = this.url;
         link.target = "_blank";
+
+        // Use structure that CSS can truncate with ellipsis
         link.innerHTML =
             this.title !== "No Title Found"
-                ? `<span class="title-text" title="${this.title}">${this.title}</span><span class="url-subtext">${this.url}</span>`
-                : `<span class="title-text">${this.url}</span>`;
+                ? `<span class="title-text" title="${this.title}">${this.title}</span><span class="url-subtext" title="${this.url}">${this.url}</span>`
+                : `<span class="title-text" title="${this.url}">${this.url}</span>`;
+
         this.dom.titleCell.innerHTML = "";
         this.dom.titleCell.appendChild(link);
     }
@@ -116,9 +125,14 @@ class EntryRow {
             },
         };
         const t = map[this.mediaType] || map["unknown"];
-        this.dom.typeCell.innerHTML = `<div class="type-badge ${t.class}"><div class="icon-box"><i class="fa-solid ${t.icon}"></i></div><span>${t.label}</span></div>`;
+        this.dom.typeCell.innerHTML = `
+            <div class="type-badge ${t.class}">
+                <div class="icon-box"><i class="fa-solid ${t.icon}"></i></div>
+                <span>${t.label}</span>
+            </div>`;
     }
 
+    // --- Instance API ---
     update(newData) {
         if (newData.title !== undefined) {
             this.title = newData.title;
@@ -141,6 +155,11 @@ class EntryRow {
         this.dom.row.style.display = visible ? "" : "none";
     }
 
+    markAsNew() {
+        this.dom.row.classList.add("new-row");
+        setTimeout(() => this.dom.row.classList.remove("new-row"), 3000);
+    }
+
     remove() {
         this.dom.row.remove();
     }
@@ -152,9 +171,10 @@ class EntryRow {
 const entryMap = new Map();
 const tableBody = document.getElementById("table-body");
 let currentSortCol = "id";
-let currentSortDir = -1;
+let currentSortDir = 1;
 const apiKey = window.MEDIA_SERVER_KEY;
 
+// HELPER: Determine which items to act on (Selected OR Visible)
 function getActiveIds() {
     const selected = Array.from(entryMap.values()).filter((e) => e.isSelected);
     if (selected.length > 0) return selected.map((e) => e.id);
@@ -163,9 +183,23 @@ function getActiveIds() {
         .map((e) => e.id);
 }
 
+function addEntry(data, isNew = false) {
+    if (entryMap.has(data.id)) return;
+    const entry = new EntryRow(data);
+    entryMap.set(data.id, entry);
+
+    if (isNew) {
+        tableBody.prepend(entry.dom.row);
+        entry.markAsNew();
+    } else {
+        tableBody.appendChild(entry.dom.row);
+    }
+}
+
 /**
- * UNIFIED ACTIONS
+ * UNIFIED ACTION LOGIC (Works on Array of IDs)
  */
+
 function unifiedCopy(ids, property) {
     const text = ids
         .map((id) => entryMap.get(id)?.[property])
@@ -177,6 +211,7 @@ function unifiedCopy(ids, property) {
 function unifiedDelete(ids) {
     if (ids.length === 0) return;
 
+    // Reality Check: Single ID/Title vs Count
     const message =
         ids.length === 1
             ? `Delete entry #${ids[0]}: "${entryMap.get(ids[0]).title}"?`
@@ -192,8 +227,11 @@ function unifiedDelete(ids) {
         body: ids.length === 1 ? null : JSON.stringify({ ids }),
     }).then(() => {
         ids.forEach((id) => {
-            entryMap.get(id)?.remove();
-            entryMap.delete(id);
+            const entry = entryMap.get(id);
+            if (entry) {
+                entry.remove();
+                entryMap.delete(id);
+            }
         });
         document.getElementById("selectAll").checked = false;
     });
@@ -203,6 +241,7 @@ function unifiedEdit(ids) {
     if (ids.length === 0) return;
     const modal = document.getElementById("editModal");
     const countDisplay = document.getElementById("affectedCount");
+
     modal.dataset.targetIds = JSON.stringify(ids);
 
     if (ids.length === 1) {
@@ -226,19 +265,22 @@ function saveEdit() {
     const newType = document.getElementById("editMediaType").value;
 
     const payload = { media_type: newType };
-    if (newTitle.trim() !== "" || ids.length === 1) payload.title = newTitle;
+    // If bulk and title is empty, don't overwrite existing titles
+    if (newTitle.trim() !== "" || ids.length === 1) {
+        payload.title = newTitle;
+    }
 
     Promise.all(
-        ids.map((id) =>
-            fetch(`/api/entry/${id}`, {
+        ids.map((id) => {
+            return fetch(`/api/entry/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "X-API-Key": apiKey,
                 },
                 body: JSON.stringify(payload),
-            })
-        )
+            });
+        })
     ).then(() => {
         ids.forEach((id) => entryMap.get(id)?.update(payload));
         closeModal();
@@ -246,18 +288,19 @@ function saveEdit() {
 }
 
 /**
- * UI EVENT HANDLERS
+ * UI EVENT HELPERS
  */
 function filterTable() {
     const term = document.getElementById("searchInput").value.toLowerCase();
-    document.getElementById("clearBtn").style.display =
-        term.length > 0 ? "block" : "none";
-    entryMap.forEach((e) =>
-        e.setVisibility(
-            e.title.toLowerCase().includes(term) ||
-                e.url.toLowerCase().includes(term)
-        )
-    );
+    const clearBtn = document.getElementById("clearBtn");
+    clearBtn.style.display = term.length > 0 ? "block" : "none";
+
+    entryMap.forEach((entry) => {
+        const match =
+            entry.title.toLowerCase().includes(term) ||
+            entry.url.toLowerCase().includes(term);
+        entry.setVisibility(match);
+    });
 }
 
 function clearSearch() {
@@ -266,8 +309,8 @@ function clearSearch() {
 }
 
 function toggleSelectAll(checked) {
-    entryMap.forEach((e) => {
-        if (e.isVisible) e.setSelected(checked);
+    entryMap.forEach((entry) => {
+        if (entry.isVisible) entry.setSelected(checked);
     });
 }
 
@@ -276,19 +319,53 @@ function closeModal() {
 }
 
 function sortTable(col) {
-    if (currentSortCol === col) currentSortDir *= -1;
-    else {
+    if (currentSortCol === col) {
+        currentSortDir *= -1;
+    } else {
         currentSortCol = col;
         currentSortDir = 1;
     }
 
-    const sorted = Array.from(entryMap.values()).sort(
-        (a, b) => (a[col] < b[col] ? -1 : 1) * currentSortDir
-    );
-    const frag = document.createDocumentFragment();
-    sorted.forEach((e) => frag.appendChild(e.dom.row));
-    tableBody.appendChild(frag);
+    // 1. Get the current limit from the dropdown
+    const limit = parseInt(document.getElementById("rowLimit").value);
+    const searchTerm = document
+        .getElementById("searchInput")
+        .value.toLowerCase();
 
+    // 2. Sort the data
+    const sorted = Array.from(entryMap.values()).sort((a, b) => {
+        let valA = a[col];
+        let valB = b[col];
+        if (col === "title") {
+            valA = (a.title || a.url).toLowerCase();
+            valB = (b.title || b.url).toLowerCase();
+        }
+        return (valA < valB ? -1 : 1) * currentSortDir;
+    });
+
+    // 3. Re-attach and Apply Limit
+    const fragment = document.createDocumentFragment();
+    let shownCount = 0;
+
+    sorted.forEach((entry) => {
+        const matchesSearch =
+            entry.title.toLowerCase().includes(searchTerm) ||
+            entry.url.toLowerCase().includes(searchTerm);
+
+        // Logic: If it matches search AND we haven't hit the limit (or limit is 0/unlimited)
+        if (matchesSearch && (limit === 0 || shownCount < limit)) {
+            entry.setVisibility(true);
+            shownCount++;
+        } else {
+            entry.setVisibility(false);
+        }
+
+        fragment.appendChild(entry.dom.row);
+    });
+
+    tableBody.appendChild(fragment);
+
+    // Update header icons
     document
         .querySelectorAll("th")
         .forEach((th) => th.classList.remove("active", "asc", "desc"));
@@ -305,6 +382,7 @@ function handleColorScheme() {
         (window.matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"
             : "light");
+
     if (current === "dark") document.body.classList.add("dark-mode");
 
     btn.onclick = () => {
@@ -314,23 +392,30 @@ function handleColorScheme() {
     };
 }
 
-// BOOTSTRAP
+// MAIN INITIALIZATION
 document.addEventListener("DOMContentLoaded", () => {
     handleColorScheme();
 
-    // Initial Data
+    // 1. Initial Load
     fetch("/api/history", { headers: { "X-API-Key": apiKey } })
         .then((res) => res.json())
         .then((data) => {
-            data.forEach((item) => {
-                const e = new EntryRow(item);
-                entryMap.set(item.id, e);
-                tableBody.appendChild(e.dom.row);
-            });
+            data.forEach((item) => addEntry(item));
             sortTable("id");
         });
 
-    // Dropdown Event Delegation
+    // 2. Real-Time Listener (SSE)
+    const eventSource = new EventSource(`/api/stream?api_key=${apiKey}`);
+    eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        addEntry(data, true);
+    };
+    eventSource.onerror = (err) => {
+        console.error("EventSource failed:", err);
+        eventSource.close();
+    };
+
+    // 3. Dropdown Delegation
     document.addEventListener("click", (e) => {
         const trigger = e.target.closest(".menu-trigger");
         document.querySelectorAll(".dropdown-content").forEach((c) => {
@@ -340,7 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Global Bindings
+    // 4. Global Bindings for HTML
     window.unifiedEdit = unifiedEdit;
     window.unifiedCopy = unifiedCopy;
     window.unifiedDelete = unifiedDelete;

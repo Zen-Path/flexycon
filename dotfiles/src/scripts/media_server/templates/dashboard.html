@@ -33,6 +33,23 @@
             </div>
 
             <div class="button-group">
+                <div class="limit-container">
+                    <label
+                        for="rowLimit"
+                        style="font-size: 0.85em; color: var(--text-muted)"
+                        >Show:</label
+                    >
+                    <select
+                        id="rowLimit"
+                        onchange="sortTable(currentSortCol)"
+                        class="limit-select">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100" selected>100</option>
+                        <option value="500">500</option>
+                        <option value="0">Unlimited</option>
+                    </select>
+                </div>
                 <button id="themeToggle" class="btn-base theme-toggle">
                     <i class="fas fa-moon"></i>
                 </button>
