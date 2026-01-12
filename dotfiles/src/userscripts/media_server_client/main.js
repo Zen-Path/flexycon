@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.0.3
+// @version         2.0.9
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -34,7 +34,32 @@ const DOWNLOAD_FAILURE_PATTERNS = [
     "[downloader.http][warning] File size larger",
 ];
 
+const DOWNLOAD_STATUS = Object.freeze({
+    IN_PROGRESS: "⏳",
+    SUCCESS: "🟢",
+    ERROR: "🔴",
+});
+
+/**
+ * Updates the document title with a status icon.
+ * Pass a value from DOWNLOAD_STATUS to add/change an icon.
+ * Pass null to remove any existing status icons.
+ */
+function showDownloadStatus(icon) {
+    const allIcons = Object.values(DOWNLOAD_STATUS).join("");
+    const statusRegex = new RegExp(`^[${allIcons}]\\s-\\s`, "u");
+    const cleanTitle = document.title.replace(statusRegex, "");
+
+    if (Object.values(DOWNLOAD_STATUS).includes(icon)) {
+        document.title = `${icon} - ${cleanTitle}`;
+    } else {
+        document.title = cleanTitle;
+    }
+}
+
 function downloadMedia(urls, mediaType, range) {
+    showDownloadStatus(DOWNLOAD_STATUS.IN_PROGRESS);
+
     const payload = { urls, media_type: mediaType };
     if (range !== undefined) {
         payload.range = range;
@@ -51,13 +76,14 @@ function downloadMedia(urls, mediaType, range) {
         data: requestData,
         onerror: function (error) {
             console.error(":: Download failed", error);
-            alert("Download failed.");
+            showDownloadStatus(DOWNLOAD_STATUS.ERROR);
         },
         onload: function (response) {
             console.log(":: Response info", response);
 
             // TODO: Improve error handling
-            alert("Download successful!");
+
+            showDownloadStatus(DOWNLOAD_STATUS.SUCCESS);
         },
     });
 }
