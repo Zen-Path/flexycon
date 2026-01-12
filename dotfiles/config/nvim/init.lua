@@ -146,13 +146,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         -- Remove extra blank lines at EOF
         vim.cmd([[%s/\n\+\%$//e]])
 
-        -- Add exactly one newline at EOF
-        local last_line = vim.fn.line("$")
-        local last_line_content = vim.fn.getline(last_line)
-        if last_line_content ~= "" then
-            vim.fn.append(last_line, "")
-        end
-
         -- Restore cursor position
         vim.fn.setpos(".", pos)
     end,
