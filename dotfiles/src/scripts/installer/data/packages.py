@@ -68,6 +68,11 @@ packages = [
         description="Tools and libraries to manipulate images in many formats",
     ),
     Package(
+        identifier="jq",
+        managers=[Brew, Yay],
+        description="Command-line JSON processor",
+    ),
+    Package(
         identifier="kitty",
         managers=[Brew],
         is_gui=True,
