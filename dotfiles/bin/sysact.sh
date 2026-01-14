@@ -20,13 +20,36 @@ wait_display() {
     done
 }
 
-pause_dunst() {
+power_manager() {
+    # $1: The power action (suspend, hibernate, lock)
+
     # https://wiki.archlinux.org/title/Dunst
     dunstctl set-paused true
     time1=$(date '+%s')
 
-    eval "$1"
-    wait_display
+    slock &
+    SLOCK_PID=$!
+
+    sleep 1
+
+    if [ "$1" = "suspend" ] || [ "$1" = "hibernate" ]; then
+        $ctl "$1" -i
+
+        # Path B: Ghost-wake prevention
+        (
+            sleep 45
+            if ps -p $SLOCK_PID > /dev/null; then
+                power_manager "$1"
+            fi
+        ) &
+        WATCHER_PID=$!
+    fi
+
+    # Path A: Wait for the user to manually unlock slock
+    wait $SLOCK_PID
+
+    # Once unlocked, we immediately kill Path B
+    [ -n "$WATCHER_PID" ] && kill "$WATCHER_PID" 2> /dev/null
 
     time2=$(date '+%s')
     delta=$((time2 - time1))
@@ -50,8 +73,8 @@ hibernate 🐻
 choice="$(printf "%s" "$choices" | dmenu -i -l -1 -p "Action")"
 
 case "$choice" in
-    'sleep 😴') pause_dunst "slock $ctl suspend -i" ;;
-    'lock 🔒') pause_dunst 'slock' ;;
+    'sleep 😴') power_manager 'suspend' ;;
+    'lock 🔒') power_manager 'lock' ;;
     'power off 🔌') $ctl poweroff -i ;;
     'reboot 🔄') $ctl reboot -i ;;
     "exit $WM 🚪") kill -TERM "$(wmpid)" ;;
@@ -60,6 +83,6 @@ case "$choice" in
         kill -HUP "$(wmpid)"
         ;;
     'display off 📺') xset dpms force off ;;
-    'hibernate 🐻') pause_dunst "slock $ctl hibernate -i" ;;
+    'hibernate 🐻') power_manager 'hibernate' ;;
     *) exit 1 ;;
 esac
