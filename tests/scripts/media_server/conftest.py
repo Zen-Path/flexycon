@@ -108,9 +108,5 @@ def auth_headers():
     return {"X-API-Key": "test-secret-key"}
 
 
-@pytest.fixture
-def dashboard_url():
-    return f"{BASE_URL}"
-
-
+DASHBOARD_URL = f"{BASE_URL}/dashboard"
 API_DOWNLOAD = "/api/media/download"

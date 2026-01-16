@@ -5,16 +5,16 @@ import pytest
 import requests
 from playwright.sync_api import Page, expect
 
-from .conftest import API_DOWNLOAD
+from .conftest import API_DOWNLOAD, BASE_URL, DASHBOARD_URL
 
 pytestmark = [pytest.mark.ui]
 
 
-def test_dashboard_visuals(page: Page, dashboard_url, seed):
+def test_dashboard_visuals(page: Page, seed):
     """Check that the dashboard renders seeded data correctly."""
     seed()
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
 
     expect(page).to_have_title("Live Dashboard")
 
@@ -50,11 +50,11 @@ def test_dashboard_visuals(page: Page, dashboard_url, seed):
     expect(first_row.locator(".col-actions .btn-delete")).to_be_visible(timeout=0)
 
 
-def test_search(page: Page, dashboard_url, seed):
+def test_search(page: Page, seed):
     """Test the Javascript search filter."""
     seed()
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
 
     page.fill("#searchInput", "Cat Memes")
     expect(page.locator("body")).to_contain_text("Best Cat Memes")
@@ -65,7 +65,7 @@ def test_search(page: Page, dashboard_url, seed):
     expect(page.locator("body")).to_contain_text("Rick Astley")
 
 
-def test_sorting_by_url(page: Page, dashboard_url, seed):
+def test_sorting_by_url(page: Page, seed):
     """
     Test 2: Sorting
     - Title column should sort by URL, not Title.
@@ -77,7 +77,7 @@ def test_sorting_by_url(page: Page, dashboard_url, seed):
     ]
     seed(initial_data)
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
 
     # Click 'Title' header -> Sort ASC
     page.click("#th-title")
@@ -95,7 +95,7 @@ def test_sorting_by_url(page: Page, dashboard_url, seed):
     expect(page.locator("#table-body tr").first).to_contain_text("Zebra Title")
 
 
-def test_search_and_sort(page: Page, dashboard_url, seed):
+def test_search_and_sort(page: Page, seed):
     """
     Test 3: Search + Sort
     """
@@ -118,7 +118,7 @@ def test_search_and_sort(page: Page, dashboard_url, seed):
     ]
     seed(initial_data)
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
 
     # Search
     page.fill("#searchInput", "Python")
@@ -137,7 +137,7 @@ def test_search_and_sort(page: Page, dashboard_url, seed):
     expect(page.locator("body")).not_to_contain_text("Java Tutorial")
 
 
-def test_edit_feature_ui(page: Page, dashboard_url, seed):
+def test_edit_feature_ui(page: Page, seed):
     """
     Test Edit Flow:
     1. Click Edit button on a row.
@@ -150,7 +150,7 @@ def test_edit_feature_ui(page: Page, dashboard_url, seed):
     ]
     seed(initial_data)
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
 
     page.click(".btn-edit")
 
@@ -178,7 +178,7 @@ def test_edit_feature_ui(page: Page, dashboard_url, seed):
     expect(page.locator(".type-gallery")).to_be_visible()
 
 
-def test_delete_single_ui(page: Page, dashboard_url, seed):
+def test_delete_single_ui(page: Page, seed):
     """
     Test Delete Flow:
     1. Click Delete button.
@@ -190,7 +190,7 @@ def test_delete_single_ui(page: Page, dashboard_url, seed):
     ]
     seed(initial_data)
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
 
     # Verify row exists
     expect(page.locator("#table-body tr")).to_have_count(1)
@@ -208,7 +208,7 @@ def test_delete_single_ui(page: Page, dashboard_url, seed):
     expect(page.locator("body")).not_to_contain_text("To Be Deleted")
 
 
-def test_delete_all_visible_no_search(page: Page, dashboard_url, seed):
+def test_delete_all_visible_no_search(page: Page, seed):
     """
     Test Delete Visible (No Filter):
     1. Seed 3 items.
@@ -223,7 +223,7 @@ def test_delete_all_visible_no_search(page: Page, dashboard_url, seed):
     ]
     seed(initial_data)
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
     expect(page.locator("#table-body tr")).to_have_count(3)
 
     # Setup Dialog Handler (Click OK on alert)
@@ -237,7 +237,7 @@ def test_delete_all_visible_no_search(page: Page, dashboard_url, seed):
     expect(page.locator("body")).not_to_contain_text("Item One")
 
 
-def test_delete_visible_with_search(page: Page, dashboard_url, seed):
+def test_delete_visible_with_search(page: Page, seed):
     """
     Test Delete Visible (With Filter):
     1. Seed mixed items ("Keep Me" vs "Delete Me").
@@ -254,7 +254,7 @@ def test_delete_visible_with_search(page: Page, dashboard_url, seed):
     ]
     seed(initial_data)
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
 
     # Search for "Delete" (Should show 2 rows)
     page.fill("#searchInput", "Delete")
@@ -276,7 +276,7 @@ def test_delete_visible_with_search(page: Page, dashboard_url, seed):
     expect(page.locator("body")).not_to_contain_text("Delete Me")
 
 
-def test_realtime_updates(page: Page, auth_headers, dashboard_url, seed):
+def test_realtime_updates(page: Page, auth_headers, seed):
     """
     1. Seed some initial data.
     2. Load Dashboard.
@@ -294,7 +294,7 @@ def test_realtime_updates(page: Page, auth_headers, dashboard_url, seed):
     ]
     seed(initial_data)
 
-    page.goto(dashboard_url)
+    page.goto(DASHBOARD_URL)
     initial_rows_count = page.locator("#table-body tr").count()
     assert initial_rows_count == 1
 
@@ -302,9 +302,7 @@ def test_realtime_updates(page: Page, auth_headers, dashboard_url, seed):
     new_item_count = 5
     for _ in range(new_item_count):
         payload = {"urls": ["https://example.com/"], "mediaType": "unknown"}
-        requests.post(
-            f"{dashboard_url}{API_DOWNLOAD}", json=payload, headers=auth_headers
-        )
+        requests.post(f"{BASE_URL}{API_DOWNLOAD}", json=payload, headers=auth_headers)
 
     # Verify Dashboard Updates
     expect(page.locator("#table-body tr")).to_have_count(
