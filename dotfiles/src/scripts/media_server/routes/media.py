@@ -1,6 +1,7 @@
 import json
 import sqlite3
 from datetime import datetime
+from typing import Dict, List, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup
@@ -8,53 +9,138 @@ from common.helpers import run_command
 from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
 from scripts.media_server.src.constants import ScraperConfig
+from scripts.media_server.src.core import DownloadReportItem
 from scripts.media_server.src.downloaders import Gallery
 
 media_bp = Blueprint("media", __name__)
 
 
-def expand_collection_urls(url):
+def expand_collection_urls(url: str, depth: int = 0) -> List[str]:
     """
     Determines if a URL is a collection based on Level Homogeneity. (best effort)
     """
+
+    if depth > 3:
+        return []
+
     try:
         cmd = ["gallery-dl", "-s", "-j", url]
         result = run_command(cmd)
+        if not result.success:
+            return []
+
         data = json.loads(result.output)
-
-        if not data:
-            return [url]
-
-        # Extract levels, ignoring level 1 (which is a generic metadata block)
-        levels = [entry[0] for entry in data if entry[0] > 1]
-
-        if not levels:
-            return [url]
-
-        unique_levels = set(levels)
 
         # If there is only ONE unique level (e.g., all are level 6), it is probably
         # a collection of gallery links.
-        if len(unique_levels) == 1:
-            child_urls = []
-            for entry in data:
-                # Ensure we only grab strings that look like URLs
-                if (
-                    len(entry) >= 2
-                    and isinstance(entry[1], str)
-                    and entry[1].startswith("http")
-                ):
-                    child_urls.append(entry[1])
+        # TODO: investigate gallery returns type to improve this logic
+        levels = [entry[0] for entry in data if entry[0] > 1]
+        unique_levels = set(levels)
+        if len(unique_levels) != 1:
+            return []
 
-            if child_urls:
-                return list(dict.fromkeys(child_urls))
+        child_urls = []
+        for entry in data:
+            # Entry structure: [level, content]
+            if (
+                len(entry) >= 2
+                and isinstance(entry[1], str)
+                and entry[1].startswith("http")
+            ):
+                c_url = entry[1]
+                if c_url != url:  # Prevent self-reference loops
+                    child_urls.append(c_url)
+                    child_urls.extend(expand_collection_urls(c_url, depth + 1))
 
-        return [url]
+        return list(dict.fromkeys(child_urls))
 
     except Exception as e:
-        # Fallback to the original URL if anything goes wrong
-        logger.error(f"Expansion error for {url}: {e}")
-        return [url]
+        logger.warning(f"Expansion error for {url}: {e}")
+        return []
+
+
+def start_download_record(
+    url: str, media_type: str
+) -> Tuple[bool, Optional[int], Optional[str]]:
+    """
+    Initializes a download entry in the database and notifies the dashboard.
+
+    This function creates a 'shell' record, allowing the system to track that
+    a download is active before the heavy processing begins.
+
+    Returns:
+        A tuple of (success_status, generated_id, error_message).
+    """
+    start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    try:
+        with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO downloads (url, media_type, start_time) VALUES (?, ?, ?)",
+                (url, media_type, start_time),
+            )
+            conn.commit()
+            last_id = cursor.lastrowid
+
+        # Notify Dashboard via SSE
+        data = json.dumps(
+            {
+                "id": last_id,
+                "url": url,
+                "startTime": start_time,
+            }
+        )
+        current_app.config["ANNOUNCER"].announce(f"data: {data}\n\n")
+
+        return True, last_id, None
+    except Exception as e:
+        err_msg = f"Failed to initialize download record: {e}"
+        logger.error(err_msg)
+        return False, None, err_msg
+
+
+def complete_download_record(
+    download_id: int, title: Optional[str]
+) -> Tuple[bool, Optional[str]]:
+    """
+    Finalizes an existing download record with its metadata and notifies the dashboard.
+
+    Updates the specific row with the final title and the timestamp of
+    completion.
+
+    Returns:
+        A tuple of (success_status, error_message).
+    """
+    end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    try:
+        with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                UPDATE downloads
+                SET title = ?, end_time = ?
+                WHERE id = ?
+                """,
+                (title, end_time, download_id),
+            )
+            conn.commit()
+
+        data = json.dumps(
+            {
+                "id": download_id,
+                "title": title,
+                "endTime": end_time,
+            }
+        )
+        current_app.config["ANNOUNCER"].announce(f"data: {data}\n\n")
+
+        return True, None
+    except Exception as e:
+        err_msg = f"Failed to update download record #{download_id}: {e}"
+        logger.error(err_msg)
+        return False, err_msg
 
 
 @media_bp.route("/download", methods=["POST"])
@@ -89,19 +175,68 @@ def download_media():
     if range_end and not isinstance(range_end, int):
         return jsonify({"error": "'rangeEnd' must be an int."}), 400
 
-    # Expansion Logic
-    final_urls = []
-    if media_type in ["gallery", "unknown"]:
-        for url in urls:
-            expanded = expand_collection_urls(url)
-            final_urls.extend(expanded)
-    else:
-        final_urls = urls
+    report: Dict[str, DownloadReportItem] = {}
 
-    # Processing
-    for url in final_urls:
-        start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        title = "No Title Found"
+    # INITIAL RECORDING
+
+    # We store the initial batch to ensure we have a "paper trail"
+    initial_queue = []
+    for url in list(set(urls)):
+        success, download_id, error = start_download_record(url, media_type)
+        report[url] = DownloadReportItem(url=url, status=success, error=error)
+
+        if success:
+            initial_queue.append((download_id, url))
+
+    # EXPANSION
+
+    final_processing_queue = []
+    seen_urls = set()
+
+    if media_type in ["gallery", "unknown"]:
+        for parent_id, parent_url in initial_queue:
+            seen_urls.add(parent_url)
+            expanded_urls = expand_collection_urls(parent_url)
+
+            if not expanded_urls:
+                final_processing_queue.append((parent_id, parent_url))
+                continue
+
+            report[parent_url].log += f" Expanded into {len(expanded_urls)} items."
+
+            for child_url in expanded_urls:
+                if child_url in seen_urls:
+                    continue
+
+                child_success, child_id, child_error = start_download_record(
+                    child_url, media_type
+                )
+
+                # Regardless of success status, we want to keep track of the url,
+                # since if it fails and multiple parents expand into lists containing
+                # this url, we would keep re-trying to add it to the db. Retries should
+                # be a user initiated action.
+                seen_urls.add(child_url)
+
+                report[child_url] = DownloadReportItem(
+                    url=child_url,
+                    status=child_success,
+                    error=child_error,
+                    log=f"Child of #{parent_id}",
+                )
+
+                if child_success:
+                    final_processing_queue.append((child_id, child_url))
+
+    else:
+        # Non-gallery types will never expand
+        final_processing_queue = initial_queue
+
+    # PROCESSING
+
+    for download_id, url in final_processing_queue:
+        # Scrape title
+        title = None
 
         try:
             headers = {"User-Agent": ScraperConfig.USER_AGENT}
@@ -112,39 +247,28 @@ def download_media():
                 if soup.title and soup.title.string:
                     title = soup.title.string.strip()
             else:
-                title = f"Error: {response.status_code}"
+                report[url].warnings.append(f"Title scrape HTTP {response.status_code}")
 
-        except Exception:
-            title = "Error: Failed to Connect"
+        except Exception as e:
+            report[url].warnings.append(f"Title scrape failed: {str(e)}")
 
-        match media_type:
-            case "gallery" | "unknown":
-                cmd_result = Gallery.download([url], range_start, range_end)
+        # Download
+        try:
+            match media_type:
+                case "gallery" | "unknown":
+                    cmd_result = Gallery.download([url], range_start, range_end)
+                    report[url].output = cmd_result.output
+                    report[url].status = cmd_result.return_code == 0
 
-        end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    if not report[url].status:
+                        report[url].error = "Gallery-dl command failed"
 
-        # Save to DB
-        with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "INSERT INTO downloads (url, title, media_type, start_time, end_time) VALUES (?, ?, ?, ?, ?)",
-                (url, title, media_type, start_time, end_time),
-            )
-            last_id = cursor.lastrowid
-            conn.commit()
+        except Exception as e:
+            report[url].status = False
+            report[url].error = str(e)
 
-        # Notify Dashboard
-        data = json.dumps(
-            {
-                "id": last_id,
-                "url": url,
-                "title": title,
-                "mediaType": media_type,
-                "startTime": start_time,
-                "endTime": end_time,
-            }
-        )
-        msg = f"data: {data}\n\n"
-        current_app.config["ANNOUNCER"].announce(msg)
+        # Finalize DB record.
+        complete_download_record(download_id, title)  # type: ignore[arg-type]
 
-    return jsonify({"status": "downloaded", "count": len(final_urls)})
+    final_json_report = {url: item.to_dict() for url, item in report.items()}
+    return jsonify(final_json_report), 200

@@ -17,7 +17,7 @@ from scripts.media_server.routes.media import media_bp
 from scripts.media_server.src.core import MessageAnnouncer, init_db
 from scripts.media_server.src.logging_middleware import register_logging
 
-__version__ = "1.0.3"
+__version__ = "1.1.0"
 
 load_dotenv(flex_scripts / "media_server" / ".env")
 

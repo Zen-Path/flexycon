@@ -1,7 +1,8 @@
 import queue
 import sqlite3
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from common.logger import logger
 
@@ -82,3 +83,16 @@ class MessageAnnouncer:
                 self.listeners[i].put_nowait(msg)
             except queue.Full:
                 del self.listeners[i]
+
+
+@dataclass
+class DownloadReportItem:
+    url: str
+    status: bool = True
+    error: Optional[str] = None
+    warnings: List[str] = field(default_factory=list)
+    log: str = ""
+    output: str = ""
+
+    def to_dict(self):
+        return asdict(self)

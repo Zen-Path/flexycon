@@ -105,4 +105,4 @@ def test_download(client, auth_headers):
         response = client.post(API_DOWNLOAD, headers=auth_headers, json=payload)
 
         assert response.status_code == 200
-        assert response.json["count"] == 1
+        assert len(response.json) == 1

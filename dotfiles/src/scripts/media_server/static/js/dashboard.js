@@ -227,6 +227,14 @@ function closeModal() {
     document.getElementById("editModal").style.display = "none";
 }
 
+function updateEntry(id, newTitle, newType) {
+    const item = allData.find((r) => r.id === id);
+    if (item) {
+        item.title = newTitle;
+        item.mediaType = newType;
+    }
+}
+
 function saveEdit() {
     const id = parseInt(document.getElementById("editId").value);
     const newTitle = document.getElementById("editTitle").value;
@@ -245,12 +253,7 @@ function saveEdit() {
     })
         .then((res) => res.json())
         .then(() => {
-            // Update local memory
-            const item = allData.find((r) => r.id === id);
-            if (item) {
-                item.title = newTitle;
-                item.mediaType = newType;
-            }
+            updateEntry(id, newTitle, newType);
             closeModal();
             renderTable();
         });
@@ -369,7 +372,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const eventSource = new EventSource(`/api/stream?apiKey=${apiKey}`);
     eventSource.onmessage = function (event) {
         const data = JSON.parse(event.data);
-        addRowToData(data, true);
+        const item = allData.find((r) => r.id === data.id);
+        if (item) {
+            updateEntry(id, data.title, data.mediaType);
+        } else {
+            addRowToData(data, true);
+        }
         renderTable();
     };
 

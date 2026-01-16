@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from urllib.parse import urljoin
 
 import pytest
 import requests
@@ -43,7 +44,7 @@ def test_dashboard_visuals(page: Page, seed):
 
     # Time
     time_text = first_row.locator(".col-time").inner_text()
-    parsed_date = datetime.strptime(time_text, "%Y-%m-%d %H:%M:%S")
+    _ = datetime.strptime(time_text, "%Y-%m-%d %H:%M:%S")
 
     # Actions
     expect(first_row.locator(".col-actions .btn-edit")).to_be_visible(timeout=0)
@@ -296,16 +297,24 @@ def test_realtime_updates(page: Page, auth_headers, seed):
 
     page.goto(DASHBOARD_URL)
     initial_rows_count = page.locator("#table-body tr").count()
-    assert initial_rows_count == 1
+    assert initial_rows_count == len(initial_data)
 
-    # Trigger Download via API
     new_item_count = 5
-    for _ in range(new_item_count):
-        payload = {"urls": ["https://example.com/"], "mediaType": "unknown"}
-        requests.post(f"{BASE_URL}{API_DOWNLOAD}", json=payload, headers=auth_headers)
+    for i in range(new_item_count):
+        payload = {
+            "urls": [urljoin("https://example.com", str(i))],
+            "mediaType": "unknown",
+        }
+        requests.post(
+            urljoin(BASE_URL, API_DOWNLOAD), json=payload, headers=auth_headers
+        )
 
-    # Verify Dashboard Updates
-    expect(page.locator("#table-body tr")).to_have_count(
-        initial_rows_count + new_item_count
-    )
-    expect(page.locator("body")).to_contain_text("https://example.com/")
+    all_titles = page.locator("#table-body .title-text").all_inner_texts()
+    assert len(all_titles) == initial_rows_count + new_item_count
+    assert "Initial Item" in all_titles
+    assert "No Title Found" in all_titles
+
+    all_urls = page.locator("#table-body .url-subtext").all_inner_texts()
+    assert len(all_urls) == len(all_titles)
+    assert "http://initial.com" in all_urls
+    assert "https://example.com/1" in all_urls
