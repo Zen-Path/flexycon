@@ -4,7 +4,7 @@ from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
-from common.helpers import parse_range, run_command
+from common.helpers import run_command
 from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
 from scripts.media_server.src.models import Gallery
@@ -61,7 +61,8 @@ def download_media():
     data = request.get_json(silent=True) or {}
     urls = data.get("urls")
     media_type = data.get("mediaType")
-    range_raw = data.get("range")
+    range_start = data.get("rangeStart")
+    range_end = data.get("rangeEnd")
 
     # Validation
 
@@ -81,11 +82,11 @@ def download_media():
         media_type = "unknown"
 
     ## Range Parts
-    range_parts = None
-    if range_raw:
-        range_parts, error = parse_range(range_raw)
-        if error:
-            return jsonify({"error": error}), 400
+    if range_start and not isinstance(range_start, int):
+        return jsonify({"error": "'rangeStart' must be an int."}), 400
+
+    if range_end and not isinstance(range_end, int):
+        return jsonify({"error": "'rangeEnd' must be an int."}), 400
 
     # Expansion Logic
     final_urls = []
@@ -117,9 +118,7 @@ def download_media():
 
         match media_type:
             case "gallery" | "unknown":
-                # Pass range_parts only if present
-                kwargs = {"range_parts": range_parts} if range_parts else {}
-                cmd_result = Gallery.download([url], **kwargs)
+                cmd_result = Gallery.download([url], range_start, range_end)
 
         end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

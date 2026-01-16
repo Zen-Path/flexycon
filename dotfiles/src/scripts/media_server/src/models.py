@@ -2,7 +2,7 @@ import os
 import shutil
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from common.helpers import CommandResult, resolve_path, run_command
 from common.logger import logger
@@ -20,7 +20,10 @@ class Media(ABC):
     @classmethod
     @abstractmethod
     def download(
-        cls, urls: List[str], range_parts: Optional[Tuple[int, int]] = None
+        cls,
+        urls: List[str],
+        range_start: Optional[int] = None,
+        range_end: Optional[int] = None,
     ) -> CommandResult:
         pass
 
@@ -30,7 +33,10 @@ class Gallery(Media):
 
     @classmethod
     def _build_command(
-        cls, urls: List[str], range_parts: Optional[Tuple[int, int]] = None
+        cls,
+        urls: List[str],
+        range_start: Optional[int] = None,
+        range_end: Optional[int] = None,
     ) -> List[str]:
         # logger.debug(cls.DOWNLOAD_DIR)
 
@@ -50,8 +56,8 @@ class Gallery(Media):
             *urls,
         ]
 
-        if range_parts:
-            command += ["--range", f"{range_parts[0]}-{range_parts[1]}"]
+        if range_start or range_end:
+            command += ["--range", f"{range_start or 0}-{range_end or ""}"]
 
         exec_cmd = (
             f"mkdir -p {cls.FILES_DIR}; "
@@ -66,7 +72,10 @@ class Gallery(Media):
 
     @classmethod
     def download(
-        cls, urls: List[str], range_parts: Optional[Tuple[int, int]] = None
+        cls,
+        urls: List[str],
+        range_start: Optional[int] = None,
+        range_end: Optional[int] = None,
     ) -> CommandResult:
-        command = cls._build_command(urls, range_parts)
+        command = cls._build_command(urls, range_start, range_end)
         return run_command(command)

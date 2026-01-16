@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.0.12
+// @version         2.0.13
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -58,13 +58,17 @@ function showDownloadStatus(icon) {
     }
 }
 
-function downloadMedia(urls, mediaType, range) {
+function downloadMedia(urls, mediaType, rangeStart, rangeEnd) {
     showDownloadStatus(DOWNLOAD_STATUS.IN_PROGRESS);
 
     const payload = { urls, mediaType };
-    if (range !== undefined) {
-        payload.range = range;
+    if (Number.isInteger(startVal)) {
+        payload.rangeStart = startVal;
     }
+    if (Number.isInteger(endVal)) {
+        payload.rangeEnd = endVal;
+    }
+
     const requestData = JSON.stringify(payload);
 
     GM_xmlhttpRequest({
@@ -112,7 +116,8 @@ function main() {
         downloadMedia(
             formData.urls,
             formData.mediaType,
-            formData.range === ":" ? null : formData.range
+            formData.rangeStart,
+            formData.rangeEnd
         );
     });
 

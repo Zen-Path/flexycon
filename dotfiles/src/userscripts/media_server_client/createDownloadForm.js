@@ -94,14 +94,15 @@ btnCancel.addEventListener("click", () => {
 
 btnSubmit.addEventListener("click", () => {
     // Validate range
-    const startVal = parseInt(rangeStart.value) || null;
-    const endVal = parseInt(rangeEnd.value) || null;
+    const startVal =
+        rangeStart.value.trim() !== "" ? parseInt(rangeStart.value) : null;
+    const endVal =
+        rangeEnd.value.trim() !== "" ? parseInt(rangeEnd.value) : null;
 
-    if (!isNaN(startVal) && !isNaN(endVal)) {
-        if (startVal > endVal) {
-            rangeEnd.classList.add("gm-error");
-            return; // Stop submission
-        }
+    if (startVal !== null && endVal !== null && startVal > endVal) {
+        rangeEnd.classList.add("gm-error");
+        alert("Start value cannot be greater than End value");
+        return;
     }
 
     const rawUrls = urlInput.value
@@ -113,11 +114,8 @@ btnSubmit.addEventListener("click", () => {
     const result = {
         urls: rawUrls,
         mediaType: type,
-        range: `${startVal === null ? "" : startVal}:${endVal === null ? "" : endVal}`,
-        rangeObj: {
-            start: startVal,
-            end: endVal,
-        },
+        rangeStart: startVal,
+        rangeEnd: endVal,
     };
 
     closeOverlay();
