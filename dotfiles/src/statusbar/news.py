@@ -113,7 +113,7 @@ def main():
 
     unread_count = get_unread_items_count()
     if not unread_count:
-        print(f" ❗err")
+        print(" ❗err")
     else:
         print(f"{unread_count}")
 

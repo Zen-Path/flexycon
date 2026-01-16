@@ -6,7 +6,7 @@ import os
 import shutil
 import signal
 import subprocess
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Optional
 

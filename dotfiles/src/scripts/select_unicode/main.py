@@ -4,10 +4,7 @@
 
 import argparse
 import logging
-import os
 import subprocess
-import sys
-from pathlib import Path
 
 from common.helpers import notify, run_command
 from common.logger import logger, setup_logging
@@ -85,7 +82,7 @@ def main():
 
     if not args.no_copy:
         subprocess.run(["xclip", "-selection", "clipboard"], input=char.encode())
-        logger.info(f"Character copied.")
+        logger.info("Character copied.")
 
         if not args.no_notify:
             notify("Character copied", f"'{char}' was copied.")

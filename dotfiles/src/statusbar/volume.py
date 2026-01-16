@@ -2,9 +2,6 @@
 
 # {{@@ header() @@}}
 
-import os
-import subprocess
-import sys
 
 from common.helpers import notify, run_command
 from common.logger import logger
@@ -35,7 +32,7 @@ def toggle_mute():
 ACTIONS = {
     MouseButton.LEFT: lambda: (
         run_command(["setsid", "-w", "-f", TERMINAL, "-e", "pulsemixer"]),
-        run_command(["pkill", f"-RTMIN+10", STATUSBAR]),
+        run_command(["pkill", "-RTMIN+10", STATUSBAR]),
     ),
     MouseButton.MIDDLE: toggle_mute,
     MouseButton.RIGHT: lambda: notify(
