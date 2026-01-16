@@ -67,10 +67,7 @@ function renderTable() {
             row.isNew = false;
         }
 
-        const titleDisplay =
-            row.title && row.title !== "No Title Found"
-                ? `<span class="title-text" title="${row.title}">${row.title}</span><span class="url-subtext">${row.url}</span>`
-                : `<span class="title-text">${row.url}</span>`;
+        const titleDisplay = row.title ? `${row.title}` : "No Title Found";
 
         tr.innerHTML = `
         <td class="col-check">
@@ -78,7 +75,12 @@ function renderTable() {
         </td>
         <td class="col-id">#${row.id}</td>
         <td class="col-type">${getIconHtml(row.mediaType)}</td>
-        <td class="col-title"><a href="${row.url}" target="_blank">${titleDisplay}</a></td>
+        <td class="col-title">
+            <a href="${row.url}" target="_blank">
+                <span class="title-text" title="${titleDisplay}">${titleDisplay}</span>
+                <span class="url-subtext">${row.url}</span>
+            </a>
+        </td>
         <td class="col-time">${row.startTime}</td>
         <td class="col-actions">
             <button class="action-btn btn-edit" onclick="openEditModal(${row.id})" title="Edit">
