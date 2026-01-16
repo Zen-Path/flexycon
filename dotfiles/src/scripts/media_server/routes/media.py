@@ -113,7 +113,7 @@ def download_media():
             else:
                 title = f"Error: {response.status_code}"
 
-        except Exception as e:
+        except Exception:
             title = "Error: Failed to Connect"
 
         match media_type:
