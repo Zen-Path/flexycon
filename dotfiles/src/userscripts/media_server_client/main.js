@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.0.10
+// @version         2.0.11
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -61,7 +61,7 @@ function showDownloadStatus(icon) {
 function downloadMedia(urls, mediaType, range) {
     showDownloadStatus(DOWNLOAD_STATUS.IN_PROGRESS);
 
-    const payload = { urls, media_type: mediaType };
+    const payload = { urls, mediaType };
     if (range !== undefined) {
         payload.range = range;
     }

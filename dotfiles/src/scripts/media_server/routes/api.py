@@ -13,7 +13,20 @@ def history():
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM downloads ORDER BY id DESC")
-        rows = [dict(row) for row in cursor.fetchall()]
+
+        rows = []
+        for row in cursor.fetchall():
+            d = dict(row)
+            rows.append(
+                {
+                    "id": d["id"],
+                    "url": d["url"],
+                    "title": d["title"],
+                    "mediaType": d["media_type"],
+                    "startTime": d["start_time"],
+                    "endTime": d["end_time"],
+                }
+            )
     return jsonify(rows)
 
 
@@ -37,7 +50,7 @@ def stream():
 def update_entry(entry_id):
     data = request.json or {}
     new_title = data.get("title")
-    new_type = data.get("media_type")
+    new_type = data.get("mediaType")
 
     with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
         cursor = conn.cursor()

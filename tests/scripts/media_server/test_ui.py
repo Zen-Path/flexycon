@@ -299,7 +299,7 @@ def test_realtime_updates(page: Page, auth_headers, dashboard_url, seed):
     # Trigger Download via API
     new_item_count = 5
     for _ in range(new_item_count):
-        payload = {"urls": ["https://example.com/"], "media_type": "unknown"}
+        payload = {"urls": ["https://example.com/"], "mediaType": "unknown"}
         requests.post(
             f"{dashboard_url}/media/download", json=payload, headers=auth_headers
         )

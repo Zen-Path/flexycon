@@ -77,9 +77,9 @@ function renderTable() {
             <input type="checkbox" class="row-checkbox" ${row.selected ? "checked" : ""} onchange="toggleRowSelect(${row.id}, this.checked)">
         </td>
         <td class="col-id">#${row.id}</td>
-        <td class="col-type">${getIconHtml(row.media_type)}</td>
+        <td class="col-type">${getIconHtml(row.mediaType)}</td>
         <td class="col-title"><a href="${row.url}" target="_blank">${titleDisplay}</a></td>
-        <td class="col-time">${row.start_time}</td>
+        <td class="col-time">${row.startTime}</td>
         <td class="col-actions">
             <button class="action-btn btn-edit" onclick="openEditModal(${row.id})" title="Edit">
                 <i class="fa-solid fa-pen-to-square"></i>
@@ -217,7 +217,7 @@ function openEditModal(id) {
 
     document.getElementById("editId").value = id;
     document.getElementById("editTitle").value = item.title;
-    document.getElementById("editMediaType").value = item.media_type;
+    document.getElementById("editMediaType").value = item.mediaType;
     document.getElementById("editModal").style.display = "flex";
 }
 
@@ -238,7 +238,7 @@ function saveEdit() {
         },
         body: JSON.stringify({
             title: newTitle,
-            media_type: newType,
+            mediaType: newType,
         }),
     })
         .then((res) => res.json())
@@ -247,7 +247,7 @@ function saveEdit() {
             const item = allData.find((r) => r.id === id);
             if (item) {
                 item.title = newTitle;
-                item.media_type = newType;
+                item.mediaType = newType;
             }
             closeModal();
             renderTable();
@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     // Real-Time Listener
-    const eventSource = new EventSource(`/api/stream?api_key=${apiKey}`);
+    const eventSource = new EventSource(`/api/stream?apiKey=${apiKey}`);
     eventSource.onmessage = function (event) {
         const data = JSON.parse(event.data);
         addRowToData(data, true);

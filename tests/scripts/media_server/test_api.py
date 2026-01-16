@@ -33,7 +33,7 @@ def test_edit_entry(client, auth_headers, seed):
     target_id = history_before[0]["id"]
 
     # Send PUT request to update
-    payload = {"title": "Updated Title", "media_type": "video"}
+    payload = {"title": "Updated Title", "mediaType": "video"}
     response = client.put(f"/api/entry/{target_id}", headers=auth_headers, json=payload)
 
     assert response.status_code == 200
@@ -44,7 +44,7 @@ def test_edit_entry(client, auth_headers, seed):
     updated_item = history_after[0]
 
     assert updated_item["title"] == "Updated Title"
-    assert updated_item["media_type"] == "video"
+    assert updated_item["mediaType"] == "video"
 
 
 def test_delete_single_entry(client, auth_headers, seed):
@@ -97,7 +97,7 @@ def test_download(client, auth_headers):
         mock_get.return_value.status_code = 200
         mock_get.return_value.text = "<html><title>Mocked Title</title></html>"
 
-        payload = {"urls": ["http://mock-site.com"], "media_type": "video"}
+        payload = {"urls": ["http://mock-site.com"], "mediaType": "video"}
         response = client.post("/media/download", headers=auth_headers, json=payload)
 
         assert response.status_code == 200

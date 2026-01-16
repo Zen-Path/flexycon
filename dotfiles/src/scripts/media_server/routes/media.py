@@ -62,7 +62,7 @@ def expand_collection_urls(url):
 def download_media():
     data = request.get_json(silent=True) or {}
     urls = data.get("urls")
-    media_type = data.get("media_type")
+    media_type = data.get("mediaType")
     range_raw = data.get("range")
 
     # Validation
@@ -77,7 +77,7 @@ def download_media():
 
     ## Media Type
     if not media_type or not isinstance(media_type, str):
-        return jsonify({"error": "'media_type' must be a non-empty string."}), 400
+        return jsonify({"error": "'mediaType' must be a non-empty string."}), 400
 
     if media_type not in ["image", "video", "gallery", "unknown"]:
         media_type = "unknown"
@@ -141,9 +141,9 @@ def download_media():
                 "id": last_id,
                 "url": url,
                 "title": title,
-                "media_type": media_type,
-                "start_time": start_time,
-                "end_time": end_time,
+                "mediaType": media_type,
+                "startTime": start_time,
+                "endTime": end_time,
             }
         )
         msg = f"data: {data}\n\n"

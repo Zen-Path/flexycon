@@ -12,7 +12,7 @@ def require_api_key(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # Check Header OR Query String (for SSE)
-        key = request.headers.get("X-API-Key") or request.args.get("api_key")
+        key = request.headers.get("X-API-Key") or request.args.get("apiKey")
 
         if key != current_app.config.get("MEDIA_SERVER_KEY"):
             abort(401)
