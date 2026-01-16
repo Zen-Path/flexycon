@@ -1,4 +1,4 @@
-from .conftest import API_GET_DOWNLOADS, API_HEALTH
+from ..conftest import API_GET_DOWNLOADS, API_HEALTH
 
 
 def test_health_check(client):
