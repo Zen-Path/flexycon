@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from .conftest import API_DOWNLOAD, API_HEALTH
+from .conftest import API_DOWNLOAD, API_GET_DOWNLOADS, API_HEALTH
 
 
 def test_health_check(client):
@@ -13,7 +13,7 @@ def test_health_check(client):
 
 def test_unauthorized_access(client):
     """Verify that API endpoints reject requests without a key."""
-    response = client.get("/api/history")
+    response = client.get(API_GET_DOWNLOADS)
 
     assert response.status_code == 401
 
@@ -23,7 +23,7 @@ def test_authorized_access(client, auth_headers, seed):
     # Explicitly seed data so we have something to fetch
     seed()
 
-    response = client.get("/api/history", headers=auth_headers)
+    response = client.get(API_GET_DOWNLOADS, headers=auth_headers)
     assert response.status_code == 200
 
     data = response.json
@@ -39,7 +39,7 @@ def test_edit_entry(client, auth_headers, seed):
     seed(initial_data)
 
     # Get the ID of the item we just seeded
-    history_before = client.get("/api/history", headers=auth_headers).json
+    history_before = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     target_id = history_before[0]["id"]
 
     # Send PUT request to update
@@ -50,7 +50,7 @@ def test_edit_entry(client, auth_headers, seed):
     assert response.json["status"] == "updated"
 
     # Verify changes in DB
-    history_after = client.get("/api/history", headers=auth_headers).json
+    history_after = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     updated_item = history_after[0]
 
     assert updated_item["title"] == "Updated Title"
@@ -65,7 +65,7 @@ def test_delete_single_entry(client, auth_headers, seed):
     seed(initial_data)
 
     # Get the ID
-    history = client.get("/api/history", headers=auth_headers).json
+    history = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     target_id = history[0]["id"]
 
     # Send DELETE request
@@ -75,7 +75,7 @@ def test_delete_single_entry(client, auth_headers, seed):
     assert response.json["status"] == "deleted"
 
     # Verify it's gone from DB
-    history_after = client.get("/api/history", headers=auth_headers).json
+    history_after = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     assert len(history_after) == 0
 
 
@@ -87,7 +87,7 @@ def test_delete_bulk(client, auth_headers, seed):
     seed(initial_data)
 
     # Get ID of the item we just seeded
-    history = client.get("/api/history", headers=auth_headers).json
+    history = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     target_id = history[0]["id"]
 
     # Delete it via API
@@ -97,7 +97,7 @@ def test_delete_bulk(client, auth_headers, seed):
     assert res.status_code == 200
 
     # Verify it is gone
-    history_after = client.get("/api/history", headers=auth_headers).json
+    history_after = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     assert len(history_after) == 0
 
 

@@ -24,8 +24,8 @@ def health_check():
     )
 
 
-@api_bp.route("/history")
-def history():
+@api_bp.route("/downloads")
+def get_downloads():
     with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()

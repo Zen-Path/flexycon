@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
     handleColorScheme();
 
     // Initial Load
-    fetch("/api/history", {
+    fetch("/api/downloads", {
         headers: { "X-API-Key": apiKey },
     })
         .then((response) => response.json())
