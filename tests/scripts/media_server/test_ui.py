@@ -207,7 +207,7 @@ def test_delete_all_visible_no_search(page: Page, dashboard_url, seed):
     page.on("dialog", lambda dialog: dialog.accept())
 
     # Click Delete Visible
-    page.click("button:has-text('Delete Visible')")
+    page.click("button:has-text('Delete Selected')")
 
     # Verify Empty Table
     expect(page.locator("#table-body tr")).to_have_count(0)
@@ -239,7 +239,7 @@ def test_delete_visible_with_search(page: Page, dashboard_url, seed):
 
     # Handle Dialog & Click Delete
     page.on("dialog", lambda dialog: dialog.accept())
-    page.click("button:has-text('Delete Visible')")
+    page.click("button:has-text('Delete Selected')")
 
     # Verify current view is empty (because all matching items were deleted)
     expect(page.locator("#table-body tr")).to_have_count(0)
