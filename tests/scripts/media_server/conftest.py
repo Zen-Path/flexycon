@@ -111,3 +111,6 @@ def auth_headers():
 @pytest.fixture
 def dashboard_url():
     return f"{BASE_URL}"
+
+
+API_DOWNLOAD = "/api/media/download"

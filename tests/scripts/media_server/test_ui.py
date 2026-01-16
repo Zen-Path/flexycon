@@ -5,6 +5,8 @@ import pytest
 import requests
 from playwright.sync_api import Page, expect
 
+from .conftest import API_DOWNLOAD
+
 pytestmark = [pytest.mark.ui]
 
 
@@ -301,7 +303,7 @@ def test_realtime_updates(page: Page, auth_headers, dashboard_url, seed):
     for _ in range(new_item_count):
         payload = {"urls": ["https://example.com/"], "mediaType": "unknown"}
         requests.post(
-            f"{dashboard_url}/media/download", json=payload, headers=auth_headers
+            f"{dashboard_url}{API_DOWNLOAD}", json=payload, headers=auth_headers
         )
 
     # Verify Dashboard Updates

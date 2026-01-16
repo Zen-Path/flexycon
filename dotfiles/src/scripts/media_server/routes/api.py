@@ -2,7 +2,7 @@ import sqlite3
 
 from flask import Blueprint, Response, current_app, jsonify, request
 
-api_bp = Blueprint("api", __name__, url_prefix="/api")
+api_bp = Blueprint("api", __name__)
 
 
 @api_bp.route("/history")

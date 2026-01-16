@@ -1,5 +1,7 @@
 from unittest.mock import patch
 
+from .conftest import API_DOWNLOAD
+
 
 def test_unauthorized_access(client):
     """Verify that API endpoints reject requests without a key."""
@@ -98,7 +100,7 @@ def test_download(client, auth_headers):
         mock_get.return_value.text = "<html><title>Mocked Title</title></html>"
 
         payload = {"urls": ["http://mock-site.com"], "mediaType": "video"}
-        response = client.post("/media/download", headers=auth_headers, json=payload)
+        response = client.post(API_DOWNLOAD, headers=auth_headers, json=payload)
 
         assert response.status_code == 200
         assert response.json["count"] == 1

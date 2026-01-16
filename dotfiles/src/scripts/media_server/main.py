@@ -21,13 +21,13 @@ app = Flask(
     static_folder=Path(flex_scripts / "media_server" / "static"),
 )
 
-app.register_blueprint(api_bp)
-app.register_blueprint(media_bp)
+app.register_blueprint(api_bp, url_prefix="/api")
+app.register_blueprint(media_bp, url_prefix="/api/media")
 
 
 @app.before_request
 def check_auth():
-    if request.path.startswith("/api/") or request.path.startswith("/media/"):
+    if request.path.startswith("/api/"):
         # Check header OR query string (for SSE)
         provided_key = request.headers.get("X-API-Key") or request.args.get("apiKey")
 

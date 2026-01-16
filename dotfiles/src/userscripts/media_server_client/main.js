@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.0.11
+// @version         2.0.12
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -69,7 +69,7 @@ function downloadMedia(urls, mediaType, range) {
 
     GM_xmlhttpRequest({
         method: "POST",
-        url: `${BASE_URL}/media/download`,
+        url: `${BASE_URL}/api/media/download`,
         headers: {
             "Content-Type": "application/json",
             "X-API-Key": "{{@@ _vars['media_server_key'] @@}}",

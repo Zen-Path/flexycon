@@ -9,7 +9,7 @@ from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
 from scripts.media_server.src.models import Gallery
 
-media_bp = Blueprint("media", __name__, url_prefix="/media")
+media_bp = Blueprint("media", __name__)
 
 
 def expand_collection_urls(url):
