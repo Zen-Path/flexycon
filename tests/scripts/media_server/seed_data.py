@@ -3,7 +3,7 @@ import tempfile
 from pathlib import Path
 
 from scenarios import get_default_data
-from scripts.media_server.src.core import seed_db
+from scripts.media_server.src.utils import seed_db
 
 
 def main():

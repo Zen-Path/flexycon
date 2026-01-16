@@ -14,8 +14,8 @@ from flask import Flask, abort, current_app, redirect, render_template, request
 from flask_cors import CORS
 from scripts.media_server.routes.api import api_bp
 from scripts.media_server.routes.media import media_bp
-from scripts.media_server.src.core import MessageAnnouncer, init_db
 from scripts.media_server.src.logging_middleware import register_logging
+from scripts.media_server.src.utils import MessageAnnouncer, init_db
 
 __version__ = "1.1.0"
 

@@ -9,8 +9,8 @@ from common.helpers import run_command
 from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
 from scripts.media_server.src.constants import ScraperConfig
-from scripts.media_server.src.core import DownloadReportItem
 from scripts.media_server.src.downloaders import Gallery
+from scripts.media_server.src.utils import DownloadReportItem
 
 media_bp = Blueprint("media", __name__)
 
