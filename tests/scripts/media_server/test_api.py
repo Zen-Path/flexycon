@@ -1,6 +1,4 @@
-from unittest.mock import patch
-
-from .conftest import API_DOWNLOAD, API_GET_DOWNLOADS, API_HEALTH
+from .conftest import API_GET_DOWNLOADS, API_HEALTH
 
 
 def test_health_check(client):
@@ -93,16 +91,3 @@ def test_delete_bulk(client, auth_headers, seed):
     # Verify it is gone
     history_after = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     assert len(history_after) == 0
-
-
-def test_download(client, auth_headers):
-    """Test the download endpoint with mocked external requests."""
-    with patch("requests.get") as mock_get:
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.text = "<html><title>Mocked Title</title></html>"
-
-        payload = {"urls": ["http://mock-site.com"], "mediaType": "video"}
-        response = client.post(API_DOWNLOAD, headers=auth_headers, json=payload)
-
-        assert response.status_code == 200
-        assert len(response.json) == 1

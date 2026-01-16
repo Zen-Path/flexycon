@@ -10,6 +10,19 @@ class MockCmdResult:
         self.success = return_code == 0
 
 
+def test_simple_download(client, auth_headers):
+    """Test the download endpoint with mocked external requests."""
+    with patch("requests.get") as mock_get:
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.text = "<html><title>Mocked Title</title></html>"
+
+        payload = {"urls": ["http://mock-site.com"], "mediaType": "video"}
+        response = client.post(API_DOWNLOAD, headers=auth_headers, json=payload)
+
+        assert response.status_code == 200
+        assert len(response.json) == 1
+
+
 def test_download_media_invalid_input(client, auth_headers):
     """Verify that bad payloads return 400."""
     # Test missing URLs
