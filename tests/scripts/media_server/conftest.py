@@ -109,4 +109,6 @@ def auth_headers():
 
 
 DASHBOARD_URL = f"{BASE_URL}/dashboard"
+
+API_HEALTH = "/api/health"
 API_DOWNLOAD = "/api/media/download"

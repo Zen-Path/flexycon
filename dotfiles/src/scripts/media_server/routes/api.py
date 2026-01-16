@@ -1,8 +1,27 @@
 import sqlite3
+from datetime import datetime, timezone
 
 from flask import Blueprint, Response, current_app, jsonify, request
 
 api_bp = Blueprint("api", __name__)
+
+
+@api_bp.route("/health", methods=["GET"])
+def health_check():
+    """
+    Standard health check for monitoring tools.
+    Returns 200 OK if the server is up.
+    """
+    return (
+        jsonify(
+            {
+                "status": "healthy",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "version": current_app.config.get("APP_VERSION", "unknown"),
+            }
+        ),
+        200,
+    )
 
 
 @api_bp.route("/history")

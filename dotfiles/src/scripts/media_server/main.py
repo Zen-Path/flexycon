@@ -15,7 +15,7 @@ from scripts.media_server.routes.media import media_bp
 from scripts.media_server.src.core import MessageAnnouncer, init_db
 from scripts.media_server.src.logging_middleware import register_logging
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 app = Flask(
     __name__,
@@ -29,7 +29,7 @@ app.register_blueprint(media_bp, url_prefix="/api/media")
 
 @app.before_request
 def check_auth():
-    if request.path.startswith("/api/"):
+    if request.path.startswith("/api/") and request.path != "/api/health":
         # Check header OR query string (for SSE)
         provided_key = request.headers.get("X-API-Key") or request.args.get("apiKey")
 
