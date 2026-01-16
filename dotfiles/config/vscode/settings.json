@@ -34,6 +34,7 @@
         "**/.git": false,
         "**/.mypy_cache": true,
         "**/.pytest_cache": true,
+        "**/.ruff_cache": true,
         "**/.venv": true,
         "**/__pycache__": true,
         "**/node_modules": true,
