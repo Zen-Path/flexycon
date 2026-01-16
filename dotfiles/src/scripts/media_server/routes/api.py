@@ -1,13 +1,11 @@
 import sqlite3
 
 from flask import Blueprint, Response, current_app, jsonify, request
-from scripts.media_server.src.core import require_api_key
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
 
 @api_bp.route("/history")
-@require_api_key
 def history():
     with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
         conn.row_factory = sqlite3.Row
@@ -31,7 +29,6 @@ def history():
 
 
 @api_bp.route("/stream")
-@require_api_key
 def stream():
     # Get announcer whilst context is still alive
     announcer = current_app.config["ANNOUNCER"]
@@ -46,7 +43,6 @@ def stream():
 
 
 @api_bp.route("/entry/<int:entry_id>", methods=["PUT"])
-@require_api_key
 def update_entry(entry_id):
     data = request.json or {}
     new_title = data.get("title")
@@ -63,7 +59,6 @@ def update_entry(entry_id):
 
 
 @api_bp.route("/entry/<int:entry_id>", methods=["DELETE"])
-@require_api_key
 def delete_entry(entry_id):
     with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
         cursor = conn.cursor()
@@ -73,7 +68,6 @@ def delete_entry(entry_id):
 
 
 @api_bp.route("/delete_bulk", methods=["POST"])
-@require_api_key
 def delete_bulk():
     data = request.json or {}
     ids = data.get("ids", [])

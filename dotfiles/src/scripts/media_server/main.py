@@ -8,7 +8,7 @@ from pathlib import Path
 
 from common.logger import logger, setup_logging
 from common.variables import flex_data_path, flex_scripts
-from flask import Flask, redirect, render_template
+from flask import Flask, abort, current_app, redirect, render_template, request
 from flask_cors import CORS
 from scripts.media_server.routes.api import api_bp
 from scripts.media_server.routes.media import media_bp
@@ -23,6 +23,17 @@ app = Flask(
 
 app.register_blueprint(api_bp)
 app.register_blueprint(media_bp)
+
+
+@app.before_request
+def check_auth():
+    if request.path.startswith("/api/") or request.path.startswith("/media/"):
+        # Check header OR query string (for SSE)
+        provided_key = request.headers.get("X-API-Key") or request.args.get("apiKey")
+
+        expected_key = current_app.config.get("MEDIA_SERVER_KEY")
+        if not provided_key or provided_key != expected_key:
+            abort(401)
 
 
 @app.route("/")

@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 from common.helpers import parse_range, run_command
 from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
-from scripts.media_server.src.core import require_api_key
 from scripts.media_server.src.models import Gallery
 
 media_bp = Blueprint("media", __name__, url_prefix="/media")
@@ -58,7 +57,6 @@ def expand_collection_urls(url):
 
 
 @media_bp.route("/download", methods=["POST"])
-@require_api_key
 def download_media():
     data = request.get_json(silent=True) or {}
     urls = data.get("urls")
