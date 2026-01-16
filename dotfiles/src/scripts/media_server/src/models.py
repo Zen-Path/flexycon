@@ -32,24 +32,17 @@ class Gallery(Media):
     DOWNLOAD_DIR = Media.BASE_DIR / "Galleries"
 
     @classmethod
-    def _build_command(
+    def download(
         cls,
         urls: List[str],
         range_start: Optional[int] = None,
         range_end: Optional[int] = None,
-    ) -> List[str]:
-        # logger.debug(cls.DOWNLOAD_DIR)
-
-        gallery_dl_cmd = (
-            "gallery-dl"
-            if shutil.which("gallery-dl")
-            else str(resolve_path(["$FLEXYCON_HOME", "venv", "bin", "gallery-dl"]))
-        )
-        if gallery_dl_cmd != "gallery-dl":
-            logger.debug(f"Gallery-dl command: {gallery_dl_cmd}")
-
+    ) -> CommandResult:
+        """
+        Download media using 'gallery-dl'.
+        """
         command = [
-            gallery_dl_cmd,
+            "gallery-dl",
             "-o",
             f"base-directory={cls.DOWNLOAD_DIR}",
             "--no-colors",
@@ -59,23 +52,4 @@ class Gallery(Media):
         if range_start or range_end:
             command += ["--range", f"{range_start or 0}-{range_end or ""}"]
 
-        exec_cmd = (
-            f"mkdir -p {cls.FILES_DIR}; "
-            f'if [ -f "{cls.FILES_DIR}/{{_filename}}" ]; then rm {{_path}}; '
-            f"else mv {{_path}} {cls.FILES_DIR}; fi && "
-            f"ln -s {cls.FILES_DIR}/{{_filename}} {{_directory}}"
-        )
-
-        # command += ["--exec", exec_cmd]
-
-        return command
-
-    @classmethod
-    def download(
-        cls,
-        urls: List[str],
-        range_start: Optional[int] = None,
-        range_end: Optional[int] = None,
-    ) -> CommandResult:
-        command = cls._build_command(urls, range_start, range_end)
         return run_command(command)
