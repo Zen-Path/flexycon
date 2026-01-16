@@ -31,6 +31,7 @@ dependencies = [
     "pre_commit==4.2.0", # for pre-commit git hooks
     "black==25.1.0",     # for formatting
     "mypy==1.16.1",      # for type checking
+    "ruff==0.14.13",     # linter and formatter
 
     # test
     "pytest==8.4.2",            # for running test suites
@@ -65,3 +66,18 @@ markers = [
     "ui: checks that require a browser/playwright",
     "slow: marks tests as slow",
 ]
+
+[tool.ruff]
+line-length    = 88
+target-version = "py313"
+
+    [tool.ruff.lint]
+    # "E" (pycodestyle)
+    # "F" (pyflakes - catches unused imports)
+    # "I" (isort)
+    fixable = ["ALL"]
+    select  = ["E", "F", "I"]
+
+    [tool.ruff.format]
+    indent-style = "space"
+    quote-style  = "double"
