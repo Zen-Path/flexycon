@@ -4,10 +4,12 @@
 
 import argparse
 import logging
+import os
 from pathlib import Path
 
 from common.logger import logger, setup_logging
 from common.variables import flex_data_path, flex_scripts
+from dotenv import load_dotenv
 from flask import Flask, abort, current_app, redirect, render_template, request
 from flask_cors import CORS
 from scripts.media_server.routes.api import api_bp
@@ -16,6 +18,8 @@ from scripts.media_server.src.core import MessageAnnouncer, init_db
 from scripts.media_server.src.logging_middleware import register_logging
 
 __version__ = "1.0.3"
+
+load_dotenv(flex_scripts / "media_server" / ".env")
 
 app = Flask(
     __name__,
@@ -92,6 +96,11 @@ def main():
 
     announcer = MessageAnnouncer()
     app.config["ANNOUNCER"] = announcer
+
+    # .env value > xdg value > fallback location
+    app.config["DOWNLOAD_DIR"] = Path(
+        os.getenv("DOWNLOAD_DIR") or os.getenv("XDG_DOWNLOAD_DIR") or "downloads"
+    )
 
     app.run(
         port=int("{{@@ _vars['media_server_port'] @@}}"), debug=False, threaded=True
