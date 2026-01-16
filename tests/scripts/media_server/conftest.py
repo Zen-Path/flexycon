@@ -6,10 +6,11 @@ import time
 from pathlib import Path
 
 import pytest
-from scenarios import get_default_data
 from scripts.media_server.main import app
 from scripts.media_server.src.core import MessageAnnouncer, init_db, seed_db
 from werkzeug.serving import make_server
+
+from .scenarios import get_default_data
 
 # --- CONFIGURATION ---
 TEST_PORT = 5002
