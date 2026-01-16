@@ -194,13 +194,14 @@ function copyVisibleUrls() {
         return;
     }
 
-    const urlList = itemsToCopy.map((item) => item.url).join("\n");
+    const uniqueUrls = [...new Set(itemsToCopy.map((item) => item.url))];
+    const urlsStr = uniqueUrls.join("\n");
 
     // Copy to clipboard
     navigator.clipboard
-        .writeText(urlList)
+        .writeText(urlsStr)
         .then(() => {
-            alert(`Copied ${itemsToCopy.length} URLs to clipboard!`);
+            alert(`Copied ${uniqueUrls.length} URLs to clipboard!`);
         })
         .catch((err) => {
             console.error("Failed to copy: ", err);
