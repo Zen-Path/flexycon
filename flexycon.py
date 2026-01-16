@@ -33,6 +33,7 @@ UNINSTALL_TARGETS = [
 CLEAN_TARGETS = [
     ".mypy_cache",
     ".pytest_cache",
+    ".ruff_cache",
     "__pycache__",
     "dist",
     "build",
