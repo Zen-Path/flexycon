@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import pytest
 import requests
@@ -13,18 +14,38 @@ def test_dashboard_visuals(page: Page, dashboard_url, seed):
 
     page.goto(dashboard_url)
 
-    # Check Title
     expect(page).to_have_title("Live Dashboard")
 
     # Check that we have rows
     rows = page.locator("#table-body tr")
     expect(rows).not_to_have_count(0)
 
-    # Check for specific seeded title
-    expect(page.locator("body")).to_contain_text("Rick Astley")
+    # Check each column
+    first_row = page.locator("#table-body tr").first
+    expect(first_row).to_be_visible()
 
-    # Check for at least one visible video icon
-    expect(page.locator(".type-video").first).to_be_visible()
+    expect(first_row.locator(".col-check input[type='checkbox']")).to_be_visible(
+        timeout=0
+    )
+
+    # ID: Matches # followed by digits (e.g., #123)
+    expect(first_row.locator(".col-id")).to_have_text(re.compile(r"^#\d+$"), timeout=0)
+
+    expect(first_row.locator(".col-type .type-video")).to_be_visible(timeout=0)
+
+    # Title
+    expect(first_row.locator(".col-title a")).to_have_attribute(
+        "href", re.compile(r"^https?://"), timeout=0
+    )
+    expect(first_row.locator(".col-title .title-text")).to_contain_text("Channel Intro")
+
+    # Time
+    time_text = first_row.locator(".col-time").inner_text()
+    parsed_date = datetime.strptime(time_text, "%Y-%m-%d %H:%M:%S")
+
+    # Actions
+    expect(first_row.locator(".col-actions .btn-edit")).to_be_visible(timeout=0)
+    expect(first_row.locator(".col-actions .btn-delete")).to_be_visible(timeout=0)
 
 
 def test_search(page: Page, dashboard_url, seed):
