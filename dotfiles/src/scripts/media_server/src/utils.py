@@ -1,9 +1,11 @@
+import json
 import queue
 import sqlite3
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import List, Optional, Tuple
 
+from common.helpers import run_command
 from common.logger import logger
 
 
@@ -96,3 +98,47 @@ class DownloadReportItem:
 
     def to_dict(self):
         return asdict(self)
+
+
+def expand_collection_urls(url: str, depth: int = 0) -> List[str]:
+    """
+    Determines if a URL is a collection based on Level Homogeneity. (best effort)
+    """
+
+    if depth > 3:
+        return []
+
+    try:
+        cmd = ["gallery-dl", "-s", "-j", url]
+        result = run_command(cmd)
+        if not result.success:
+            return []
+
+        data = json.loads(result.output)
+
+        # If there is only ONE unique level (e.g., all are level 6), it is probably
+        # a collection of gallery links.
+        # TODO: investigate gallery returns type to improve this logic
+        levels = [entry[0] for entry in data if entry[0] > 1]
+        unique_levels = set(levels)
+        if len(unique_levels) != 1:
+            return []
+
+        child_urls = []
+        for entry in data:
+            # Entry structure: [level, content]
+            if (
+                len(entry) >= 2
+                and isinstance(entry[1], str)
+                and entry[1].startswith("http")
+            ):
+                c_url = entry[1]
+                if c_url != url:  # Prevent self-reference loops
+                    child_urls.append(c_url)
+                    child_urls.extend(expand_collection_urls(c_url, depth + 1))
+
+        return list(dict.fromkeys(child_urls))
+
+    except Exception as e:
+        logger.warning(f"Expansion error for {url}: {e}")
+        return []

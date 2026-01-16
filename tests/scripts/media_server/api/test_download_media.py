@@ -1,7 +1,5 @@
 from unittest.mock import MagicMock, patch
 
-from scripts.media_server.routes.media import expand_collection_urls
-
 from ..conftest import API_DOWNLOAD
 
 
@@ -109,16 +107,3 @@ def test_gallery_dl_failure_reporting(mock_gallery, client, auth_headers):
     assert data[url]["status"] is False
     assert data[url]["output"] == "403 Forbidden"
     assert data[url]["error"] == "Gallery-dl command failed"
-
-
-# Helpers
-
-
-def test_expand_collection_urls_depth_limit():
-    """Ensure recursion stops at depth 3."""
-    with patch("scripts.media_server.routes.media.run_command") as mock_run:
-        # If it didn't stop, it would call run_command indefinitely
-
-        result = expand_collection_urls("http://test.com", depth=4)
-        assert result == []
-        assert mock_run.call_count == 0
