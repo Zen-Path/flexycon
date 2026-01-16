@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from common.helpers import run_command
 from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
+from scripts.media_server.src.constants import ScraperConfig
 from scripts.media_server.src.downloaders import Gallery
 
 media_bp = Blueprint("media", __name__)
@@ -103,8 +104,8 @@ def download_media():
         title = "No Title Found"
 
         try:
-            headers = {"User-Agent": "Mozilla/5.0"}
-            response = requests.get(url, headers=headers, timeout=10)
+            headers = {"User-Agent": ScraperConfig.USER_AGENT}
+            response = requests.get(url, headers=headers, timeout=ScraperConfig.TIMEOUT)
 
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, "html.parser")
