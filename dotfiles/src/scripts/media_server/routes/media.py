@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from common.helpers import run_command
 from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
-from scripts.media_server.src.models import Gallery
+from scripts.media_server.src.downloaders import Gallery
 
 media_bp = Blueprint("media", __name__)
 
