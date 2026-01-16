@@ -15,6 +15,8 @@ from scripts.media_server.routes.media import media_bp
 from scripts.media_server.src.core import MessageAnnouncer, init_db
 from scripts.media_server.src.logging_middleware import register_logging
 
+__version__ = "1.0.0"
+
 app = Flask(
     __name__,
     template_folder=Path(flex_scripts / "media_server" / "templates"),
@@ -60,6 +62,14 @@ def build_parser():
 
     parser.add_argument("--verbose", action="store_true", help="enable debug output")
 
+    parser.add_argument(
+        "-V",
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="show the script's version and exit",
+    )
+
     return parser
 
 
@@ -72,6 +82,8 @@ def main():
     register_logging(app)
 
     CORS(app)  # Enable CORS for all routes
+
+    app.config["APP_VERSION"] = __version__
 
     app.config["MEDIA_SERVER_KEY"] = "{{@@ _vars['media_server_key'] @@}}"
 
