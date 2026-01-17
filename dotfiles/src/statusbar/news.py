@@ -30,6 +30,7 @@ def get_unread_items_count():
     # If newsraft fails, fallback to reading from the database
     if not unread_count:
         try:
+            # TODO: use shutils
             subprocess.run(["cp", "-f", NEWS_DB, NEWS_DB_BACKUP], check=False)
             unread_count = get_unread_db(NEWS_DB_BACKUP)
         except Exception:
@@ -55,6 +56,7 @@ def get_unread_newsraft():
 def get_unread_db(db_file):
     """Get unread items count directly from the database."""
     try:
+        # TODO: maybe use sqlite module?
         result = subprocess.run(
             [
                 "sqlite3",
