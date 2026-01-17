@@ -240,16 +240,18 @@ function saveEdit() {
     const newTitle = document.getElementById("editTitle").value;
     const newType = document.getElementById("editMediaType").value;
 
-    fetch(`/api/entry/${id}`, {
-        method: "PUT",
+    const payload = { id, title: newTitle };
+    if (newType !== "") {
+        payload.mediaType = newType;
+    }
+
+    fetch(`/api/bulkEdit`, {
+        method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             "X-API-Key": apiKey,
         },
-        body: JSON.stringify({
-            title: newTitle,
-            mediaType: newType,
-        }),
+        body: JSON.stringify([payload]),
     })
         .then((res) => res.json())
         .then(() => {

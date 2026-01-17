@@ -61,20 +61,74 @@ def stream():
     return Response(stream_messages(), mimetype="text/event-stream")
 
 
-@api_bp.route("/entry/<int:entry_id>", methods=["PUT"])
-def update_entry(entry_id):
-    data = request.json or {}
-    new_title = data.get("title")
-    new_type = data.get("mediaType")
+@api_bp.route("/bulkEdit", methods=["PATCH"])
+def bulk_edit_entries():
+    data = request.get_json(silent=True) or []
 
+    if not isinstance(data, list):
+        return jsonify({"error": "Payload must be a list of objects"}), 400
+
+    results = []
     with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            "UPDATE downloads SET title = ?, media_type = ? WHERE id = ?",
-            (new_title, new_type, entry_id),
-        )
-        conn.commit()
-    return jsonify({"status": "updated"})
+        for item in data:
+            entry_id = item.get("id")
+            item_report = {"id": entry_id, "status": True, "error": None}
+
+            if not entry_id:
+                item_report["status"] = False
+                item_report["errors"] = "Missing 'id' field"
+                results.append(item_report)
+                continue
+
+            # Dynamic SQL construction
+            updates = []
+            params = []
+
+            if "title" in item:
+                updates.append("title = ?")
+                params.append(item["title"])
+
+            if "mediaType" in item:
+                updates.append("media_type = ?")
+                params.append(item["mediaType"])
+
+            if not updates:
+                item_report["status"] = False
+                item_report["errors"] = "No fields provided for update"
+                results.append(item_report)
+                continue
+
+            # Execution
+            try:
+                cursor = conn.cursor()
+                sql = f"UPDATE downloads SET {', '.join(updates)} WHERE id = ?"
+                params.append(entry_id)
+
+                cursor.execute(sql, params)
+
+                if cursor.rowcount == 0:
+                    item_report["status"] = False
+                    item_report["errors"] = "Record ID not found in database"
+                else:
+                    conn.commit()
+
+            except Exception as e:
+                conn.rollback()
+                item_report["status"] = False
+                item_report["errors"] = str(e)
+
+            results.append(item_report)
+
+    unique_statuses = {r["status"] for r in results}
+
+    if len(unique_statuses) > 1:
+        overall_status = "mixed"
+    elif True in unique_statuses:
+        overall_status = "success"
+    else:
+        overall_status = "failed"
+
+    return jsonify({"status": overall_status, "results": results}), 200
 
 
 @api_bp.route("/bulkDelete", methods=["POST"])

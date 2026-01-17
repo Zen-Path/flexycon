@@ -1,4 +1,4 @@
-from ..conftest import API_BULK_DELETE, API_GET_DOWNLOADS, API_HEALTH
+from ..conftest import API_BULK_DELETE, API_BULK_EDIT, API_GET_DOWNLOADS, API_HEALTH
 
 
 def test_health_check(client):
@@ -23,23 +23,25 @@ def test_auth(client, auth_headers, seed):
     assert valid_key_response.status_code == 200
 
 
-def test_edit_entry(client, auth_headers, seed):
-    """Test updating an existing entry's title and media type."""
+def test_bulk_edit(client, auth_headers, seed):
+    """Test editing of existing entries."""
     initial_data = [
         ("http://to-edit.com", "Original Title", "image", "2025-01-01", "2025-01-01")
     ]
     seed(initial_data)
 
-    # Get the ID of the item we just seeded
     history_before = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     target_id = history_before[0]["id"]
 
-    # Send PUT request to update
-    payload = {"title": "Updated Title", "mediaType": "video"}
-    response = client.put(f"/api/entry/{target_id}", headers=auth_headers, json=payload)
+    payload = [{"id": target_id, "title": "Updated Title", "mediaType": "video"}]
+    response = client.patch(API_BULK_EDIT, headers=auth_headers, json=payload)
 
     assert response.status_code == 200
-    assert response.json["status"] == "updated"
+    assert response.json["status"] == "success"
+
+    assert len(response.json["results"]) == 1
+    assert response.json["results"][0]["status"] == True
+    assert response.json["results"][0]["error"] == None
 
     # Verify changes in DB
     history_after = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
