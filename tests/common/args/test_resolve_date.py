@@ -7,7 +7,9 @@ from common.args import resolve_date
 
 @pytest.fixture
 def fixed_now(monkeypatch):
-    """Monkeypatch datetime.now() in the target module to return a fixed point in time."""
+    """
+    Monkeypatch datetime.now() in the target module to return a fixed point in time.
+    """
     fixed_now = datetime(2024, 1, 1, 12, 0, 0)
 
     class FixedDateTime(datetime):

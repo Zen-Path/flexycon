@@ -55,7 +55,7 @@ def main():
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 
     target_date = resolve_date(args)
-    logger.info(f"Target date: {target_date.strftime("%Y-%m-%d")}\n")
+    logger.info(f"Target date: {target_date.strftime('%Y-%m-%d')}\n")
 
     all_repo_outputs = []
 
@@ -76,7 +76,7 @@ def main():
 
             main_messages = get_commit_messages_on_date(repo, main_branch, target_date)
             if main_messages:
-                branch_block = f"\n{"\n".join(main_messages)}"
+                branch_block = f"\n{'\n'.join(main_messages)}"
                 repo_sections.append(branch_block)
 
             # For the other branches, we only want to see commits that aren't also

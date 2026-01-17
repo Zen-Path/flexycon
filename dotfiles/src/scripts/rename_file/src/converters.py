@@ -11,7 +11,7 @@ def to_camel_case(words: List[str], ext: str = "") -> str:
     # Capitalize each following word
     rest = [w[:1].upper() + w[1:] if w else "" for w in words[1:]]
 
-    return f'{"".join([first] + rest)}{ext.lower()}'
+    return f"{''.join([first] + rest)}{ext.lower()}"
 
 
 def to_camel_snake_case(words: List[str], ext: str = "") -> str:
@@ -30,7 +30,7 @@ def to_flat_upper_case(words: List[str], ext: str = "") -> str:
 
 
 def to_kebab_case(words: List[str], ext: str = "") -> str:
-    return f'{"-".join(words)}{ext}'.lower()
+    return f"{'-'.join(words)}{ext}".lower()
 
 
 def to_kebab_upper_case(words: List[str], ext: str = "") -> str:
@@ -47,7 +47,7 @@ def to_pascal_case(words: List[str], ext: str = "", delimiter: str = "") -> str:
 
 
 def to_snake_case(words: List[str], ext: str = "") -> str:
-    return f'{"_".join(words)}{ext}'.lower()
+    return f"{'_'.join(words)}{ext}".lower()
 
 
 def to_snake_upper_case(words: List[str], ext: str = "") -> str:

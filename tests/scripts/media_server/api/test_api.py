@@ -40,8 +40,8 @@ def test_bulk_edit(client, auth_headers, seed):
     assert response.json["status"] == "success"
 
     assert len(response.json["results"]) == 1
-    assert response.json["results"][0]["status"] == True
-    assert response.json["results"][0]["error"] == None
+    assert response.json["results"][0]["status"]
+    assert response.json["results"][0]["error"] is None
 
     # Verify changes in DB
     history_after = client.get(API_GET_DOWNLOADS, headers=auth_headers).json

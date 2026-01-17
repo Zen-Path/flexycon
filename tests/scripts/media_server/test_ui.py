@@ -205,7 +205,8 @@ def test_delete_single_ui(page: Page, seed):
     page.click(".btn-delete")
 
     # Verify Row is Gone
-    # The API call is async, so expect().to_have_count(0) waits automatically until it happens
+    # The API call is async, so expect().to_have_count(0) waits automatically until
+    # it happens
     expect(page.locator("#table-body tr")).to_have_count(0)
     expect(page.locator("body")).not_to_contain_text("To Be Deleted")
 

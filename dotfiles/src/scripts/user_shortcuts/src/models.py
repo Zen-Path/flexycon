@@ -65,7 +65,7 @@ class BookmarkRenderer(ABC):
             processed_bookmarks.append((alias, bookmark))
 
             logger.debug(
-                f"- Added alias {"".join(alias)!r} for bookmark {bookmark.name!r}"
+                f"- Added alias {''.join(alias)!r} for bookmark {bookmark.name!r}"
             )
 
         logger.info(f"[{self.name}] Processed {len(processed_bookmarks)} bookmarks")

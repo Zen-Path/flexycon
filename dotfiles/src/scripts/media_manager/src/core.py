@@ -43,7 +43,7 @@ def handle_video(args):
 
 def handle_audio(args):
     for i, input_path in enumerate(args.input):
-        output_path = args.output[i] if args.output else None
+        _ = args.output[i] if args.output else None
 
         if args.convert:
             pass

@@ -9,7 +9,8 @@ logger = logging.getLogger(__name__)
 # Initialize colorama
 init(autoreset=True)
 
-# Optional: You can replace these colors with others or use colorama for cross-platform support
+# Optional: You can replace these colors with others or use colorama for
+# cross-platform support
 LOG_COLORS = {
     logging.DEBUG: Fore.BLUE,
     logging.INFO: Fore.GREEN,

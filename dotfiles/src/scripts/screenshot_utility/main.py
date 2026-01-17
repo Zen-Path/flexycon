@@ -75,7 +75,7 @@ class ScreenshotUtility:
     ):
         self.maim = maim or MaimUtility()
         self.output_dir = os.path.expanduser(
-            output_dir or f"{os.getenv("XDG_PICTURES_DIR", "~/Pictures")}/Screenshots"
+            output_dir or f"{os.getenv('XDG_PICTURES_DIR', '~/Pictures')}/Screenshots"
         )
 
     def _capture(self, output_path, copy_output, select=False):
@@ -88,7 +88,7 @@ class ScreenshotUtility:
     def compose_output_path(self, capture_type, name=None, ext="png"):
         """Generate a file path to the output directory with the current timestamp."""
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        name_fmt = f"-{name[:100].replace(" ", "-")}" if name else ""
+        name_fmt = f"-{name[:100].replace(' ', '-')}" if name else ""
 
         return os.path.join(
             self.output_dir,

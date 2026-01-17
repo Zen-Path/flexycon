@@ -92,7 +92,10 @@ def test_gallery_expansion_flow(
 @patch("requests.get")
 @patch("scripts.media_server.routes.media.Gallery.download")
 def test_title_scrape_failure_handling(mock_gallery, mock_get, client, auth_headers):
-    """Verify that a failed title scrape adds a warning but doesn't fail the download."""
+    """
+    Verify that a failed title scrape adds a warning but doesn't fail the
+    download.
+    """
     mock_get.side_effect = Exception("Connection Timeout")
     mock_gallery.return_value = MockCmdResult(0)
 

@@ -150,7 +150,7 @@ class SystemAction:
         print(system.lock_cmd)
         action()
         system.lock_screen()
-        wait_for_display(polling_rate)
+        # wait_for_display(polling_rate)
 
         elapsed_time = datetime.now() - start_time
 
@@ -215,7 +215,7 @@ class Display:
 def main():
     window_manger = Dwm()
     system = System(lock_cmd="slock")
-    display = Display
+    _ = Display
 
     system_actions = filter(
         None,
@@ -238,7 +238,8 @@ def main():
                 if hasattr(window_manger, "refresh")
                 else None
             ),
-            # SystemAction("Display Off", "📺", lambda *_: QuickAction.turn_off_display()),
+            # SystemAction("Display Off", "📺", lambda *_:
+            #   QuickAction.turn_off_display()),
             SystemAction("Hibernate", "🐻", lambda: system.hibernate),
         ],
     )

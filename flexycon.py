@@ -147,7 +147,10 @@ def init_submodules():
 
 
 def get_dotdrop_profile() -> Optional[str]:
-    """Resolve the active dotdrop profile from the environment or user variables file."""
+    """
+    Resolve the active dotdrop profile from the environment or user variables
+    file.
+    """
     profile = os.getenv("DOTDROP_PROFILE")
     if profile:
         return profile

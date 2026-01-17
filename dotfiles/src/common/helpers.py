@@ -61,7 +61,7 @@ def write_to_file(content: str, path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
 
-    logger.debug(f"Wrote contents {content[:20].replace("\n", " ")!r} to file {path!r}")
+    logger.debug(f"Wrote contents {content[:20].replace('\n', ' ')!r} to file {path!r}")
 
 
 def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
@@ -215,7 +215,8 @@ def split_acronyms(token: str) -> List[str]:
     """
     Handle acronyms.
     If there's no uppercase letter, return the token as-is. Otherwise, detect
-    sequences of 2+ uppercase chars (acronyms). If an acronym is immediately followed by a lowercase letter, the last capital joins the lowercase word.
+    sequences of 2+ uppercase chars (acronyms). If an acronym is immediately
+    followed by a lowercase letter, the last capital joins the lowercase word.
 
     Examples:
     - HTMLParser → HTML + Parser

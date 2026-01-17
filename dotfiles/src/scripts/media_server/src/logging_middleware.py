@@ -37,9 +37,11 @@ def register_logging(app):
         output_lines.append(f"{Fore.LIGHTBLUE_EX}REQUEST{Fore.LIGHTBLACK_EX}:")
         if params:
             output_lines.append(f"params: {json.dumps(params, indent=4)}")
-        output_lines.append(
-            f"data: {json.dumps(data, indent=4) if isinstance(data, (dict, list)) else data}{Style.RESET_ALL}"
+
+        data_fmt = (
+            json.dumps(data, indent=4) if isinstance(data, (dict, list)) else data
         )
+        output_lines.append(f"data: {data_fmt}{Style.RESET_ALL}")
 
         logger.info("\n".join(output_lines))
 

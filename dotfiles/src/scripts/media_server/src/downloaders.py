@@ -39,6 +39,6 @@ class Gallery(Media):
         ]
 
         if range_start or range_end:
-            command += ["--range", f"{range_start or 0}-{range_end or ""}"]
+            command += ["--range", f"{range_start or 0}-{range_end or ''}"]
 
         return run_command(command)
