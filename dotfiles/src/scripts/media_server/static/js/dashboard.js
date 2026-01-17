@@ -83,6 +83,12 @@ function renderTable() {
         </td>
         <td class="col-time">${row.startTime}</td>
         <td class="col-actions">
+            <button class="action-btn btn-copy-title" onclick="copyItemField(${row.id}, 'title')" title="Copy Title">
+                <i class="fa-solid fa-copy"></i>
+            </button>
+            <button class="action-btn btn-copy-url" onclick="copyItemField(${row.id}, 'url')" title="Copy URL">
+                <i class="fa-solid fa-link"></i>
+            </button>
             <button class="action-btn btn-edit" onclick="openEditModal(${row.id})" title="Edit">
                 <i class="fa-solid fa-pen-to-square"></i>
             </button>
@@ -208,6 +214,33 @@ function copyVisibleUrls() {
         .catch((err) => {
             console.error("Failed to copy: ", err);
             alert("Failed to copy to clipboard. See console for error.");
+        });
+}
+
+function copyItemField(id, field) {
+    const item = allData.find((r) => r.id === id);
+
+    if (!item) {
+        alert(`Item #${id} not found.`);
+        return;
+    }
+
+    if (!(field in item)) {
+        alert(`Field "${field}" does not exist on this item.`);
+        return;
+    }
+
+    const itemField = item[field];
+
+    navigator.clipboard
+        .writeText(String(itemField))
+        .then(() => {
+            alert(`Copied #${id} ${field} to clipboard!`);
+        })
+        .catch((err) => {
+            const errorMsg = `Failed to copy #${id} ${field}: ${err}`;
+            console.error(errorMsg);
+            alert(errorMsg);
         });
 }
 
@@ -420,4 +453,5 @@ document.addEventListener("DOMContentLoaded", () => {
     window.sortTable = sortTable;
     window.toggleRowSelect = toggleRowSelect;
     window.toggleSelectAll = toggleSelectAll;
+    window.copyItemField = copyItemField;
 });

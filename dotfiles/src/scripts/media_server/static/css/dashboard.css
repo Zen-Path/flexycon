@@ -325,6 +325,14 @@ th.active {
     color: var(--clr-danger);
 }
 
+.btn-copy-title {
+    color: var(--clr-primary);
+}
+
+.btn-copy-url {
+    color: var(--clr-primary);
+}
+
 /* --- Type Icons --- */
 .type-badge {
     display: flex;
