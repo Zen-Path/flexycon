@@ -77,15 +77,6 @@ def update_entry(entry_id):
     return jsonify({"status": "updated"})
 
 
-@api_bp.route("/entry/<int:entry_id>", methods=["DELETE"])
-def delete_entry(entry_id):
-    with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM downloads WHERE id = ?", (entry_id,))
-        conn.commit()
-    return jsonify({"status": "deleted"})
-
-
 @api_bp.route("/bulkDelete", methods=["POST"])
 def bulk_delete():
     data = request.json or {}

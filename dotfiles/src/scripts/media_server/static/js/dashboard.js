@@ -264,13 +264,13 @@ function saveEdit() {
 function deleteEntry(id) {
     if (!confirm("Are you sure you want to delete this entry?")) return;
 
-    fetch(`/api/entry/${id}`, {
-        method: "DELETE",
+    fetch(`/api/bulkDelete/${id}`, {
+        method: "POST",
         headers: {
             "X-API-Key": apiKey,
         },
+        body: JSON.stringify({ ids: [id] }),
     }).then(() => {
-        // Remove from local array
         allData = allData.filter((item) => item.id !== id);
         renderTable();
     });
