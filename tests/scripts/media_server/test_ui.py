@@ -292,12 +292,15 @@ def test_bulk_delete_failure_alert(page: Page, seed):
 
     page.click("button:has-text('Delete Selected')")
 
-    print(dialog_messages)
-    # Verify the Alert Content
-    assert any("Could not delete 1 items" in msg for msg in dialog_messages)
+    # Since JS alerts are blocking, Playwright needs a moment
+    # to catch the second event.
+    page.wait_for_timeout(100)
 
-    # Verify the item is STILL in the table (because it failed to delete)
-    expect(page.locator("#table-body tr")).to_have_count(len(initial_data))
+    assert "Delete all 2" in dialog_messages[0]
+    assert "Could not delete 1 items" in dialog_messages[1]
+
+    # Verify that only the entry that failed to download is still in the table
+    expect(page.locator("#table-body tr")).to_have_count(1)
     expect(page.locator("body")).to_contain_text("Faulty Item")
 
 
