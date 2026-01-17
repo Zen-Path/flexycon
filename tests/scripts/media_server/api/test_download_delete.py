@@ -13,6 +13,7 @@ def test_bulk_delete_variations(mock_connect, create_mock_cursor, client, auth_h
     assert res.status_code == 400
     data = res.get_json()
     assert not data["status"]
+    assert data["data"] is None
     assert data["error"] == "Invalid or empty 'ids' list"
 
     # One invalid ID

@@ -140,7 +140,7 @@ def bulk_delete():
     if not ids or not isinstance(ids, list):
         return (
             jsonify(
-                OperationResult(False, [], "Invalid or empty 'ids' list").to_dict()
+                OperationResult(False, None, "Invalid or empty 'ids' list").to_dict()
             ),
             400,
         )
