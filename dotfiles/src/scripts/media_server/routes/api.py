@@ -67,18 +67,17 @@ def bulk_edit_entries():
     data = request.get_json(silent=True) or []
 
     if not isinstance(data, list):
-        return jsonify({"error": "Payload must be a list of objects"}), 400
+        return (
+            jsonify(OperationResult(False, None, "Payload must be a list of objects")),
+            400,
+        )
 
     results = []
     with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
         for item in data:
             entry_id = item.get("id")
-            item_report = {"id": entry_id, "status": True, "error": None}
-
             if not entry_id:
-                item_report["status"] = False
-                item_report["errors"] = "Missing 'id' field"
-                results.append(item_report)
+                results.append(OperationResult(False, None, "Missing 'id' field"))
                 continue
 
             # Dynamic SQL construction
@@ -90,13 +89,20 @@ def bulk_edit_entries():
                 params.append(item["title"])
 
             if "mediaType" in item:
+                media_type = item["mediaType"]
+                if media_type and media_type not in ["image", "video", "gallery"]:
+                    results.append(
+                        OperationResult(
+                            False, entry_id, f"Invalid mediaType: {media_type!r}"
+                        )
+                    )
+                    continue
+
                 updates.append("media_type = ?")
                 params.append(item["mediaType"])
 
             if not updates:
-                item_report["status"] = False
-                item_report["errors"] = "No fields provided for update"
-                results.append(item_report)
+                results.append(OperationResult(False, entry_id, "No fields to update"))
                 continue
 
             # Execution
@@ -104,32 +110,22 @@ def bulk_edit_entries():
                 cursor = conn.cursor()
                 sql = f"UPDATE downloads SET {', '.join(updates)} WHERE id = ?"
                 params.append(entry_id)
-
                 cursor.execute(sql, params)
 
                 if cursor.rowcount == 0:
-                    item_report["status"] = False
-                    item_report["errors"] = "Record ID not found in database"
+                    results.append(
+                        OperationResult(False, entry_id, "ID not found in database")
+                    )
                 else:
                     conn.commit()
+                    results.append(OperationResult(True, entry_id, None))
 
             except Exception as e:
                 conn.rollback()
-                item_report["status"] = False
-                item_report["errors"] = str(e)
+                results.append(OperationResult(False, entry_id, str(e)))
 
-            results.append(item_report)
-
-    unique_statuses = {r["status"] for r in results}
-
-    if len(unique_statuses) > 1:
-        overall_status = "mixed"
-    elif True in unique_statuses:
-        overall_status = "success"
-    else:
-        overall_status = "failed"
-
-    return jsonify({"status": overall_status, "results": results}), 200
+    master_result = OperationResult(True, results)
+    return jsonify(master_result.to_dict()), 200
 
 
 @api_bp.route("/bulkDelete", methods=["POST"])
