@@ -7,6 +7,51 @@ const EventType = Object.freeze({
     PROGRESS:   3,
 });
 
+// Mirror of the backend MediaType Enum
+// prettier-ignore
+const MediaType = Object.freeze({
+    GALLERY:    0,
+    IMAGE:      1,
+    VIDEO:      2,
+    AUDIO:      3,
+    TEXT:       4,
+});
+
+// Metadata configuration for UI rendering
+const MEDIA_CONFIG = Object.freeze({
+    [MediaType.GALLERY]: {
+        icon: "fa-layer-group",
+        className: "type-gallery",
+        label: "Gallery",
+    },
+    [MediaType.IMAGE]: {
+        icon: "fa-image",
+        className: "type-image",
+        label: "Image",
+    },
+    [MediaType.VIDEO]: {
+        icon: "fa-film",
+        className: "type-video",
+        label: "Video",
+    },
+    [MediaType.AUDIO]: {
+        icon: "fa-microphone",
+        className: "type-audio",
+        label: "Audio",
+    },
+    [MediaType.TEXT]: {
+        icon: "fa-file-lines",
+        className: "type-text",
+        label: "Text",
+    },
+    // Fallback
+    UNKNOWN: {
+        icon: "fa-circle-question",
+        className: "type-unknown",
+        label: "Unknown",
+    },
+});
+
 // LOGIC
 
 function addRowToData(item, isNew) {
@@ -16,34 +61,29 @@ function addRowToData(item, isNew) {
 }
 
 // TABLE RENDER
-function getIconHtml(type) {
-    const map = {
-        image: {
-            icon: "fa-image",
-            class: "type-image",
-            label: "Image",
-        },
-        video: {
-            icon: "fa-film",
-            class: "type-video",
-            label: "Video",
-        },
-        gallery: {
-            icon: "fa-layer-group",
-            class: "type-gallery",
-            label: "Gallery",
-        },
-        unknown: {
-            icon: "fa-circle-question",
-            class: "type-unknown",
-            label: "Unknown",
-        },
-    };
-    const t = map[type] || map["unknown"];
-    return `<div class="type-badge ${t.class}">
-            <div class="icon-box"><i class="fa-solid ${t.icon}"></i></div>
-            <span>${t.label}</span>
-        </div>`;
+
+/**
+ * Generates the HTML for a media badge based on the type ID.
+ * @returns {string} HTML string.
+ */
+function getMediaBadgeHtml(input) {
+    // TODO: remove when we switch to ints on the backend
+    // * @param {number} typeId - The integer value from the backend.
+    const STRING_TO_ID = Object.fromEntries(
+        Object.entries(MediaType).map(([key, val]) => [key.toLowerCase(), val])
+    );
+    const typeId =
+        typeof input === "string" ? STRING_TO_ID[input.toLowerCase()] : input;
+
+    const config = MEDIA_CONFIG[typeId] || MEDIA_CONFIG.UNKNOWN;
+
+    return `
+        <div class="type-badge ${config.className}">
+            <div class="icon-box">
+                <i class="fa-solid ${config.icon}"></i>
+            </div>
+            <span>${config.label}</span>
+        </div>`.trim();
 }
 
 function renderTable() {
@@ -85,7 +125,7 @@ function renderTable() {
             <input type="checkbox" class="row-checkbox" ${row.selected ? "checked" : ""} onchange="toggleRowSelect(${row.id}, this.checked)">
         </td>
         <td class="col-id">#${row.id}</td>
-        <td class="col-type">${getIconHtml(row.mediaType)}</td>
+        <td class="col-type">${getMediaBadgeHtml(row.mediaType)}</td>
         <td class="col-title">
             <a href="${row.url}" target="_blank">
                 <span class="title-text" title="${titleDisplay}">${titleDisplay}</span>
