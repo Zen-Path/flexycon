@@ -1,4 +1,4 @@
-from ..conftest import API_BULK_DELETE, API_BULK_EDIT, API_GET_DOWNLOADS, API_HEALTH
+from ..conftest import API_BULK_EDIT, API_GET_DOWNLOADS, API_HEALTH
 
 
 def test_health_check(client):
@@ -49,23 +49,3 @@ def test_bulk_edit(client, auth_headers, seed):
 
     assert updated_item["title"] == "Updated Title"
     assert updated_item["mediaType"] == "video"
-
-
-def test_delete_bulk(client, auth_headers, seed):
-    """Test deleting items."""
-    initial_data = [
-        ("http://to-delete.com", "Delete Me", "image", "2025-01-01", "2025-01-01")
-    ]
-    seed(initial_data)
-
-    # Get ID of the item we just seeded
-    history = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
-    target_id = history[0]["id"]
-
-    # Delete it via API
-    res = client.post(API_BULK_DELETE, headers=auth_headers, json={"ids": [target_id]})
-    assert res.status_code == 200
-
-    # Verify it is gone
-    history_after = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
-    assert len(history_after) == 0

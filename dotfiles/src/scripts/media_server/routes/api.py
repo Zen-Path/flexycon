@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime, timezone
 
 from flask import Blueprint, Response, current_app, jsonify, request
+from scripts.media_server.src.utils import OperationResult
 
 api_bp = Blueprint("api", __name__)
 
@@ -133,18 +134,37 @@ def bulk_edit_entries():
 
 @api_bp.route("/bulkDelete", methods=["POST"])
 def bulk_delete():
-    data = request.json or {}
+    data = request.get_json(silent=True) or {}
     ids = data.get("ids", [])
-    if not ids:
-        return jsonify({"status": "no_action"})
 
-    # Generate SQL placeholders (?, ?, ?) based on list length
-    placeholders = ", ".join(["?"] * len(ids))
-    sql = f"DELETE FROM downloads WHERE id IN ({placeholders})"
+    if not ids or not isinstance(ids, list):
+        return (
+            jsonify(
+                OperationResult(False, [], "Invalid or empty 'ids' list").to_dict()
+            ),
+            400,
+        )
 
+    unique_ids = list(set(ids))
+
+    results = []
     with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
-        cursor = conn.cursor()
-        cursor.execute(sql, ids)
-        conn.commit()
+        for entry_id in unique_ids:
+            try:
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM downloads WHERE id = ?", (entry_id,))
 
-    return jsonify({"status": "deleted", "count": len(ids)})
+                if cursor.rowcount > 0:
+                    conn.commit()
+                    results.append(OperationResult(True, entry_id))
+                else:
+                    results.append(
+                        OperationResult(False, entry_id, "Record ID not found")
+                    )
+
+            except Exception as e:
+                conn.rollback()
+                results.append(OperationResult(False, entry_id, str(e)))
+
+    master_result = OperationResult(True, results)
+    return jsonify(master_result.to_dict()), 200

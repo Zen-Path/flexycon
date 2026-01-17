@@ -304,11 +304,39 @@ function deleteVisible() {
         body: JSON.stringify({ ids: ids }),
     })
         .then((res) => res.json())
-        .then(() => {
-            // Remove deleted IDs from local memory
-            allData = allData.filter((item) => !ids.includes(item.id));
+        .then((envelope) => {
+            if (!envelope.status) {
+                console.error("Bulk delete failed entirely:", envelope);
+                alert(
+                    "Could not delete items: " +
+                        (envelope.error || "Unknown error")
+                );
+                return;
+            }
+
+            const successfullyDeletedIds = envelope.data
+                .filter((item) => item.status === true)
+                .map((item) => item.data); // 'data' holds the ID
+
+            allData = allData.filter(
+                (item) => !successfullyDeletedIds.includes(item.id)
+            );
+
+            const failedCount = envelope.data.filter(
+                (item) => item.status === false
+            ).length;
+
+            if (failedCount > 0) {
+                alert(`Could not delete ${failedCount} items.`);
+                console.error(`Deletion Response:\n${data}`);
+            }
+
             document.getElementById("selectAll").checked = false;
             renderTable();
+        })
+        .catch((err) => {
+            alert(`Could not delete items: ${err}.`);
+            console.error("Network or server error:", err);
         });
 }
 

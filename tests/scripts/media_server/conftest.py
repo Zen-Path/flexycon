@@ -4,6 +4,7 @@ import tempfile
 import threading
 import time
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 from scripts.media_server.main import app
@@ -106,6 +107,18 @@ def client(db_instance):
 @pytest.fixture
 def auth_headers():
     return {"X-API-Key": "test-secret-key"}
+
+
+@pytest.fixture
+def create_mock_cursor():
+    """Returns a factory function to create a cursor with a specific rowcount."""
+
+    def _create(row_count=1):
+        cursor = MagicMock()
+        cursor.rowcount = row_count
+        return cursor
+
+    return _create
 
 
 DASHBOARD_URL = f"{BASE_URL}/dashboard"

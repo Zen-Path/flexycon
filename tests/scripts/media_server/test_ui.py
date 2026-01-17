@@ -1,10 +1,11 @@
+import json
 import re
 from datetime import datetime
 from urllib.parse import urljoin
 
 import pytest
 import requests
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Dialog, Page, expect
 
 from .conftest import API_DOWNLOAD, BASE_URL, DASHBOARD_URL
 
@@ -236,6 +237,67 @@ def test_delete_all_visible_no_search(page: Page, seed):
     # Verify Empty Table
     expect(page.locator("#table-body tr")).to_have_count(0)
     expect(page.locator("body")).not_to_contain_text("Item One")
+
+
+def test_bulk_delete_failure_alert(page: Page, seed):
+    """
+    Test Alert Message on Failure:
+    1. Seed 1 item.
+    2. Intercept the network to return a 'failed' status for that ID.
+    3. Verify the alert message shows the correct failure count.
+    """
+    initial_data = [
+        ("http://fail.com", "Faulty Item", "image", "2025-01-01", "2025-01-01"),
+        ("http://success.com", "Valid Item", "image", "2025-01-01", "2025-01-01"),
+    ]
+    seed(initial_data)
+
+    page.goto(DASHBOARD_URL)
+
+    # Capture the dialog message
+    dialog_messages = []
+
+    def handle_dialog(dialog: Dialog) -> None:
+        """Explicit handler to satisfy mypy."""
+        dialog_messages.append(dialog.message)
+        dialog.accept()
+
+    page.on("dialog", handle_dialog)
+
+    # Intercept the Delete API call
+    # We simulate a "failed" response where status is 'failed'
+    # and results show the ID was not found.
+    page.route(
+        "**/api/bulkDelete",
+        lambda route: route.fulfill(
+            status=200,
+            content_type="application/json",
+            body=json.dumps(
+                {
+                    "status": True,
+                    "error": None,
+                    "data": [
+                        {
+                            "status": False,
+                            "error": "Record ID not found",
+                            "data": 1,  # Simulating the ID that failed
+                        },
+                        {"status": True, "error": None, "data": 2},
+                    ],
+                }
+            ),
+        ),
+    )
+
+    page.click("button:has-text('Delete Selected')")
+
+    print(dialog_messages)
+    # Verify the Alert Content
+    assert any("Could not delete 1 items" in msg for msg in dialog_messages)
+
+    # Verify the item is STILL in the table (because it failed to delete)
+    expect(page.locator("#table-body tr")).to_have_count(len(initial_data))
+    expect(page.locator("body")).to_contain_text("Faulty Item")
 
 
 def test_delete_visible_with_search(page: Page, seed):
