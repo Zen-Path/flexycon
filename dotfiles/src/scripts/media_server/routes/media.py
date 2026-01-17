@@ -1,4 +1,3 @@
-import json
 import sqlite3
 from datetime import datetime
 from typing import Dict, Optional, Tuple
@@ -7,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
-from scripts.media_server.src.constants import ScraperConfig
+from scripts.media_server.src.constants import EventType, ScraperConfig
 from scripts.media_server.src.downloaders import Gallery
 from scripts.media_server.src.utils import DownloadReportItem, expand_collection_urls
 
@@ -38,15 +37,15 @@ def start_download_record(
             conn.commit()
             last_id = cursor.lastrowid
 
-        # Notify Dashboard via SSE
-        data = json.dumps(
+        current_app.config["ANNOUNCER"].announce_event(
+            EventType.CREATE,
             {
                 "id": last_id,
                 "url": url,
+                "mediaType": media_type,
                 "startTime": start_time,
-            }
+            },
         )
-        current_app.config["ANNOUNCER"].announce(f"data: {data}\n\n")
 
         return True, last_id, None
     except Exception as e:
@@ -82,14 +81,14 @@ def complete_download_record(
             )
             conn.commit()
 
-        data = json.dumps(
+        current_app.config["ANNOUNCER"].announce_event(
+            EventType.UPDATE,
             {
                 "id": download_id,
                 "title": title,
                 "endTime": end_time,
-            }
+            },
         )
-        current_app.config["ANNOUNCER"].announce(f"data: {data}\n\n")
 
         return True, None
     except Exception as e:
@@ -189,7 +188,8 @@ def download_media():
 
     # PROCESSING
 
-    for download_id, url in final_processing_queue:
+    final_processing_count = len(final_processing_queue)
+    for i, (download_id, url) in enumerate(final_processing_queue):
         # Scrape title
         title = None
 
@@ -221,6 +221,11 @@ def download_media():
         except Exception as e:
             report[url].status = False
             report[url].error = str(e)
+
+        current_app.config["ANNOUNCER"].announce_event(
+            EventType.PROGRESS,
+            {"id": download_id, "current": i, "total": final_processing_count},
+        )
 
         # Finalize DB record.
         complete_download_record(download_id, title)  # type: ignore[arg-type]

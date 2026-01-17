@@ -1,3 +1,14 @@
+// Mirror of the backend EventType Enum
+// prettier-ignore
+const EventType = Object.freeze({
+    CREATE:     0,
+    UPDATE:     1,
+    DELETE:     2,
+    PROGRESS:   3,
+});
+
+// LOGIC
+
 function addRowToData(item, isNew) {
     item.isNew = isNew;
     item.selected = false; // Initialize selection state
@@ -296,6 +307,10 @@ function saveEdit() {
 
 // DELETE
 
+function handleDelete(payload) {
+    allData = allData.filter((item) => item.id !== payload.id);
+}
+
 function deleteEntry(id) {
     if (!confirm("Are you sure you want to delete this entry?")) return;
 
@@ -373,6 +388,12 @@ function deleteVisible() {
         });
 }
 
+function handleProgress(payload) {
+    const percentage = Math.round((payload.current / payload.total) * 100);
+    payload.percentage = percentage;
+    console.log("Progress update: ", payload);
+}
+
 function handleColorScheme() {
     const themeToggleBtn = document.getElementById("themeToggle");
     const themeIcon = themeToggleBtn.querySelector("i");
@@ -433,15 +454,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Real-Time Listener
     const eventSource = new EventSource(`/api/stream?apiKey=${apiKey}`);
+
     eventSource.onmessage = function (event) {
-        const data = JSON.parse(event.data);
-        const item = allData.find((r) => r.id === data.id);
-        if (item) {
-            updateEntry(id, data.title, data.mediaType);
-        } else {
-            addRowToData(data, true);
+        const { type, data } = JSON.parse(event.data);
+
+        switch (type) {
+            case EventType.CREATE:
+                addRowToData(data, true);
+                break;
+
+            case EventType.UPDATE:
+                updateEntry(id, data.title, data.mediaType);
+                break;
+
+            case EventType.PROGRESS:
+                handleProgress(data);
+                break;
+
+            case EventType.DELETE:
+                handleDelete(data);
+                break;
+
+            default:
+                console.warn(`Unhandled EventType received: ${type}`);
         }
-        renderTable();
+
+        // Refresh UI for non-progress events
+        if (type !== EventType.PROGRESS) {
+            renderTable();
+        }
     };
 
     window.copyVisibleUrls = copyVisibleUrls;

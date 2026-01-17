@@ -21,6 +21,15 @@ class MediaType(IntEnum):
 # fmt: on
 
 
+# fmt: off
+class EventType(IntEnum):
+    CREATE      = 0
+    UPDATE      = 1
+    DELETE      = 2
+    PROGRESS    = 3
+# fmt: on
+
+
 class ScraperConfig:
     TIMEOUT = 10
     USER_AGENT = (

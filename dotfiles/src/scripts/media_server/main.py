@@ -94,8 +94,7 @@ def main():
     app.config["DB_PATH"] = args.db_path
     init_db(app.config["DB_PATH"])
 
-    announcer = MessageAnnouncer()
-    app.config["ANNOUNCER"] = announcer
+    app.config["ANNOUNCER"] = MessageAnnouncer()
 
     # .env value > xdg value > fallback location
     app.config["DOWNLOAD_DIR"] = Path(

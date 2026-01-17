@@ -50,7 +50,6 @@ def get_downloads():
 
 @api_bp.route("/stream")
 def stream():
-    # Get announcer whilst context is still alive
     announcer = current_app.config["ANNOUNCER"]
 
     def stream_messages():

@@ -105,6 +105,14 @@ def client(db_instance):
 
 
 @pytest.fixture
+def announcer(db_instance):
+    """
+    Provides access to the MessageAnnouncer instance stored in the app config.
+    """
+    return app.config["ANNOUNCER"]
+
+
+@pytest.fixture
 def auth_headers():
     return {"X-API-Key": "test-secret-key"}
 
@@ -125,6 +133,7 @@ DASHBOARD_URL = f"{BASE_URL}/dashboard"
 
 API_GET_DOWNLOADS = "/api/downloads"
 API_HEALTH = "/api/health"
+API_STREAM = "/api/stream"
 API_DOWNLOAD = "/api/media/download"
 API_BULK_DELETE = "/api/bulkDelete"
 API_BULK_EDIT = "/api/bulkEdit"

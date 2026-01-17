@@ -7,6 +7,7 @@ from typing import Any, List, Optional, Tuple
 
 from common.helpers import run_command
 from common.logger import logger
+from scripts.media_server.src.constants import EventType
 
 
 def init_db(db_path: Path):
@@ -78,13 +79,18 @@ class MessageAnnouncer:
         self.listeners.append(q)
         return q
 
-    def announce(self, msg):
+    def _announce(self, msg: str):
         # Iterate backwards to remove dead listeners safely
         for i in reversed(range(len(self.listeners))):
             try:
                 self.listeners[i].put_nowait(msg)
             except queue.Full:
                 del self.listeners[i]
+
+    def announce_event(self, event_type: EventType, payload: dict):
+        """Wraps the payload in a standard envelope and announces it."""
+        msg = {"type": event_type.value, "data": payload}
+        self._announce(f"data: {json.dumps(msg)}\n\n")
 
 
 @dataclass
