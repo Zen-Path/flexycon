@@ -361,7 +361,7 @@ function deleteVisible() {
 
             if (failedCount > 0) {
                 alert(`Could not delete ${failedCount} items.`);
-                console.error(`Deletion Response:\n${data}`);
+                console.error("Deletion Response:", envelope);
             }
 
             document.getElementById("selectAll").checked = false;
