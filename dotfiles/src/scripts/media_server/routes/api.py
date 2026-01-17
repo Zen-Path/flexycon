@@ -86,8 +86,8 @@ def delete_entry(entry_id):
     return jsonify({"status": "deleted"})
 
 
-@api_bp.route("/delete_bulk", methods=["POST"])
-def delete_bulk():
+@api_bp.route("/bulkDelete", methods=["POST"])
+def bulk_delete():
     data = request.json or {}
     ids = data.get("ids", [])
     if not ids:

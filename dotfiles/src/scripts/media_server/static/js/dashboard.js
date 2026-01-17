@@ -293,7 +293,7 @@ function deleteVisible() {
 
     const ids = itemsToDelete.map((item) => item.id);
 
-    fetch("/api/delete_bulk", {
+    fetch("/api/bulkDelete", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

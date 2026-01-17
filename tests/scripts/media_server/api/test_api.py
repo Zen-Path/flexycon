@@ -1,4 +1,4 @@
-from ..conftest import API_GET_DOWNLOADS, API_HEALTH
+from ..conftest import API_BULK_DELETE, API_GET_DOWNLOADS, API_HEALTH
 
 
 def test_health_check(client):
@@ -83,9 +83,7 @@ def test_delete_bulk(client, auth_headers, seed):
     target_id = history[0]["id"]
 
     # Delete it via API
-    res = client.post(
-        "/api/delete_bulk", headers=auth_headers, json={"ids": [target_id]}
-    )
+    res = client.post(API_BULK_DELETE, headers=auth_headers, json={"ids": [target_id]})
     assert res.status_code == 200
 
     # Verify it is gone
