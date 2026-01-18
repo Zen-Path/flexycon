@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.0.15
+// @version         2.1.5
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -21,6 +21,8 @@
 
 const SERVER_PORT = "{{@@ _vars['media_server_port'] @@}}";
 const BASE_URL = `http://localhost:${SERVER_PORT}`;
+
+const API_DOWNLOAD = `${BASE_URL}/api/media/download`;
 
 const MEDIA_TYPES = {
     IMAGE: "image",
@@ -69,33 +71,76 @@ function downloadMedia(urls, mediaType, rangeStart, rangeEnd) {
     showDownloadStatus(DOWNLOAD_STATUS.IN_PROGRESS);
 
     const payload = { urls, mediaType };
-    if (Number.isInteger(startVal)) {
-        payload.rangeStart = startVal;
+    if (Number.isInteger(rangeStart)) {
+        payload.rangeStart = rangeStart;
     }
-    if (Number.isInteger(endVal)) {
-        payload.rangeEnd = endVal;
+    if (Number.isInteger(rangeEnd)) {
+        payload.rangeEnd = rangeEnd;
     }
 
     const requestData = JSON.stringify(payload);
 
     GM_xmlhttpRequest({
         method: "POST",
-        url: `${BASE_URL}/api/media/download`,
+        url: API_DOWNLOAD,
         headers: {
             "Content-Type": "application/json",
             "X-API-Key": "{{@@ _vars['media_server_key'] @@}}",
         },
         data: requestData,
-        onerror: function (error) {
-            console.error(":: Download failed", error);
-            showDownloadStatus(DOWNLOAD_STATUS.ERROR);
-        },
         onload: function (response) {
-            console.log(":: Response info", response);
+            if (response.status < 200 || response.status > 300) {
+                console.warn(":: Response info", response);
+                showDownloadStatus(DOWNLOAD_STATUS.FAILED);
+                return;
+            }
 
-            // TODO: Improve error handling
+            try {
+                const report = JSON.parse(response.responseText);
+                const entries = Object.entries(report);
+                console.log(":: Download response", report);
 
-            showDownloadStatus(DOWNLOAD_STATUS.SUCCESS);
+                if (entries.length === 0) {
+                    console.error("Empty response from server");
+                    showDownloadStatus(DOWNLOAD_STATUS.FAILED);
+                    return;
+                }
+
+                const totalItems = entries.length;
+                const successCount = entries.filter(
+                    ([_, data]) => data.status === true
+                ).length;
+
+                let overallStatus;
+                if (successCount === totalItems) {
+                    overallStatus = DOWNLOAD_STATUS.DONE;
+                } else if (successCount === 0) {
+                    overallStatus = DOWNLOAD_STATUS.FAILED;
+                } else {
+                    overallStatus = DOWNLOAD_STATUS.MIXED;
+                }
+
+                showDownloadStatus(overallStatus);
+
+                // Log failures for debugging
+                if (successCount < totalItems) {
+                    entries.forEach(([url, data]) => {
+                        if (!data.status) {
+                            console.error(
+                                `Error for ${url}:`,
+                                data.error || "Unknown error"
+                            );
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to parse server response", error);
+                showDownloadStatus(DOWNLOAD_STATUS.FAILED);
+            }
+        },
+        onerror: function (error) {
+            console.error("Download failed", error);
+            showDownloadStatus(DOWNLOAD_STATUS.FAILED);
         },
     });
 }
