@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.0.14
+// @version         2.0.15
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -29,27 +29,40 @@ const MEDIA_TYPES = {
     UNKNOWN: "unknown",
 };
 
+// prettier-ignore
 const DOWNLOAD_STATUS = Object.freeze({
-    IN_PROGRESS: "⏳",
-    SUCCESS: "🟢",
-    ERROR: "🔴",
+    PENDING:        0,
+    IN_PROGRESS:    1,
+    DONE:           2,
+    FAILED:         3,
+    MIXED:          4,
 });
+
+// prettier-ignore
+const STATUS_ICONS = Object.freeze({
+    [DOWNLOAD_STATUS.PENDING]:      "🔜",
+    [DOWNLOAD_STATUS.IN_PROGRESS]:  "⏳",
+    [DOWNLOAD_STATUS.DONE]:         "🟩",
+    [DOWNLOAD_STATUS.FAILED]:       "🟥",
+    [DOWNLOAD_STATUS.MIXED]:        "🟨",
+})
 
 /**
  * Updates the document title with a status icon.
  * Pass a value from DOWNLOAD_STATUS to add/change an icon.
  * Pass null to remove any existing status icons.
  */
-function showDownloadStatus(icon) {
-    const allIcons = Object.values(DOWNLOAD_STATUS).join("");
+function showDownloadStatus(statusId) {
+    const icon = STATUS_ICONS[statusId];
+    if (icon && document.title.startsWith(`${icon} - `)) {
+        return;
+    }
+
+    const allIcons = Object.values(STATUS_ICONS).join("");
     const statusRegex = new RegExp(`^[${allIcons}]\\s-\\s`, "u");
     const cleanTitle = document.title.replace(statusRegex, "");
 
-    if (Object.values(DOWNLOAD_STATUS).includes(icon)) {
-        document.title = `${icon} - ${cleanTitle}`;
-    } else {
-        document.title = cleanTitle;
-    }
+    document.title = icon ? `${icon} - ${cleanTitle}` : cleanTitle;
 }
 
 function downloadMedia(urls, mediaType, rangeStart, rangeEnd) {
