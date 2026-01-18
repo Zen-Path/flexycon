@@ -17,7 +17,7 @@ from scripts.media_server.routes.media import media_bp
 from scripts.media_server.src.logging_middleware import register_logging
 from scripts.media_server.src.utils import MessageAnnouncer, init_db
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 load_dotenv(flex_scripts / "media_server" / ".env")
 
@@ -40,6 +40,15 @@ def check_auth():
         expected_key = current_app.config.get("MEDIA_SERVER_KEY")
         if not provided_key or provided_key != expected_key:
             abort(401)
+
+
+@app.context_processor
+def inject_global_vars():
+    return {
+        "project_version": __version__,
+        "github_url": "https://github.com/Zen-Path/flexycon/tree/main/dotfiles/src/scripts/media_server",
+        "site_name": "Media Server",
+    }
 
 
 @app.route("/")

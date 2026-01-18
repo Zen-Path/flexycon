@@ -18,7 +18,7 @@ def test_dashboard_visuals(page: Page, seed):
 
     page.goto(DASHBOARD_URL)
 
-    expect(page).to_have_title("Live Dashboard")
+    expect(page).to_have_title("Downloads | Media Server")
 
     # Check that we have rows
     rows = page.locator("#table-body tr")
