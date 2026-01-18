@@ -241,6 +241,11 @@ def download_media():
                                 report[url].status = False
                                 report[url].error = f"[gallery-dl] {line}."
 
+                    if report[url].status:
+                        for line in report[url].output.splitlines():
+                            if line.startswith("./"):
+                                report[url].files.append(line)
+
         except Exception as e:
             report[url].status = False
             report[url].error = str(e)

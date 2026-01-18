@@ -145,3 +145,28 @@ def test_gallery_dl_failure_patterns(mock_gallery, mock_expand, client, auth_hea
     assert not data[url]["status"]
     assert "No results found" in data[url]["error"]
     assert "[reddit][info]" in data[url]["output"]
+
+
+@patch("scripts.media_server.routes.media.expand_collection_urls")
+@patch("scripts.media_server.routes.media.Gallery.download")
+def test_return_files(mock_gallery, mock_expand, client, auth_headers):
+    """Verify that file paths are return for successful downloads."""
+    files = [
+        "./dir1/image-1.jpg",
+        "./dir1/image-2.jpg",
+        "./dir2/image-1.jpg",
+    ]
+    mock_gallery.return_value = MockCmdResult(return_code=0, output="\n".join(files))
+    mock_expand.return_value = []
+
+    url = "https://test.com/gallery"
+    res = client.post(
+        API_DOWNLOAD, headers=auth_headers, json={"urls": [url], "mediaType": "gallery"}
+    )
+
+    data = res.get_json()
+    print(data)
+    assert data[url]["status"]
+    assert len(data[url]["files"]) == 3
+    assert data[url]["files"][0] == "./dir1/image-1.jpg"
+    assert "./dir1/image-1.jpg" in data[url]["output"]

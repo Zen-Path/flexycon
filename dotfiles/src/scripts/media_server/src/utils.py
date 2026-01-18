@@ -101,6 +101,7 @@ class DownloadReportItem:
     warnings: List[str] = field(default_factory=list)
     log: str = ""
     output: str = ""
+    files: List[str] = field(default_factory=list)
 
     def to_dict(self):
         return asdict(self)
