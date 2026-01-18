@@ -3,8 +3,9 @@
     margin: 0 auto;
 }
 
-/* Header */
-.header-row {
+/* HEADER */
+
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
