@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.0.13
+// @version         2.0.14
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -28,12 +28,6 @@ const MEDIA_TYPES = {
     GALLERY: "gallery",
     UNKNOWN: "unknown",
 };
-
-const DOWNLOAD_FAILURE_PATTERNS = [
-    "[ytdl][error]",
-    "[ytdl-generic][error]",
-    "[downloader.http][warning] File size larger",
-];
 
 const DOWNLOAD_STATUS = Object.freeze({
     IN_PROGRESS: "⏳",
