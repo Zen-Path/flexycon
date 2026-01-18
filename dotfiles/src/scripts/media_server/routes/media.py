@@ -1,3 +1,4 @@
+import re
 import sqlite3
 from datetime import datetime
 from typing import Dict, Optional, Tuple
@@ -188,6 +189,11 @@ def download_media():
 
     # PROCESSING
 
+    # gallery-dl output patterns
+    no_results_pattern = r"^\[\w+\]\[info\] No results for"
+    larger_than_allowed_pattern = r"^\[\w+\]\[warning\] File size larger"
+    catchall_error_pattern = r"^\[\w+\]\[error\]"
+
     final_processing_count = len(final_processing_queue)
     for i, (download_id, url) in enumerate(final_processing_queue):
         # Scrape title
@@ -216,7 +222,24 @@ def download_media():
                     report[url].status = cmd_result.return_code == 0
 
                     if not report[url].status:
-                        report[url].error = "Gallery-dl command failed"
+                        report[url].error = (
+                            f"[gallery-dl] Command failed: {cmd_result.return_code}"
+                        )
+                    else:
+                        for line in report[url].output.splitlines():
+                            if re.search(no_results_pattern, line):
+                                report[url].status = False
+                                report[url].error = (
+                                    "[gallery-dl] No results found for url."
+                                )
+                            elif re.search(larger_than_allowed_pattern, line):
+                                report[url].status = False
+                                report[url].error = (
+                                    "[gallery-dl] File size larger than allowed."
+                                )
+                            elif re.search(catchall_error_pattern, line):
+                                report[url].status = False
+                                report[url].error = f"[gallery-dl] {line}."
 
         except Exception as e:
             report[url].status = False

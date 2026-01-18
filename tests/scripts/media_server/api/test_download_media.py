@@ -109,10 +109,12 @@ def test_title_scrape_failure_handling(mock_gallery, mock_get, client, auth_head
     assert any("Title scrape failed" in w for w in data[url]["warnings"])
 
 
+@patch("scripts.media_server.routes.media.expand_collection_urls")
 @patch("scripts.media_server.routes.media.Gallery.download")
-def test_gallery_dl_failure_reporting(mock_gallery, client, auth_headers):
+def test_gallery_dl_failure_reporting(mock_gallery, mock_expand, client, auth_headers):
     """Verify that a non-zero return code from gallery-dl marks status as False."""
     mock_gallery.return_value = MockCmdResult(return_code=1, output="403 Forbidden")
+    mock_expand.return_value = []
 
     url = "http://blocked.com/gallery"
     res = client.post(
@@ -122,4 +124,24 @@ def test_gallery_dl_failure_reporting(mock_gallery, client, auth_headers):
     data = res.get_json()
     assert data[url]["status"] is False
     assert data[url]["output"] == "403 Forbidden"
-    assert data[url]["error"] == "Gallery-dl command failed"
+    assert "Command failed" in data[url]["error"]
+
+
+@patch("scripts.media_server.routes.media.expand_collection_urls")
+@patch("scripts.media_server.routes.media.Gallery.download")
+def test_gallery_dl_failure_patterns(mock_gallery, mock_expand, client, auth_headers):
+    """Verify that if failure patterns are matched return status is False."""
+    mock_gallery.return_value = MockCmdResult(
+        return_code=0, output="[reddit][info] No results for url"
+    )
+    mock_expand.return_value = []
+
+    url = "http://fail.com/gallery"
+    res = client.post(
+        API_DOWNLOAD, headers=auth_headers, json={"urls": [url], "mediaType": "gallery"}
+    )
+
+    data = res.get_json()
+    assert not data[url]["status"]
+    assert "No results found" in data[url]["error"]
+    assert "[reddit][info]" in data[url]["output"]
