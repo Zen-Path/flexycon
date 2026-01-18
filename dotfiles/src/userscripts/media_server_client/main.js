@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.1.5
+// @version         2.1.8
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -49,12 +49,21 @@ const STATUS_ICONS = Object.freeze({
     [DOWNLOAD_STATUS.MIXED]:        "🟨",
 })
 
+let statusFlashTimer = null;
+
 /**
- * Updates the document title with a status icon.
- * Pass a value from DOWNLOAD_STATUS to add/change an icon.
- * Pass null to remove any existing status icons.
+ * Updates the document title with a status icon and optional flashing effect.
+ * @param {number} statusId - The ID from DOWNLOAD_STATUS
+ * @param {boolean} [flash=false] - If true, the icon will flash to grab attention
+ * - After a short timer, the icon remains static.
  */
-function showDownloadStatus(statusId) {
+function showDownloadStatus(statusId, flash = true) {
+    // Clear existing flashers
+    if (statusFlashTimer) {
+        clearInterval(statusFlashTimer);
+        statusFlashTimer = null;
+    }
+
     const icon = STATUS_ICONS[statusId];
     if (icon && document.title.startsWith(`${icon} - `)) {
         return;
@@ -64,11 +73,36 @@ function showDownloadStatus(statusId) {
     const statusRegex = new RegExp(`^[${allIcons}]\\s-\\s`, "u");
     const cleanTitle = document.title.replace(statusRegex, "");
 
-    document.title = icon ? `${icon} - ${cleanTitle}` : cleanTitle;
+    if (!icon) {
+        document.title = cleanTitle;
+        return;
+    }
+
+    const staticTitle = `${icon} - ${cleanTitle}`;
+    if (!flash) {
+        document.title = staticTitle;
+        return;
+    }
+
+    // Start flashing
+    let showIcon = true;
+    statusFlashTimer = setInterval(() => {
+        document.title = showIcon ? staticTitle : cleanTitle;
+        showIcon = !showIcon;
+    }, 500);
+
+    // Auto-stop flashing
+    setTimeout(() => {
+        if (statusFlashTimer) {
+            clearInterval(statusFlashTimer);
+            statusFlashTimer = null;
+            document.title = staticTitle;
+        }
+    }, 3000);
 }
 
 function downloadMedia(urls, mediaType, rangeStart, rangeEnd) {
-    showDownloadStatus(DOWNLOAD_STATUS.IN_PROGRESS);
+    showDownloadStatus(DOWNLOAD_STATUS.IN_PROGRESS, false);
 
     const payload = { urls, mediaType };
     if (Number.isInteger(rangeStart)) {
