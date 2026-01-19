@@ -376,7 +376,7 @@ function saveEdit() {
 // DELETE
 
 function handleDelete(payload) {
-    allData = allData.filter((item) => item.id !== payload.id);
+    allData = allData.filter((item) => !payload.ids.includes(item.id));
 }
 
 function deleteEntry(id) {

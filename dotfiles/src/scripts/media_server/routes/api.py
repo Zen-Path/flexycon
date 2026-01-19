@@ -176,6 +176,17 @@ def bulk_delete():
             )
             db.session.commit()
 
+            # Even if notification fails, we should still delete the data.
+            try:
+                current_app.config["ANNOUNCER"].announce_event(
+                    EventType.DELETE,
+                    {
+                        "ids": list(existing_ids),
+                    },
+                )
+            except:
+                pass
+
         master_result = OperationResult(True, results)
         return jsonify(master_result.to_dict()), 200
 
