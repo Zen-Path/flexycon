@@ -6,13 +6,12 @@ from datetime import datetime
 from unittest.mock import MagicMock
 
 import pytest
+from scripts.media_server.data.demo_downloads import get_demo_downloads
 from scripts.media_server.main import app
 from scripts.media_server.src.constants import MediaType
 from scripts.media_server.src.models import Download, db
-from scripts.media_server.src.utils import MessageAnnouncer
+from scripts.media_server.src.utils import MessageAnnouncer, seed_db
 from werkzeug.serving import make_server
-
-from .scenarios import get_default_data
 
 # --- CONFIGURATION ---
 TEST_PORT = 5002
@@ -93,31 +92,10 @@ def clean_db(db_instance):
 
 @pytest.fixture
 def seed(db_instance):
-    """
-    A factory fixture to seed the database on demand.
-    Usage: seed() or seed([{'url': '...', ...}])
-    """
+    """Wrapper fixture for the seed_db utility."""
 
     def _seed(data=None):
-        data_to_use = data if data is not None else get_default_data()
-
-        base_defaults = {
-            "url": "https://default.com/media",
-        }
-
-        entries = []
-        for row in data_to_use:
-            merged_row = {**base_defaults, **row}
-            entries.append(Download(**merged_row))
-
-        db_instance.session.add_all(entries)
-        db_instance.session.commit()
-
-        # Refresh objects to ensure they have IDs and DB-generated timestamps
-        for entry in entries:
-            db_instance.session.refresh(entry)
-
-        return entries
+        return seed_db(data)
 
     return _seed
 

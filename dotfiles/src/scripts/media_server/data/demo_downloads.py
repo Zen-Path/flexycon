@@ -30,7 +30,7 @@ def validate_seed_data(data):
 
 
 @lru_cache(maxsize=1)
-def get_default_data():
+def get_demo_downloads():
     now = datetime.now()
 
     data = [

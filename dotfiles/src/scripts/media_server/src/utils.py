@@ -1,13 +1,15 @@
 import json
 import queue
 from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, List, Optional
 
 from common.helpers import run_command
 from common.logger import logger
+from scripts.media_server.data.demo_downloads import get_demo_downloads
 from scripts.media_server.src.constants import EventType
-from scripts.media_server.src.models import db
+from scripts.media_server.src.models import Download, db
 
 
 def init_db(app):
@@ -27,6 +29,38 @@ def init_db(app):
     except Exception as e:
         logger.critical(f"Database initialization failed: {e}")
         raise
+
+
+def seed_db(data=None):
+    """
+    Seeds the database with provided data.
+    """
+    data_to_use = data if data is not None else get_demo_downloads()
+
+    base_defaults = {
+        "url": "https://default.com/media",
+        "start_time": datetime.now(timezone.utc),
+    }
+
+    entries = []
+    for row in data_to_use:
+        # Merge defaults with provided data
+        merged_row = {**base_defaults, **row}
+        entry = Download(**merged_row)
+        entries.append(entry)
+
+    db.session.add_all(entries)
+
+    try:
+        db.session.commit()
+        # Refresh to get IDs/auto-generated timestamps back from SQLite
+        for entry in entries:
+            db.session.refresh(entry)
+    except Exception as e:
+        db.session.rollback()
+        raise e
+
+    return entries
 
 
 class MessageAnnouncer:

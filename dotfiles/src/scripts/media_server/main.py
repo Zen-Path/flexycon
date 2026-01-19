@@ -4,6 +4,7 @@
 
 import logging
 import os
+import tempfile
 from pathlib import Path
 
 from common.logger import logger, setup_logging
@@ -15,7 +16,7 @@ from scripts.media_server.routes.api import api_bp
 from scripts.media_server.routes.media import media_bp
 from scripts.media_server.src.logging_middleware import register_logging
 from scripts.media_server.src.models import db
-from scripts.media_server.src.utils import MessageAnnouncer, init_db
+from scripts.media_server.src.utils import MessageAnnouncer, init_db, seed_db
 
 __version__ = "2.0.5"
 
@@ -81,6 +82,8 @@ def dashboard_page():
 
 def main():
     debug_mode = bool(int(os.getenv("DEBUG", "0")))
+    demo_mode = bool(int(os.getenv("DEMO", 0)))
+
     setup_logging(logger, logging.DEBUG if debug_mode else logging.WARNING)
 
     logger.info(f"Version: {__version__}")
@@ -92,9 +95,13 @@ def main():
     logger.debug(f"Download dir: {download_dir}")
 
     # Needs to be an abs path
-    db_path = Path(
-        os.getenv("DB_PATH") or flex_scripts / "media_server" / "media.db"
-    ).absolute()
+    if demo_mode:
+        db_fd, db_path = tempfile.mkstemp(suffix=".db")
+        os.close(db_fd)
+    else:
+        db_path = Path(
+            os.getenv("DB_PATH") or flex_scripts / "media_server" / "media.db"
+        ).absolute()
     logger.debug(f"Database path: {db_path}")
 
     app.config.update(
@@ -110,7 +117,13 @@ def main():
     register_logging(app)
 
     db.init_app(app)
-    init_db(app)
+
+    with app.app_context():
+        init_db(app)
+
+        if demo_mode:
+            logger.info("Demo mode enabled: Seeding database...")
+            seed_db()
 
     app.run(
         port=int("{{@@ _vars['media_server_port'] @@}}"),
