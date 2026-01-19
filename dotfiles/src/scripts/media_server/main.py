@@ -2,22 +2,22 @@
 
 # {{@@ header() @@}}
 
-import argparse
 import logging
 import os
 from pathlib import Path
 
 from common.logger import logger, setup_logging
-from common.variables import flex_data_path, flex_scripts
+from common.variables import flex_scripts
 from dotenv import load_dotenv
-from flask import Flask, abort, current_app, redirect, render_template, request
+from flask import Flask, abort, current_app, jsonify, redirect, render_template, request
 from flask_cors import CORS
 from scripts.media_server.routes.api import api_bp
 from scripts.media_server.routes.media import media_bp
 from scripts.media_server.src.logging_middleware import register_logging
+from scripts.media_server.src.models import db
 from scripts.media_server.src.utils import MessageAnnouncer, init_db
 
-__version__ = "1.2.0"
+__version__ = "2.0.5"
 
 load_dotenv(flex_scripts / "media_server" / ".env")
 
@@ -42,6 +42,24 @@ def check_auth():
             abort(401)
 
 
+@app.errorhandler(404)
+def handle_404(e):
+    # Only return JSON if the request was directed at the API
+    if request.path.startswith("/api/"):
+        return (
+            jsonify(
+                {
+                    "status": False,
+                    "error": "Not Found",
+                    "message": f"The requested URL {request.path!r} was not found.",
+                }
+            ),
+            404,
+        )
+
+    return e
+
+
 @app.context_processor
 def inject_global_vars():
     return {
@@ -61,57 +79,43 @@ def dashboard_page():
     return render_template("dashboard.html")
 
 
-def build_parser():
-    parser = argparse.ArgumentParser(
-        description="Media server to download files from the web."
-    )
-
-    parser.add_argument(
-        "--db-path",
-        type=Path,
-        default=flex_data_path / "media.db",
-        help="Path to the database",
-    )
-
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
-
-    parser.add_argument(
-        "-V",
-        "--version",
-        action="version",
-        version=f"%(prog)s {__version__}",
-        help="show the script's version and exit",
-    )
-
-    return parser
-
-
 def main():
-    args = build_parser().parse_args()
+    debug_mode = bool(int(os.getenv("DEBUG", "0")))
+    setup_logging(logger, logging.DEBUG if debug_mode else logging.WARNING)
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
-
-    register_logging(app)
-
-    CORS(app)  # Enable CORS for all routes
-
-    app.config["APP_VERSION"] = __version__
-
-    app.config["MEDIA_SERVER_KEY"] = "{{@@ _vars['media_server_key'] @@}}"
-
-    app.config["DB_PATH"] = args.db_path
-    init_db(app.config["DB_PATH"])
-
-    app.config["ANNOUNCER"] = MessageAnnouncer()
+    logger.info(f"Version: {__version__}")
 
     # .env value > xdg value > fallback location
-    app.config["DOWNLOAD_DIR"] = Path(
+    download_dir = Path(
         os.getenv("DOWNLOAD_DIR") or os.getenv("XDG_DOWNLOAD_DIR") or "downloads"
     )
+    logger.debug(f"Download dir: {download_dir}")
+
+    # Needs to be an abs path
+    db_path = Path(
+        os.getenv("DB_PATH") or flex_scripts / "media_server" / "media.db"
+    ).absolute()
+    logger.debug(f"Database path: {db_path}")
+
+    app.config.update(
+        APP_VERSION=__version__,
+        MEDIA_SERVER_KEY="{{@@ _vars['media_server_key'] @@}}",
+        SQLALCHEMY_DATABASE_URI=f"sqlite:///{db_path}",
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        ANNOUNCER=MessageAnnouncer(),
+        DOWNLOAD_DIR=download_dir,
+    )
+
+    CORS(app)  # Enable CORS for all routes
+    register_logging(app)
+
+    db.init_app(app)
+    init_db(app)
 
     app.run(
-        port=int("{{@@ _vars['media_server_port'] @@}}"), debug=False, threaded=True
+        port=int("{{@@ _vars['media_server_port'] @@}}"),
+        debug=debug_mode,
+        threaded=True,
     )
 
 

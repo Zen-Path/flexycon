@@ -1,15 +1,13 @@
-import json
-from unittest.mock import MagicMock, patch
+from datetime import datetime
 
 import pytest
+from scripts.media_server.src.constants import MediaType
 
 from ..conftest import API_BULK_EDIT, API_GET_DOWNLOADS
 
 
-@patch("scripts.media_server.routes.media.sqlite3.connect")
-def test_bulk_edit_variations(mock_connect, create_mock_cursor, client, auth_headers):
-    mock_conn = MagicMock()
-    mock_connect.return_value.__enter__.return_value = mock_conn
+def test_invalid_scenarios(client, auth_headers, seed):
+    seed([{"id": 1}])
 
     # Wrong data type
     res = client.patch(
@@ -30,7 +28,7 @@ def test_bulk_edit_variations(mock_connect, create_mock_cursor, client, auth_hea
 
     # Invalid media type
     res = client.patch(
-        API_BULK_EDIT, headers=auth_headers, json=[{"id": 1, "mediaType": "pizza"}]
+        API_BULK_EDIT, headers=auth_headers, json=[{"id": 1, "mediaType": -1}]
     )
     data = res.get_json()
     assert not data["status"]
@@ -42,73 +40,106 @@ def test_bulk_edit_variations(mock_connect, create_mock_cursor, client, auth_hea
     assert not data["status"]
     assert data["data"][0]["error"] == "No fields to update"
 
-    # One valid
-    mock_conn.cursor.return_value = create_mock_cursor(1)
-    res = client.patch(
-        API_BULK_EDIT, headers=auth_headers, json=[{"id": 1, "title": "Updated"}]
-    )
-    data = res.get_json()
-    assert data["status"]
-    assert data["data"][0]["status"]
 
-    # Multiple valid
-    mock_conn.cursor.return_value = create_mock_cursor(1)
-    payload = [
-        {"id": 1, "title": "One"},
-        {"id": 2, "mediaType": "video"},
-        {"id": 3, "title": "Three", "mediaType": "gallery"},
-    ]
+@pytest.mark.parametrize(
+    "test_name, seed_data, payload, expected_results",
+    [
+        (
+            "single_valid",
+            [{"id": 1, "title": "Old"}],
+            [{"id": 1, "title": "Updated"}],
+            [{"id": 1, "status": True}],
+        ),
+        (
+            "multiple_valid",
+            [{"id": 1}, {"id": 2}, {"id": 3}],
+            [
+                {"id": 1, "title": "One"},
+                {"id": 2, "mediaType": MediaType.VIDEO},
+                {"id": 3, "title": "Three", "mediaType": MediaType.GALLERY},
+            ],
+            [
+                {"id": 1, "status": True},
+                {"id": 2, "status": True},
+                {"id": 3, "status": True},
+            ],
+        ),
+        (
+            "mixed_status",
+            [{"id": 1}, {"id": 2}],
+            [
+                {"id": 1, "title": "Ok"},
+                {"id": 2, "title": "Ok Too"},
+                {"id": 99, "title": "I don't exist"},
+            ],
+            [
+                {"id": 1, "status": True},
+                {"id": 2, "status": True},
+                {"id": 99, "status": False, "error": "not found"},
+            ],
+        ),
+    ],
+    ids=lambda x: x if isinstance(x, str) else "",
+)
+def test_valid_scenarios(
+    test_name, seed_data, payload, expected_results, client, auth_headers, seed
+):
+    seed(seed_data)
+
     res = client.patch(API_BULK_EDIT, headers=auth_headers, json=payload)
     data = res.get_json()
-    assert data["status"]
-    assert len(data["data"]) == 3
-    assert all(item["status"] for item in data["data"])
 
-    # Mixed status
-    cursor_success = create_mock_cursor(1)
-    cursor_not_found = create_mock_cursor(0)
-    mock_conn.cursor.side_effect = [cursor_success, cursor_success, cursor_not_found]
+    assert res.status_code == 200
+    assert data["status"] is True
+    assert len(data["data"]) == len(expected_results)
 
-    payload = [
-        {"id": 1, "title": "Ok"},
-        {"id": 2, "title": "Ok Too"},
-        {"id": 99, "title": "I don't exist"},
-    ]
-    res = client.patch(API_BULK_EDIT, headers=auth_headers, json=payload)
-    data = res.get_json()
+    for i, expected in enumerate(expected_results):
+        actual = data["data"][i]
 
-    assert data["status"]
-    assert data["data"][0]["status"]
-    assert data["data"][1]["status"]
+        assert actual["data"] == expected["id"]
+        assert actual["status"] == expected["status"]
 
-    assert not data["data"][2]["status"]
-    assert "ID not found" in data["data"][2]["error"]
+        if not expected["status"]:
+            assert expected["error"].lower() in actual["error"].lower()
 
 
 @pytest.mark.parametrize(
-    "payload,new_title,new_media_type",
+    "test_name, payload, new_title, new_media_type",
     [
-        ({"title": "New Title", "mediaType": "gallery"}, "New Title", "gallery"),
-        # Partial updating
-        ({"title": "New Title"}, "New Title", "image"),
-        ({"mediaType": "video"}, "Edit Me", "video"),
+        (
+            "update_both",
+            {"title": "New Title", "mediaType": MediaType.GALLERY},
+            "New Title",
+            MediaType.GALLERY,
+        ),
+        # Partial updates
+        ("update_title", {"title": "New Title"}, "New Title", MediaType.IMAGE),
+        (
+            "update_media_type",
+            {"mediaType": MediaType.VIDEO},
+            "Test Page",
+            MediaType.VIDEO,
+        ),
         # Resetting
-        ({"title": None, "mediaType": None}, None, None),
-        ({"title": None}, None, "image"),
-        ({"mediaType": None}, "Edit Me", None),
+        ("reset_both", {"title": None, "mediaType": None}, None, None),
+        ("reset_title", {"title": None}, None, MediaType.IMAGE),
+        ("reset_media_type", {"mediaType": None}, "Test Page", None),
     ],
+    ids=lambda x: x if isinstance(x, str) else "",
 )
 def test_bulk_edit_persistence(
-    payload, new_title, new_media_type, client, auth_headers, seed
+    test_name,
+    payload,
+    new_title,
+    new_media_type,
+    client,
+    auth_headers,
+    seed,
+    sample_download_row,
 ):
     """Test that rows are updated in the database."""
-    initial_data = [
-        ("http://to-edit.com", "Edit Me", "image", "2025-01-01", "2025-01-01")
-    ]
-    seed(initial_data)
-
-    history = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
-    target_id = history[0]["id"]
+    seeded_rows = seed([sample_download_row])
+    target_id = seeded_rows[0].id
 
     res = client.patch(
         API_BULK_EDIT, headers=auth_headers, json=[{"id": target_id, **payload}]
@@ -119,8 +150,17 @@ def test_bulk_edit_persistence(
 
     history_after = client.get(API_GET_DOWNLOADS, headers=auth_headers).json
     assert len(history_after) == 1
-    assert history_after[0]["title"] == new_title
-    assert history_after[0]["mediaType"] == new_media_type
+
+    updated_row = history_after[0]
+    assert updated_row["title"] == new_title
+    assert updated_row["mediaType"] == new_media_type
+
+    assert "updatedAt" in updated_row
+    assert updated_row["updatedAt"].endswith("Z")
 
     # Other data shouldn't be affected
-    assert history_after[0]["startTime"] == "2025-01-01"
+    assert updated_row["orderNumber"] == sample_download_row["order_number"]
+
+    actual_start = datetime.fromisoformat(updated_row["startTime"].replace("Z", ""))
+    expected_start = sample_download_row["start_time"]
+    assert actual_start == expected_start

@@ -2,9 +2,9 @@ import json
 import threading
 from unittest.mock import MagicMock, patch
 
-from scripts.media_server.src.constants import EventType
+from scripts.media_server.src.constants import EventType, MediaType
 
-from ..conftest import API_DOWNLOAD, API_STREAM
+from ..conftest import API_BULK_DELETE, API_DOWNLOAD, API_STREAM
 
 
 def parse_sse(raw_msg: str) -> dict:
@@ -63,7 +63,7 @@ def test_download_announcements(client, announcer, auth_headers):
         mock_result.output = "Successful mock download"
         mock_dl.return_value = mock_result
 
-        payload = {"urls": ["http://gallery.com"], "mediaType": "gallery"}
+        payload = {"urls": ["http://gallery.com"], "mediaType": MediaType.GALLERY}
         res = client.post(API_DOWNLOAD, headers=auth_headers, json=payload)
         assert res.status_code == 200
 
@@ -87,3 +87,22 @@ def test_download_announcements(client, announcer, auth_headers):
     assert msg_update["data"]["id"] == download_id
     assert msg_update["data"]["title"] == "SSE Gallery"
     assert "endTime" in msg_update["data"]
+
+
+def test_system_resilience_to_announcer_failure(client, auth_headers, seed):
+    """
+    If the event announcer crashes, the API should still work (Graceful Degradation).
+    """
+    seed([{"url": "test.com", "id": 100}])
+
+    with patch(
+        "scripts.media_server.src.utils.MessageAnnouncer.announce_event"
+    ) as mock_announce:
+        mock_announce.side_effect = Exception("Socket Connection Lost")
+
+        # Try to delete. Even if the dashboard notification fails, the DB delete
+        # should happen.
+        res = client.post(API_BULK_DELETE, headers=auth_headers, json={"ids": [100]})
+
+        assert res.status_code == 200
+        assert res.get_json()["status"] is True

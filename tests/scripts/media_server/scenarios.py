@@ -1,237 +1,282 @@
 from datetime import datetime, timedelta
+from functools import lru_cache
+
+from scripts.media_server.src.constants import MediaType
 
 
+def validate_seed_data(data):
+    prev_start_time = None
+
+    for i, entry in enumerate(data):
+        url = entry.get("url", "Unknown URL")
+        start = entry["start_time"]
+        end = entry["end_time"]
+
+        # End shouldn't be older than start time
+        if end < start:
+            raise ValueError(
+                f"Item #{i} ({url!r}): 'end_time' is earlier than 'start_time'."
+            )
+
+        # Data should be in reverse chronological order by start time
+        if prev_start_time and start > prev_start_time:
+            raise ValueError(
+                f"Item #{i} ({url!r}): not in reverse chronological order.\n"
+                f"Current entry ({start}) is newer than the entry above "
+                f"({prev_start_time})."
+            )
+
+        prev_start_time = start
+
+
+@lru_cache(maxsize=1)
 def get_default_data():
     now = datetime.now()
-    return [
-        # --- RECENT (Minutes/Seconds ago) ---
-        (
-            "https://www.youtube.com/watch?v=test_video",
-            "Rick Astley - Never Gonna Give You Up (Official Music Video)",
-            "video",
-            (now - timedelta(minutes=10)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://very-long-url-website.com/long-title-test",
-            "This is an extremely long title to test if the CSS truncation works correctly in the dashboard table row and does not break the layout of the cell",
-            "unknown",
-            (now - timedelta(seconds=45)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(seconds=5)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://twitter.com/updates/status/12345",
-            "Breaking News: Python 3.14 Released 🚀",
-            "image",
-            (now - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(seconds=10)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://cdn.example.com/assets/logo.png",
-            None,  # Missing title
-            "image",
-            (now - timedelta(minutes=2)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(minutes=2)).strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),  # Instant download
-        ),
-        # --- TODAY (Hours ago) ---
-        (
-            "https://imgur.com/gallery/cats",
-            "Best Cat Memes 2025",
-            "gallery",
-            (now - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(hours=1, minutes=55)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://vimeo.com/12345678",
-            'Documentary: "The Life of a Software Engineer"',
-            "video",
-            (now - timedelta(hours=4)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(hours=3, minutes=30)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://unsplash.com/photos/mountain-view",
-            "High resolution mountain landscape [4K]",
-            "image",
-            (now - timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(hours=4, minutes=59)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://github.com/torvalds/linux/archive/master.zip",
-            "linux-master.zip",
-            "unknown",
-            (now - timedelta(hours=6)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(hours=5, minutes=50)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.tiktok.com/@user/video/987654",
-            "Viral Dance Challenge #2025",
-            "video",
-            (now - timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(hours=7, minutes=59)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        # --- YESTERDAY ---
-        (
-            "https://example.com/missing-title-2",
-            None,
-            "gallery",
-            (now - timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.nasa.gov/image-of-the-day",
-            "Nebula Cluster from James Webb Telescope",
-            "image",
-            (now - timedelta(days=1, hours=2)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=1, hours=1, minutes=50)).strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
-        ),
-        (
-            "https://stackoverflow.com/questions/12345",
-            "How to exit vim? - Stack Overflow",
-            "unknown",
-            (now - timedelta(days=1, hours=5)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=1, hours=5)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.ted.com/talks/future_of_ai",
-            "The Future of AI and Humanity",
-            "video",
-            (now - timedelta(days=1, hours=10)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=1, hours=9)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        # --- THIS WEEK (Testing Sorting) ---
-        (
-            "https://www.reddit.com/r/funny/top",
-            "Top posts from r/funny this week",
-            "gallery",
-            (now - timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://jp.wikipedia.org/wiki/Python",
-            "Python (プログラミング言語) - Wikipedia",  # Unicode Test (Japanese)
-            "unknown",
-            (now - timedelta(days=3)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=3)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://ar.wikipedia.org/wiki/Python",
-            "بايثون (لغة برمجة) - ويكيبيديا",  # Unicode Test (Arabic)
-            "unknown",
-            (now - timedelta(days=3, hours=1)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=3, hours=0, minutes=59)).strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
-        ),
-        (
-            "https://spotify.com/track/123",
-            "lofi hip hop radio - beats to relax/study to",
-            "video",
-            (now - timedelta(days=4)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=3, hours=20)).strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),  # Long download
-        ),
-        (
-            "https://www.bbc.com/news/technology",
-            "Technology News - BBC News",
-            "unknown",
-            (now - timedelta(days=5)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=5)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.deviantart.com/art/digital-painting",
-            "Cyberpunk Cityscape Concept Art",
-            "image",
-            (now - timedelta(days=6)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=6)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.twitch.tv/videos/111222333",
-            "Grand Finals - EVO 2025",
-            "video",
-            (now - timedelta(days=6, hours=12)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=6, hours=10)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        # --- OLDER (Last Month) ---
-        (
-            "https://archive.org/details/old-movie",
-            "'Metropolis (1927)' - Full Movie",
-            "video",
-            (now - timedelta(days=10)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=10)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.pinterest.com/pin/12345",
-            "DIY Home Decor Ideas",
-            "gallery",
-            (now - timedelta(days=12)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=12)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.behance.net/gallery/ui-kit",
-            "Mobile App UI Kit Freebie",
-            "gallery",
-            (now - timedelta(days=15)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=15)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.coursera.org/learn/machine-learning",
-            "Machine Learning Specialization",
-            "video",
-            (now - timedelta(days=18)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=17, hours=23)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://192.168.1.1/config.backup",
-            "Router Configuration Backup",
-            "unknown",
-            (now - timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://example.com/very/deeply/nested/url/structure/that/goes/on/forever/and/ever/to/test/wrapping",
-            "Deeply Nested URL Test",
-            "unknown",
-            (now - timedelta(days=22)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=22)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://wallhaven.cc/w/123",
-            "Abstract Geometric Wallpaper",
-            "image",
-            (now - timedelta(days=25)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=25)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.instagram.com/p/Cxyz123",
-            "Sunset at the beach 🏖️",
-            "image",
-            (now - timedelta(days=28)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=28)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.soundcloud.com/artist/song",
-            "New Single - Summer Vibes",
-            "unknown",
-            (now - timedelta(days=29)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=29)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.dropbox.com/s/shared/project.pdf",
-            "Final_Project_Report_v2_FINAL_REAL.pdf",
-            "unknown",
-            (now - timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-        (
-            "https://www.youtube.com/watch?v=intro",
-            "Channel Intro",
-            "video",
-            (now - timedelta(days=31)).strftime("%Y-%m-%d %H:%M:%S"),
-            (now - timedelta(days=31)).strftime("%Y-%m-%d %H:%M:%S"),
-        ),
+
+    data = [
+        {
+            "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            "title": "Rick Astley - Never Gonna Give You Up (Official Video) - YouTube",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(seconds=2),
+            "end_time": now,
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+            "title": "Me at the zoo - YouTube",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(seconds=30),
+            "end_time": now - timedelta(seconds=25),
+        },
+        # Long title
+        {
+            "url": "https://very-long-url-website.com/long-title-test",
+            "title": "This is an extremely long title to test if the CSS truncation"
+            "works correctly in the dashboard table row and does not break the layout"
+            "of the cell",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(minutes=1, seconds=10),
+            "end_time": now - timedelta(minutes=1, seconds=5),
+        },
+        {
+            "url": "https://x.com/updates/status/12345",
+            "title": "Breaking News: Python 3.14 Released 🚀",
+            "media_type": MediaType.IMAGE,
+            "start_time": now - timedelta(minutes=5, seconds=25),
+            "end_time": now - timedelta(minutes=5, seconds=20),
+        },
+        # Missing title
+        {
+            "url": "https://cdn.example.com/assets/logo.png",
+            "title": None,
+            "media_type": MediaType.IMAGE,
+            "start_time": now - timedelta(hours=1, minutes=1, seconds=10),
+            "end_time": now - timedelta(hours=1, minutes=1, seconds=5),
+        },
+        # Gallery media
+        {
+            "url": "https://imgur.com/gallery/cats",
+            "title": "Best Cat Memes 2025",
+            "media_type": MediaType.GALLERY,
+            "start_time": now - timedelta(hours=1, minutes=45, seconds=10),
+            "end_time": now - timedelta(hours=1, minutes=45, seconds=5),
+        },
+        # Double quotes in title
+        {
+            "url": "https://vimeo.com/12345678",
+            "title": 'Documentary: "The Life of a Software Engineer"',
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(hours=2, minutes=5, seconds=40),
+            "end_time": now - timedelta(hours=2, minutes=5, seconds=35),
+        },
+        {
+            "url": "https://unsplash.com/photos/mountain-view",
+            "title": "High resolution mountain landscape [4K]",
+            "media_type": MediaType.IMAGE,
+            "start_time": now - timedelta(hours=3, minutes=10, seconds=10),
+            "end_time": now - timedelta(hours=3, minutes=10, seconds=5),
+        },
+        # Direct zip link
+        {
+            "url": "https://github.com/torvalds/linux/archive/master.zip",
+            "title": "linux-master.zip",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(hours=3, minutes=20, seconds=20),
+            "end_time": now - timedelta(hours=3, minutes=20, seconds=10),
+        },
+        {
+            "url": "https://www.tiktok.com/@user/video/987654",
+            "title": "Viral Dance Challenge #2025",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(hours=4, minutes=20, seconds=30),
+            "end_time": now - timedelta(hours=4, minutes=20, seconds=25),
+        },
+        {
+            "url": "https://example.com/missing-title-2",
+            "title": None,
+            "media_type": MediaType.GALLERY,
+            "start_time": now - timedelta(hours=4, minutes=30, seconds=35),
+            "end_time": now - timedelta(hours=4, minutes=30, seconds=25),
+        },
+        # Start time = end time
+        {
+            "url": "https://www.nasa.gov/image-of-the-day",
+            "title": "Nebula Cluster from James Webb Telescope",
+            "media_type": MediaType.IMAGE,
+            "start_time": now - timedelta(hours=5, minutes=1, seconds=1),
+            "end_time": now - timedelta(hours=5, minutes=1, seconds=1),
+        },
+        # Same start time for the next 2
+        {
+            "url": "https://stackoverflow.com/questions/12345",
+            "title": "How to exit vim? - Stack Overflow",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(hours=6, minutes=1, seconds=10),
+            "end_time": now - timedelta(hours=6, minutes=1, seconds=5),
+        },
+        {
+            "url": "https://www.ted.com/talks/future_of_ai",
+            "title": "The Future of AI and Humanity",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(hours=6, minutes=1, seconds=10),
+            "end_time": now - timedelta(hours=6, minutes=1, seconds=1),
+        },
+        # Long running
+        {
+            "url": "https://www.reddit.com/r/funny/top",
+            "title": "Top posts from r/funny this week",
+            "media_type": MediaType.GALLERY,
+            "start_time": now - timedelta(hours=6, minutes=5, seconds=1),
+            "end_time": now - timedelta(hours=5, minutes=1, seconds=10),
+        },
+        # Emoji in title
+        {
+            "url": "https://jp.wikipedia.org/wiki/Python",
+            "title": "Python (🐍) - Wikipedia",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(hours=7, minutes=1, seconds=10),
+            "end_time": now - timedelta(hours=7, minutes=1, seconds=1),
+        },
+        # Right-to-left title
+        {
+            "url": "https://ar.wikipedia.org/wiki/Python",
+            "title": "بايثون (لغة برمجة) - ويكيبيديا",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(hours=7, minutes=5, seconds=10),
+            "end_time": now - timedelta(hours=7, minutes=5, seconds=1),
+        },
+        # Yesterday
+        {
+            "url": "https://spotify.com/track/123",
+            "title": "lofi hip hop radio - beats to relax/study to",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(days=1, hours=1, minutes=5, seconds=10),
+            "end_time": now - timedelta(days=1, hours=1, minutes=5, seconds=5),
+        },
+        {
+            "url": "https://www.bbc.com/news/technology",
+            "title": "Technology News - BBC News",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(days=1, hours=2, minutes=5, seconds=15),
+            "end_time": now - timedelta(days=1, hours=2, minutes=5, seconds=10),
+        },
+        {
+            "url": "https://www.deviantart.com/art/digital-painting",
+            "title": "Cyberpunk Cityscape Concept Art",
+            "media_type": MediaType.IMAGE,
+            "start_time": now - timedelta(days=1, hours=15, minutes=55, seconds=10),
+            "end_time": now - timedelta(days=1, hours=15, minutes=50, seconds=5),
+        },
+        # This week
+        {
+            "url": "https://www.twitch.tv/videos/111222333",
+            "title": "Grand Finals - EVO 2025",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(days=2, hours=1, minutes=5, seconds=10),
+            "end_time": now - timedelta(days=2, hours=1, minutes=5, seconds=5),
+        },
+        {
+            "url": "https://archive.org/details/old-movie",
+            "title": "'Metropolis (1927)' - Full Movie",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(days=2, hours=5, minutes=25, seconds=10),
+            "end_time": now - timedelta(days=2, hours=5, minutes=25, seconds=5),
+        },
+        {
+            "url": "https://www.pinterest.com/pin/12345",
+            "title": "DIY Home Decor Ideas",
+            "media_type": MediaType.GALLERY,
+            "start_time": now - timedelta(days=4, hours=1, minutes=5, seconds=10),
+            "end_time": now - timedelta(days=4, hours=1, minutes=5, seconds=5),
+        },
+        # Last week
+        {
+            "url": "https://www.behance.net/gallery/ui-kit",
+            "title": "Mobile App UI Kit Freebie",
+            "media_type": MediaType.GALLERY,
+            "start_time": now - timedelta(days=7, hours=1, minutes=5, seconds=10),
+            "end_time": now - timedelta(days=7, hours=1, minutes=5, seconds=5),
+        },
+        {
+            "url": "https://www.coursera.org/learn/machine-learning",
+            "title": "Machine Learning Specialization",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(days=8, hours=1, minutes=5, seconds=10),
+            "end_time": now - timedelta(days=8, hours=1, minutes=5, seconds=5),
+        },
+        {
+            "url": "https://192.168.1.1/config.backup",
+            "title": "Router Configuration Backup",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(days=9, hours=1, minutes=5, seconds=10),
+            "end_time": now - timedelta(days=9, hours=1, minutes=5, seconds=5),
+        },
+        {
+            "url": "https://example.com/very/deeply/nested/url/structure/that/goes/on/forever/and/ever/to/test/wrapping",
+            "title": "Deeply Nested URL Test",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(days=10, hours=1, minutes=5, seconds=10),
+            "end_time": now - timedelta(days=10, hours=1, minutes=5, seconds=5),
+        },
+        # Last month
+        {
+            "url": "https://wallhaven.cc/w/123",
+            "title": "Abstract Geometric Wallpaper",
+            "media_type": MediaType.IMAGE,
+            "start_time": now - timedelta(days=32, hours=1, minutes=5, seconds=10),
+            "end_time": now - timedelta(days=32, hours=1, minutes=5, seconds=5),
+        },
+        {
+            "url": "https://www.instagram.com/p/Cxyz123",
+            "title": "Sunset at the beach 🏖️",
+            "media_type": MediaType.IMAGE,
+            "start_time": now - timedelta(days=35, hours=1, seconds=10),
+            "end_time": now - timedelta(days=35, hours=1, seconds=5),
+        },
+        {
+            "url": "https://www.soundcloud.com/artist/song",
+            "title": "New Single - Summer Vibes",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(days=40, hours=5, seconds=10),
+            "end_time": now - timedelta(days=40, hours=5, seconds=5),
+        },
+        # Very old entries
+        {
+            "url": "https://www.dropbox.com/s/shared/project.pdf",
+            "title": "Final_Project_Report_v2_FINAL_REAL.pdf",
+            "media_type": MediaType.TEXT,
+            "start_time": now - timedelta(days=90, hours=1, seconds=10),
+            "end_time": now - timedelta(days=90, hours=1, seconds=5),
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=intro",
+            "title": "Channel Intro",
+            "media_type": MediaType.VIDEO,
+            "start_time": now - timedelta(days=195, hours=10, seconds=10),
+            "end_time": now - timedelta(days=195, hours=10, seconds=5),
+        },
     ]
+
+    validate_seed_data(data)
+
+    return data

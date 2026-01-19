@@ -1,21 +1,26 @@
 import re
-import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup
 from common.logger import logger
 from flask import Blueprint, current_app, jsonify, request
-from scripts.media_server.src.constants import EventType, ScraperConfig
+from scripts.media_server.src.constants import (
+    DownloadStatus,
+    EventType,
+    MediaType,
+    ScraperConfig,
+)
 from scripts.media_server.src.downloaders import Gallery
+from scripts.media_server.src.models import Download, db
 from scripts.media_server.src.utils import DownloadReportItem, expand_collection_urls
 
 media_bp = Blueprint("media", __name__)
 
 
 def start_download_record(
-    url: str, media_type: str
+    url: str, media_type: Optional[int]
 ) -> Tuple[bool, Optional[int], Optional[str]]:
     """
     Initializes a download entry in the database and notifies the dashboard.
@@ -26,17 +31,13 @@ def start_download_record(
     Returns:
         A tuple of (success_status, generated_id, error_message).
     """
-    start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
     try:
-        with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "INSERT INTO downloads (url, media_type, start_time) VALUES (?, ?, ?)",
-                (url, media_type, start_time),
-            )
-            conn.commit()
-            last_id = cursor.lastrowid
+        new_download = Download(url=url, media_type=media_type)
+
+        db.session.add(new_download)
+        db.session.commit()
+
+        last_id = new_download.id
 
         current_app.config["ANNOUNCER"].announce_event(
             EventType.CREATE,
@@ -44,19 +45,22 @@ def start_download_record(
                 "id": last_id,
                 "url": url,
                 "mediaType": media_type,
-                "startTime": start_time,
+                "startTime": new_download.start_time_iso,
             },
         )
 
         return True, last_id, None
+
     except Exception as e:
+        db.session.rollback()
+
         err_msg = f"Failed to initialize download record: {e}"
         logger.error(err_msg)
         return False, None, err_msg
 
 
 def complete_download_record(
-    download_id: int, title: Optional[str]
+    download_id: int, title: Optional[str], status: DownloadStatus
 ) -> Tuple[bool, Optional[str]]:
     """
     Finalizes an existing download record with its metadata and notifies the dashboard.
@@ -67,32 +71,32 @@ def complete_download_record(
     Returns:
         A tuple of (success_status, error_message).
     """
-    end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
     try:
-        with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                """
-                UPDATE downloads
-                SET title = ?, end_time = ?
-                WHERE id = ?
-                """,
-                (title, end_time, download_id),
-            )
-            conn.commit()
+        record = db.session.get(Download, download_id)
+        if not record:
+            return False, f"Download ID {download_id} not found."
+
+        record.title = title
+        record.end_time = datetime.now(timezone.utc)
+        record.status = status
+
+        db.session.commit()
 
         current_app.config["ANNOUNCER"].announce_event(
             EventType.UPDATE,
             {
                 "id": download_id,
                 "title": title,
-                "endTime": end_time,
+                "endTime": record.end_time_iso,
+                "updatedAt": record.updated_at_iso,
+                "orderNumber": record.order_number,
             },
         )
 
         return True, None
     except Exception as e:
+        db.session.rollback()
+
         err_msg = f"Failed to update download record #{download_id}: {e}"
         logger.error(err_msg)
         return False, err_msg
@@ -100,7 +104,7 @@ def complete_download_record(
 
 @media_bp.route("/download", methods=["POST"])
 def download_media():
-    data = request.get_json(silent=True) or {}
+    data = request.get_json()
     urls = data.get("urls")
     media_type = data.get("mediaType")
     range_start = data.get("rangeStart")
@@ -117,11 +121,13 @@ def download_media():
         return jsonify({"error": "'urls' must be a list of strings."}), 400
 
     ## Media Type
-    if not media_type or not isinstance(media_type, str):
-        return jsonify({"error": "'mediaType' must be a non-empty string."}), 400
-
-    if media_type not in ["image", "video", "gallery", "unknown"]:
-        media_type = "unknown"
+    if media_type is not None:
+        if not isinstance(media_type, int):
+            return jsonify({"error": "'mediaType' must be an int."}), 400
+        try:
+            media_type = MediaType(media_type)
+        except ValueError:
+            return jsonify({"error": f"Invalid mediaType value: {media_type}"}), 400
 
     ## Range Parts
     if range_start and not isinstance(range_start, int):
@@ -148,7 +154,7 @@ def download_media():
     final_processing_queue = []
     seen_urls = set()
 
-    if media_type in ["gallery", "unknown"]:
+    if not media_type or media_type == MediaType.GALLERY:
         for parent_id, parent_url in initial_queue:
             seen_urls.add(parent_url)
             expanded_urls = expand_collection_urls(parent_url)
@@ -216,7 +222,7 @@ def download_media():
         # Download
         try:
             match media_type:
-                case "gallery" | "unknown":
+                case MediaType.GALLERY | None:
                     cmd_result = Gallery.download([url], range_start, range_end)
                     report[url].output = cmd_result.output
                     report[url].status = cmd_result.return_code == 0
@@ -255,8 +261,17 @@ def download_media():
             {"id": download_id, "current": i, "total": final_processing_count},
         )
 
-        # Finalize DB record.
-        complete_download_record(download_id, title)  # type: ignore[arg-type]
+        # Finalize DB record
+        success, error = complete_download_record(
+            download_id,  # type: ignore[arg-type]
+            title,
+            DownloadStatus.DONE if report[url].status else DownloadStatus.FAILED,
+        )
+
+        if report[url].status:
+            report[url].status = success
+        if error:
+            report[url].error = error
 
     final_json_report = {url: item.to_dict() for url, item in report.items()}
     return jsonify(final_json_report), 200

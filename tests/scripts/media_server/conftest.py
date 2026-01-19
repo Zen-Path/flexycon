@@ -1,14 +1,15 @@
 import os
-import sqlite3
 import tempfile
 import threading
 import time
-from pathlib import Path
+from datetime import datetime
 from unittest.mock import MagicMock
 
 import pytest
 from scripts.media_server.main import app
-from scripts.media_server.src.utils import MessageAnnouncer, init_db, seed_db
+from scripts.media_server.src.constants import MediaType
+from scripts.media_server.src.models import Download, db
+from scripts.media_server.src.utils import MessageAnnouncer
 from werkzeug.serving import make_server
 
 from .scenarios import get_default_data
@@ -21,17 +22,19 @@ BASE_URL = f"http://127.0.0.1:{TEST_PORT}"
 @pytest.fixture(scope="session")
 def db_instance():
     """
-    Creates a temporary database file and CONFIGURES the global app.
-    This is the 'root' fixture that runs once per test session.
+    Sets up the SQLAlchemy database and initializes the app.
     """
     db_fd, db_path = tempfile.mkstemp(suffix=".db")
     os.close(db_fd)
+    db_uri = f"sqlite:///{os.path.abspath(db_path)}"
 
     announcer = MessageAnnouncer()
 
     app.config.update(
         {
-            "DB_PATH": db_path,
+            "SQLALCHEMY_DATABASE_URI": db_uri,
+            "SQLALCHEMY_TRACK_MODIFICATIONS": False,
+            "SQLALCHEMY_ENGINE_OPTIONS": {"connect_args": {"timeout": 10}},
             "MEDIA_SERVER_KEY": "test-secret-key",
             "TESTING": True,
             "ANNOUNCER": announcer,
@@ -39,10 +42,12 @@ def db_instance():
     )
 
     with app.app_context():
-        init_db(Path(db_path))
+        db.init_app(app)
+        db.create_all()
 
-    yield Path(db_path)
+    yield db
 
+    # Cleanup after the whole session is done
     if os.path.exists(db_path):
         os.remove(db_path)
 
@@ -50,16 +55,13 @@ def db_instance():
 @pytest.fixture(scope="session", autouse=True)
 def run_server(db_instance):
     """
-    Launches the Flask server using Werkzeug's make_server.
-    This allows for a clean shutdown, preventing 'Address already in use'.
+    Launches the Flask server in a background thread.
     """
     server = make_server("127.0.0.1", TEST_PORT, app, threaded=True)
-
     server_thread = threading.Thread(target=server.serve_forever)
     server_thread.start()
 
-    # Give it a moment to bind
-    time.sleep(1)
+    time.sleep(0.5)  # Wait for server to bind
 
     yield
 
@@ -68,29 +70,54 @@ def run_server(db_instance):
 
 
 @pytest.fixture(autouse=True)
-def reset_db_state(db_instance):
+def app_context():
     """
-    Runs BEFORE every test function.
-    Cleans the DB so every test starts with a blank slate.
+    Ensures an application context is active for every single test.
+    This fixes the 'Working outside of application context' error.
     """
-    with sqlite3.connect(db_instance) as conn:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM downloads")
-        cursor.execute("DELETE FROM sqlite_sequence WHERE name='downloads'")
-        conn.commit()
-    yield
+    with app.app_context():
+        yield
+
+
+@pytest.fixture(autouse=True)
+def clean_db(db_instance):
+    """
+    Since we use a background server, we must commit data for the server to see it.
+    Therefore, we manually delete all rows after each test to ensure isolation.
+    """
+    yield  # Run the test
+
+    db.session.query(Download).delete()
+    db.session.commit()
 
 
 @pytest.fixture
 def seed(db_instance):
     """
-    Helper fixture to allow tests to seed data on demand.
-    Usage: seed() for defaults, or seed(custom_list).
+    A factory fixture to seed the database on demand.
+    Usage: seed() or seed([{'url': '...', ...}])
     """
 
     def _seed(data=None):
         data_to_use = data if data is not None else get_default_data()
-        seed_db(db_instance, data_to_use)
+
+        base_defaults = {
+            "url": "https://default.com/media",
+        }
+
+        entries = []
+        for row in data_to_use:
+            merged_row = {**base_defaults, **row}
+            entries.append(Download(**merged_row))
+
+        db_instance.session.add_all(entries)
+        db_instance.session.commit()
+
+        # Refresh objects to ensure they have IDs and DB-generated timestamps
+        for entry in entries:
+            db_instance.session.refresh(entry)
+
+        return entries
 
     return _seed
 
@@ -127,6 +154,18 @@ def create_mock_cursor():
         return cursor
 
     return _create
+
+
+@pytest.fixture
+def sample_download_row():
+    return {
+        "url": "https://www.test.com/image-1.jpg",
+        "title": "Test Page",
+        "media_type": MediaType.IMAGE,
+        "start_time": datetime.fromisoformat("2025-01-01T10:10:15"),
+        "end_time": datetime.fromisoformat("2025-01-01T10:11:20"),
+        "order_number": 0,
+    }
 
 
 DASHBOARD_URL = f"{BASE_URL}/dashboard"

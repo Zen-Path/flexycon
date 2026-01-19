@@ -25,6 +25,24 @@ function closeOverlay() {
 
 // HTML
 
+function generateMediaSelect(targetId) {
+    const options = Object.entries(MediaType).map(([name, value]) => {
+        const isSelected = value === targetId ? "selected" : "";
+        // Convert "GALLERY" to "Gallery"
+        const label = name.charAt(0) + name.slice(1).toLowerCase();
+
+        return `<option value="${value}" ${isSelected}>${label}</option>`;
+    });
+
+    // Manually add the Unknown option
+    options.push(`<option value="-1" selected>Unknown</option>`);
+
+    return `
+        <select id="gm-media-select" class="gm-select">
+            ${options.join("\n")}
+        </select>
+    `;
+}
 overlay.innerHTML = `
 <div class="gm-overlay-box">
     <h2 class="gm-overlay-title">URL Extractor</h2>
@@ -39,15 +57,7 @@ overlay.innerHTML = `
     <!-- Media Type Dropdown -->
     <div>
         <label class="gm-label">Media Type</label>
-        <select id="gm-media-select" class="gm-select">
-            ${Object.values(MEDIA_TYPES)
-                .map((val) => {
-                    const isSelected =
-                        val === MEDIA_TYPES.UNKNOWN ? "selected" : "";
-                    return `<option value="${val}" ${isSelected}>${val}</option>`;
-                })
-                .join("")}
-        </select>
+        ${generateMediaSelect()}
     </div>
 
     <!-- Range Inputs -->
@@ -109,11 +119,12 @@ btnSubmit.addEventListener("click", () => {
         .split("\n")
         .map((l) => l.trim())
         .filter((l) => l !== "");
-    const type = mediaSelect.value;
+    const mediaType =
+        mediaSelect.value.trim() !== "" ? parseInt(mediaSelect.value) : null;
 
     const result = {
         urls: rawUrls,
-        mediaType: type,
+        mediaType: mediaType,
         rangeStart: startVal,
         rangeEnd: endVal,
     };

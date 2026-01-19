@@ -6,6 +6,7 @@ from urllib.parse import urljoin
 import pytest
 import requests
 from playwright.sync_api import Dialog, Page, expect
+from scripts.media_server.src.constants import MediaType
 
 from .conftest import API_DOWNLOAD, BASE_URL, DASHBOARD_URL
 
@@ -74,8 +75,16 @@ def test_sorting_by_url(page: Page, seed):
     - Verify Sort Indicators.
     """
     initial_data = [
-        ("http://a_start.com", "Zebra Title", "image", "2025-01-01", "2025-01-01"),
-        ("http://z_end.com", "Apple Title", "image", "2025-01-01", "2025-01-01"),
+        {
+            "url": "http://a_start.com",
+            "title": "Zebra Title",
+            "start_time": datetime.now(),
+        },
+        {
+            "url": "http://z_end.com",
+            "title": "Apple Title",
+            "start_time": datetime.now(),
+        },
     ]
     seed(initial_data)
 
@@ -102,21 +111,21 @@ def test_search_and_sort(page: Page, seed):
     Test 3: Search + Sort
     """
     initial_data = [
-        (
-            "http://python-1.com",
-            "Python Tutorial A",
-            "video",
-            "2025-01-01",
-            "2025-01-01",
-        ),
-        (
-            "http://python-2.com",
-            "Python Tutorial Z",
-            "video",
-            "2025-01-02",
-            "2025-01-02",
-        ),
-        ("http://java-1.com", "Java Tutorial", "video", "2025-01-03", "2025-01-03"),
+        {
+            "url": "http://python-1.com",
+            "title": "Python Tutorial A",
+            "start_time": datetime.now(),
+        },
+        {
+            "url": "http://python-2.com",
+            "title": "Python Tutorial Z",
+            "start_time": datetime.now(),
+        },
+        {
+            "url": "http://java-1.com",
+            "title": "Java Tutorial",
+            "start_time": datetime.now(),
+        },
     ]
     seed(initial_data)
 
@@ -139,7 +148,7 @@ def test_search_and_sort(page: Page, seed):
     expect(page.locator("body")).not_to_contain_text("Java Tutorial")
 
 
-def test_edit_feature_ui(page: Page, seed):
+def test_edit_feature_ui(page: Page, seed, sample_download_row):
     """
     Test Edit Flow:
     1. Click Edit button on a row.
@@ -147,10 +156,7 @@ def test_edit_feature_ui(page: Page, seed):
     3. Save.
     4. Verify Table updates immediately.
     """
-    initial_data = [
-        ("http://ui-edit.com", "Old UI Title", "image", "2025-01-01", "2025-01-01")
-    ]
-    seed(initial_data)
+    seed([sample_download_row])
 
     page.goto(DASHBOARD_URL)
 
@@ -160,11 +166,12 @@ def test_edit_feature_ui(page: Page, seed):
     expect(page.locator("#editModal")).to_be_visible()
 
     # Check that input was pre-filled correctly
-    expect(page.locator("#editTitle")).to_have_value("Old UI Title")
+    expect(page.locator("#editTitle")).to_have_value(sample_download_row["title"])
 
     # Type new values
     page.fill("#editTitle", "New UI Title")
-    page.select_option("#editMediaType", "gallery")
+    page.select_option("#editMediaType", str(MediaType.GALLERY.value))
+    # page.select_option("#editMediaType", )
 
     # Save
     page.click("button:has-text('Save')")
@@ -174,23 +181,20 @@ def test_edit_feature_ui(page: Page, seed):
 
     # Text should update in the table
     expect(page.locator("body")).to_contain_text("New UI Title")
-    expect(page.locator("body")).not_to_contain_text("Old UI Title")
+    expect(page.locator("body")).not_to_contain_text(sample_download_row["title"])
 
     # Icon should update
     expect(page.locator(".type-gallery")).to_be_visible()
 
 
-def test_delete_single_ui(page: Page, seed):
+def test_delete_single_ui(page: Page, seed, sample_download_row):
     """
     Test Delete Flow:
     1. Click Delete button.
     2. Handle browser 'Confirm' dialog.
     3. Verify row disappears.
     """
-    initial_data = [
-        ("http://ui-delete.com", "To Be Deleted", "image", "2025-01-01", "2025-01-01")
-    ]
-    seed(initial_data)
+    seed([sample_download_row])
 
     page.goto(DASHBOARD_URL)
 
@@ -208,7 +212,7 @@ def test_delete_single_ui(page: Page, seed):
     # The API call is async, so expect().to_have_count(0) waits automatically until
     # it happens
     expect(page.locator("#table-body tr")).to_have_count(0)
-    expect(page.locator("body")).not_to_contain_text("To Be Deleted")
+    expect(page.locator("body")).not_to_contain_text(sample_download_row["title"])
 
 
 def test_delete_all_visible_no_search(page: Page, seed):
@@ -220,9 +224,9 @@ def test_delete_all_visible_no_search(page: Page, seed):
     4. Verify Table is completely empty.
     """
     initial_data = [
-        ("http://1.com", "Item One", "image", "2025-01-01", "2025-01-01"),
-        ("http://2.com", "Item Two", "video", "2025-01-01", "2025-01-01"),
-        ("http://3.com", "Item Three", "gallery", "2025-01-01", "2025-01-01"),
+        {"url": "http://1.com", "title": "Item One", "start_time": datetime.now()},
+        {"url": "http://2.com", "title": "Item Two", "start_time": datetime.now()},
+        {"url": "http://3.com", "title": "Item Three", "start_time": datetime.now()},
     ]
     seed(initial_data)
 
@@ -248,8 +252,16 @@ def test_bulk_delete_failure_alert(page: Page, seed):
     3. Verify the alert message shows the correct failure count.
     """
     initial_data = [
-        ("http://fail.com", "Faulty Item", "image", "2025-01-01", "2025-01-01"),
-        ("http://success.com", "Valid Item", "image", "2025-01-01", "2025-01-01"),
+        {
+            "url": "http://fail.com",
+            "title": "Faulty Item",
+            "start_time": datetime.now(),
+        },
+        {
+            "url": "http://success.com",
+            "title": "Valid Item",
+            "start_time": datetime.now(),
+        },
     ]
     seed(initial_data)
 
@@ -315,9 +327,21 @@ def test_delete_visible_with_search(page: Page, seed):
     6. Verify "Keep Me" items are STILL there.
     """
     initial_data = [
-        ("http://keep.com", "Keep Me Safe", "image", "2025-01-01", "2025-01-01"),
-        ("http://del-1.com", "Delete Me Please", "video", "2025-01-01", "2025-01-01"),
-        ("http://del-2.com", "Delete Me Also", "video", "2025-01-01", "2025-01-01"),
+        {
+            "url": "http://keep.com",
+            "title": "Keep Me Safe",
+            "start_time": datetime.now(),
+        },
+        {
+            "url": "http://del-1.com",
+            "title": "Delete Me Please",
+            "start_time": datetime.now(),
+        },
+        {
+            "url": "http://del-2.com",
+            "title": "Delete Me Also",
+            "start_time": datetime.now(),
+        },
     ]
     seed(initial_data)
 
@@ -343,22 +367,14 @@ def test_delete_visible_with_search(page: Page, seed):
     expect(page.locator("body")).not_to_contain_text("Delete Me")
 
 
-def test_realtime_updates(page: Page, auth_headers, seed):
+def test_realtime_updates(page: Page, auth_headers, seed, sample_download_row):
     """
     1. Seed some initial data.
     2. Load Dashboard.
     3. Trigger API in background (simulating backend process).
     4. Verify SSE update.
     """
-    initial_data = [
-        (
-            "http://initial.com",
-            "Initial Item",
-            "image",
-            "2025-01-01 10:00:00",
-            "2025-01-01 10:05:00",
-        )
-    ]
+    initial_data = [sample_download_row]
     seed(initial_data)
 
     page.goto(DASHBOARD_URL)
@@ -369,7 +385,7 @@ def test_realtime_updates(page: Page, auth_headers, seed):
     for i in range(new_item_count):
         payload = {
             "urls": [urljoin("https://example.com", str(i))],
-            "mediaType": "unknown",
+            "mediaType": None,
         }
         requests.post(
             urljoin(BASE_URL, API_DOWNLOAD), json=payload, headers=auth_headers
@@ -377,10 +393,10 @@ def test_realtime_updates(page: Page, auth_headers, seed):
 
     all_titles = page.locator("#table-body .title-text").all_inner_texts()
     assert len(all_titles) == initial_rows_count + new_item_count
-    assert "Initial Item" in all_titles
+    assert sample_download_row["title"] in all_titles
     assert "No Title Found" in all_titles
 
     all_urls = page.locator("#table-body .url-subtext").all_inner_texts()
     assert len(all_urls) == len(all_titles)
-    assert "http://initial.com" in all_urls
+    assert sample_download_row["url"] in all_urls
     assert "https://example.com/1" in all_urls

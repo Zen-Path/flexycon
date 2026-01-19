@@ -52,6 +52,24 @@ const MEDIA_CONFIG = Object.freeze({
     },
 });
 
+// UTILS
+
+function toLocalStandardTime(isoString) {
+    if (!isoString) return "-";
+
+    const date = new Date(isoString);
+
+    // 'sv-SE' (Sweden) results in "YYYY-MM-DD HH:mm:ss"
+    return date.toLocaleString("sv-SE", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    });
+}
+
 // LOGIC
 
 function addRowToData(item, isNew) {
@@ -120,6 +138,8 @@ function renderTable() {
 
         const titleDisplay = row.title ? `${row.title}` : "No Title Found";
 
+        const localTime = toLocalStandardTime(row.startTime);
+
         tr.innerHTML = `
         <td class="col-check">
             <input type="checkbox" class="row-checkbox" ${row.selected ? "checked" : ""} onchange="toggleRowSelect(${row.id}, this.checked)">
@@ -132,7 +152,7 @@ function renderTable() {
                 <span class="url-subtext">${row.url}</span>
             </a>
         </td>
-        <td class="col-time">${row.startTime}</td>
+        <td class="col-time">${localTime}</td>
         <td class="col-actions">
             <button class="action-btn btn-copy-title" onclick="copyItemField(${row.id}, 'title')" title="Copy Title">
                 <i class="fa-solid fa-copy"></i>
@@ -322,7 +342,9 @@ function updateEntry(id, newTitle, newType) {
 function saveEdit() {
     const id = parseInt(document.getElementById("editId").value);
     const newTitle = document.getElementById("editTitle").value;
-    const newType = document.getElementById("editMediaType").value;
+    const newTypeValue = document.getElementById("editMediaType").value;
+
+    const newType = newTypeValue === -1 ? null : parseInt(newTypeValue);
 
     const payload = { id, title: newTitle };
     if (newType !== "") {
@@ -354,9 +376,10 @@ function handleDelete(payload) {
 function deleteEntry(id) {
     if (!confirm("Are you sure you want to delete this entry?")) return;
 
-    fetch(`/api/bulkDelete/${id}`, {
+    fetch(`/api/bulkDelete`, {
         method: "POST",
         headers: {
+            "Content-Type": "application/json",
             "X-API-Key": apiKey,
         },
         body: JSON.stringify({ ids: [id] }),
@@ -483,7 +506,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial Load
     fetch("/api/downloads", {
-        headers: { "X-API-Key": apiKey },
+        headers: { "Content-Type": "application/json", "X-API-Key": apiKey },
     })
         .then((response) => response.json())
         .then((data) => {
@@ -504,7 +527,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 break;
 
             case EventType.UPDATE:
-                updateEntry(id, data.title, data.mediaType);
+                updateEntry(data.id, data.title, data.mediaType);
                 break;
 
             case EventType.PROGRESS:

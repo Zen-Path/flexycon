@@ -1,7 +1,8 @@
-import sqlite3
 from datetime import datetime, timezone
 
 from flask import Blueprint, Response, current_app, jsonify, request
+from scripts.media_server.src.constants import MediaType
+from scripts.media_server.src.models import Download, db
 from scripts.media_server.src.utils import OperationResult
 
 api_bp = Blueprint("api", __name__)
@@ -27,25 +28,28 @@ def health_check():
 
 @api_bp.route("/downloads")
 def get_downloads():
-    with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM downloads ORDER BY id DESC")
+    """
+    Fetch downloads ordered by ID descending
+    """
+    downloads = Download.query.order_by(Download.id.desc()).all()
 
-        rows = []
-        for row in cursor.fetchall():
-            d = dict(row)
-            rows.append(
-                {
-                    "id": d["id"],
-                    "url": d["url"],
-                    "title": d["title"],
-                    "mediaType": d["media_type"],
-                    "startTime": d["start_time"],
-                    "endTime": d["end_time"],
-                }
-            )
-    return jsonify(rows)
+    return jsonify(
+        [
+            {
+                "id": d.id,
+                "url": d.url,
+                "title": d.title,
+                "mediaType": d.media_type,
+                "orderNumber": d.order_number,
+                "startTime": d.start_time_iso,
+                "endTime": d.end_time_iso,
+                "updatedAt": d.updated_at_iso,
+                "status": d.status,
+                "statusMessage": d.status_msg,
+            }
+            for d in downloads
+        ]
+    )
 
 
 @api_bp.route("/stream")
@@ -63,7 +67,7 @@ def stream():
 
 @api_bp.route("/bulkEdit", methods=["PATCH"])
 def bulk_edit_entries():
-    data = request.get_json(silent=True) or []
+    data = request.get_json()
 
     if not isinstance(data, list):
         return (
@@ -71,57 +75,58 @@ def bulk_edit_entries():
             400,
         )
 
-    results = []
-    with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
-        for item in data:
-            entry_id = item.get("id")
-            if not entry_id:
-                results.append(OperationResult(False, None, "Missing 'id' field"))
-                continue
+    input_ids = [item.get("id") for item in data if item.get("id")]
+    existing_downloads = Download.query.filter(Download.id.in_(input_ids)).all()
 
-            # Dynamic SQL construction
-            updates = []
-            params = []
+    # Create a lookup map for speed and deduplication
+    download_map = {d.id: d for d in existing_downloads}
+
+    results = []
+
+    for item in data:
+        entry_id = item.get("id")
+        if not entry_id:
+            results.append(OperationResult(False, None, "Missing 'id' field"))
+            continue
+
+        target = download_map.get(entry_id)
+        if not target:
+            results.append(OperationResult(False, entry_id, "ID not found in database"))
+            continue
+
+        try:
+            has_updates = False
 
             if "title" in item:
-                updates.append("title = ?")
-                params.append(item["title"])
+                target.title = item["title"]
+                has_updates = True
 
             if "mediaType" in item:
-                media_type = item["mediaType"]
-                if media_type and media_type not in ["image", "video", "gallery"]:
+                try:
+                    media_type = item["mediaType"]
+                    target.media_type = (
+                        MediaType(media_type) if media_type is not None else None
+                    )
+                    has_updates = True
+                except ValueError:
                     results.append(
                         OperationResult(
-                            False, entry_id, f"Invalid mediaType: {media_type!r}"
+                            False, entry_id, f"Invalid mediaType: {media_type}"
                         )
                     )
                     continue
 
-                updates.append("media_type = ?")
-                params.append(item["mediaType"])
-
-            if not updates:
+            if not has_updates:
                 results.append(OperationResult(False, entry_id, "No fields to update"))
                 continue
 
-            # Execution
-            try:
-                cursor = conn.cursor()
-                sql = f"UPDATE downloads SET {', '.join(updates)} WHERE id = ?"
-                params.append(entry_id)
-                cursor.execute(sql, params)
+            # Save changes for this specific object
+            db.session.commit()
+            results.append(OperationResult(True, entry_id))
 
-                if cursor.rowcount == 0:
-                    results.append(
-                        OperationResult(False, entry_id, "ID not found in database")
-                    )
-                else:
-                    conn.commit()
-                    results.append(OperationResult(True, entry_id, None))
-
-            except Exception as e:
-                conn.rollback()
-                results.append(OperationResult(False, entry_id, str(e)))
+        except Exception as e:
+            db.session.rollback()
+            results.append(OperationResult(False, entry_id, str(e)))
 
     master_result = OperationResult(True, results)
     return jsonify(master_result.to_dict()), 200
@@ -129,8 +134,8 @@ def bulk_edit_entries():
 
 @api_bp.route("/bulkDelete", methods=["POST"])
 def bulk_delete():
-    data = request.get_json(silent=True) or {}
-    ids = data.get("ids", [])
+    data = request.get_json()
+    ids = data.get("ids")
 
     if not ids or not isinstance(ids, list):
         return (
@@ -142,24 +147,29 @@ def bulk_delete():
 
     unique_ids = list(set(ids))
 
-    results = []
-    with sqlite3.connect(current_app.config["DB_PATH"]) as conn:
+    try:
+        # Fetch existing records
+        existing_records = Download.query.filter(Download.id.in_(unique_ids)).all()
+        existing_ids = {d.id for d in existing_records}
+
+        # Identify missing for the report
+        results = []
         for entry_id in unique_ids:
-            try:
-                cursor = conn.cursor()
-                cursor.execute("DELETE FROM downloads WHERE id = ?", (entry_id,))
+            if entry_id in existing_ids:
+                results.append(OperationResult(True, entry_id))
+            else:
+                results.append(OperationResult(False, entry_id, "Record ID not found"))
 
-                if cursor.rowcount > 0:
-                    conn.commit()
-                    results.append(OperationResult(True, entry_id))
-                else:
-                    results.append(
-                        OperationResult(False, entry_id, "Record ID not found")
-                    )
+        # Bulk delete existing ones
+        if existing_ids:
+            Download.query.filter(Download.id.in_(list(existing_ids))).delete(
+                synchronize_session=False
+            )
+            db.session.commit()
 
-            except Exception as e:
-                conn.rollback()
-                results.append(OperationResult(False, entry_id, str(e)))
+        master_result = OperationResult(True, results)
+        return jsonify(master_result.to_dict()), 200
 
-    master_result = OperationResult(True, results)
-    return jsonify(master_result.to_dict()), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(OperationResult(False, None, str(e)).to_dict()), 500

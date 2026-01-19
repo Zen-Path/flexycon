@@ -1,72 +1,31 @@
 import json
 import queue
-import sqlite3
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, List, Optional, Tuple
+from typing import Any, List, Optional
 
 from common.helpers import run_command
 from common.logger import logger
 from scripts.media_server.src.constants import EventType
+from scripts.media_server.src.models import db
 
 
-def init_db(db_path: Path):
+def init_db(app):
     """
-    Initializes the database schema.
-    Raises sqlite3.Error or PermissionError if setup fails.
+    Initializes the database schema using SQLAlchemy.
     """
-    db_path.parent.mkdir(parents=True, exist_ok=True)
+    # Extract the path from the URI (stripping sqlite:///)
+    db_uri = app.config.get("SQLALCHEMY_DATABASE_URI", "")
+    if db_uri.startswith("sqlite:///"):
+        db_path = Path(db_uri.replace("sqlite:///", ""))
+        db_path.parent.mkdir(parents=True, exist_ok=True)
 
     try:
-        with sqlite3.connect(db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS downloads (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    url TEXT NOT NULL,
-                    title TEXT,
-                    media_type TEXT,
-                    start_time TEXT,
-                    end_time TEXT
-                )
-            """
-            )
-            # Context manager auto-commits on success
-            logger.debug(f"Schema initialized at {db_path}")
-
-    except PermissionError:
-        logger.critical(f"No permission to write to {db_path.parent}")
-        raise  # Re-raise so the app knows it failed
-    except sqlite3.Error as e:
+        with app.app_context():
+            db.create_all()
+            logger.debug("SQLAlchemy schema initialized.")
+    except Exception as e:
         logger.critical(f"Database initialization failed: {e}")
-        raise
-
-
-def seed_db(db_path: Path, data_rows: List[Tuple]):
-    """
-    Injects data into the database.
-    """
-    if not data_rows:
-        return
-
-    # Ensure table exists first
-    init_db(db_path)
-
-    logger.info(f"Seeding database at: {db_path} with {len(data_rows)} rows")
-
-    try:
-        with sqlite3.connect(db_path) as conn:
-            cursor = conn.cursor()
-
-            # Using executemany instead of loop for optimization purposes
-            cursor.executemany(
-                "INSERT INTO downloads (url, title, media_type, start_time, end_time) VALUES (?, ?, ?, ?, ?)",
-                data_rows,
-            )
-
-    except sqlite3.Error as e:
-        logger.error(f"Failed to seed database: {e}")
         raise
 
 

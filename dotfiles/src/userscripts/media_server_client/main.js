@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.1.8
+// @version         2.2.0
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL
@@ -24,12 +24,15 @@ const BASE_URL = `http://localhost:${SERVER_PORT}`;
 
 const API_DOWNLOAD = `${BASE_URL}/api/media/download`;
 
-const MEDIA_TYPES = {
-    IMAGE: "image",
-    VIDEO: "video",
-    GALLERY: "gallery",
-    UNKNOWN: "unknown",
-};
+// Mirror of the backend MediaType Enum
+// prettier-ignore
+const MediaType = Object.freeze({
+    GALLERY:    0,
+    IMAGE:      1,
+    VIDEO:      2,
+    AUDIO:      3,
+    TEXT:       4,
+});
 
 // prettier-ignore
 const DOWNLOAD_STATUS = Object.freeze({
@@ -190,7 +193,7 @@ function createDownloadForm() {
 function main() {
     GM_registerMenuCommand("Download Media", () => {
         const currentUrl = window.location.href;
-        downloadMedia([currentUrl], MEDIA_TYPES.UNKNOWN);
+        downloadMedia([currentUrl], null);
     });
 
     GM_registerMenuCommand("Open Download Form", async () => {
