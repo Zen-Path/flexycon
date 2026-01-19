@@ -2,7 +2,7 @@
 // @name            File Downloader
 // @namespace       Flexycon
 // @match           http*://*/*
-// @version         2.2.0
+// @version         2.2.1
 // @author          Zen-Path
 // @description     Send a download request for a URL to a local media server
 // @downloadURL

@@ -323,7 +323,8 @@ function openEditModal(id) {
 
     document.getElementById("editId").value = id;
     document.getElementById("editTitle").value = item.title;
-    document.getElementById("editMediaType").value = item.mediaType;
+    document.getElementById("editMediaType").value =
+        item.mediaType === null ? "" : item.mediaType;
     document.getElementById("editModal").style.display = "flex";
 }
 
@@ -344,7 +345,7 @@ function saveEdit() {
     const newTitle = document.getElementById("editTitle").value;
     const newTypeValue = document.getElementById("editMediaType").value;
 
-    const newType = newTypeValue === -1 ? null : parseInt(newTypeValue);
+    const newType = newTypeValue === "" ? null : parseInt(newTypeValue);
 
     const payload = { id, title: newTitle };
     if (newType !== "") {

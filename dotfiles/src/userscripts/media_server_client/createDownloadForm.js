@@ -35,7 +35,7 @@ function generateMediaSelect(targetId) {
     });
 
     // Manually add the Unknown option
-    options.push(`<option value="-1" selected>Unknown</option>`);
+    options.push(`<option value="">Unknown</option>`);
 
     return `
         <select id="gm-media-select" class="gm-select">
@@ -57,7 +57,7 @@ overlay.innerHTML = `
     <!-- Media Type Dropdown -->
     <div>
         <label class="gm-label">Media Type</label>
-        ${generateMediaSelect()}
+        ${generateMediaSelect(MediaType.GALLERY)}
     </div>
 
     <!-- Range Inputs -->
