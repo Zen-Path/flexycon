@@ -83,6 +83,8 @@ class MessageAnnouncer:
     def announce_event(self, event_type: EventType, payload: dict):
         """Wraps the payload in a standard envelope and announces it."""
         msg = {"type": event_type.value, "data": payload}
+        logger.debug(f"Announcement: {msg}")
+
         self._announce(f"data: {json.dumps(msg)}\n\n")
 
 
