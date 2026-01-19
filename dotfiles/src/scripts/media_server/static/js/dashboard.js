@@ -335,8 +335,12 @@ function closeModal() {
 function updateEntry(id, newTitle, newType) {
     const item = allData.find((r) => r.id === id);
     if (item) {
-        item.title = newTitle;
-        item.mediaType = newType;
+        if (newTitle !== undefined) {
+            item.title = newTitle;
+        }
+        if (newType !== undefined) {
+            item.mediaType = newType;
+        }
     }
 }
 
@@ -346,9 +350,10 @@ function saveEdit() {
     const newTypeValue = document.getElementById("editMediaType").value;
 
     const newType = newTypeValue === "" ? null : parseInt(newTypeValue);
+    const item = allData.find((r) => r.id === id);
 
     const payload = { id, title: newTitle };
-    if (newType !== "") {
+    if (item.mediaType !== newType) {
         payload.mediaType = newType;
     }
 
