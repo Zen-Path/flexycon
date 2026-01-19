@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from flask import Blueprint, Response, current_app, jsonify, request
-from scripts.media_server.src.constants import MediaType
+from scripts.media_server.src.constants import EventType, MediaType
 from scripts.media_server.src.models import Download, db
 from scripts.media_server.src.utils import OperationResult
 
@@ -123,6 +123,15 @@ def bulk_edit_entries():
             # Save changes for this specific object
             db.session.commit()
             results.append(OperationResult(True, entry_id))
+
+            current_app.config["ANNOUNCER"].announce_event(
+                EventType.UPDATE,
+                {
+                    "id": entry_id,
+                    "title": target.title,
+                    "mediaType": target.media_type,
+                },
+            )
 
         except Exception as e:
             db.session.rollback()
