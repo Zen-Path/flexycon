@@ -1,39 +1,45 @@
+import random
 from datetime import datetime, timedelta
 from functools import lru_cache
+from typing import Any, Dict, List, Optional
 
 from scripts.media_server.src.constants import MediaType
 
 
 def validate_seed_data(data):
-    prev_start_time = None
-
     for i, entry in enumerate(data):
         url = entry.get("url", "Unknown URL")
         start = entry["start_time"]
         end = entry["end_time"]
 
-        # End shouldn't be older than start time
-        if end < start:
+        if end and end < start:
             raise ValueError(
                 f"Item #{i} ({url!r}): 'end_time' is earlier than 'start_time'."
             )
 
-        # Data should be in reverse chronological order by start time
-        if prev_start_time and start > prev_start_time:
-            raise ValueError(
-                f"Item #{i} ({url!r}): not in reverse chronological order.\n"
-                f"Current entry ({start}) is newer than the entry above "
-                f"({prev_start_time})."
-            )
 
-        prev_start_time = start
+DEFAULT_OPTIONS = {
+    "end_time_probability": 0.9,
+    "max_days_offset": 200,
+    "max_duration_seconds": 3600,
+    "min_duration_seconds": 5,
+    "seed": 42,
+}
 
 
 @lru_cache(maxsize=1)
-def get_demo_downloads():
-    now = datetime.now()
+def get_demo_downloads(
+    now: Optional[datetime] = None, row_count: Optional[int] = None, **options: Any
+) -> List[Dict[str, Any]]:
+    config = {**DEFAULT_OPTIONS, **options}
 
-    data = [
+    # Avoid side effects on global random
+    rng = random.Random(config["seed"])
+
+    if now is None:
+        now = datetime.now()
+
+    base_data: List[Dict[str, Any]] = [
         {
             "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "title": "Rick Astley - Never Gonna Give You Up (Official Video) - YouTube",
@@ -276,6 +282,41 @@ def get_demo_downloads():
             "end_time": now - timedelta(days=195, hours=10, seconds=5),
         },
     ]
+
+    data = list(base_data)
+
+    if row_count is not None:
+        if row_count > len(data):
+            metadata_pool = [{"url": d["url"], "title": d["title"]} for d in base_data]
+
+            extra_needed = row_count - len(data)
+            for _ in range(extra_needed):
+                source = rng.choice(metadata_pool)
+
+                days_offset = rng.randint(0, config["max_days_offset"])
+                seconds_offset = rng.randint(0, 86400)
+                start_time = now - timedelta(days=days_offset, seconds=seconds_offset)
+
+                end_time = None
+                if rng.random() < config["end_time_probability"]:
+                    duration = rng.randint(
+                        config["min_duration_seconds"], config["max_duration_seconds"]
+                    )
+                    end_time = start_time + timedelta(seconds=duration)
+
+                data.append(
+                    {
+                        "url": source["url"],
+                        "title": source["title"],
+                        "media_type": rng.choice(list(MediaType)),
+                        "start_time": start_time,
+                        "end_time": end_time,
+                    }
+                )
+        else:
+            data = data[:row_count]
+
+    data.sort(key=lambda x: x["start_time"], reverse=False)
 
     validate_seed_data(data)
 
