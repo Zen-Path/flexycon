@@ -66,9 +66,10 @@ def seed_db(data=None):
 class MessageAnnouncer:
     def __init__(self) -> None:
         self.listeners: List[queue.Queue[str]] = []
+        self.max_listeners = 10
 
     def listen(self) -> queue.Queue[str]:
-        q: queue.Queue[str] = queue.Queue(maxsize=10)
+        q: queue.Queue[str] = queue.Queue(maxsize=self.max_listeners)
         self.listeners.append(q)
         return q
 
