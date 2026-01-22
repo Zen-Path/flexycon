@@ -3,7 +3,7 @@ import queue
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from common.helpers import run_command
 from common.logger import logger
@@ -64,15 +64,15 @@ def seed_db(data=None):
 
 
 class MessageAnnouncer:
-    def __init__(self):
-        self.listeners = []
+    def __init__(self) -> None:
+        self.listeners: List[queue.Queue[str]] = []
 
-    def listen(self):
-        q = queue.Queue(maxsize=10)
+    def listen(self) -> queue.Queue[str]:
+        q: queue.Queue[str] = queue.Queue(maxsize=10)
         self.listeners.append(q)
         return q
 
-    def _announce(self, msg: str):
+    def _announce(self, msg: str) -> None:
         # Iterate backwards to remove dead listeners safely
         for i in reversed(range(len(self.listeners))):
             try:
@@ -80,7 +80,7 @@ class MessageAnnouncer:
             except queue.Full:
                 del self.listeners[i]
 
-    def announce_event(self, event_type: EventType, payload: dict):
+    def announce_event(self, event_type: EventType, payload: Dict[str, Any]) -> None:
         """Wraps the payload in a standard envelope and announces it."""
         msg = {"type": event_type.value, "data": payload}
         logger.debug(f"Announcement: {msg}")
