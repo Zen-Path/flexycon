@@ -39,15 +39,18 @@ def start_download_record(
 
         last_id = new_download.id
 
-        current_app.config["ANNOUNCER"].announce_event(
-            EventType.CREATE,
-            {
-                "id": last_id,
-                "url": url,
-                "mediaType": media_type,
-                "startTime": new_download.start_time_iso,
-            },
-        )
+        try:
+            current_app.config["ANNOUNCER"].announce_event(
+                EventType.CREATE,
+                {
+                    "id": last_id,
+                    "url": url,
+                    "mediaType": media_type,
+                    "startTime": new_download.start_time_iso,
+                },
+            )
+        except Exception as e:
+            logger.warning(f"Announcer failed: {e}")
 
         return True, last_id, None
 
@@ -82,16 +85,19 @@ def complete_download_record(
 
         db.session.commit()
 
-        current_app.config["ANNOUNCER"].announce_event(
-            EventType.UPDATE,
-            {
-                "id": download_id,
-                "title": title,
-                "endTime": record.end_time_iso,
-                "updatedAt": record.updated_at_iso,
-                "orderNumber": record.order_number,
-            },
-        )
+        try:
+            current_app.config["ANNOUNCER"].announce_event(
+                EventType.UPDATE,
+                {
+                    "id": download_id,
+                    "title": title,
+                    "endTime": record.end_time_iso,
+                    "updatedAt": record.updated_at_iso,
+                    "orderNumber": record.order_number,
+                },
+            )
+        except Exception as e:
+            logger.warning(f"Announcer failed: {e}")
 
         return True, None
     except Exception as e:
@@ -256,10 +262,13 @@ def download_media():
             report[url].status = False
             report[url].error = str(e)
 
-        current_app.config["ANNOUNCER"].announce_event(
-            EventType.PROGRESS,
-            {"id": download_id, "current": i, "total": final_processing_count},
-        )
+        try:
+            current_app.config["ANNOUNCER"].announce_event(
+                EventType.PROGRESS,
+                {"id": download_id, "current": i, "total": final_processing_count},
+            )
+        except Exception as e:
+            logger.warning(f"Announcer failed: {e}")
 
         # Finalize DB record
         success, error = complete_download_record(

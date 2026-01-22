@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from common.logger import logger
 from flask import Blueprint, Response, current_app, jsonify, request
 from scripts.media_server.src.constants import EventType, MediaType
 from scripts.media_server.src.models import Download, db
@@ -124,14 +125,17 @@ def bulk_edit_entries():
             db.session.commit()
             results.append(OperationResult(True, entry_id))
 
-            current_app.config["ANNOUNCER"].announce_event(
-                EventType.UPDATE,
-                {
-                    "id": entry_id,
-                    "title": target.title,
-                    "mediaType": target.media_type,
-                },
-            )
+            try:
+                current_app.config["ANNOUNCER"].announce_event(
+                    EventType.UPDATE,
+                    {
+                        "id": entry_id,
+                        "title": target.title,
+                        "mediaType": target.media_type,
+                    },
+                )
+            except Exception as e:
+                logger.warning(f"Announcer failed: {e}")
 
         except Exception as e:
             db.session.rollback()
@@ -184,8 +188,8 @@ def bulk_delete():
                         "ids": list(existing_ids),
                     },
                 )
-            except:
-                pass
+            except Exception as e:
+                logger.warning(f"Announcer failed: {e}")
 
         master_result = OperationResult(True, results)
         return jsonify(master_result.to_dict()), 200
