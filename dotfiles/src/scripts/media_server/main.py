@@ -18,7 +18,7 @@ from scripts.media_server.src.logging_middleware import register_logging
 from scripts.media_server.src.models import db
 from scripts.media_server.src.utils import MessageAnnouncer, init_db, seed_db
 
-__version__ = "2.0.10"
+__version__ = "2.0.13"
 
 load_dotenv(flex_scripts / "media_server" / ".env")
 
@@ -124,8 +124,11 @@ def main():
         init_db(app)
 
         if demo_mode:
-            logger.info("Demo mode enabled: Seeding database...")
-            seed_db()
+            logger.info("Demo mode enabled!")
+
+            row_count = int(os.getenv("DEMO_ROW_COUNT", 25))
+            logger.info(f"Seeding database with {row_count} rows...")
+            seed_db(row_count=row_count)
 
     app.run(
         port=int("{{@@ _vars['media_server_port'] @@}}"),
