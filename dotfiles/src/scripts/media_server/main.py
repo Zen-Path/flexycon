@@ -18,7 +18,7 @@ from scripts.media_server.src.logging_middleware import register_logging
 from scripts.media_server.src.models import db
 from scripts.media_server.src.utils import MessageAnnouncer, init_db, seed_db
 
-__version__ = "2.0.7"
+__version__ = "2.0.8"
 
 load_dotenv(flex_scripts / "media_server" / ".env")
 
@@ -99,9 +99,11 @@ def main():
         db_fd, db_path = tempfile.mkstemp(suffix=".db")
         os.close(db_fd)
     else:
-        db_path = Path(
-            os.getenv("DB_PATH") or flex_scripts / "media_server" / "media.db"
-        ).absolute()
+        db_path = str(
+            Path(
+                os.getenv("DB_PATH") or flex_scripts / "media_server" / "media.db"
+            ).absolute()
+        )
     logger.debug(f"Database path: {db_path!r}")
 
     app.config.update(
