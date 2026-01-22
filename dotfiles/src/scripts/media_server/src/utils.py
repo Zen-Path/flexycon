@@ -1,7 +1,6 @@
 import json
 import queue
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -31,34 +30,28 @@ def init_db(app):
         raise
 
 
-def seed_db(data=None):
+def seed_db(
+    data: Optional[List[Dict[str, Any]]] = None, row_count: Optional[int] = None
+):
     """
     Seeds the database with provided data.
     """
-    data_to_use = data if data is not None else get_demo_downloads()
+    data_to_use = data if data is not None else get_demo_downloads(row_count=row_count)
 
-    base_defaults = {
+    defaults = {
         "url": "https://default.com/media",
-        "start_time": datetime.now(timezone.utc),
     }
 
-    entries = []
-    for row in data_to_use:
-        # Merge defaults with provided data
-        merged_row = {**base_defaults, **row}
-        entry = Download(**merged_row)
-        entries.append(entry)
-
-    db.session.add_all(entries)
+    entries: List[Download] = [Download(**{**defaults, **row}) for row in data_to_use]
 
     try:
+        db.session.add_all(entries)
+        db.session.flush()
         db.session.commit()
-        # Refresh to get IDs/auto-generated timestamps back from SQLite
-        for entry in entries:
-            db.session.refresh(entry)
     except Exception as e:
         db.session.rollback()
-        raise e
+        logger.error(f"Error seeding database: {e}")
+        raise
 
     return entries
 
