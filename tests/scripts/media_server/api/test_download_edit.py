@@ -155,8 +155,8 @@ def test_bulk_edit_persistence(
     assert updated_row["title"] == new_title
     assert updated_row["mediaType"] == new_media_type
 
-    assert "updatedAt" in updated_row
-    assert updated_row["updatedAt"].endswith("Z")
+    assert "updatedTime" in updated_row
+    assert updated_row["updatedTime"].endswith("Z")
 
     # Other data shouldn't be affected
     assert updated_row["orderNumber"] == sample_download_row["order_number"]

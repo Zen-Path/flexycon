@@ -44,7 +44,7 @@ def get_downloads():
                 "orderNumber": d.order_number,
                 "startTime": d.start_time_iso,
                 "endTime": d.end_time_iso,
-                "updatedAt": d.updated_at_iso,
+                "updatedTime": d.updated_time_iso,
                 "status": d.status,
                 "statusMessage": d.status_msg,
             }
@@ -103,8 +103,8 @@ def bulk_edit_entries():
                 has_updates = True
 
             if "mediaType" in item:
+                media_type = item["mediaType"]
                 try:
-                    media_type = item["mediaType"]
                     target.media_type = (
                         MediaType(media_type) if media_type is not None else None
                     )

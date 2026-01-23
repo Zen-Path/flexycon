@@ -21,6 +21,7 @@ class Download(db.Model):  # type: ignore[name-defined]
         db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
     )
     end_time = db.Column(db.DateTime, nullable=True)
+    # TODO: update col name at next migration
     updated_at = db.Column(
         db.DateTime, nullable=True, onupdate=lambda: datetime.now(timezone.utc)
     )
@@ -37,5 +38,5 @@ class Download(db.Model):  # type: ignore[name-defined]
         return self.end_time.isoformat() + "Z" if self.end_time else None
 
     @property
-    def updated_at_iso(self):
+    def updated_time_iso(self):
         return self.updated_at.isoformat() + "Z" if self.updated_at else None

@@ -92,7 +92,7 @@ def complete_download_record(
                     "id": download_id,
                     "title": title,
                     "endTime": record.end_time_iso,
-                    "updatedAt": record.updated_at_iso,
+                    "updatedTime": record.updated_time_iso,
                     "orderNumber": record.order_number,
                 },
             )
