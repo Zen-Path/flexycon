@@ -88,11 +88,74 @@ body.dark-mode {
     --clr-warning: #fabd2f;
 }
 
+/* CSS RESET */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+/* Remove underline */
+a {
+    text-decoration: none;
+}
+
+/* Improve media defaults */
+img,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+/* Remove "3D" look */
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+}
+
+/* Remove weird gabs between cells */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Remove bullets */
+ol,
+ul {
+    list-style: none;
+}
+
+input {
+    color: inherit;
+}
+
+/* CUSTOM */
+
 body {
     display: flex;
     min-height: 100vh;
+    /* Fallback */
+    min-height: 100dvh;
     flex-direction: column;
-    margin: 0;
 
     color: var(--text-main);
     background-color: var(--bg-body);
@@ -103,6 +166,12 @@ body {
 main {
     /* Push the footer to the bottom */
     flex: 1;
+
+    width: 100%;
+    max-width: 1600px;
+
+    margin: 0 auto;
+    padding: 20px;
 }
 
 footer {
@@ -124,4 +193,12 @@ footer a {
 footer .version {
     font-family: monospace;
     font-weight: bold;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.flip {
+    transform: rotate(180deg);
 }

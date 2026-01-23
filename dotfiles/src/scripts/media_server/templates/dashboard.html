@@ -4,99 +4,31 @@ extra_css %}
     rel="stylesheet"
     href="{{ url_for('static', filename='css/dashboard.css') }}" />
 {% endblock %} {% block content %}
-
-<div class="header">
+<div class="actions-header">
     <div class="search-container">
         <input
             type="text"
             id="searchInput"
             oninput="filterTable()"
-            placeholder="Search title or URL..." />
-        <i
-            class="fa-solid fa-times clear-search"
-            id="clearBtn"
-            onclick="clearSearch()"></i>
+            placeholder="Search title..." />
+        <i id="clearBtn" class="fa-solid fa-times" onclick="clearSearch()"></i>
     </div>
 
     <div class="button-group">
-        <button class="btn-base copy-btn" onclick="copyVisibleUrls()">
-            <i class="fa-solid fa-copy"></i> Copy Selected
-        </button>
-
-        <button class="btn-base danger-btn" onclick="deleteVisible()">
-            <i class="fa-solid fa-trash-can"></i> Delete Selected
-        </button>
-
-        <button id="themeToggle" class="btn-base theme-toggle">
+        <button id="themeToggle" class="btn-base">
             <i class="fas fa-moon"></i>
         </button>
     </div>
 </div>
 
-<table id="dataTable">
-    <thead>
-        <tr>
-            <th class="col-check">
-                <input
-                    type="checkbox"
-                    id="selectAll"
-                    onclick="toggleSelectAll(this.checked)" />
-            </th>
-            <th id="th-id" onclick="sortTable('id')">ID</th>
-            <th id="th-media_type" onclick="sortTable('media_type')">Type</th>
-            <th id="th-title" onclick="sortTable('title')">Title / URL</th>
-            <th id="th-start_time" onclick="sortTable('start_time')">
-                Start Time
-            </th>
-            <!-- Actions Column (No sorting) -->
-            <th class="col-actions">Actions</th>
-        </tr>
-    </thead>
-    <tbody id="table-body">
-        <!-- Rows go here -->
-    </tbody>
-</table>
-
-<!-- Edit Modal -->
-<div class="modal-overlay" id="editModal">
-    <div class="modal">
-        <h3>Edit Entry</h3>
-        <input type="hidden" id="editId" />
-
-        <div class="form-group">
-            <label>Title</label>
-            <input type="text" id="editTitle" />
-        </div>
-
-        <div class="form-group">
-            <label>Media Type</label>
-            <select id="editMediaType">
-                <!-- TODO: generate from MediaType -->
-                <option value="0">Gallery</option>
-                <option value="1">Image</option>
-                <option value="2">Video</option>
-                <option value="3">Audio</option>
-                <option value="4">Text</option>
-                <option value="">Unknown</option>
-            </select>
-        </div>
-
-        <div class="modal-actions">
-            <button class="modal-btn btn-cancel" onclick="closeModal()">
-                Cancel
-            </button>
-            <button class="modal-btn btn-save" onclick="saveEdit()">
-                Save
-            </button>
-        </div>
-    </div>
-</div>
-
+<div id="downloadsTable"></div>
 {% endblock %} {% block extra_js %}
-<!-- Inject config variables here -->
 <script>
+    // Inject config variables here
     window.MEDIA_SERVER_KEY = "{{ config.get('MEDIA_SERVER_KEY', '') }}";
 </script>
 
-<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script
+    type="module"
+    src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

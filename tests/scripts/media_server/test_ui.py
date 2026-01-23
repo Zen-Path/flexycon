@@ -22,35 +22,41 @@ def test_dashboard_visuals(page: Page, seed):
     expect(page).to_have_title("Downloads | Media Server")
 
     # Check that we have rows
-    rows = page.locator("#table-body tr")
+    rows = page.locator(".data-row")
     expect(rows).not_to_have_count(0)
 
     # Check each column
-    first_row = page.locator("#table-body tr").first
-    expect(first_row).to_be_visible()
+    first_row = page.locator(".data-row").first
+    expect(first_row).to_be_visible(timeout=100)
 
-    expect(first_row.locator(".col-check input[type='checkbox']")).to_be_visible(
-        timeout=0
+    expect(first_row.locator(".col-checkbox input[type='checkbox']")).to_be_visible(
+        timeout=100
     )
 
     # ID: Matches # followed by digits (e.g., #123)
-    expect(first_row.locator(".col-id")).to_have_text(re.compile(r"^#\d+$"), timeout=0)
+    expect(first_row.locator(".col-id")).to_have_text(
+        re.compile(r"^#\d+$"), timeout=100
+    )
 
-    expect(first_row.locator(".col-type .type-video")).to_be_visible(timeout=0)
+    expect(first_row.locator(".col-media-type.type-video")).to_be_visible(timeout=100)
 
     # Title
-    expect(first_row.locator(".col-title a")).to_have_attribute(
-        "href", re.compile(r"^https?://"), timeout=0
+    expect(first_row.locator(".col-name a")).to_have_attribute(
+        "href", re.compile(r"^https?://"), timeout=100
     )
-    expect(first_row.locator(".col-title .title-text")).to_contain_text("Channel Intro")
+    expect(first_row.locator(".col-name .title")).to_contain_text(
+        "Channel Intro", timeout=100
+    )
 
     # Time
-    time_text = first_row.locator(".col-time").inner_text()
+    time_text = first_row.locator(".col-start-time").inner_text(timeout=100)
     _ = datetime.strptime(time_text, "%Y-%m-%d %H:%M:%S")
 
     # Actions
-    expect(first_row.locator(".col-actions .btn-edit")).to_be_visible(timeout=0)
-    expect(first_row.locator(".col-actions .btn-delete")).to_be_visible(timeout=0)
+    expect(first_row.locator(".col-actions .action-btn")).to_be_visible(timeout=100)
+
+    # Theme toggle
+    expect(page.locator("#themeToggle")).to_be_visible(timeout=100)
 
 
 def test_search(page: Page, seed):
@@ -60,12 +66,13 @@ def test_search(page: Page, seed):
     page.goto(DASHBOARD_URL)
 
     page.fill("#searchInput", "Cat Memes")
-    expect(page.locator("body")).to_contain_text("Best Cat Memes")
-    expect(page.locator("body")).not_to_contain_text("Rick Astley")
+    page.pause()
+    expect(page.locator(".data-table-body")).to_contain_text("Best Cat Memes")
+    expect(page.locator(".data-table-body")).not_to_contain_text("Rick Astley")
 
     # Clear search
     page.click("#clearBtn")
-    expect(page.locator("body")).to_contain_text("Rick Astley")
+    expect(page.locator(".data-table-body")).to_contain_text("Rick Astley")
 
 
 def test_sorting_by_url(page: Page, seed):
@@ -90,20 +97,23 @@ def test_sorting_by_url(page: Page, seed):
 
     page.goto(DASHBOARD_URL)
 
+    name_column_class = ".header-cell .col-name"
+    sort_indicator_class = ".header-cell .col-name .sort-indicator"
+
     # Click 'Title' header -> Sort ASC
-    page.click("#th-title")
+    page.click(name_column_class)
 
     # Verify Indicator
-    expect(page.locator("#th-title")).to_have_class(re.compile(r"active.*asc"))
+    expect(page.locator(sort_indicator_class)).to_have_class("fa-caret-up")
 
     # Verify Order (Using expect to wait for re-render)
-    expect(page.locator("#table-body tr").first).to_contain_text("Apple Title")
+    expect(page.locator(".data-row").first).to_contain_text("Apple Title", timeout=100)
 
     # Click again -> Sort DESC
-    page.click("#th-title")
-    expect(page.locator("#th-title")).to_have_class(re.compile(r"active.*desc"))
+    page.click(name_column_class)
+    expect(page.locator(sort_indicator_class)).to_have_class("fa-caret-down")
 
-    expect(page.locator("#table-body tr").first).to_contain_text("Zebra Title")
+    expect(page.locator(".data-row").first).to_contain_text("Zebra Title")
 
 
 def test_search_and_sort(page: Page, seed):
@@ -133,19 +143,21 @@ def test_search_and_sort(page: Page, seed):
 
     # Search
     page.fill("#searchInput", "Python")
-    rows = page.locator("#table-body tr")
+    rows = page.locator(".data-row")
     expect(rows).to_have_count(2)
 
+    name_column_class = ".header-cell .col-name"
+
     # Sort ASC
-    page.click("#th-title")
+    page.click(name_column_class)
     expect(rows.nth(0)).to_contain_text("Tutorial A")
 
     # Sort DESC
-    page.click("#th-title")
+    page.click(name_column_class)
     expect(rows.nth(0)).to_contain_text("Tutorial Z")
 
     # Ensure Java hidden
-    expect(page.locator("body")).not_to_contain_text("Java Tutorial")
+    expect(page.locator(".data-table-body")).not_to_contain_text("Java Tutorial")
 
 
 def test_edit_feature_ui(page: Page, seed, sample_download_row):
@@ -160,7 +172,8 @@ def test_edit_feature_ui(page: Page, seed, sample_download_row):
 
     page.goto(DASHBOARD_URL)
 
-    page.click(".btn-edit")
+    page.click(".cell .action-btn")
+    page.click(".dropdown-content .menu-item")
 
     # Verify Modal is visible
     expect(page.locator("#editModal")).to_be_visible()
@@ -170,11 +183,10 @@ def test_edit_feature_ui(page: Page, seed, sample_download_row):
 
     # Type new values
     page.fill("#editTitle", "New UI Title")
-    page.select_option("#editMediaType", str(MediaType.GALLERY.value))
-    # page.select_option("#editMediaType", )
+    page.select_option("#editMediaType", str(MediaType.GALLERY))
 
     # Save
-    page.click("button:has-text('Save')")
+    page.click("button:has-text('Save Changes')")
 
     # Modal should close
     expect(page.locator("#editModal")).not_to_be_visible()
@@ -199,19 +211,19 @@ def test_delete_single_ui(page: Page, seed, sample_download_row):
     page.goto(DASHBOARD_URL)
 
     # Verify row exists
-    expect(page.locator("#table-body tr")).to_have_count(1)
+    expect(page.locator(".data-row")).to_have_count(1)
 
     # Setup Dialog Handler (IMPORTANT)
     # By default, Playwright dismisses dialogs. We must tell it to 'accept' (Click OK).
     page.on("dialog", lambda dialog: dialog.accept())
 
-    # Click Delete
-    page.click(".btn-delete")
+    page.click(".cell .action-btn")
+    page.click(".dropdown-content .fa-pen")
 
     # Verify Row is Gone
     # The API call is async, so expect().to_have_count(0) waits automatically until
     # it happens
-    expect(page.locator("#table-body tr")).to_have_count(0)
+    expect(page.locator(".data-row")).to_have_count(0)
     expect(page.locator("body")).not_to_contain_text(sample_download_row["title"])
 
 
@@ -231,7 +243,7 @@ def test_delete_all_visible_no_search(page: Page, seed):
     seed(initial_data)
 
     page.goto(DASHBOARD_URL)
-    expect(page.locator("#table-body tr")).to_have_count(3)
+    expect(page.locator(".data-row")).to_have_count(3)
 
     # Setup Dialog Handler (Click OK on alert)
     page.on("dialog", lambda dialog: dialog.accept())
@@ -240,7 +252,7 @@ def test_delete_all_visible_no_search(page: Page, seed):
     page.click("button:has-text('Delete Selected')")
 
     # Verify Empty Table
-    expect(page.locator("#table-body tr")).to_have_count(0)
+    expect(page.locator(".data-row")).to_have_count(0)
     expect(page.locator("body")).not_to_contain_text("Item One")
 
 
@@ -312,7 +324,7 @@ def test_bulk_delete_failure_alert(page: Page, seed):
     assert "Could not delete 1 items" in dialog_messages[1]
 
     # Verify that only the entry that failed to download is still in the table
-    expect(page.locator("#table-body tr")).to_have_count(1)
+    expect(page.locator(".data-row")).to_have_count(1)
     expect(page.locator("body")).to_contain_text("Faulty Item")
 
 
@@ -349,20 +361,20 @@ def test_delete_visible_with_search(page: Page, seed):
 
     # Search for "Delete" (Should show 2 rows)
     page.fill("#searchInput", "Delete")
-    expect(page.locator("#table-body tr")).to_have_count(2)
+    expect(page.locator(".data-row")).to_have_count(2)
 
     # Handle Dialog & Click Delete
     page.on("dialog", lambda dialog: dialog.accept())
     page.click("button:has-text('Delete Selected')")
 
     # Verify current view is empty (because all matching items were deleted)
-    expect(page.locator("#table-body tr")).to_have_count(0)
+    expect(page.locator(".data-row")).to_have_count(0)
 
     # Clear Search to reveal remaining items
     page.click("#clearBtn")
 
     # Verify "Keep Me" is still there, but "Delete" items are gone
-    expect(page.locator("#table-body tr")).to_have_count(1)
+    expect(page.locator(".data-row")).to_have_count(1)
     expect(page.locator("body")).to_contain_text("Keep Me Safe")
     expect(page.locator("body")).not_to_contain_text("Delete Me")
 
@@ -378,7 +390,7 @@ def test_realtime_updates(page: Page, auth_headers, seed, sample_download_row):
     seed(initial_data)
 
     page.goto(DASHBOARD_URL)
-    initial_rows_count = page.locator("#table-body tr").count()
+    initial_rows_count = page.locator(".data-row").count()
     assert initial_rows_count == len(initial_data)
 
     new_item_count = 5
@@ -391,12 +403,12 @@ def test_realtime_updates(page: Page, auth_headers, seed, sample_download_row):
             urljoin(BASE_URL, API_DOWNLOAD), json=payload, headers=auth_headers
         )
 
-    all_titles = page.locator("#table-body .title-text").all_inner_texts()
+    all_titles = page.locator("#table-container .title").all_inner_texts()
     assert len(all_titles) == initial_rows_count + new_item_count
     assert sample_download_row["title"] in all_titles
     assert "No Title Found" in all_titles
 
-    all_urls = page.locator("#table-body .url-subtext").all_inner_texts()
+    all_urls = page.locator("#table-container .url-subtext").all_inner_texts()
     assert len(all_urls) == len(all_titles)
     assert sample_download_row["url"] in all_urls
     assert "https://example.com/1" in all_urls
