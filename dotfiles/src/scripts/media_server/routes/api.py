@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 from common.logger import logger
 from flask import Blueprint, Response, current_app, jsonify, request
-from scripts.media_server.src.constants import EventType, MediaType
+from scripts.media_server.src.constants import DownloadStatus, EventType, MediaType
 from scripts.media_server.src.models import Download, db
 from scripts.media_server.src.utils import OperationResult
 
@@ -117,6 +117,19 @@ def bulk_edit_entries():
                     )
                     continue
 
+            if "status" in item:
+                status = item["status"]
+                try:
+                    target.status = (
+                        DownloadStatus(status) if status is not None else None
+                    )
+                    has_updates = True
+                except ValueError:
+                    results.append(
+                        OperationResult(False, entry_id, f"Invalid status: {status}")
+                    )
+                    continue
+
             if not has_updates:
                 results.append(OperationResult(False, entry_id, "No fields to update"))
                 continue
@@ -132,6 +145,8 @@ def bulk_edit_entries():
                         "id": entry_id,
                         "title": target.title,
                         "mediaType": target.media_type,
+                        "status": target.status,
+                        "statusMessage": target.status_msg,
                     },
                 )
             except Exception as e:

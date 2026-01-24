@@ -27,6 +27,7 @@ class Download(db.Model):  # type: ignore[name-defined]
     )
 
     status = db.Column(db.Integer, default=DownloadStatus.PENDING, nullable=False)
+    # TODO: update name to use full word
     status_msg = db.Column(db.Text, nullable=True)
 
     @property

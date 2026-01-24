@@ -47,6 +47,8 @@ def start_download_record(
                     "url": url,
                     "mediaType": media_type,
                     "startTime": new_download.start_time_iso,
+                    "status": new_download.status,
+                    "statusMessage": new_download.status_msg,
                 },
             )
         except Exception as e:
@@ -94,6 +96,8 @@ def complete_download_record(
                     "endTime": record.end_time_iso,
                     "updatedTime": record.updated_time_iso,
                     "orderNumber": record.order_number,
+                    "status": record.status,
+                    "statusMessage": record.status_msg,
                 },
             )
         except Exception as e:
