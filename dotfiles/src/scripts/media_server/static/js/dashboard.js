@@ -84,6 +84,10 @@ function bulkDelete(ids) {
         });
 }
 
+function showTableInfo() {
+    console.log(downloadsTable.getStatsString());
+}
+
 // SSE handles
 
 function handleDeletes(payload) {
@@ -155,4 +159,5 @@ document.addEventListener("DOMContentLoaded", () => {
     window.bulkDelete = bulkDelete;
     window.filterTable = filterTable;
     window.clearSearch = clearSearch;
+    window.showTableInfo = showTableInfo;
 });

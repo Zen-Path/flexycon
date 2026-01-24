@@ -57,6 +57,7 @@
     gap: 10px;
 }
 
+#tableInfo,
 #themeToggle {
     cursor: pointer;
 
@@ -72,6 +73,7 @@
     transition: all 0.2s;
 }
 
+#tableInfo:hover,
 #themeToggle:hover {
     background-color: var(--bg-hover);
     color: var(--clr-primary);

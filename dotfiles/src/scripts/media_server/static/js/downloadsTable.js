@@ -108,6 +108,50 @@ export class DownloadsTable extends BaseDataTable {
 
         return createMenuTrigger(actions);
     }
+
+    getStatsString() {
+        const total = this.entryList.length;
+        if (total === 0) return "Table is empty.";
+
+        const selected = this.selectedCount;
+        const visible = this.entryList.filter((e) => e._isVisible).length;
+
+        // Build frequency maps dynamically
+        const stats = this.entryList.reduce(
+            (acc, entry) => {
+                const { mediaType, status } = entry.data;
+                acc.mediaTypes[mediaType] =
+                    (acc.mediaTypes[mediaType] || 0) + 1;
+                acc.statuses[status] = (acc.statuses[status] || 0) + 1;
+                return acc;
+            },
+            { mediaTypes: {}, statuses: {} }
+        );
+
+        const formatGroup = (title, dataMap, config) => {
+            let str = `\n[ ${title} ]\n`;
+            Object.entries(dataMap).forEach(([key, count]) => {
+                const label = config[key]?.label || `Unknown (${key})`;
+                str += `  - ${label.padEnd(15)}: ${count}\n`;
+            });
+            return str;
+        };
+
+        let report = `=== Table Summary (${new Date().toLocaleTimeString()}) ===\n`;
+        report += `Total Rows:      ${total}\n`;
+        report += `Selected:        ${selected} (${((selected / total) * 100).toFixed(1)}%)\n`;
+        report += `Visible:         ${visible} / ${total}\n`;
+
+        // Distribution sections
+        report += formatGroup(
+            "Media Types",
+            stats.mediaTypes,
+            MEDIA_TYPE_CONFIG
+        );
+        report += formatGroup("Statuses", stats.statuses, STATUS_CONFIG);
+
+        return report;
+    }
 }
 
 export class DownloadRow extends BaseDataRow {
