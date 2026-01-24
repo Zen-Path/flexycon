@@ -52,6 +52,43 @@ export const MEDIA_TYPE_CONFIG = Object.freeze({
     },
 });
 
+export const DOWNLOAD_STATUS = Object.freeze({
+    PENDING: 0,
+    IN_PROGRESS: 1,
+    DONE: 2,
+    FAILED: 3,
+    MIXED: 4,
+});
+
+export const STATUS_CONFIG = Object.freeze({
+    [DOWNLOAD_STATUS.PENDING]: {
+        label: "Pending",
+        icon: "fa-clock",
+        color: "text-muted",
+    },
+    [DOWNLOAD_STATUS.IN_PROGRESS]: {
+        label: "In Progress",
+        icon: "fa-spinner fa-spin",
+        color: "text-primary",
+    },
+    [DOWNLOAD_STATUS.DONE]: {
+        label: "Completed",
+        icon: "fa-check-circle",
+        color: "text-success",
+    },
+    [DOWNLOAD_STATUS.FAILED]: {
+        label: "Failed",
+        icon: "fa-times-circle",
+        color: "text-danger",
+    },
+    [DOWNLOAD_STATUS.MIXED]: {
+        label: "Mixed",
+        icon: "fa-circle-exclamation",
+        color: "text-warning",
+    },
+    UNKNOWN: { label: "Unknown", icon: "fa-question", color: "text-muted" },
+});
+
 export class ColumnData {
     constructor({
         id,

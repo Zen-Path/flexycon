@@ -1,4 +1,4 @@
-import { MEDIA_TYPE_CONFIG } from "./constants.js";
+import { MEDIA_TYPE_CONFIG, STATUS_CONFIG } from "./constants.js";
 
 export const ModalManager = {
     dom: {},
@@ -42,8 +42,17 @@ export const ModalManager = {
         );
 
         const statusValue = isBulk ? "" : (items[0].data.status ?? "");
+
+        // Don't allow the user to set the status to unknown, that is just for the UI
+        const { UNKNOWN, ...validStatusConfig } =
+            structuredClone(STATUS_CONFIG);
         this.dom.form.appendChild(
-            this._createField("Status", "text", "editStatus", statusValue)
+            this._createSelectField(
+                "Status",
+                "editStatus",
+                validStatusConfig,
+                statusValue
+            )
         );
 
         // Store the targets for the save function
@@ -61,7 +70,7 @@ export const ModalManager = {
             const statusVal = document.getElementById("editStatus").value;
 
             if (typeVal !== "") data.mediaType = parseInt(typeVal);
-            if (statusVal !== "") data.status = statusVal;
+            if (statusVal !== "") data.status = parseInt(statusVal);
 
             // Only add title if it's a single edit
             if (!isBulk) {

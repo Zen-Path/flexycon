@@ -92,7 +92,7 @@
 .data-table-header,
 .data-row {
     display: grid;
-    grid-template-columns: 55px 90px 150px minmax(350px, 1fr) 140px 50px;
+    grid-template-columns: 55px 75px 140px minmax(350px, 1fr) 140px 140px 50px;
 }
 
 /* Header */
@@ -196,6 +196,7 @@
 .cell.col-id,
 .cell.col-media-type,
 .cell.col-start-time,
+.cell.col-status,
 .cell.col-actions {
     display: flex;
     align-items: center;
@@ -212,9 +213,8 @@
     color: var(--text-muted);
 }
 
-.data-row .col-media-type {
-    gap: 6px;
-    min-width: 0;
+.data-row .col-status {
+    font-size: 0.95em;
 }
 
 .col-name .title {

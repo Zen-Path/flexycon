@@ -18,7 +18,7 @@ from scripts.media_server.src.logging_middleware import register_logging
 from scripts.media_server.src.models import db
 from scripts.media_server.src.utils import MessageAnnouncer, init_db, seed_db
 
-__version__ = "3.0.8"
+__version__ = "3.1.0"
 
 load_dotenv(flex_scripts / "media_server" / ".env")
 

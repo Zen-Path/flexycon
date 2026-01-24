@@ -3,11 +3,12 @@ import {
     VALID_MEDIA_TYPES,
     MEDIA_TYPE_CONFIG,
     ColumnData,
+    STATUS_CONFIG,
 } from "./constants.js";
 import { toLocalStandardTime, formatDuration } from "./utils.js";
 import { createMenuTrigger } from "./dropdownHelper.js";
 import { ModalManager } from "./modalManager.js";
-import { copyToClipboard } from "./utils.js";
+import { copyToClipboard, createIconLabelPair } from "./utils.js";
 
 export class DownloadsTable extends BaseDataTable {
     constructor(container) {
@@ -47,6 +48,13 @@ export class DownloadsTable extends BaseDataTable {
                 field: "startTime",
                 sortable: true,
                 cssClass: "col-start-time",
+            }),
+            STATUS: new ColumnData({
+                id: "status",
+                label: "Status",
+                field: "status",
+                sortable: true,
+                cssClass: "col-status",
             }),
             ACTIONS: new ColumnData({
                 id: "actions",
@@ -121,7 +129,7 @@ export class DownloadRow extends BaseDataRow {
                 ? toLocalStandardTime(data.updatedTime)
                 : "-",
 
-            status: data.status || "Unknown",
+            status: data.status,
             statusMessage: data.statusMessage || "",
         };
 
@@ -204,11 +212,15 @@ export class DownloadRow extends BaseDataRow {
                     cell.textContent = this.displayValues.startTime;
                     cell.title = this.#generateTimeDiffTooltip();
                     break;
+                case columns.STATUS.id:
+                    cell.append(this.#renderStatusContent());
+                    this.dom.statusCell = cell;
+                    break;
                 case columns.ACTIONS.id:
                     cell.append(this.#createActions());
                     break;
                 default:
-                    cell.textContent = this.displayValues[col.field] || "";
+                    cell.textContent = this.displayValues[col.field] ?? "";
             }
 
             this.dom.row.appendChild(cell);
@@ -271,6 +283,17 @@ export class DownloadRow extends BaseDataRow {
             return `Download started more than ${diffHumanReadable} ago.`;
         }
         return `Finished at ${toLocalStandardTime(this.data.endTime)} (took ${diffHumanReadable})`;
+    }
+
+    #renderStatusContent() {
+        const config = STATUS_CONFIG[this.data.status] ?? STATUS_CONFIG.UNKNOWN;
+
+        return createIconLabelPair({
+            icon: config.icon,
+            label: config.label,
+            extraClasses: [config.color],
+            title: config.label,
+        });
     }
 
     #createActions() {
@@ -341,6 +364,11 @@ export class DownloadRow extends BaseDataRow {
 
                 case "status":
                     this.data.status = newData.status;
+                    if (this.dom.statusCell) {
+                        this.dom.statusCell.replaceChildren(
+                            this.#renderStatusContent()
+                        );
+                    }
                     if (this.dom.startTimeEl) {
                         this.dom.startTimeEl.title =
                             this.#generateTimeDiffTooltip();
