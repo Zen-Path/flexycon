@@ -3,28 +3,66 @@ from datetime import datetime, timedelta
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
-from scripts.media_server.src.constants import MediaType
-
-
-def validate_seed_data(data):
-    for i, entry in enumerate(data):
-        url = entry.get("url", "Unknown URL")
-        start = entry["start_time"]
-        end = entry["end_time"]
-
-        if end and end < start:
-            raise ValueError(
-                f"Item #{i} ({url!r}): 'end_time' is earlier than 'start_time'."
-            )
-
+from scripts.media_server.src.constants import DownloadStatus, MediaType
 
 DEFAULT_OPTIONS = {
     "end_time_probability": 0.9,
     "max_days_offset": 200,
     "max_duration_seconds": 3600,
     "min_duration_seconds": 5,
+    "status_success_probability": 0.6,
+    "status_failure_probability": 0.1,
+    "status_mixed_probability": 0.15,
+    "status_in_progress_probability": 0.05,
     "seed": 42,
 }
+
+
+def resolve_status(
+    item: Dict[str, Any], rng: random.Random, config: Dict[str, Any], now: datetime
+) -> int:
+    """
+    Enforces logical consistency between status and timestamps.
+    Ensures end_time is never in the future relative to 'now'.
+    """
+    # Ensure end_time <= now
+    if item.get("end_time") and item["end_time"] > now:
+        item["end_time"] = now
+
+    has_end_time = item.get("end_time") is not None
+    current_status = item.get("status")
+
+    # If it has an end_time, it MUST be a terminal state.
+    if has_end_time:
+        if current_status in [
+            DownloadStatus.DONE,
+            DownloadStatus.FAILED,
+            DownloadStatus.MIXED,
+        ]:
+            return current_status
+
+        # If it was PENDING/IN_PROGRESS but has an end_time, we force a terminal state
+        p = rng.random()
+        success_limit = config["status_success_probability"]
+        failure_limit = success_limit + config["status_failure_probability"]
+
+        if p < success_limit:
+            return DownloadStatus.DONE
+        if p < failure_limit:
+            return DownloadStatus.FAILED
+        return DownloadStatus.MIXED
+
+    # If it has NO end_time, it MUST be an active state.
+    if not has_end_time:
+        if current_status in [DownloadStatus.PENDING, DownloadStatus.IN_PROGRESS]:
+            return current_status
+
+        # Fallback for missing/terminal status on an item with no end_time
+        return (
+            DownloadStatus.IN_PROGRESS if rng.random() < 0.3 else DownloadStatus.PENDING
+        )
+
+    return current_status or DownloadStatus.PENDING
 
 
 @lru_cache(maxsize=1)
@@ -36,16 +74,16 @@ def get_demo_downloads(
     # Avoid side effects on global random
     rng = random.Random(config["seed"])
 
-    if now is None:
-        now = datetime.now()
+    now = now or datetime.now()
 
-    base_data: List[Dict[str, Any]] = [
+    raw_data: List[Dict[str, Any]] = [
         {
             "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "title": "Rick Astley - Never Gonna Give You Up (Official Video) - YouTube",
             "media_type": MediaType.VIDEO,
             "start_time": now - timedelta(seconds=2),
             "end_time": now,
+            "status": DownloadStatus.DONE,
         },
         {
             "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
@@ -63,13 +101,15 @@ def get_demo_downloads(
             "media_type": MediaType.TEXT,
             "start_time": now - timedelta(minutes=1, seconds=10),
             "end_time": now - timedelta(minutes=1, seconds=5),
+            "status": DownloadStatus.FAILED,
         },
         {
             "url": "https://x.com/updates/status/12345",
             "title": "Breaking News: Python 3.14 Released 🚀",
             "media_type": MediaType.IMAGE,
             "start_time": now - timedelta(minutes=5, seconds=25),
-            "end_time": now - timedelta(minutes=5, seconds=20),
+            "end_time": None,
+            "status": DownloadStatus.IN_PROGRESS,
         },
         # Missing title
         {
@@ -154,6 +194,7 @@ def get_demo_downloads(
             "media_type": MediaType.GALLERY,
             "start_time": now - timedelta(hours=6, minutes=5, seconds=1),
             "end_time": now - timedelta(hours=5, minutes=1, seconds=10),
+            "status": DownloadStatus.MIXED,
         },
         # Emoji in title
         {
@@ -283,41 +324,46 @@ def get_demo_downloads(
         },
     ]
 
-    data = list(base_data)
+    if row_count and row_count > len(raw_data):
+        meta_pool = [
+            {"u": d["url"], "t": d["title"], "m": d["media_type"]} for d in raw_data
+        ]
+        for _ in range(row_count - len(raw_data)):
+            source = rng.choice(meta_pool)
 
-    if row_count is not None:
-        if row_count > len(data):
-            metadata_pool = [{"url": d["url"], "title": d["title"]} for d in base_data]
+            is_finished = rng.random() < config["end_time_probability"]
+            start_time = now - timedelta(
+                days=rng.randint(0, config["max_days_offset"]),
+                seconds=rng.randint(0, 86400),
+            )
 
-            extra_needed = row_count - len(data)
-            for _ in range(extra_needed):
-                source = rng.choice(metadata_pool)
-
-                days_offset = rng.randint(0, config["max_days_offset"])
-                seconds_offset = rng.randint(0, 86400)
-                start_time = now - timedelta(days=days_offset, seconds=seconds_offset)
-
-                end_time = None
-                if rng.random() < config["end_time_probability"]:
-                    duration = rng.randint(
+            end_time = None
+            if is_finished:
+                end_time = start_time + timedelta(
+                    seconds=rng.randint(
                         config["min_duration_seconds"], config["max_duration_seconds"]
                     )
-                    end_time = start_time + timedelta(seconds=duration)
-
-                data.append(
-                    {
-                        "url": source["url"],
-                        "title": source["title"],
-                        "media_type": rng.choice(list(MediaType)),
-                        "start_time": start_time,
-                        "end_time": end_time,
-                    }
                 )
-        else:
-            data = data[:row_count]
 
-    data.sort(key=lambda x: x["start_time"], reverse=False)
+            raw_data.append(
+                {
+                    "url": source["u"],
+                    "title": source["t"],
+                    "media_type": source["m"],
+                    "start_time": start_time,
+                    "end_time": end_time,
+                    "status": None,  # Leave it for the resolver
+                }
+            )
 
-    validate_seed_data(data)
+    processed_data = []
+    for item in raw_data:
+        item["status"] = resolve_status(item, rng, config, now)
+        processed_data.append(item)
 
-    return data
+    if row_count:
+        processed_data = processed_data[:row_count]
+
+    processed_data.sort(key=lambda x: x["start_time"], reverse=True)
+
+    return processed_data
