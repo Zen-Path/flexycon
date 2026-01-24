@@ -166,39 +166,7 @@ export class DownloadRow extends BaseDataRow {
 
             switch (col.id) {
                 case columns.CHECKBOX.id:
-                    const checkbox = this.#createCheckbox();
-
-                    // Allow user to shift-click select multiple rows at a time
-                    checkbox.onclick = (e) => {
-                        e.stopPropagation(); // Prevent sort trigger
-
-                        const currentIndex = this.table.entryList.indexOf(this);
-
-                        if (
-                            e.shiftKey &&
-                            this.table.lastSelectedIndex !== null
-                        ) {
-                            const start = Math.min(
-                                this.table.lastSelectedIndex,
-                                currentIndex
-                            );
-                            const end = Math.max(
-                                this.table.lastSelectedIndex,
-                                currentIndex
-                            );
-
-                            // Select everything in the range
-                            for (let i = start; i <= end; i++) {
-                                this.table.entryList[i].isSelected =
-                                    e.target.checked;
-                            }
-                        } else {
-                            this.isSelected = e.target.checked;
-                            this.table.lastSelectedIndex = currentIndex;
-                        }
-                    };
-
-                    this.dom.checkbox = checkbox;
+                    this.dom.checkbox = this.#createCheckbox();
                     cell.append(this.dom.checkbox);
                     break;
                 case columns.MEDIA_TYPE.id:
@@ -236,6 +204,33 @@ export class DownloadRow extends BaseDataRow {
         input.onclick = (e) => {
             this.isSelected = e.target.checked;
         };
+
+        // Allow user to shift-click select multiple rows at a time
+        input.onclick = (e) => {
+            e.stopPropagation(); // Prevent sort trigger
+
+            const currentIndex = this.table.entryList.indexOf(this);
+
+            if (e.shiftKey && this.table.lastSelectedIndex !== null) {
+                const start = Math.min(
+                    this.table.lastSelectedIndex,
+                    currentIndex
+                );
+                const end = Math.max(
+                    this.table.lastSelectedIndex,
+                    currentIndex
+                );
+
+                // Select everything in the range
+                for (let i = start; i <= end; i++) {
+                    this.table.entryList[i].isSelected = e.target.checked;
+                }
+            } else {
+                this.isSelected = e.target.checked;
+                this.table.lastSelectedIndex = currentIndex;
+            }
+        };
+
         return input;
     }
 
