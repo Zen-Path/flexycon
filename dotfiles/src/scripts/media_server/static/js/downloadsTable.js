@@ -166,7 +166,7 @@ export class DownloadRow extends BaseDataRow {
 
             switch (col.id) {
                 case columns.CHECKBOX.id:
-                    this.dom.checkbox = this.#createCheckbox();
+                    this.dom.checkbox = this.#renderCheckbox();
                     cell.append(this.dom.checkbox);
                     break;
                 case columns.MEDIA_TYPE.id:
@@ -174,7 +174,7 @@ export class DownloadRow extends BaseDataRow {
                     this.dom.mediaTypeCell = cell;
                     break;
                 case columns.NAME.id:
-                    cell.append(this.#createNameElems());
+                    cell.append(this.#renderNameContent());
                     break;
                 case columns.START_TIME.id:
                     cell.textContent = this.displayValues.startTime;
@@ -185,7 +185,7 @@ export class DownloadRow extends BaseDataRow {
                     this.dom.statusCell = cell;
                     break;
                 case columns.ACTIONS.id:
-                    cell.append(this.#createActions());
+                    cell.append(this.#renderActions());
                     break;
                 default:
                     cell.textContent = this.displayValues[col.field] ?? "";
@@ -197,7 +197,7 @@ export class DownloadRow extends BaseDataRow {
         return this.dom.row;
     }
 
-    #createCheckbox() {
+    #renderCheckbox() {
         const input = document.createElement("input");
         input.type = "checkbox";
         input.checked = this.isSelected;
@@ -245,7 +245,7 @@ export class DownloadRow extends BaseDataRow {
         });
     }
 
-    #createNameElems() {
+    #renderNameContent() {
         const container = document.createElement("a");
         container.href = this.data.url;
         container.target = "_blank";
@@ -291,7 +291,7 @@ export class DownloadRow extends BaseDataRow {
         });
     }
 
-    #createActions() {
+    #renderActions() {
         const actions = [
             {
                 label: "Edit Entry",
