@@ -65,7 +65,7 @@ export class DownloadsTable extends BaseDataTable {
     _createActions() {
         const actions = [
             {
-                label: "Edit Selected URLs",
+                label: "Edit Selected",
                 icon: "fa-pen",
                 onClick: () => {
                     ModalManager.openEdit(this.getSelectedEntries());
