@@ -126,7 +126,7 @@
 
 .sort-indicator {
     position: absolute;
-    right: 8px;
+    right: 6px;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
@@ -488,4 +488,25 @@
 
 .text-warning {
     color: var(--gb-yellow);
+}
+
+.icon-label-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+    line-height: 1;
+}
+
+.icon-label-group i {
+    flex-shrink: 0; /* Prevents squishing */
+    width: 16px; /* For vertical alignment */
+    text-align: center;
+}
+
+.icon-label-group .label {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* The "truncate" logic */
 }

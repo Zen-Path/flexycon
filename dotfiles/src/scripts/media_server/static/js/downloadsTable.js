@@ -103,20 +103,15 @@ export class DownloadsTable extends BaseDataTable {
 }
 
 export class DownloadRow extends BaseDataRow {
-    constructor(container, table) {
-        super(container, table);
-        this.mediaTypeConfig = null;
-    }
-
     initData(data) {
-        this.mediaTypeConfig =
+        const mediaTypeConfig =
             MEDIA_TYPE_CONFIG[this.data.mediaType] ?? MEDIA_TYPE_CONFIG.UNKNOWN;
 
         this.displayValues = {
             id: typeof data.id === "number" ? `#${data.id}` : "N/A",
             title: data.title || "Untitled",
             url: data.url || "Unknown",
-            mediaType: this.mediaTypeConfig.label,
+            mediaType: mediaTypeConfig.label,
 
             startTime: data.startTime
                 ? toLocalStandardTime(data.startTime)
@@ -153,8 +148,6 @@ export class DownloadRow extends BaseDataRow {
     }
 
     render() {
-        this.initData(this.data);
-
         this.dom.row = document.createElement("div");
         this.dom.row.classList.add("data-row");
 
@@ -201,15 +194,7 @@ export class DownloadRow extends BaseDataRow {
                     cell.append(this.dom.checkbox);
                     break;
                 case columns.MEDIA_TYPE.id:
-                    const iconEl = document.createElement("i");
-                    iconEl.classList.add("fa-solid", this.mediaTypeConfig.icon);
-
-                    const labelEl = document.createElement("span");
-                    labelEl.classList.add("truncate");
-                    labelEl.textContent = this.mediaTypeConfig.label;
-
-                    cell.classList.add(this.mediaTypeConfig.className);
-                    cell.append(iconEl, labelEl);
+                    cell.append(this.#renderMediaContent());
                     this.dom.mediaTypeCell = cell;
                     break;
                 case columns.NAME.id:
@@ -240,6 +225,17 @@ export class DownloadRow extends BaseDataRow {
             this.isSelected = e.target.checked;
         };
         return input;
+    }
+
+    #renderMediaContent() {
+        const config =
+            MEDIA_TYPE_CONFIG[this.data.mediaType] ?? MEDIA_TYPE_CONFIG.UNKNOWN;
+
+        return createIconLabelPair({
+            icon: config.icon,
+            label: config.label,
+            extraClasses: [config.className],
+        });
     }
 
     #createNameElems() {
@@ -314,9 +310,12 @@ export class DownloadRow extends BaseDataRow {
     }
 
     update(newData) {
+        const supportedFields = ["title", "mediaType", "status"];
         const changedFields = Object.keys(newData).filter(
             (key) =>
-                newData[key] !== undefined && newData[key] !== this.data[key]
+                supportedFields.includes(key) &&
+                newData[key] !== undefined &&
+                newData[key] !== this.data[key]
         );
 
         if (changedFields.length === 0) return;
@@ -332,20 +331,12 @@ export class DownloadRow extends BaseDataRow {
                     break;
 
                 case "mediaType":
-                    const config =
-                        MEDIA_TYPE_CONFIG[newData.mediaType] ??
-                        MEDIA_TYPE_CONFIG.UNKNOWN;
-                    if (this.dom.mediaTypeCell) {
-                        this.dom.mediaTypeCell.classList.remove(
-                            this.mediaTypeConfig.className
-                        );
-                        this.dom.mediaTypeCell.classList.add(config.className);
-                        this.dom.mediaTypeCell.innerHTML = `
-                        <i class="fa-solid ${config.icon}"></i>
-                        <span>${config.label}</span>
-                        `;
-                    }
                     this.data.mediaType = newData.mediaType;
+                    if (this.dom.mediaTypeCell) {
+                        this.dom.mediaTypeCell.replaceChildren(
+                            this.#renderMediaContent()
+                        );
+                    }
                     break;
 
                 case "status":

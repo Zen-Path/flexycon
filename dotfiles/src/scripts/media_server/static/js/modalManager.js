@@ -31,13 +31,13 @@ export const ModalManager = {
             );
         }
 
-        const typeValue = isBulk ? "" : (items[0].data.mediaType ?? "");
+        const mediaTypeValue = isBulk ? "" : (items[0].data.mediaType ?? "");
         this.dom.form.appendChild(
             this._createSelectField(
                 "Media Type",
                 "editMediaType",
                 MEDIA_TYPE_CONFIG,
-                typeValue
+                mediaTypeValue
             )
         );
 

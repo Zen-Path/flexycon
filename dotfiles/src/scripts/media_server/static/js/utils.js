@@ -106,6 +106,37 @@ export function handleColorScheme() {
     });
 }
 
+/**
+ * Generates a standardized Icon + Label container.
+ * @param {Object} options - Configuration for the pair.
+ * @param {string} options.icon - Space-separated FontAwesome classes (e.g., "fa-clock").
+ * @param {string} options.label - The text to display.
+ * @param {Array<string>} [options.extraClasses] - Additional classes for the container.
+ * @param {string} [options.title] - Optional tooltip.
+ * @returns {HTMLElement}
+ */
+export function createIconLabelPair({
+    icon,
+    label,
+    extraClasses = [],
+    title = "",
+}) {
+    const container = document.createElement("div");
+    container.classList.add("icon-label-group", ...extraClasses);
+    if (title) container.title = title;
+
+    const iconEl = document.createElement("i");
+    // Handle split for multiple classes (like "fa-spinner fa-spin")
+    iconEl.classList.add("fa-solid", ...icon.split(" "));
+
+    const labelEl = document.createElement("span");
+    labelEl.classList.add("label", "truncate");
+    labelEl.textContent = label;
+
+    container.append(iconEl, labelEl);
+    return container;
+}
+
 export class StreamManager {
     constructor(url) {
         this.url = url;
