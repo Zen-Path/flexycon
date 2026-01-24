@@ -1,5 +1,6 @@
 import json
 import queue
+import re
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -96,12 +97,56 @@ class DownloadReportItem:
         return asdict(self)
 
 
+# These patterns represent single-item URLs that gallery-dl would
+# otherwise parse but we KNOW aren't collections we want to recurse.
+NON_COLLECTION_PATTERNS = [
+    re.compile(r"^https?://(?:www\.)?x\.com/\w+/status/\d+"),
+    re.compile(r"^https?://(?:www\.)?pornpics\.com/galleries/[\w-]+/?"),
+    re.compile(r"^https?://(?:www\.)?xnxx\.com/video-.*"),
+    re.compile(r"^https?://(?:www\.)?reddit\.com/r/\w+/comments/.*/?"),
+]
+
+# Common direct media extensions
+MEDIA_EXTENSIONS = {
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".webp",
+    ".mp4",
+    ".mkv",
+    ".mov",
+    ".mp3",
+    ".zip",
+}
+
+
+def is_direct_file(url: str) -> bool:
+    """Check if the URL points directly to a file extension."""
+    path = Path(url.split("?")[0])  # Strip query params
+    return path.suffix.lower() in MEDIA_EXTENSIONS
+
+
+def is_known_single_item(url: str) -> bool:
+    """Check if the URL matches a known pattern that doesn't need expansion."""
+    return any(pattern.search(url) for pattern in NON_COLLECTION_PATTERNS)
+
+
 def expand_collection_urls(url: str, depth: int = 0) -> List[str]:
     """
-    Determines if a URL is a collection based on Level Homogeneity. (best effort)
+    Determines if a URL is a collection and expands it.
+    Rejects direct file urls and known patterns.
     """
 
     if depth > 3:
+        return []
+
+    if is_direct_file(url):
+        logger.debug(f"Fast-path: skipping expansion for direct file: {url}")
+        return []
+
+    if is_known_single_item(url):
+        logger.debug(f"Fast-path: skipping expansion for known single-item: {url}")
         return []
 
     try:
