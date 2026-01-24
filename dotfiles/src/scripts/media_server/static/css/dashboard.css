@@ -469,3 +469,23 @@
 .cancel-btn:hover {
     background-color: var(--clr-danger-hover);
 }
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.text-primary {
+    color: var(--text-main);
+}
+
+.text-success {
+    color: var(--gb-green);
+}
+
+.text-danger {
+    color: var(--gb-red);
+}
+
+.text-warning {
+    color: var(--gb-yellow);
+}
