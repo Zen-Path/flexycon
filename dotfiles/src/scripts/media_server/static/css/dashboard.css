@@ -231,16 +231,24 @@
 
 /* Media Types */
 
+.type-gallery {
+    color: var(--gb-green);
+}
+
 .type-image {
-    color: var(--gb-blue);
+    color: var(--gb-yellow);
 }
 
 .type-video {
     color: var(--gb-red);
 }
 
-.type-gallery {
-    color: var(--gb-green);
+.type-audio {
+    color: var(--gb-purple);
+}
+
+.type-text {
+    color: var(--gb-orange);
 }
 
 .type-unknown {
