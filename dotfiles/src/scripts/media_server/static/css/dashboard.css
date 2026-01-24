@@ -100,8 +100,13 @@
 /* Header */
 
 .data-table-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
     background: var(--bg-header);
     border-bottom: 2px solid var(--border-main);
+
     font-weight: bold;
     user-select: none;
 }
