@@ -108,17 +108,14 @@
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
+
     padding: 12px 12px;
     gap: 8px;
 }
 
 .header-cell:first-child {
     padding: 12px 18px 12px 12px;
-}
-
-.data-table-header .col-checkbox,
-.data-table-header .col-actions {
-    justify-content: center;
 }
 
 /* Sorting */
