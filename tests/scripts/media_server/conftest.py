@@ -6,7 +6,6 @@ from datetime import datetime
 from unittest.mock import MagicMock
 
 import pytest
-from scripts.media_server.data.demo_downloads import get_demo_downloads
 from scripts.media_server.main import app
 from scripts.media_server.src.constants import MediaType
 from scripts.media_server.src.models import Download, db
