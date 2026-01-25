@@ -1,6 +1,4 @@
 :root {
-    --table-radius: 10px;
-
     --col-check-width: 50px;
     --col-id-width: 80px;
     --col-media-type-width: 140px;
@@ -130,7 +128,7 @@
 .data-table-wrapper {
     background: var(--bg-surface);
     border: 1px solid var(--border-main);
-    border-radius: var(--table-radius);
+    border-radius: 8px;
 
     overflow: hidden;
     overflow-x: scroll;
@@ -146,11 +144,12 @@
 .data-table-header,
 .data-row {
     display: grid;
-    grid-template-columns: var(--col-check-width) var(--col-id-width) var(
-            --col-media-type-width
-        ) var(--col-name-width) var(--col-start-time-width) var(
+    grid-template-columns:
+        var(--col-check-width) var(--col-id-width) var(--col-media-type-width)
+        var(--col-name-width) var(--col-start-time-width) var(
             --col-status-width
-        ) var(--col-actions-width);
+        )
+        var(--col-actions-width);
 }
 
 /* Header */
