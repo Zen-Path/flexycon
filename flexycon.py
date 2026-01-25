@@ -250,7 +250,14 @@ def setup():
     logger.info("📦 Installing pre-commit hooks...")
     precommit_bin = VENV_BIN / "pre-commit"
     if precommit_bin.exists():
-        run_command([str(precommit_bin), "install", "--install-hooks"])
+        # Install the standard commit hook
+        run_command([str(precommit_bin), "install"])
+
+        # Install the push hook (required for the UI tests)
+        run_command([str(precommit_bin), "install", "--hook-type", "pre-push"])
+
+        # Pre-install the environments so the first commit isn't slow
+        run_command([str(precommit_bin), "install-hooks"])
     else:
         logger.warning("pre-commit not found. Skipping hook installation.")
 
