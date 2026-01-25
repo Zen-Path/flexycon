@@ -1,6 +1,3 @@
-// State management for the module
-let activeDropdownMenu = null;
-
 /**
  * Creates the ellipsis trigger button.
  */
@@ -12,22 +9,13 @@ export function createMenuTrigger(actions) {
     btn.className = "action-btn";
     btn.innerHTML = `<i class="fa-solid fa-ellipsis-vertical"></i>`;
 
+    const menu = renderDropdownMenu(actions, btn);
+    container.append(btn, menu);
+
     btn.onclick = (e) => {
         e.stopPropagation();
 
-        // Check if this specific menu is already open
-        const isSelf =
-            activeDropdownMenu &&
-            activeDropdownMenu.parentElement === container;
-
-        closeActiveMenu();
-
-        // If we didn't just close ourselves, create and show a new menu
-        if (!isSelf) {
-            const menu = renderDropdownMenu(actions);
-            container.appendChild(menu);
-            activeDropdownMenu = menu;
-        }
+        menu.togglePopover();
     };
 
     container.appendChild(btn);
@@ -37,9 +25,29 @@ export function createMenuTrigger(actions) {
 /**
  * Generates the actual dropdown HTML on demand.
  */
-function renderDropdownMenu(actions) {
+function renderDropdownMenu(actions, anchorBtn) {
     const menu = document.createElement("div");
+    menu.setAttribute("popover", "auto");
     menu.className = "dropdown-content";
+
+    // Position the menu whenever it opens
+    menu.addEventListener("toggle", (event) => {
+        if (event.newState === "open") {
+            const rect = anchorBtn.getBoundingClientRect();
+            menu.style.margin = "0";
+            menu.style.inset = "auto";
+
+            // menu.style.position = "fixed";
+            menu.style.top = `${rect.bottom}px`;
+            menu.style.left = `${rect.left}px`;
+
+            // 3. Prevent the menu from going off-screen on the right
+            const menuRect = menu.getBoundingClientRect();
+            if (rect.left + menuRect.width > window.innerWidth) {
+                menu.style.left = `${rect.right - menuRect.width}px`;
+            }
+        }
+    });
 
     actions.forEach((action) => {
         const btn = document.createElement("button");
@@ -72,11 +80,11 @@ function renderDropdownMenu(actions) {
                     if (menu.parentElement) {
                         iconEl.classList.replace(feedbackClass, originalClass);
                         iconEl.classList.remove(feedbackColor);
-                        closeActiveMenu();
+                        menu.hidePopover();
                     }
                 }, 2000);
             } else {
-                closeActiveMenu();
+                menu.hidePopover();
             }
         };
 
@@ -85,20 +93,3 @@ function renderDropdownMenu(actions) {
 
     return menu;
 }
-
-/**
- * Global function to close the active menu
- */
-export function closeActiveMenu() {
-    if (activeDropdownMenu) {
-        activeDropdownMenu.remove();
-        activeDropdownMenu = null;
-    }
-}
-
-// Close menu if user clicks anywhere else
-document.addEventListener("click", (e) => {
-    if (activeDropdownMenu && !activeDropdownMenu.contains(e.target)) {
-        closeActiveMenu();
-    }
-});
