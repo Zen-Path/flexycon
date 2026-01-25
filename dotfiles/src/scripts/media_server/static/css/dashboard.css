@@ -200,7 +200,7 @@
 
 /* Rows */
 
-.data-row {
+.data-row:not(:last-of-type) {
     border-bottom: 1px solid var(--border-subtle);
 }
 
