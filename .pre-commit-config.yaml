@@ -6,7 +6,7 @@ default_stages: [pre-commit]
 repos:
     # --- PYTHON ---
     - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.14.13
+      rev: v0.14.14
       hooks:
           - id: ruff
             name: "Python: Ruff Lint"
@@ -26,7 +26,7 @@ repos:
 
     # --- SHELL ---
     - repo: https://github.com/scop/pre-commit-shfmt
-      rev: v3.11.0-1
+      rev: v3.12.0-2
       hooks:
           - id: shfmt
             name: "Shell: shfmt"
@@ -42,7 +42,7 @@ repos:
 
     # --- LUA ---
     - repo: https://github.com/JohnnyMorganz/StyLua
-      rev: v2.0.2
+      rev: v2.3.1
       hooks:
           - id: stylua-system # stylua | stylua-system | stylua-github
             name: "Lua: StyLua"
@@ -60,7 +60,7 @@ repos:
 
     # --- STATIC ANALYSIS ---
     - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.15.0
+      rev: v1.19.1
       hooks:
           - id: mypy
             name: "Python: Type Check (mypy)"
