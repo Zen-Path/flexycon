@@ -49,7 +49,7 @@ export class BaseDataTable {
         for (const data of items) {
             try {
                 const id = data?.id;
-                if (id === undefined) {
+                if (typeof id !== "number") {
                     console.error("Data item is missing ID:", data);
                     continue;
                 }

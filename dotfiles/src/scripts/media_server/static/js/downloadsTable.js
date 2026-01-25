@@ -4,6 +4,7 @@ import {
     MEDIA_TYPE_CONFIG,
     ColumnData,
     STATUS_CONFIG,
+    DOWNLOAD_STATUS,
 } from "./constants.js";
 import { toLocalStandardTime, formatDuration } from "./utils.js";
 import { createMenuTrigger } from "./dropdownHelper.js";
@@ -161,41 +162,104 @@ export class DownloadsTable extends BaseDataTable {
 
 export class DownloadRow extends BaseDataRow {
     initData(data) {
-        const mediaTypeConfig =
-            MEDIA_TYPE_CONFIG[this.data.mediaType] ?? MEDIA_TYPE_CONFIG.UNKNOWN;
+        if (!(typeof data.id === "number")) {
+            data.id = -1;
+        }
+
+        if (
+            !(
+                typeof data.mediaType === "number" &&
+                VALID_MEDIA_TYPES.includes(data.mediaType)
+            )
+        ) {
+            data.mediaType = -1;
+        }
+
+        if (!(typeof data.title === "string" && data.title.trim().length > 0)) {
+            data.title = null;
+        }
+
+        if (!(typeof data.url === "string" && data.url.trim().length > 0)) {
+            data.url = null;
+        }
+
+        if (
+            !(
+                typeof data.startTime === "string" &&
+                data.startTime.trim().length > 0 &&
+                data.startTime.includes("Z")
+            )
+        ) {
+            data.startTime = 0;
+        }
+
+        if (
+            !(
+                typeof data.endTime === "string" &&
+                data.endTime.trim().length > 0 &&
+                data.endTime.includes("Z")
+            )
+        ) {
+            data.endTime = 0;
+        }
+
+        if (
+            !(
+                typeof data.updatedTime === "string" &&
+                data.updatedTime.trim().length > 0 &&
+                data.updatedTime.includes("Z")
+            )
+        ) {
+            data.updatedTime = 0;
+        }
+
+        if (
+            !(
+                typeof data.status === "number" &&
+                Object.values(DOWNLOAD_STATUS).includes(data.status)
+            )
+        ) {
+            data.status = -1;
+        }
+
+        if (
+            !(
+                typeof data.statusMessage === "string" &&
+                data.statusMessage.trim().length > 0
+            )
+        ) {
+            data.statusMessage = null;
+        }
 
         this.displayValues = {
-            id: typeof data.id === "number" ? `#${data.id}` : "N/A",
-            title: data.title || "Untitled",
-            url: data.url || "Unknown",
-            mediaType: mediaTypeConfig.label,
+            id: data.id >= 0 ? `#${data.id}` : "N/A",
+            title: data.title !== null ? data.title.trim() : "Untitled",
+            url: data.url !== null ? data.url.trim() : "Unknown",
 
-            startTime: data.startTime
-                ? toLocalStandardTime(data.startTime)
-                : "-",
-            endTime: data.endTime ? toLocalStandardTime(data.endTime) : "-",
-            updatedTime: data.updatedTime
-                ? toLocalStandardTime(data.updatedTime)
-                : "-",
-
-            status: data.status,
-            statusMessage: data.statusMessage || "",
+            startTime:
+                data.startTime !== 0
+                    ? toLocalStandardTime(data.startTime)
+                    : "-",
+            endTime:
+                data.endTime !== 0 ? toLocalStandardTime(data.endTime) : "-",
+            updatedTime:
+                data.updatedTime !== 0
+                    ? toLocalStandardTime(data.updatedTime)
+                    : "-",
         };
 
         this.sortValues = {
-            id: Number(data.id) || 0,
-            title: (data.title || "").toLowerCase(),
-            url: data.url,
-            mediaType: VALID_MEDIA_TYPES.includes(data.mediaType)
-                ? data.mediaType
-                : -1,
+            id: data.id,
+            title: (data.title ?? "").toLowerCase(),
+            url: data.url ?? "",
+            mediaType: data.mediaType,
 
-            startTime: data.startTime ? new Date(data.startTime).getTime() : 0,
-            endTime: data.endTime ? new Date(data.endTime).getTime() : 0,
-            updateTime: data.updateTime
-                ? new Date(data.updateTime).getTime()
-                : 0,
-            status: data.status || -1,
+            startTime:
+                data.startTime !== 0 ? new Date(data.startTime).getTime() : 0,
+            endTime: data.endTime !== 0 ? new Date(data.endTime).getTime() : 0,
+            updateTime:
+                data.updateTime !== 0 ? new Date(data.updateTime).getTime() : 0,
+            status: data.status,
             isSelected: this.isSelected,
         };
 
@@ -324,7 +388,7 @@ export class DownloadRow extends BaseDataRow {
         const diff = end - start;
         const diffHumanReadable = formatDuration(diff);
 
-        if (this.data.endTime === undefined) {
+        if (this.data.endTime === 0) {
             return `Download started more than ${diffHumanReadable} ago.`;
         }
         return `Finished at ${toLocalStandardTime(this.data.endTime)} (took ${diffHumanReadable})`;

@@ -33,10 +33,19 @@ export async function copyToClipboard(data) {
     }
 }
 
+/**
+ * Formats an ISO string to YYYY-MM-DD HH:mm:ss
+ * Returns "-" if the input is null, undefined, or invalid.
+ */
 export function toLocalStandardTime(isoString) {
     if (!isoString) return "-";
 
     const date = new Date(isoString);
+
+    if (isNaN(date.getTime())) {
+        console.warn(`Invalid date string provided: "${isoString}"`);
+        return "-";
+    }
 
     // 'sv-SE' (Sweden) results in "YYYY-MM-DD HH:mm:ss"
     return date.toLocaleString("sv-SE", {
