@@ -115,7 +115,7 @@ export class BaseDataTable {
                 cell.onclick = () => this.handleSortClick(column.field);
 
                 const icon = document.createElement("i");
-                icon.className = "fa-solid sort-indicator hidden";
+                icon.className = "fa-solid sort-indicator";
 
                 this.dom.sortIndicators.set(column.field, icon);
                 cell.appendChild(icon);
@@ -161,17 +161,17 @@ export class BaseDataTable {
 
         this.dom.sortIndicators.forEach((indicator, indicatorField) => {
             if (indicatorField === field) {
+                indicator.classList.remove("fa-caret-up", "fa-caret-down");
+                indicator.classList.add(
+                    direction === 1 ? "fa-caret-up" : "fa-caret-down",
+                    "active"
+                );
+            } else {
                 indicator.classList.remove(
-                    "hidden",
+                    "active",
                     "fa-caret-up",
                     "fa-caret-down"
                 );
-                indicator.classList.add(
-                    direction === 1 ? "fa-caret-up" : "fa-caret-down"
-                );
-            } else {
-                indicator.classList.add("hidden");
-                indicator.classList.remove("fa-caret-up", "fa-caret-down");
             }
         });
     }

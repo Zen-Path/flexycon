@@ -112,7 +112,6 @@
 }
 
 .header-cell {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,13 +131,14 @@
 }
 
 .sort-indicator {
-    position: absolute;
-    right: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
+    width: 0;
+}
+
+.sort-indicator.active {
+    width: 14px;
+    color: var(--primary-color);
     /* Let clicks pass through to the cell */
-    transition: opacity 0.2s ease;
+    pointer-events: none;
 }
 
 /* Rows */
