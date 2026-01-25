@@ -68,16 +68,26 @@ markers = [
 ]
 
 [tool.ruff]
-line-length    = 88
-target-version = "py313"
+# Same as Black
+indent-width = 4
+line-length  = 88
+
+target-version = "py314"
 
     [tool.ruff.lint]
-    # "E" (pycodestyle)
-    # "F" (pyflakes - catches unused imports)
-    # "I" (isort)
-    fixable = ["ALL"]
-    select  = ["E", "F", "I"]
+    # "E" - pycodestyle
+    # "F" - pyflakes
+    # "I" - isort
+    ignore = []
+    select = ["E", "F", "I"]
+
+    # Allow fix for all enabled rules (when `--fix`) is provided.
+    fixable   = ["ALL"]
+    unfixable = []
 
     [tool.ruff.format]
-    indent-style = "space"
-    quote-style  = "double"
+    # Same as Black
+    indent-style              = "space"
+    line-ending               = "auto"
+    quote-style               = "double"
+    skip-magic-trailing-comma = false
