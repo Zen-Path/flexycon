@@ -96,11 +96,13 @@ export class ColumnData {
         field = null,
         sortable = false,
         cssClass = null,
+        icon = null,
     }) {
         this.id = id;
         this.label = label;
         this.field = field;
         this.sortable = sortable;
         this.cssClass = cssClass;
+        this.icon = icon;
     }
 }

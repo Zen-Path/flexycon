@@ -1,4 +1,4 @@
-import { copyToClipboard } from "./utils.js";
+import { copyToClipboard, createIconLabelPair } from "./utils.js";
 
 export class BaseDataTable {
     constructor(container) {
@@ -106,7 +106,13 @@ export class BaseDataTable {
                     cell.appendChild(this._createActions());
                     break;
                 default:
-                    cell.innerHTML = `<span>${column.label || ""}</span>`;
+                    cell.append(
+                        createIconLabelPair({
+                            icon: column.icon,
+                            label: column.label,
+                            title: column.label,
+                        })
+                    );
                     break;
             }
 

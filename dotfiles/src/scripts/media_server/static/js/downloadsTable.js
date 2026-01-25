@@ -27,6 +27,7 @@ export class DownloadsTable extends BaseDataTable {
                 field: "id",
                 sortable: true,
                 cssClass: "col-id",
+                icon: "fa-hashtag",
             }),
             MEDIA_TYPE: new ColumnData({
                 id: "media-type",
@@ -34,6 +35,7 @@ export class DownloadsTable extends BaseDataTable {
                 field: "mediaType",
                 sortable: true,
                 cssClass: "col-media-type",
+                icon: "fa-image",
             }),
             NAME: new ColumnData({
                 id: "name",
@@ -41,6 +43,7 @@ export class DownloadsTable extends BaseDataTable {
                 field: "title",
                 sortable: true,
                 cssClass: "col-name",
+                icon: "fa-quote-left",
             }),
             START_TIME: new ColumnData({
                 id: "start-time",
@@ -48,6 +51,7 @@ export class DownloadsTable extends BaseDataTable {
                 field: "startTime",
                 sortable: true,
                 cssClass: "col-start-time",
+                icon: "fa-clock",
             }),
             STATUS: new ColumnData({
                 id: "status",
@@ -55,6 +59,7 @@ export class DownloadsTable extends BaseDataTable {
                 field: "status",
                 sortable: true,
                 cssClass: "col-status",
+                icon: "fa-circle-check",
             }),
             ACTIONS: new ColumnData({
                 id: "actions",

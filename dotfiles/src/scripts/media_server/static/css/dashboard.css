@@ -498,8 +498,8 @@
 }
 
 .icon-label-group i {
-    flex-shrink: 0; /* Prevents squishing */
-    width: 16px; /* For vertical alignment */
+    /* For vertical alignment */
+    width: 16px;
     text-align: center;
 }
 
@@ -507,5 +507,5 @@
     font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* The "truncate" logic */
+    text-overflow: ellipsis;
 }
