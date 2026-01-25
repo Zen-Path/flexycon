@@ -71,20 +71,22 @@ repos:
     - repo: https://github.com/christophmeissner/pytest-pre-commit
       rev: 1.0.0
       hooks:
-          # Runs on every COMMIT
+          # Runs on COMMIT
           - id: pytest
             name: "Test: API Suite"
             entry: pytest -m "not ui and not slow"
             language: system
             pass_filenames: false
             types: [python]
+            always_run: false
 
-          # Runs only on PUSH
+          # Runs on PUSH
           - id: pytest
-            alias: pytest-ui
-            name: "Test: UI Suite"
-            entry: pytest -m "ui"
+            alias: pytest-full
+            name: "Test: Full Suite"
+            entry: pytest
             language: system
             pass_filenames: false
             types_or: [python, javascript, html]
             stages: [pre-push]
+            always_run: false
