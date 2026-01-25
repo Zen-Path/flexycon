@@ -286,6 +286,7 @@ export class DownloadRow extends BaseDataRow {
             icon: config.icon,
             label: config.label,
             extraClasses: [config.className],
+            title: config.label,
         });
     }
 
