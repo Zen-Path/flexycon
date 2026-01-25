@@ -8,12 +8,7 @@ def test_empty_return(client, auth_headers):
     assert len(history) == 0
 
 
-def test_valid_scenarios(
-    client,
-    auth_headers,
-    seed,
-    sample_download_row,
-):
+def test_valid_scenarios(client, auth_headers, seed, sample_download_row):
     """Test that all rows from the database are returned."""
     seeded_rows = seed([sample_download_row])
     target_id = seeded_rows[0].id

@@ -238,21 +238,23 @@ def download_media():
                     report[url].status = cmd_result.return_code == 0
 
                     if not report[url].status:
-                        report[url].error = (
+                        report[
+                            url
+                        ].error = (
                             f"[gallery-dl] Command failed: {cmd_result.return_code}"
                         )
                     else:
                         for line in report[url].output.splitlines():
                             if re.search(no_results_pattern, line):
                                 report[url].status = False
-                                report[url].error = (
-                                    "[gallery-dl] No results found for url."
-                                )
+                                report[
+                                    url
+                                ].error = "[gallery-dl] No results found for url."
                             elif re.search(larger_than_allowed_pattern, line):
                                 report[url].status = False
-                                report[url].error = (
-                                    "[gallery-dl] File size larger than allowed."
-                                )
+                                report[
+                                    url
+                                ].error = "[gallery-dl] File size larger than allowed."
                             elif re.search(catchall_error_pattern, line):
                                 report[url].status = False
                                 report[url].error = f"[gallery-dl] {line}."

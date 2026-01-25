@@ -25,14 +25,8 @@ def build_parser():
         description="Wrapper around rclone with persistent config."
     )
 
-    parser.add_argument(
-        "source",
-        help="source path",
-    )
-    parser.add_argument(
-        "destination",
-        help="destination path",
-    )
+    parser.add_argument("source", help="source path")
+    parser.add_argument("destination", help="destination path")
 
     parser.add_argument(
         "-a",

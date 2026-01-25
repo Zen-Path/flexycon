@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+
 import platform
 
 import pytest
@@ -100,9 +102,7 @@ def test_get_path(path_parts, expand_vars, escape_path, expected, mock_env):
             ["h"],
             "user home",
             # zsh
-            "# user home\n"
-            'alias h="cd /Users/mock && ls"\n'
-            "hash -d h=/Users/mock\n",
+            '# user home\nalias h="cd /Users/mock && ls"\nhash -d h=/Users/mock\n',
             # nvim
             "-- user home\n"
             "vim.api.nvim_set_keymap(\n"

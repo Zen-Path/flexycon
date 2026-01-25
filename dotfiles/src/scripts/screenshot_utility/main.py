@@ -68,11 +68,7 @@ class MaimUtility:
 
 
 class ScreenshotUtility:
-    def __init__(
-        self,
-        maim=None,
-        output_dir=None,
-    ):
+    def __init__(self, maim=None, output_dir=None):
         self.maim = maim or MaimUtility()
         self.output_dir = os.path.expanduser(
             output_dir or f"{os.getenv('XDG_PICTURES_DIR', '~/Pictures')}/Screenshots"
@@ -91,8 +87,7 @@ class ScreenshotUtility:
         name_fmt = f"-{name[:100].replace(' ', '-')}" if name else ""
 
         return os.path.join(
-            self.output_dir,
-            f"{timestamp}_{capture_type}{name_fmt}.{ext}".lower(),
+            self.output_dir, f"{timestamp}_{capture_type}{name_fmt}.{ext}".lower()
         )
 
     def area(self, copy_output=False):

@@ -198,10 +198,7 @@ def bulk_delete():
             # Even if notification fails, we should still delete the data.
             try:
                 current_app.config["ANNOUNCER"].announce_event(
-                    EventType.DELETE,
-                    {
-                        "ids": list(existing_ids),
-                    },
+                    EventType.DELETE, {"ids": list(existing_ids)}
                 )
             except Exception as e:
                 logger.warning(f"Announcer failed: {e}")

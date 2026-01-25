@@ -23,10 +23,7 @@ def to_flat_case(words: List[str], ext: str = "") -> str:
 
 
 def to_flat_upper_case(words: List[str], ext: str = "") -> str:
-    return to_flat_case(
-        words,
-        ext,
-    ).upper()
+    return to_flat_case(words, ext).upper()
 
 
 def to_kebab_case(words: List[str], ext: str = "") -> str:

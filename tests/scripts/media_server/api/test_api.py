@@ -32,10 +32,7 @@ def test_auth(client, auth_headers, seed):
 
 def test_wrong_method(client, auth_headers):
     """Sending a POST request to a GET endpoint"""
-    res = client.post(
-        API_GET_DOWNLOADS,
-        headers=auth_headers,
-    )
+    res = client.post(API_GET_DOWNLOADS, headers=auth_headers)
 
     assert res.status_code == 405
 
