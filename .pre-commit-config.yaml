@@ -1,46 +1,35 @@
+# Stop at the first hook that fails
+fail_fast: true
+
+default_stages: [pre-commit]
+
 repos:
-    - repo: https://github.com/psf/black
-      rev: 25.1.0
+    # --- PYTHON ---
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.14.13
       hooks:
-          - id: black
-            name: black (py)
-            files: \.py$
+          - id: ruff
+            name: "Python: Ruff Lint"
+            args: [--fix]
+            types: [python]
+          - id: ruff-format
+            name: "Python: Ruff Format"
+            types: [python]
 
-    - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.15.0
-      hooks:
-          - id: mypy
-            language: system
-
-    - repo: https://github.com/pycqa/isort
-      rev: 6.0.1
-      hooks:
-          - id: isort
-            args: ["--profile", "black"]
-
-    - repo: https://github.com/christophmeissner/pytest-pre-commit
-      rev: 1.0.0
-      hooks:
-          - id: pytest
-            entry: pytest -m "not ui and not slow"
-            language: system
-            pass_filenames: false
-            always_run: true
-
+    # --- WEB & DOCS ---
     - repo: https://github.com/pre-commit/mirrors-prettier
       rev: v4.0.0-alpha.8
       hooks:
           - id: prettier
-            name: prettier (js|json|css|html|md)
-            # Either list the file extensions you want prettified:
-            files: \.(js|jsx|ts|tsx|json|css|scss|html|md)$
-            # or exclude python files:
-            # exclude: \.py$
+            name: "Web: Prettier"
+            types_or: [javascript, ts, tsx, json, css, scss, html, markdown]
 
+    # --- SHELL ---
     - repo: https://github.com/scop/pre-commit-shfmt
       rev: v3.11.0-1
       hooks:
-          - id: shfmt # prebuilt upstream executable
+          - id: shfmt
+            name: "Shell: shfmt"
             args:
                 [
                     --indent=4,
@@ -49,20 +38,53 @@ repos:
                     --space-redirects,
                     --write,
                 ]
-            files: \.sh$
+            types: [shell]
 
+    # --- LUA ---
     - repo: https://github.com/JohnnyMorganz/StyLua
       rev: v2.0.2
       hooks:
           - id: stylua-system # stylua | stylua-system | stylua-github
-            name: stylua (lua)
-            files: \.lua$
+            name: "Lua: StyLua"
+            types: [lua]
 
+    # --- TOML ---
     - repo: local
       hooks:
           - id: taplo-format
-            name: Format TOML with Taplo
+            name: "TOML: Taplo"
             entry: taplo
             language: system
             types: [toml]
             args: ["format"]
+
+    # --- STATIC ANALYSIS ---
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: v1.15.0
+      hooks:
+          - id: mypy
+            name: "Python: Type Check (mypy)"
+            language: system
+            types: [python]
+
+    # TESTING
+    - repo: https://github.com/christophmeissner/pytest-pre-commit
+      rev: 1.0.0
+      hooks:
+          # Runs on every COMMIT
+          - id: pytest
+            name: "Test: API Suite"
+            entry: pytest -m "not ui and not slow"
+            language: system
+            pass_filenames: false
+            types: [python]
+
+          # Runs only on PUSH
+          - id: pytest
+            alias: pytest-ui
+            name: "Test: UI Suite"
+            entry: pytest -m "ui"
+            language: system
+            pass_filenames: false
+            types_or: [python, javascript, html]
+            stages: [pre-push]
