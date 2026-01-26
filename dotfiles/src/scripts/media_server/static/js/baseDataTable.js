@@ -219,10 +219,15 @@ export class BaseDataTable {
     }
 
     filter(searchValue) {
-        const query = String(searchValue).toLowerCase();
+        const query = String(searchValue).trim().toLowerCase();
 
         requestAnimationFrame(() => {
             this.entryList.forEach((entry) => {
+                if (query === "") {
+                    entry.isVisible = true;
+                    return;
+                }
+
                 const matches = entry.searchIndex.includes(query);
                 entry.isVisible = matches;
             });

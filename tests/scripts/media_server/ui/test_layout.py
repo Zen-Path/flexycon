@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from playwright.sync_api import Page, expect
 
@@ -70,3 +72,48 @@ def test_url_opening_new_window(page: Page, dashboard, mock_downloads):
 
     new_page = popup_info.value
     assert new_page.url == target_url
+
+
+def test_theme_toggle_cycles_state(page: Page, dashboard, mock_downloads):
+    """
+    Verify that clicking the toggle flips the dark-mode class regardless of starting
+    state.
+    """
+    mock_downloads([])
+    dashboard.navigate()
+
+    body = page.locator("body")
+    initial_is_dark = "dark-mode" in (body.get_attribute("class") or "")
+
+    dashboard.theme_toggle.click()
+
+    if initial_is_dark:
+        expect(body).not_to_have_class(re.compile(r"dark-mode"))
+    else:
+        expect(body).to_have_class(re.compile(r"dark-mode"))
+
+    # Click again to return to original state
+    dashboard.theme_toggle.click()
+    if initial_is_dark:
+        expect(body).to_have_class(re.compile(r"dark-mode"))
+    else:
+        expect(body).not_to_have_class(re.compile(r"dark-mode"))
+
+
+def test_theme_preference_persistence_on_reload(page: Page, dashboard, mock_downloads):
+    """Verify that the theme selection survives a page refresh."""
+    mock_downloads([])
+    dashboard.navigate()
+
+    body = page.locator("body")
+
+    # If it's not dark, make it dark.
+    if "dark-mode" not in (body.get_attribute("class") or ""):
+        dashboard.theme_toggle.click()
+
+    expect(body).to_have_class(re.compile(r"dark-mode"))
+
+    page.reload()
+    mock_downloads([])
+
+    expect(body).to_have_class(re.compile(r"dark-mode"))

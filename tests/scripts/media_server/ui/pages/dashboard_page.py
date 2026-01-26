@@ -59,8 +59,31 @@ class DashboardPage:
     def navigate(self):
         self.page.goto(self.url)
 
-    def is_visually_truncated(self, locator):
+    def is_truncated(self, locator):
         return locator.evaluate("el => el.scrollWidth > el.clientWidth")
 
     def get_cell_tooltip(self, locator):
         return locator.get_attribute("title")
+
+    def row_by_title(self, title: str):
+        """Returns the locator for a row containing a specific title."""
+        return self.rows.filter(has=self.page.locator(self.b_col_title, has_text=title))
+
+    def search_for(self, text: str, delay=50):
+        """Clears the input and types sequentially to trigger oninput."""
+        self.search_input.clear()
+        self.search_input.press_sequentially(text, delay=delay)
+
+    def is_row_visible(self, title: str):
+        """Helper to check visibility of a row by its title text."""
+        return self.row_by_title(title).is_visible()
+
+    def get_sort_indicator(self, column_selector: str):
+        return self.table_header.locator(f"{column_selector} .sort-indicator")
+
+    def get_column_values(self, cell_selector: str):
+        """
+        Returns a list of strings currently visible in the table for a specific column.
+        """
+        # We use .all_inner_texts() to get the current state of the DOM
+        return self.page.locator(f"{self.table_body} {cell_selector}").all_inner_texts()

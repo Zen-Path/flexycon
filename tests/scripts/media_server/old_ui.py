@@ -1,5 +1,4 @@
 import json
-import re
 from datetime import datetime
 from urllib.parse import urljoin
 
@@ -8,156 +7,11 @@ import requests
 from playwright.sync_api import Dialog, Page, expect
 from scripts.media_server.src.constants import MediaType
 
-from .conftest import API_DOWNLOAD, BASE_URL, DASHBOARD_URL
+from .conftest import API_DOWNLOAD, BASE_URL
+
+DASHBOARD_URL = ""  # fix mypy warning
 
 pytestmark = [pytest.mark.ui]
-
-
-def test_dashboard_visuals(page: Page, seed):
-    """Check that the dashboard renders seeded data correctly."""
-    seed()
-
-    page.goto(DASHBOARD_URL)
-
-    expect(page).to_have_title("Downloads | Media Server")
-
-    # Check that we have rows
-    rows = page.locator(".data-row")
-    expect(rows).not_to_have_count(0)
-
-    # Check each column
-    first_row = page.locator(".data-row").first
-    expect(first_row).to_be_visible(timeout=100)
-
-    expect(first_row.locator(".col-checkbox input[type='checkbox']")).to_be_visible(
-        timeout=100
-    )
-
-    # ID: Matches # followed by digits (e.g., #123)
-    expect(first_row.locator(".col-id")).to_have_text(
-        re.compile(r"^#\d+$"), timeout=100
-    )
-
-    expect(first_row.locator(".col-media-type.type-video")).to_be_visible(timeout=100)
-
-    # Title
-    expect(first_row.locator(".col-name a")).to_have_attribute(
-        "href", re.compile(r"^https?://"), timeout=100
-    )
-    expect(first_row.locator(".col-name .title")).to_contain_text(
-        "Channel Intro", timeout=100
-    )
-
-    # Time
-    time_text = first_row.locator(".col-start-time").inner_text(timeout=100)
-    _ = datetime.strptime(time_text, "%Y-%m-%d %H:%M:%S")
-
-    # Actions
-    expect(first_row.locator(".col-actions .action-btn")).to_be_visible(timeout=100)
-
-    # Theme toggle
-    expect(page.locator("#themeToggle")).to_be_visible(timeout=100)
-
-
-def test_search(page: Page, seed):
-    """Test the Javascript search filter."""
-    seed()
-
-    page.goto(DASHBOARD_URL)
-
-    page.fill("#searchInput", "Cat Memes")
-    page.pause()
-    expect(page.locator(".data-table-body")).to_contain_text("Best Cat Memes")
-    expect(page.locator(".data-table-body")).not_to_contain_text("Rick Astley")
-
-    # Clear search
-    page.click("#clearBtn")
-    expect(page.locator(".data-table-body")).to_contain_text("Rick Astley")
-
-
-def test_sorting_by_url(page: Page, seed):
-    """
-    Test 2: Sorting
-    - Title column should sort by URL, not Title.
-    - Verify Sort Indicators.
-    """
-    initial_data = [
-        {
-            "url": "http://a_start.com",
-            "title": "Zebra Title",
-            "start_time": datetime.now(),
-        },
-        {
-            "url": "http://z_end.com",
-            "title": "Apple Title",
-            "start_time": datetime.now(),
-        },
-    ]
-    seed(initial_data)
-
-    page.goto(DASHBOARD_URL)
-
-    name_column_class = ".header-cell .col-name"
-    sort_indicator_class = ".header-cell .col-name .sort-indicator"
-
-    # Click 'Title' header -> Sort ASC
-    page.click(name_column_class)
-
-    # Verify Indicator
-    expect(page.locator(sort_indicator_class)).to_have_class("fa-caret-up")
-
-    # Verify Order (Using expect to wait for re-render)
-    expect(page.locator(".data-row").first).to_contain_text("Apple Title", timeout=100)
-
-    # Click again -> Sort DESC
-    page.click(name_column_class)
-    expect(page.locator(sort_indicator_class)).to_have_class("fa-caret-down")
-
-    expect(page.locator(".data-row").first).to_contain_text("Zebra Title")
-
-
-def test_search_and_sort(page: Page, seed):
-    """
-    Test 3: Search + Sort
-    """
-    initial_data = [
-        {
-            "url": "http://python-1.com",
-            "title": "Python Tutorial A",
-            "start_time": datetime.now(),
-        },
-        {
-            "url": "http://python-2.com",
-            "title": "Python Tutorial Z",
-            "start_time": datetime.now(),
-        },
-        {
-            "url": "http://java-1.com",
-            "title": "Java Tutorial",
-            "start_time": datetime.now(),
-        },
-    ]
-    seed(initial_data)
-
-    page.goto(DASHBOARD_URL)
-
-    # Search
-    page.fill("#searchInput", "Python")
-    rows = page.locator(".data-row")
-    expect(rows).to_have_count(2)
-
-    name_column_class = ".header-cell .col-name"
-
-    # Sort ASC
-    page.click(name_column_class)
-    expect(rows.nth(0)).to_contain_text("Tutorial A")
-
-    # Sort DESC
-    page.click(name_column_class)
-    expect(rows.nth(0)).to_contain_text("Tutorial Z")
-
-    # Ensure Java hidden
-    expect(page.locator(".data-table-body")).not_to_contain_text("Java Tutorial")
 
 
 def test_edit_feature_ui(page: Page, seed, sample_download_row):

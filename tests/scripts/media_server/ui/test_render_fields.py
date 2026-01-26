@@ -114,6 +114,17 @@ def test_title_valid(dashboard, mock_downloads, input_title):
     assert title_el.get_attribute("title") == input_title
 
 
+def test_title_visual_truncation(dashboard, mock_downloads):
+    """Verify that a super long title actually triggers the CSS truncation."""
+    long_title = "Really long title " * 10
+    mock_downloads([{"id": 1, "title": long_title}])
+    dashboard.navigate()
+
+    title_el = dashboard.rows.first.locator(dashboard.b_col_title)
+    expect(title_el).to_have_class(re.compile(r"truncate"))
+    assert dashboard.is_truncated(title_el), "Long title did not visually truncate"
+
+
 # Start Time
 
 
