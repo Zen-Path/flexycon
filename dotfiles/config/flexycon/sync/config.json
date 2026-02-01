@@ -1,14 +1,14 @@
 {
     "ignore": [
+        "*.egg-info/**",
+        ".DS_Store",
         ".git/**",
-        ".venv/**",
-        "venv/**",
         ".mypy_cache/**",
         ".pytest_cache/**",
         ".ruff_cache/**",
-        "*.egg-info/**",
+        ".venv/**",
         "__pycache__/**",
         "node_modules/**",
-        ".DS_Store"
+        "venv/**"
     ]
 }
