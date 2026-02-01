@@ -26,6 +26,7 @@ def format_operations(
         "dir remove": Fore.MAGENTA,
         "dir make": Fore.BLUE,
         "dir mod time": Fore.CYAN,
+        "update mod time": Fore.CYAN,
     }
 
     # Normalize type names
@@ -33,6 +34,7 @@ def format_operations(
         "set directory modification time": "dir mod time",
         "remove directory": "dir remove",
         "make directory": "dir make",
+        "update modification time": "update mod time",
     }
 
     # Sort operations by type, then file, then size (numerically)
