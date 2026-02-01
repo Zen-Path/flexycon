@@ -76,7 +76,7 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="d",
-        path_parts=["$HOME", "University", "Y1_S1"],
+        path_parts=["$HOME", "University", "Semester"],
         aliases={"default": ["u", "n", "i", "s"], YAZI.name: ["u", "s"]},
         description="university current semester",
     ),
