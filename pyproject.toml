@@ -9,8 +9,8 @@ authors = [
 dependencies = [
     "pip>=26.0",
 
-    "dotdrop==1.15.0",          #  for dotfile management
-    "python-magic-bin==0.4.14", # for dotdrop on windows
+    "dotdrop==1.15.0",      #  for dotfile management
+    "python-magic==0.4.27", # for dotdrop on windows
 
     # util
     "colorama==0.4.6",      # for colored text
