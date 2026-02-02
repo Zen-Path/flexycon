@@ -113,7 +113,7 @@ set_wallpaper = [
 
 rules = [
     # Folder
-    { name = "*/", use = [
+    { url = "*/", use = [
         "cd",
         "open",
         "open_in_visual_editor",
@@ -171,7 +171,7 @@ rules = [
     ] },
 
     # Fallback
-    { name = "*", use = [
+    { url = "*", use = [
         "open",
         "open_in_browser",
         "show_exif_info",
@@ -191,10 +191,12 @@ suppress_preload = false
 
 fetchers = [
     # Mimetype
-    { id = "mime", name = "*", run = "mime-ext", if = "!(mime|dummy)", prio = "high" },
-    # { id    = "mime",   name = "*",     run = "mime",      if = "!mime",           prio = "high" },
-    { id = "git", name = "*", run = "git" },
-    { id = "git", name = "*/", run = "git" },
+    { id = "mime", url = "*/", run = "mime.dir", prio = "high" },
+    { id = "mime", url = "local://*", run = "mime-ext.local", prio = "high" },
+    { id = "mime", url = "remote://*", run = "mime-ext.remote", prio = "high" },
+
+    { id = "git", url = "*", run = "git" },
+    { id = "git", url = "*/", run = "git" },
 ]
 preloaders = [
     # Image
@@ -209,7 +211,7 @@ preloaders = [
     { mime = "application/ms-opentype", run = "font" },
 ]
 previewers = [
-    { name = "*/", run = "folder" },
+    { url = "*/", run = "folder" },
     # Code
     { mime = "text/*", run = "code" },
     { mime = "*/{xml,javascript,wine-extension-ini}", run = "code" },
@@ -231,10 +233,10 @@ previewers = [
     # Empty file
     { mime = "inode/empty", run = "empty" },
     # Fallback
-    { name = "*", run = "code" },
+    { url = "*", run = "code" },
 ]
 spotters = [
-    { name = "*/", run = "folder" },
+    { url = "*/", run = "folder" },
     # Code
     { mime = "text/*", run = "code" },
     { mime = "*/{xml,javascript,wine-extension-ini}", run = "code" },
@@ -244,7 +246,7 @@ spotters = [
     # Video
     { mime = "video/*", run = "video" },
     # Fallback
-    { name = "*", run = "file" },
+    { url = "*", run = "file" },
 ]
 
 [input]

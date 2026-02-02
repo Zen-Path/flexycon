@@ -157,16 +157,16 @@ rules = [
     # { mime = "inode/empty", fg = "red" },
 
     # Special files
-    { name = "*", is = "orphan", bg = "red" },
-    { name = "*", is = "exec", fg = "green" },
+    { url = "*", is = "orphan", bg = "red" },
+    { url = "*", is = "exec", fg = "green" },
 
     # Dummy files
-    { name = "*", is = "dummy", bg = "red" },
-    { name = "*/", is = "dummy", bg = "red" },
+    { url = "*", is = "dummy", bg = "red" },
+    { url = "*/", is = "dummy", bg = "red" },
 
     # Fallback
-    { name = "*", fg = "gray" },
-    { name = "*/", fg = "blue", bold = true },
+    { url = "*", fg = "gray" },
+    { url = "*/", fg = "blue", bold = true },
 ]
 
 [icon]
