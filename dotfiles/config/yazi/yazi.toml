@@ -33,78 +33,77 @@ wrap            = "yes"
 # TODO: Add commands for macos and windows where missing
 
 cd = [
-    { run = 'ya emit cd "$1"', desc = "Enter directory" },
+    { run = 'ya emit cd %s1', desc = "Enter directory" },
 ]
 
 reveal = [
-    { run = 'xdg-open "$(dirname "$1")"', desc = "Reveal", for = "linux" },
-    { run = 'open -R "$1"', desc = "Reveal", for = "macos" },
-    { run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
+    { run = 'xdg-open %d1', desc = "Reveal", for = "linux" },
+    { run = 'open -R %s1', desc = "Reveal", for = "macos" },
+    { run = 'explorer /select,%s1', orphan = true, desc = "Reveal", for = "windows" },
 ]
 
 # Edit
 edit = [
-    { run = '${EDITOR:-vi} "$@"', block = true, desc = "Edit", for = "unix" },
-    { run = 'code %*', orphan = true, desc = "Edit", for = "windows" },
-    { run = 'code -w %*', block = true, desc = "Edit (block)", for = "windows" },
+    { run = '${EDITOR:-vi} %s', block = true, desc = "Edit", for = "unix" },
+    { run = 'code %s', orphan = true, desc = "Edit", for = "windows" },
+    { run = 'code -w %s', block = true, desc = "Edit (block)", for = "windows" },
 ]
 
 edit_image = [
-    { run = 'gimp "$@"', orphan = true, desc = "Edit image", for = "unix" },
+    { run = 'gimp %s', orphan = true, desc = "Edit image", for = "unix" },
 ]
 
 edit_new_win = [
-    { run = '${TERMINAL} -e ${EDITOR:-vi} "$@"', orphan = true, desc = "Edit in new window", for = "unix" },
+    { run = '${TERMINAL} -e ${EDITOR:-vi} %s', orphan = true, desc = "Edit in new window", for = "unix" },
 ]
 
 # Open
 open = [
-    { run = 'xdg-open "$1"', orphan = true, desc = "Open", for = "linux" },
-    { run = 'open "$@"', desc = "Open", for = "macos" },
-    { run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
+    { run = 'xdg-open %s1', orphan = true, desc = "Open", for = "linux" },
+    { run = 'open %s', desc = "Open", for = "macos" },
+    { run = 'start "" %1', orphan = true, desc = "Open", for = "windows" },
 ]
 
 open_new_win = [
-    { run = '${TERMINAL} -e xdg-open "$1"', orphan = true, desc = "Open in new window", for = "linux" },
+    { run = '${TERMINAL} -e xdg-open %s1', orphan = true, desc = "Open in new window", for = "linux" },
 ]
 
 open_in_browser = [
-    { run = '${BROWSER} "$1"', orphan = true, desc = "Open in browser", for = "unix" },
+    { run = '${BROWSER} %s1', orphan = true, desc = "Open in browser", for = "unix" },
 ]
 
 open_in_visual_editor = [
-    { run = '${VISUAL} "$1"', orphan = true, desc = "Open in graphical editor", for = "unix" },
+    { run = '${VISUAL} %s1', orphan = true, desc = "Open in graphical editor", for = "unix" },
 ]
 
 # Play
 play = [
-    { run = 'mpv --force-window "$@"', orphan = true, desc = "Play", for = "linux" },
-    { run = 'mpv --force-window "$@"', orphan = true, desc = "Play (mpv)", for = "macos" },
-    { run = 'open "$@"', orphan = true, desc = "Play (default app)", for = "macos" },
-    { run = 'mpv --force-window %*', orphan = true, desc = "Play", for = "windows" },
+    { run = 'mpv --force-window %s', orphan = true, desc = "Play", for = "linux" },
+    { run = 'mpv --force-window %s', orphan = true, desc = "Play (mpv)", for = "macos" },
+    { run = 'open %s', orphan = true, desc = "Play (default app)", for = "macos" },
+    { run = 'mpv --force-window %s', orphan = true, desc = "Play", for = "windows" },
 ]
 
 play_new_win = [
-    { run = '${TERMINAL} -e mpv --force-window "$@"', orphan = true, desc = "Play in new window", for = "linux" },
+    { run = '${TERMINAL} -e mpv --force-window %s', orphan = true, desc = "Play in new window", for = "linux" },
 ]
 
 # File info
 show_exif_info = [
-    { run = '''exiftool "$1"; echo "\n:: Press enter to exit"; read _''', block = true, desc = "Show EXIF info", for = "unix" },
+    { run = "clear; exiftool %s1; echo 'Press enter to exit'; read _", desc = "Show EXIF", for = "unix", block = true },
 ]
 
 show_media_info = [
-    { run = '''mediainfo "$1"; echo ":: Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
+    { run = "clear; mediainfo %s1; echo 'Press enter to exit'; read _", desc = "Show media info", for = "unix", block = true },
 ]
 
 # Misc
 extract = [
-    { run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
-    { run = 'ya pub extract --list %*', desc = "Extract here", for = "windows" },
+    { run = "ya pub extract --list %s", desc = "Extract here" },
 ]
 
 set_wallpaper = [
-    { run = 'setbg "$@"', desc = "Set image as wallpaper", for = "linux" },
+    { run = 'setbg %s', desc = "Set image as wallpaper", for = "linux" },
 ]
 
 [open]
