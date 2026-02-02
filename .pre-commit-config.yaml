@@ -33,7 +33,8 @@ repos:
       hooks:
           - id: prettier
             name: "Web: Prettier"
-            types_or: [javascript, ts, tsx, json, css, scss, html, markdown]
+            types_or:
+                [css, html, javascript, json, markdown, scss, ts, tsx, yaml]
 
     # --- SHELL ---
     - repo: https://github.com/scop/pre-commit-shfmt
