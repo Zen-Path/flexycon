@@ -244,12 +244,14 @@ def setup():
     else:
         logger.error("'playwright' not found. Skipping installation.")
 
+    # npm
     logger.info("📦 Installing npm packages...")
     if shutil.which("npm"):
         run_command(["npm", "install"])
     else:
-        logger.warning("npm not found. Skipping npm installation.")
+        logger.error("'npm' not found. Skipping installation.")
 
+    # pre-commit
     logger.info("📦 Installing pre-commit hooks...")
     precommit_bin = VENV_BIN / "pre-commit"
     if precommit_bin.exists():
@@ -262,7 +264,7 @@ def setup():
         # Pre-install the environments so the first commit isn't slow
         run_command([str(precommit_bin), "install-hooks"])
     else:
-        logger.warning("pre-commit not found. Skipping hook installation.")
+        logger.error("'pre-commit' not found. Skipping installation.")
 
 
 @target()
