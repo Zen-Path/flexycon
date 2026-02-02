@@ -4,18 +4,6 @@ fail_fast: true
 default_stages: [pre-commit]
 
 repos:
-    # --- PYTHON ---
-    - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.14.14
-      hooks:
-          - id: ruff
-            name: "Python: Ruff Lint"
-            args: [--fix]
-            types: [python]
-          - id: ruff-format
-            name: "Python: Ruff Format"
-            types: [python]
-
     # --- WEB & DOCS ---
     - repo: https://github.com/pre-commit/mirrors-prettier
       rev: v4.0.0-alpha.8
@@ -58,7 +46,21 @@ repos:
             types: [toml]
             args: ["format"]
 
-    # --- STATIC ANALYSIS ---
+    # --- PYTHON ---
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.14.14
+      hooks:
+          - id: ruff-format
+            name: "Python: Ruff Format (Initial)"
+            types: [python]
+          - id: ruff
+            name: "Python: Ruff Lint"
+            args: [--fix]
+            types: [python]
+          - id: ruff-format
+            name: "Python: Ruff Format (Final)"
+            types: [python]
+
     - repo: https://github.com/pre-commit/mirrors-mypy
       rev: v1.19.1
       hooks:
