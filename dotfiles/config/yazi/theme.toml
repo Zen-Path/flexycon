@@ -89,11 +89,11 @@ title    = {}
 value    = {}
 
 [confirm]
+body       = {}
 border     = { fg = "blue" }
 btn_labels = ["  [Y]es  ", "  (N)o  "]
 btn_no     = {}
 btn_yes    = { reversed = true }
-content    = {}
 list       = {}
 title      = { fg = "blue" }
 
