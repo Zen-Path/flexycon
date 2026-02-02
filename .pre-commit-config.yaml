@@ -4,6 +4,29 @@ fail_fast: true
 default_stages: [pre-commit]
 
 repos:
+    # --- SAFETY & HOUSEKEEPING ---
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v5.0.0
+      hooks:
+          - id: check-added-large-files
+            name: "Safety: No Large Files"
+            args: ["--maxkb=500"]
+          - id: check-case-conflict
+            name: "Safety: Case Insensitive Filenames"
+          - id: check-executables-have-shebangs
+            name: "Safety: Exec Shebang Presence"
+          - id: check-illegal-windows-names
+            name: "Safety: Illegal Windows Filenames"
+          - id: check-merge-conflict
+            name: "Safety: No Merge Conflicts"
+          - id: end-of-file-fixer
+            name: "Style: End of File Fixer"
+          - id: mixed-line-ending
+            name: "Style: Enforce LF"
+            args: ["--fix=lf"]
+          - id: trailing-whitespace
+            name: "Style: Trailing Whitespace"
+
     # --- WEB & DOCS ---
     - repo: https://github.com/pre-commit/mirrors-prettier
       rev: v4.0.0-alpha.8
