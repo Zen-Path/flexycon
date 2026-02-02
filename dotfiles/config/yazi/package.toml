@@ -1,36 +1,36 @@
 [[plugin.deps]]
-hash = "4c49c446328c4553a4ccab7facc10b21"
-rev  = "d1c8baa"
+hash = "7b7dc677b58371da6fc63e4fcd134651"
+rev  = "230b9c6"
 use  = "yazi-rs/plugins:mime-ext"
 
 [[plugin.deps]]
-hash = "63b6c222bf2103b3023389dde5e2ecfe"
-rev  = "d1c8baa"
+hash = "270915fa8282a19908449530ff66f7e2"
+rev  = "230b9c6"
 use  = "yazi-rs/plugins:git"
 
 [[plugin.deps]]
 hash = "3996fc74044bc44144b323686f887e1"
-rev  = "d1c8baa"
+rev  = "230b9c6"
 use  = "yazi-rs/plugins:full-border"
 
 [[plugin.deps]]
-hash = "435a2af56ecfb3d05755fd5e24977d8b"
-rev  = "d1c8baa"
+hash = "9ad20d763df07ce40fd09de549d914b0"
+rev  = "230b9c6"
 use  = "yazi-rs/plugins:mount"
 
 [[plugin.deps]]
 hash = "8a7c58225816a163a6e8730c0adafbc8"
-rev  = "d1c8baa"
+rev  = "230b9c6"
 use  = "yazi-rs/plugins:toggle-pane"
 
 [[plugin.deps]]
-hash = "4ee57085277d616acfa0ef1fef37dc00"
-rev  = "d1c8baa"
+hash = "f69e4737c2fb8ceec58a2950faf13c46"
+rev  = "230b9c6"
 use  = "yazi-rs/plugins:vcs-files"
 
 [[plugin.deps]]
-hash = "c2021386289a0cbb3e152a052f67c177"
-rev  = "a63550b"
+hash = "e519d894e94ded741e06aae4d4775981"
+rev  = "eca1861"
 use  = "Rolv-Apneseth/starship"
 
 [flavor]
