@@ -238,8 +238,11 @@ def setup():
 
     setup_virtual_env()
 
-    # Install playwright resources
-    run_command(["playwright", "install"])
+    # playwright
+    if shutil.which("playwright"):
+        run_command(["playwright", "install"])
+    else:
+        logger.error("'playwright' not found. Skipping installation.")
 
     logger.info("📦 Installing npm packages...")
     if shutil.which("npm"):
