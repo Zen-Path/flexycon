@@ -206,9 +206,9 @@ def download_media():
     # PROCESSING
 
     # gallery-dl output patterns
-    no_results_pattern = r"^\[\w+\]\[info\] No results for"
-    larger_than_allowed_pattern = r"^\[\w+\]\[warning\] File size larger"
-    catchall_error_pattern = r"^\[\w+\]\[error\]"
+    no_results_pattern = r"^\[[^\]]+\]\[info\] No results for"
+    larger_than_allowed_pattern = r"^\[[^\]]+\]\[warning\] File size larger"
+    catchall_error_pattern = r"^\[[^\]]+\]\[error\]"
 
     final_processing_count = len(final_processing_queue)
     for i, (download_id, url) in enumerate(final_processing_queue):
