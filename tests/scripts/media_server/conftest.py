@@ -145,8 +145,6 @@ def sample_download_row():
     }
 
 
-DASHBOARD_URL = f"{BASE_URL}/dashboard"
-
 API_GET_DOWNLOADS = "/api/downloads"
 API_HEALTH = "/api/health"
 API_STREAM = "/api/stream"
