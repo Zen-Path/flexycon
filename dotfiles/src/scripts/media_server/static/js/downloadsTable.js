@@ -4,6 +4,7 @@ import {
     MEDIA_TYPE_CONFIG,
     ColumnData,
     STATUS_CONFIG,
+    DOWNLOAD_STATUS,
 } from "./constants.js";
 import { toLocalStandardTime, formatDuration } from "./utils.js";
 import { createMenuTrigger } from "./dropdownHelper.js";
@@ -160,48 +161,94 @@ export class DownloadsTable extends BaseDataTable {
 }
 
 export class DownloadRow extends BaseDataRow {
+    constructor(data, tableRef) {
+        super(data, tableRef);
+        // Initializing data here due to private methods
+        this.initData(data);
+    }
+
     initData(data) {
-        const mediaTypeConfig =
-            MEDIA_TYPE_CONFIG[this.data.mediaType] ?? MEDIA_TYPE_CONFIG.UNKNOWN;
+        this.data.id = this.#validateNumberField(data.id);
+
+        this.data.title = this.#validateTextField(data.title);
+        this.data.url = this.#validateTextField(data.url);
+
+        this.data.mediaType = this.#validateIntOptionsField(
+            data.mediaType,
+            VALID_MEDIA_TYPES
+        );
+
+        this.data.startTime = this.#validateDateField(data.startTime);
+        this.data.endTime = this.#validateDateField(data.endTime);
+        this.data.updateTime = this.#validateDateField(data.updateTime);
+
+        this.data.status = this.#validateIntOptionsField(
+            data.status,
+            Object.values(DOWNLOAD_STATUS)
+        );
+        this.data.statusMessage = this.#validateTextField(data.statusMessage);
 
         this.displayValues = {
-            id: typeof data.id === "number" ? `#${data.id}` : "N/A",
-            title: data.title || "Untitled",
-            url: data.url || "Unknown",
-            mediaType: mediaTypeConfig.label,
+            id: this.data.id >= 0 ? `#${this.data.id}` : "N/A",
+            title: this.data.title !== "" ? this.data.title : "Untitled",
+            url: this.data.url !== "" ? this.data.url : "Unknown",
 
-            startTime: data.startTime
-                ? toLocalStandardTime(data.startTime)
-                : "-",
-            endTime: data.endTime ? toLocalStandardTime(data.endTime) : "-",
-            updatedTime: data.updatedTime
-                ? toLocalStandardTime(data.updatedTime)
-                : "-",
-
-            status: data.status,
-            statusMessage: data.statusMessage || "",
+            startTime: this.#formatDateField(this.data.startTime),
+            endTime: this.#formatDateField(this.data.endTime),
+            updatedTime: this.#formatDateField(this.data.updatedTime),
         };
 
         this.sortValues = {
-            id: Number(data.id) || 0,
-            title: (data.title || "").toLowerCase(),
-            url: data.url,
-            mediaType: VALID_MEDIA_TYPES.includes(data.mediaType)
-                ? data.mediaType
-                : -1,
+            id: this.data.id,
+            title: this.data.title.toLowerCase(),
+            url: this.data.url,
+            mediaType: this.data.mediaType,
 
-            startTime: data.startTime ? new Date(data.startTime).getTime() : 0,
-            endTime: data.endTime ? new Date(data.endTime).getTime() : 0,
-            updateTime: data.updateTime
-                ? new Date(data.updateTime).getTime()
-                : 0,
-            status: data.status || -1,
+            startTime: this.#standardizeDateField(this.data.startTime),
+            endTime: this.#standardizeDateField(this.data.endTime),
+            updateTime: this.#standardizeDateField(this.data.updateTime),
+            status: this.data.status,
             isSelected: this.isSelected,
         };
 
         // TODO: temporary workaround until we implement proper filter UI
         this.searchIndex =
             `${this.displayValues.title} ${this.displayValues.url} ${this.displayValues.id}`.toLowerCase();
+    }
+
+    #validateNumberField(value) {
+        if (typeof value === "number" && value >= 0) {
+            return value;
+        }
+        return -1;
+    }
+
+    #validateTextField(value) {
+        if (typeof value === "string" && value.trim().length > 0) {
+            return value.trim();
+        }
+        return "";
+    }
+
+    #validateDateField(value) {
+        const valueText = this.#validateTextField(value);
+        if (valueText.includes("Z")) return valueText;
+        return "";
+    }
+
+    #validateIntOptionsField(value, options) {
+        if (typeof value !== "number") return -1;
+        if (options.includes(value)) return value;
+    }
+
+    #formatDateField(value) {
+        if (value === "") return "-";
+        return toLocalStandardTime(value);
+    }
+
+    #standardizeDateField(value) {
+        if (value === 0) return 0;
+        return new Date(value).getTime();
     }
 
     render() {
@@ -324,7 +371,7 @@ export class DownloadRow extends BaseDataRow {
         const diff = end - start;
         const diffHumanReadable = formatDuration(diff);
 
-        if (this.data.endTime === undefined) {
+        if (this.data.endTime === "") {
             return `Download started more than ${diffHumanReadable} ago.`;
         }
         return `Finished at ${toLocalStandardTime(this.data.endTime)} (took ${diffHumanReadable})`;

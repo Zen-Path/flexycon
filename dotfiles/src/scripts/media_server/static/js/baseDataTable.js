@@ -322,8 +322,6 @@ export class BaseDataRow {
         // State
         this._isSelected = false;
         this._isVisible = true;
-
-        this.initData(this.data);
     }
 
     get isSelected() {
