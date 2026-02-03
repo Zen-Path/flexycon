@@ -75,8 +75,12 @@ export class BaseDataTable {
                     );
                 }
 
-                // We use prepend so new items are added at the top of the table
-                fragment.prepend(rowEl);
+                if (isFirstCall) {
+                    fragment.append(rowEl);
+                } else {
+                    // New items should be added to the top of the table
+                    fragment.prepend(rowEl);
+                }
             } catch (error) {
                 console.error(`Couldn't add entry ${data?.id}:`, error);
             }
