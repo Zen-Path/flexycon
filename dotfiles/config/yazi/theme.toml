@@ -669,6 +669,7 @@ files = [
     { name = ".eslintrc", text = "", fg = "#4b32c3" },
     { name = ".git-blame-ignore-revs", text = "", fg = "#f54d27" },
     { name = ".gitattributes", text = "", fg = "#f54d27" },
+    { name = ".git", text = "", fg = "#f54d27" },
     { name = ".gitconfig", text = "", fg = "#f54d27" },
     { name = ".gitignore", text = "", fg = "#f54d27" },
     { name = ".gitlab-ci.yml", text = "", fg = "#e24329" },
