@@ -7,3 +7,6 @@
 [submodule "src/nsxiv-extra"]
 	path = dotfiles/deps/nsxiv-extra
 	url = https://github.com/Zen-Path/nsxiv-extra
+[submodule "dotfiles/src/scripts/media_server"]
+	path = dotfiles/src/scripts/media_server
+	url = https://github.com/Zen-Path/media-server
