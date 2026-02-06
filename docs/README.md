@@ -12,6 +12,7 @@ Here you can find more details about my dotfiles.
     - [Check available locales](#check-available-locales)
     - [Check current locale settings](#check-current-locale-settings)
     - [Extract only matches using rg](#extract-only-matches-using-rg)
+    - [Kill a process that uses a port](#kill-a-process-that-uses-a-port)
 
 # Setup
 
@@ -90,4 +91,12 @@ Run:
 
 ```sh
 rg --only-matching 'pattern: (\d+)' --replace '$1'
+```
+
+### Kill a process that uses a port
+
+To kill process that uses port `5002`:
+
+```sh
+fuser -k 5002/tcp
 ```
