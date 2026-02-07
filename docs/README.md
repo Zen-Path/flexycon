@@ -100,3 +100,9 @@ To kill process that uses port `5002`:
 ```sh
 fuser -k 5002/tcp
 ```
+
+MacOS:
+
+```sh
+kill -9 $(/usr/sbin/lsof -t -i:5002)
+```
