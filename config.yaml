@@ -507,12 +507,6 @@
             "dst": "~/.local/bin/statusbar/sb-recording",
             "chmod": "755"
         },
-
-        # Userscripts
-        "f_media_server_client": {
-            "src": "{{@@ d_userscripts_src @@}}/media_server_client/main.js",
-            "dst": "{{@@ d_userscripts_dst @@}}/mediaServerClient.js"
-        }
     },
 
     "profiles": {
@@ -599,8 +593,6 @@
                 "f_sdir",
                 "f_user_shortcuts",
                 "f_tag",
-                # Userscripts
-                "f_media_server_client"
             ],
             "variables": {
                 "media_server_port": 5001,
