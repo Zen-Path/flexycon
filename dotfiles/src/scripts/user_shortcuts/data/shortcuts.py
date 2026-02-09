@@ -210,6 +210,12 @@ shortcuts: List[Bookmark] = [
         aliases={"default": ["p", "r", "v"], YAZI.name: ["P"]},
         description="private config source",
     ),
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_SRC_HOME", "media-server"],
+        aliases={"default": ["m", "s", "r", "v"]},
+        description="flexycon dotfile scripts",
+    ),
     # Flexycon
     Bookmark(
         type="d",
@@ -292,12 +298,6 @@ shortcuts: List[Bookmark] = [
         path_parts=[*flex_scripts],
         aliases={"default": ["f", "l", "x", "s"], YAZI.name: ["f", "s"]},
         activate_python_env=True,
-        description="flexycon dotfile scripts",
-    ),
-    Bookmark(
-        type="d",
-        path_parts=[*flex_scripts, "media_server"],
-        aliases={"default": ["f", "s", "m"]},
         description="flexycon dotfile scripts",
     ),
     Bookmark(

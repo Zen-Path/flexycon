@@ -240,7 +240,9 @@ def setup():
 
     # playwright
     if shutil.which("playwright"):
-        run_command(["playwright", "install"])
+        # We don't have any tests that require it at the moment
+        # run_command(["playwright", "install"])
+        pass
     else:
         logger.error("'playwright' not found. Skipping installation.")
 

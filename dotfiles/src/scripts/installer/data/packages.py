@@ -294,6 +294,12 @@ packages = [
         description="Private config",
     ),
     Package(
+        identifier="https://github.com/Zen-Path/media-server",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "media-server"],
+        description="Local media server to download and manage files",
+    ),
+    Package(
         identifier="https://github.com/Zen-Path/dwm-flexipatch",
         managers=[Git],
         destination=["$XDG_SRC_HOME", "dwm-flexipatch"],

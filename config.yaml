@@ -354,11 +354,6 @@
             "dst": "~/.local/bin/jsonc_to_json",
             "chmod": "755"
         },
-        "f_media_server": {
-            "src": "src/scripts/media_server/main.py",
-            "dst": "~/.local/bin/media_server",
-            "chmod": "755"
-        },
         "f_noisereduce": {
             "src": "bin/noisereduce.sh",
             "dst": "~/.local/bin/noisereduce",
@@ -584,7 +579,6 @@
                 "f_if_installed",
                 "f_imgconv",
                 "f_jsonc_to_json",
-                "f_media_server",
                 "f_noisereduce",
                 "f_pkgsize",
                 "f_rclone_wrapper",
