@@ -49,6 +49,7 @@
     "git.autofetch": true,
     "git.blame.editorDecoration.enabled": false,
     "git.confirmSync": false,
+    "git.enableSmartCommit": true,
     "git.openRepositoryInParentFolders": "always",
     "gitlens.currentLine.enabled": false,
     "gitlens.hovers.currentLine.over": "line",
