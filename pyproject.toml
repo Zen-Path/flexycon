@@ -73,7 +73,7 @@ target-version = "py314"
     # "E" - pycodestyle
     # "F" - pyflakes
     # "I" - isort
-    ignore = []
+    ignore = ["E501"]
     select = ["E", "F", "I"]
 
     # Allow fix for all enabled rules (when `--fix`) is provided.
