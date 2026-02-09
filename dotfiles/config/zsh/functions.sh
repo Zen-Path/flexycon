@@ -72,9 +72,9 @@ function find_by_md5() {
 
 # Python ENVironment Activate
 function penva() {
-    if [[ ! -z "$VIRTUAL_ENV" ]]; then
-        echo "Virtual env is already active; found at '$VIRTUAL_ENV'."
-        return 0
+    # Active virtual env might be for a different project. Always start from a blank state.
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        deactivate
     fi
 
     local env_dirs=("venv" ".venv" "env")
