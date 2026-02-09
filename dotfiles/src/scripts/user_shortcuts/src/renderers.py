@@ -1,6 +1,7 @@
 import platform
 from typing import List
 
+from common.logger import logger
 from common.variables import flex_home_parts
 from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
 
@@ -31,8 +32,12 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         )
 
         if bookmark.activate_python_env:
-            # Shell function name
-            alias_value += " && penva"
+            if bookmark.type != "d":
+                logger.warning(
+                    f"Python env can only be activated for directory bookmarks: {bookmark}"
+                )
+            else:
+                alias_value += " && penva"
 
         result.append(f'alias {alias_name}="{alias_value}"')
 
