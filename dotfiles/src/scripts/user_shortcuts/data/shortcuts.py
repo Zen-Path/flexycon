@@ -66,6 +66,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$HOME", "University"],
         aliases={"default": ["u", "n", "i"], YAZI.name: ["U"]},
+        activate_python_env=True,
         description="university",
     ),
     Bookmark(
@@ -78,6 +79,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$HOME", "University", "Semester"],
         aliases={"default": ["u", "n", "i", "s"], YAZI.name: ["u", "s"]},
+        activate_python_env=True,
         description="university current semester",
     ),
     # Library
@@ -208,12 +210,14 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=["$XDG_SRC_HOME", "flexycon-private"],
         aliases={"default": ["p", "r", "v"], YAZI.name: ["P"]},
+        activate_python_env=True,
         description="private config source",
     ),
     Bookmark(
         type="d",
         path_parts=["$XDG_SRC_HOME", "media-server"],
         aliases={"default": ["m", "s", "r", "v"]},
+        activate_python_env=True,
         description="flexycon dotfile scripts",
     ),
     # Flexycon
@@ -237,6 +241,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=[*flex_config, "firefox"],
         aliases={"default": ["f", "c", "f"]},
+        activate_python_env=True,
         description="flexycon firefox",
     ),
     ### Git
@@ -244,6 +249,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=[*flex_config, "git"],
         aliases={"default": ["f", "c", "g"]},
+        activate_python_env=True,
         description="flexycon git",
     ),
     ### NeoVim
@@ -251,6 +257,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=[*flex_config, "nvim"],
         aliases={"default": ["f", "c", "n"]},
+        activate_python_env=True,
         description="flexycon nvim",
     ),
     Bookmark(
@@ -264,6 +271,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=[*flex_config, "newsraft"],
         aliases={"default": ["f", "c", "N"]},
+        activate_python_env=True,
         description="flexycon newsraft",
     ),
     ### Shell
@@ -271,6 +279,7 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=[*flex_config, "shell"],
         aliases={"default": ["f", "c", "s"]},
+        activate_python_env=True,
         description="flexycon shell config",
     ),
     ### Yazi
@@ -278,12 +287,14 @@ shortcuts: List[Bookmark] = [
         type="d",
         path_parts=[*flex_config, "yazi"],
         aliases={"default": ["f", "c", "y"]},
+        activate_python_env=True,
         description="flexycon yazi",
     ),
     Bookmark(
         type="d",
         path_parts=[*flex_config, "yazi", "plugins"],
         aliases={"default": ["f", "c", "y", "p"]},
+        activate_python_env=True,
         description="flexycon yazi plugins",
     ),
     Bookmark(
