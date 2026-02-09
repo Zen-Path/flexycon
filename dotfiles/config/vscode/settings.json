@@ -20,6 +20,7 @@
     "editor.detectIndentation": false,
     "editor.lineNumbers": "relative",
     "editor.renderWhitespace": "all",
+    "editor.rulers": [88, 120],
     "editor.scrollbar.vertical": "hidden",
     "editor.scrollbar.verticalScrollbarSize": 0,
     "editor.smoothScrolling": true,
