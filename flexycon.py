@@ -217,7 +217,7 @@ def setup_virtual_env():
 
 
 @target()
-def setup():
+def install_system_packages():
     """Setup project and install dependencies"""
     logger.info("📦 Installing system packages...")
 
@@ -232,6 +232,11 @@ def setup():
         )
     else:
         process_packages(packages)
+
+
+@target()
+def setup():
+    install_system_packages()
 
     logger.info("⑂ Initializing git submodules...")
     init_submodules()
