@@ -31,6 +31,8 @@ $line_break$character"""
 # Insert a blank line between shell prompts
 add_newline = true
 
+command_timeout = 1000 # 500 ms
+
 palette = 'gruvbox_dark'
 
 [palettes.gruvbox_dark]
