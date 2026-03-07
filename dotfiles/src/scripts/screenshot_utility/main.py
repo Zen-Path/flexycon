@@ -79,7 +79,11 @@ class ScreenshotUtility:
 
         if response and copy_output:
             copy_file(output_path)
-            notify("Screenshot captured", f"Saved at {output_path!r}", icon=output_path)
+            notify(
+                "Screenshot captured",
+                f"Saved at {str(output_path)!r}",
+                icon=output_path,
+            )
 
     def compose_output_path(self, capture_type, name=None, ext="png"):
         """Generate a file path to the output directory with the current timestamp."""
