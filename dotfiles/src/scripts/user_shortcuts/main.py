@@ -46,13 +46,13 @@ def main():
         print(format_bookmarks(shortcuts))
         return
 
+    active_renderers = AVAILABLE_RENDERERS
     if args.renderer:
-        for renderer in AVAILABLE_RENDERERS:
-            if renderer.name.lower() == args.renderer:
-                renderer.process(shortcuts)
-        return
+        active_renderers = [
+            r for r in AVAILABLE_RENDERERS if r.name.lower() == args.renderer
+        ]
 
-    for renderer in AVAILABLE_RENDERERS:
+    for renderer in active_renderers:
         renderer.process(shortcuts)
 
 
