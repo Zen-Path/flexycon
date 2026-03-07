@@ -181,6 +181,7 @@ def install_temp_profile() -> Path:
     output = run_command([f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"]).output
     match = re.search(r'installed to tmp "([^"]+)"', output)
     if not match:
+        logger.debug(f"Dotdrop output:\n{output}")
         raise RuntimeError("Could not find temporary install path in output.")
 
     temp_path = Path(match.group(1))
