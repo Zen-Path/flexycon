@@ -246,10 +246,6 @@
             "dst": "~/.config/mpv/scripts/cursor_blur.lua"
         },
 
-        "f_nsxiv_exec_key_handler": {
-            "src": "src/scripts/nsxiv_key_handler/main.py",
-            "dst": "~/.config/nsxiv/exec/key-handler"
-        },
         "d_yt_dlp": {
             "src": "config/yt-dlp",
             "dst": "~/.config/yt-dlp"
@@ -365,6 +361,10 @@
             "src": "bin/noisereduce.sh",
             "dst": "~/.local/bin/noisereduce",
             "chmod": "755"
+        },
+        "f_nsxiv_exec_key_handler": {
+            "src": "src/scripts/nsxiv_key_handler/main.py",
+            "dst": "~/.config/nsxiv/exec/key-handler"
         },
         "f_rclone_wrapper": {
             "src": "src/scripts/rclone_wrapper/main.py",
@@ -671,7 +671,6 @@
                 "f_x11_profile",
                 "d_yay",
                 "d_alacritty",
-                "f_nsxiv_exec_key_handler",
                 "f_pulse_daemon",
                 "d_pipewire",
                 "d_gtk_3",
@@ -693,6 +692,7 @@
                 "f_keyboard_select",
                 "f_mounter",
                 "f_unmounter",
+                "f_nsxiv_exec_key_handler",
                 "f_nsxiv_rifle",
                 "f_remapd",
                 "f_remaps",
