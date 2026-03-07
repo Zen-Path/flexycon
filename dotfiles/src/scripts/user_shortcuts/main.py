@@ -5,6 +5,7 @@
 import argparse
 import logging
 
+from common.helpers import resolve_path
 from common.logger import logger, setup_logging
 from scripts.user_shortcuts.data.shortcuts import shortcuts
 from scripts.user_shortcuts.src.formatting import format_bookmarks
@@ -46,6 +47,19 @@ def main():
         print(format_bookmarks(shortcuts))
         return
 
+    active_shortcuts = []
+    for shortcut in shortcuts:
+        if not shortcut.condition:
+            logger.warning(
+                f"- Skipped bookmark {shortcut.name!r} due to condition not being met"
+            )
+            continue
+
+        if not resolve_path(shortcut.path_parts).exists():
+            logger.debug(f"- Bookmark {shortcut.name!r} doesn't point to a real file")
+
+        active_shortcuts.append(shortcut)
+
     active_renderers = AVAILABLE_RENDERERS
     if args.renderer:
         active_renderers = [
@@ -53,7 +67,7 @@ def main():
         ]
 
     for renderer in active_renderers:
-        renderer.process(shortcuts)
+        renderer.process(active_shortcuts)
 
 
 if __name__ == "__main__":

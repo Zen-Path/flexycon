@@ -44,23 +44,14 @@ class BookmarkRenderer(ABC):
 
         processed_bookmarks = []
         for bookmark in bookmarks:
-            if not bookmark.condition:
-                logger.warning(
-                    f"- Skipped bookmark {bookmark.name!r} due to condition not being met"
-                )
-                continue
-
             alias = self.resolve_alias(bookmark)
+
+            # The alias check stays because it depends on self.name
             if not alias:
                 logger.warning(
                     f"- Skipped bookmark {bookmark.name!r} due to missing alias"
                 )
                 continue
-
-            if not resolve_path(bookmark.path_parts).exists():
-                logger.debug(
-                    f"- Bookmark {bookmark.name!r} doesn't point to a real file"
-                )
 
             processed_bookmarks.append((alias, bookmark))
 
