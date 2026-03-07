@@ -59,10 +59,10 @@ class BookmarkRenderer(ABC):
                 f"- Added alias {''.join(alias)!r} for bookmark {bookmark.name!r}"
             )
 
-        logger.info(f"[{self.name}] Processed {len(processed_bookmarks)} bookmarks")
-
         content = self.compose_output_file(processed_bookmarks)
         write_to_file(content, self.output_path)
+
+        logger.info(f"[{self.name}] Processed {len(processed_bookmarks)} bookmarks")
 
     def resolve_alias(self, bookmark: Bookmark) -> Optional[List[str]]:
         return bookmark.aliases.get(self.name, bookmark.aliases.get("default"))
