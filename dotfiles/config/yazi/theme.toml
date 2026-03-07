@@ -15,8 +15,10 @@ light = ""
 current = { reversed = true }
 preview = { underline = true }
 
+# {%@@- if env['TERMINAL'] == "alacritty" +@@%}
 # For square indicators, use:
-# padding = { open = "█", close = "█" }
+padding = { open = "█", close = "█" }
+# {%@@- endif +@@%}
 
 [mgr]
 cwd = { fg = "cyan" }
