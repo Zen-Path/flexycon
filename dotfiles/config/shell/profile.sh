@@ -115,6 +115,7 @@ EXCLUDES=(
     --exclude "*.egg-info/"
     --exclude .mypy_cache/
     --exclude .pytest_cache/
+    --exclude .ruff_cache/
     --exclude node_modules/
     --exclude .DS_Store
 )
