@@ -33,6 +33,12 @@ shortcuts: List[Bookmark] = [
     ),
     Bookmark(
         type="d",
+        path_parts=["$HOME", "Desktop"],
+        aliases={"default": ["d", "e", "s"], YAZI.name: ["D", "t"]},
+        description="desktop",
+    ),
+    Bookmark(
+        type="d",
         path_parts=["$XDG_DOCUMENTS_DIR"],
         aliases={"default": ["d", "o", "c"], YAZI.name: ["d"]},
         description="documents",
@@ -40,7 +46,7 @@ shortcuts: List[Bookmark] = [
     Bookmark(
         type="d",
         path_parts=["$XDG_DOWNLOAD_DIR"],
-        aliases={"default": ["d", "w", "n"], YAZI.name: ["D"]},
+        aliases={"default": ["d", "w", "n"], YAZI.name: ["D", "l"]},
         description="downloads",
     ),
     Bookmark(
