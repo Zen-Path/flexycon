@@ -68,12 +68,10 @@ def format_operations(
 
         # Build formatted row
         row = [
-            ACTIONS_FMT.get(op_type, Fore.LIGHTBLACK_EX) + op_type + Style.RESET_ALL,
-            Fore.WHITE
-            + truncate(op_file, filename_max_size, truncate_from_end=False)
-            + Style.RESET_ALL,
-            Fore.MAGENTA + humanize.naturalsize(op_size) + Style.RESET_ALL,
-            size_color + str(op_size) + Style.RESET_ALL,
+            f"{ACTIONS_FMT.get(op_type, Fore.LIGHTBLACK_EX)}{op_type}{Style.RESET_ALL}",
+            f"{Fore.WHITE}{truncate(op_file, filename_max_size, truncate_from_end=False)}{Style.RESET_ALL}",
+            f"{Fore.MAGENTA}{humanize.naturalsize(op_size)}{Style.RESET_ALL}",
+            f"{size_color}{op_size}{Style.RESET_ALL}",
         ]
 
         formatted_result.append(row)
