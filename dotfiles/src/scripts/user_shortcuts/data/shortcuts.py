@@ -55,6 +55,21 @@ shortcuts: List[Bookmark] = [
         aliases={"default": ["i", "m", "g"], YAZI.name: ["i"]},
         description="images",
     ),
+    # TODO: For macOS - make sure
+    # `defaults read com.apple.screencapture location`
+    # returns '~/Pictures/Screenshots', otherwise set it.
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_PICTURES_DIR", "Screenshots"],
+        aliases={"default": ["i", "m", "g", "s"], YAZI.name: ["I", "s"]},
+        description="screenshots",
+    ),
+    Bookmark(
+        type="d",
+        path_parts=["$XDG_PICTURES_DIR", "Wallpapers"],
+        aliases={"default": ["i", "m", "g", "w"], YAZI.name: ["I", "w"]},
+        description="wallpapers",
+    ),
     Bookmark(
         type="d",
         path_parts=["$XDG_VIDEOS_DIR"],
