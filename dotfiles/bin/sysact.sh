@@ -27,6 +27,9 @@ power_manager() {
     dunstctl set-paused true
     time1=$(date '+%s')
 
+    # Before locking the screen, turn off caps lock just in case
+    xset q | grep -q "Caps Lock:   on" && xdotool key Caps_Lock
+
     slock &
     SLOCK_PID=$!
 
