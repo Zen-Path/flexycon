@@ -3522,7 +3522,7 @@ CHARS = {
         "𝟾": "mono digit 8",
         "𝟿": "mono digit 9",
     },
-    "math": {
+    "math & symbols": {
         "¡": "iexcl",
         "¢": "cent",
         "£": "pound sign",
