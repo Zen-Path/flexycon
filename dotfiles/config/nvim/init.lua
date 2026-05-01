@@ -128,6 +128,9 @@ vim.api.nvim_set_keymap(
 vim.keymap.set("n", ",,", [[:keepp /<++><CR>ca<]], opts)
 vim.keymap.set("i", ",,", [[<Esc>:keepp /<++><CR>ca<]], opts)
 
+-- Start a substitution only on the visual selection
+vim.keymap.set("v", "<leader>v", [[:s/\%V]])
+
 -- CUSTOM COMMANDS
 vim.api.nvim_create_user_command("DelEmpty", "%g/^$/d", {})
 vim.api.nvim_create_user_command("ReduceEmpty", function()
