@@ -10,6 +10,7 @@ image/gif=img.desktop;
 image/jpeg=img.desktop;
 image/png=img.desktop;
 image/webp=img.desktop;
+image/svg+xml=img.desktop;
 inode/directory=file.desktop
 text/plain=text.desktop;
 text/troff=text.desktop;
