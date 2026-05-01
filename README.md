@@ -71,14 +71,8 @@ somewhere else, update the `FLEXYCON_HOME` environmental variable.
 
 ## Mac
 
-![Full Screen](./docs/static/mac-full-screen.png "Full Screen")
+![Full Screen](./docs/static/mac-full-screen.png "Full screen")
 
 ## Linux
 
-Tile Layout:
-
-![Tile Layout](./docs/static/full-screen_tile.png "Tile Layout")
-
-Centered Master Layout:
-
-![Centered Master Layout](./docs/static/full-screen_centered-master.png "Centered Master Layout")
+![Full Screen](./docs/static/full-screen_tile.png "Full screen")
