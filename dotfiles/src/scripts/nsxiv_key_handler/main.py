@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
-from common.helpers import notify, run_command
+from common.helpers import notify, run_command, run_command_background
 from common.logger import logger, setup_logging
 from common.packages.clipboard_utilities import copy_file, copy_text
 
@@ -51,7 +51,7 @@ def action_trash(paths: List[Path]):
 
 def action_open_editor(paths: List[Path]):
     if shutil.which("gimp"):
-        run_command(["gimp", *[str(path) for path in paths]])
+        run_command_background(["gimp", *[str(path) for path in paths]])
 
 
 def action_flip(paths: List[Path]):
