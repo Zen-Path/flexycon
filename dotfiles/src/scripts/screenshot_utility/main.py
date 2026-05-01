@@ -244,7 +244,7 @@ def main():
         case "screen":
             screenshot_utility.screen(screen=args.screen_name, copy_output=args.copy)
         case "full":
-            screenshot_utility.full(copy_output=args.copy)
+            screenshot_utility.full_screen(copy_output=args.copy)
         case _:
             raise ValueError(f"Unknown action: {args.action}")
 
