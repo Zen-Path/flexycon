@@ -123,8 +123,9 @@ class ScreenshotUtility:
 
     def screen(self, screen=None, copy_output=False):
         """Capture a screen."""
-        # TODO: Implement logic
-        self.full_screen(copy_output)
+        # TODO: Implement logic for targeting a single screen
+        output_path = self.compose_output_path("screen")
+        self._capture(output_path, copy_output)
 
     def full_screen(self, copy_output=False):
         """Capture all screens."""
