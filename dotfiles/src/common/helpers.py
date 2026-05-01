@@ -57,6 +57,19 @@ def run_command(command: List[str]) -> CommandResult:
     return CommandResult(return_code=return_code, output="\n".join(output))
 
 
+def run_command_background(command: List[str]):
+    """Launch a process and move on immediately."""
+    logger.debug(f"Running {command} in background.")
+
+    subprocess.Popen(
+        command,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True,  # detach from the current process group (Unix)
+        shell=False,
+    )
+
+
 def write_to_file(content: str, path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
