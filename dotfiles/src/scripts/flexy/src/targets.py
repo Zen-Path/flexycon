@@ -3,6 +3,7 @@ import platform
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 from common.helpers import run_command
@@ -151,9 +152,12 @@ def get_dotdrop_profile() -> str | None:
 
     if not USER_VARIABLES_PATH.exists():
         logger.info("Installing bootstrap profile to generate user variables file.")
-        subprocess.run(
-            [VENV_BIN / "dotdrop", "install", "--profile", "bootstrap"], check=True
-        )
+        try:
+            subprocess.run(
+                [VENV_BIN / "dotdrop", "install", "--profile", "bootstrap"], check=True
+            )
+        except KeyboardInterrupt:
+            sys.exit(0)
 
     if USER_VARIABLES_PATH.exists():
         with USER_VARIABLES_PATH.open() as f:
@@ -300,7 +304,10 @@ def install():
         f"{VENV_BIN}/dotdrop compare --profile {profile!r} ; "
         f'{VENV_BIN}/dotdrop install --profile {profile!r}"'
     )
-    subprocess.run(cmd, shell=True, check=True)
+    try:
+        subprocess.run(cmd, shell=True, check=True)
+    except KeyboardInterrupt:
+        sys.exit(0)
 
     # TODO: Apply macOS default here
 
