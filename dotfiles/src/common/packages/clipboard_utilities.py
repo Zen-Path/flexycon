@@ -4,7 +4,6 @@ import shutil
 import subprocess
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Optional, Type, Union
 
 
 class ClipboardProvider(ABC):
@@ -19,7 +18,7 @@ class ClipboardProvider(ABC):
 
     @classmethod
     @abstractmethod
-    def copy_file(cls, file_path: Path, mime_type: Optional[str] = None) -> None:
+    def copy_file(cls, file_path: Path, mime_type: str | None = None) -> None:
         pass
 
     @classmethod
@@ -44,7 +43,7 @@ class XClipProvider(ClipboardProvider):
         subprocess.run([cls.command, "-sel", "clip"], input=text.encode(), check=True)
 
     @classmethod
-    def copy_file(cls, file_path: Path, mime_type: Optional[str] = None):
+    def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # Fallback logic: param -> guessed type -> text/plain
         mime_type = mime_type or mimetypes.guess_type(file_path)[0] or "text/plain"
         subprocess.run(
@@ -67,7 +66,7 @@ class XSelProvider(ClipboardProvider):
         )
 
     @classmethod
-    def copy_file(cls, file_path: Path, mime_type: Optional[str] = None):
+    def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # xsel is primarily for text; copying a file usually involves passing the path
         # or the file content. To match the "file" behavior, we pass the absolute path.
         path_str = str(file_path.absolute())
@@ -88,7 +87,7 @@ class WaylandProvider(ClipboardProvider):
         subprocess.run([cls.command], input=text.encode(), check=True)
 
     @classmethod
-    def copy_file(cls, file_path: Path, mime_type: Optional[str] = None):
+    def copy_file(cls, file_path: Path, mime_type: str | None = None):
         mime = mime_type or mimetypes.guess_type(file_path)[0] or "text/plain"
         with open(file_path, "rb") as f:
             subprocess.run([cls.command, "--type", mime], stdin=f, check=True)
@@ -109,7 +108,7 @@ class MacProvider(ClipboardProvider):
         subprocess.run([cls.command], input=text.encode(), check=True)
 
     @classmethod
-    def copy_file(cls, file_path: Path, mime_type: Optional[str] = None):
+    def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # macOS uses AppleScript to handle 'file objects' for Finder pasting
         script = f'set the clipboard to (POSIX file "{file_path.absolute()}")'
         subprocess.run(["osascript", "-e", script], check=True)
@@ -134,7 +133,7 @@ class WindowsProvider(ClipboardProvider):
         process.communicate(input=text.encode("utf-16"))
 
     @classmethod
-    def copy_file(cls, file_path: Path, mime_type: Optional[str] = None):
+    def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # Set-Clipboard -Path automatically handles the FileDropList format
         cmd = f"Set-Clipboard -Path '{file_path.absolute()}'"
         subprocess.run([cls.command, "-Command", cmd], check=True)
@@ -148,10 +147,10 @@ class WindowsProvider(ClipboardProvider):
 
 
 class ClipboardManager:
-    _provider: Optional[Type[ClipboardProvider]] = None
+    _provider: type[ClipboardProvider] | None = None
 
     @classmethod
-    def _resolve(cls) -> Type[ClipboardProvider]:
+    def _resolve(cls) -> type[ClipboardProvider]:
         """Detects the OS and utility once, then caches the result."""
         if cls._provider:
             return cls._provider
@@ -178,7 +177,7 @@ class ClipboardManager:
         cls._resolve().copy_text(text)
 
     @classmethod
-    def copy_file(cls, path: Union[str, Path], mime_type: Optional[str] = None):
+    def copy_file(cls, path: str | Path, mime_type: str | None = None):
         path_obj = Path(path).resolve()
         if not path_obj.exists():
             raise FileNotFoundError(f"File not found: {path_obj}")
@@ -197,7 +196,7 @@ def copy_text(text: str):
     ClipboardManager.copy_text(text)
 
 
-def copy_file(path: Union[str, Path], mime_type: Optional[str] = None):
+def copy_file(path: str | Path, mime_type: str | None = None):
     """
     Copies a file to the clipboard.
     On Desktop OSs, this allows 'Pasting' the file into folders.

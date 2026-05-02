@@ -1,5 +1,4 @@
 import os
-from typing import List, Optional
 
 from common.helpers import load_json
 from common.logger import logger
@@ -9,14 +8,14 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 class GlobalConfig(BaseModel):
     """Schema for global config"""
 
-    ignore: List[str] = Field(default_factory=list)
+    ignore: list[str] = Field(default_factory=list)
 
 
 class LocalConfig(BaseModel):
     """Schema for local config"""
 
-    ignore: Optional[List[str]] = None
-    ignore_append: Optional[List[str]] = Field(None, alias="ignore-append")
+    ignore: list[str] | None = None
+    ignore_append: list[str] | None = Field(None, alias="ignore-append")
 
     @model_validator(mode="after")
     def check_exclusive_fields(self):
@@ -26,7 +25,7 @@ class LocalConfig(BaseModel):
         return self
 
 
-def load_global_config() -> Optional[GlobalConfig]:
+def load_global_config() -> GlobalConfig | None:
     """Load and validate the global configuration."""
     xdg_config_home = os.getenv("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))
     global_path = os.path.join(xdg_config_home, "flexycon", "sync", "config.json")
@@ -42,7 +41,7 @@ def load_global_config() -> Optional[GlobalConfig]:
         return None
 
 
-def load_local_config() -> Optional[LocalConfig]:
+def load_local_config() -> LocalConfig | None:
     """Load and validate the local configuration."""
     local_path = os.path.join(os.getcwd(), ".sync-config.json")
 

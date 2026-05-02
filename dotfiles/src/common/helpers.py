@@ -6,7 +6,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Literal, Optional, Tuple
+from typing import Literal
 
 from common.logger import logger
 
@@ -24,12 +24,12 @@ class CommandResult:
         return self.output
 
 
-def resolve_path(path_parts: List[str]) -> Path:
+def resolve_path(path_parts: list[str]) -> Path:
     """Resolve a list of path parts into a single expanded path."""
     return Path(os.path.expandvars(os.path.join(*path_parts)))
 
 
-def run_command(command: List[str]) -> CommandResult:
+def run_command(command: list[str]) -> CommandResult:
     """Run a shell command and return its result."""
     cmd_identifier = secrets.token_hex(5)  # 8 hex chars
 
@@ -57,7 +57,7 @@ def run_command(command: List[str]) -> CommandResult:
     return CommandResult(return_code=return_code, output="\n".join(output))
 
 
-def run_command_background(command: List[str]):
+def run_command_background(command: list[str]):
     """Launch a process and move on immediately."""
     logger.debug(f"Running {command} in background.")
 
@@ -95,9 +95,7 @@ def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
     return user_resp in positive_resp
 
 
-def notify(
-    title: str, message: Optional[str] = None, icon_path: str | Path | None = None
-):
+def notify(title: str, message: str | None = None, icon_path: str | Path | None = None):
     """
     Send a desktop notification.
     If an icon is provided, adds an action to open the image file.
@@ -153,7 +151,7 @@ def ensure_directories_exist(file_path):
         os.makedirs(directory, exist_ok=True)
 
 
-def parse_range(range_raw: str) -> Tuple[Optional[Tuple[int, int]], Optional[str]]:
+def parse_range(range_raw: str) -> tuple[tuple[int, int] | None, str | None]:
     """Parse 'start:end' string into two integers."""
     if not range_raw or ":" not in range_raw:
         return None, "'range' must be a non-empty string of the form 'start:end'"
@@ -214,7 +212,7 @@ def truncate(
         return placeholder + text[-truncated_length:]
 
 
-def get_display_server() -> Optional[Literal["X11", "Wayland"]]:
+def get_display_server() -> Literal["X11", "Wayland"] | None:
     """
     Returns the display server currently in use, or ``None`` if it can't
     be detected.
@@ -229,7 +227,7 @@ def get_display_server() -> Optional[Literal["X11", "Wayland"]]:
         return None
 
 
-def split_acronyms(token: str) -> List[str]:
+def split_acronyms(token: str) -> list[str]:
     """
     Handle acronyms.
     If there's no uppercase letter, return the token as-is. Otherwise, detect
@@ -275,33 +273,33 @@ def split_acronyms(token: str) -> List[str]:
     return parts
 
 
-def split_into_words(name: str, boundaries: List[str] = [" ", "-", "_"]) -> List[str]:
+def split_into_words(name: str, boundaries: list[str] = [" ", "-", "_"]) -> list[str]:
     """
     Split a string into words in multiple stages.
     """
     if not name:
         return []
 
-    tokens: List[str]
+    tokens: list[str]
     if boundaries:
         pattern = "|".join(map(re.escape, boundaries))
         tokens = [t for t in re.split(pattern, name) if t]
     else:
         tokens = [name]
 
-    def split_tokens(tokens: List[str], splitter) -> List[str]:
+    def split_tokens(tokens: list[str], splitter) -> list[str]:
         result = []
         for token in tokens:
             result.extend(splitter(token))
         return [t for t in result if t]
 
-    def split_numbers(token: str) -> List[str]:
+    def split_numbers(token: str) -> list[str]:
         # Split between digit and non-digit boundaries
         return re.split(r"(?<=\D)(?=\d)|(?<=\d)(?=\D)", token)
 
     tokens = split_tokens(tokens, split_numbers)
 
-    def split_camel_case(token: str) -> List[str]:
+    def split_camel_case(token: str) -> list[str]:
         # Insert space between lowercase and uppercase letter boundaries
         return re.split(r"(?<=[a-z])(?=[A-Z])", token)
 

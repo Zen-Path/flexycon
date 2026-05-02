@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import Optional
 
 from common.helpers import run_command
 from common.logger import logger
@@ -8,9 +7,7 @@ from common.logger import logger
 # IMAGES
 
 
-def compress_image(
-    input_path: Path, output_path: Optional[Path] = None
-) -> Optional[Path]:
+def compress_image(input_path: Path, output_path: Path | None = None) -> Path | None:
     """
     Compress jpg / jpeg / png image.
     Output path: <filename>-compressed<extension>
@@ -46,7 +43,7 @@ def compress_image(
 
 
 def rotate_image(
-    input_path: Path, degrees: int, output_path: Optional[Path] = None
+    input_path: Path, degrees: int, output_path: Path | None = None
 ) -> Path:
     """
     Rotates image by degrees.
@@ -62,7 +59,7 @@ def rotate_image(
 # VIDEOS
 
 
-def convert_video_to_mp4(input_path: Path, output_path: Optional[Path] = None) -> Path:
+def convert_video_to_mp4(input_path: Path, output_path: Path | None = None) -> Path:
     """
     Converts video to mp4.
     Output path: <filename>.mp4
@@ -84,7 +81,7 @@ def convert_video_to_mp4(input_path: Path, output_path: Optional[Path] = None) -
     return output_path
 
 
-def compress_video(input_path: Path, output_path: Optional[Path] = None) -> Path:
+def compress_video(input_path: Path, output_path: Path | None = None) -> Path:
     """
     Converts video to codec x264.
     Output path: <filename>-compressed<extension>
@@ -107,7 +104,7 @@ def compress_video(input_path: Path, output_path: Optional[Path] = None) -> Path
 
 
 def rotate_video(
-    input_path: Path, degrees: int, output_path: Optional[Path] = None
+    input_path: Path, degrees: int, output_path: Path | None = None
 ) -> Path:
     """
     Rotate a video by any degree value.
@@ -156,9 +153,7 @@ def rotate_video(
     return output_path
 
 
-def extract_audio_from_video(
-    input_path: Path, output_path: Optional[Path] = None
-) -> Path:
+def extract_audio_from_video(input_path: Path, output_path: Path | None = None) -> Path:
     """
     Converts input video to audio using ffmpeg.
     Output path: <filename>-audio<extension>
@@ -183,7 +178,7 @@ def extract_audio_from_video(
 # PDF
 
 
-def compress_pdf(input_path: Path, output_path: Optional[Path] = None) -> Path:
+def compress_pdf(input_path: Path, output_path: Path | None = None) -> Path:
     """
     Compress pdf.
     Output path: <filename>-compressed<extension>
@@ -209,7 +204,7 @@ def compress_pdf(input_path: Path, output_path: Optional[Path] = None) -> Path:
     return output_path
 
 
-def convert_pdf_to_png(input_path: Path, output_path: Optional[Path] = None) -> Path:
+def convert_pdf_to_png(input_path: Path, output_path: Path | None = None) -> Path:
     """
     Convert a pdf file to a png.
     Output path: <filename>-compressed<extension>
@@ -241,7 +236,7 @@ def trim_media(
     input_path: Path,
     start_time: str,
     duration_s: int,
-    output_path: Optional[Path] = None,
+    output_path: Path | None = None,
 ) -> Path:
     """
     Trims media from a start time to finish time.

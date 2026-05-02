@@ -4,7 +4,6 @@
 
 import argparse
 import logging
-from typing import List
 
 from common.logger import logger, setup_logging
 from common.packages.models import Package
@@ -25,7 +24,7 @@ def build_parser():
     return parser
 
 
-def process_packages(packages: List[Package], dry_run: bool = False):
+def process_packages(packages: list[Package], dry_run: bool = False):
     managers_cache: dict[str, bool] = {}
 
     for package in packages:

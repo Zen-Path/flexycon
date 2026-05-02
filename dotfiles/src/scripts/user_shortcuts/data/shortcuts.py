@@ -1,5 +1,4 @@
 import platform
-from typing import List
 
 from common.variables import flex_home_parts
 from scripts.user_shortcuts.src.models import Bookmark
@@ -11,7 +10,7 @@ flex_dotfiles = flex_home_parts + ["dotfiles"]
 flex_config = flex_dotfiles + ["config"]
 flex_scripts = flex_dotfiles + ["src", "scripts"]
 
-shortcuts: List[Bookmark] = [
+shortcuts: list[Bookmark] = [
     # Home
     Bookmark(
         type="d",

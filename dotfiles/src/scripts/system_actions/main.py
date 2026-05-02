@@ -8,7 +8,6 @@ import signal
 import subprocess
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Optional
 
 import psutil
 
@@ -87,8 +86,8 @@ class System:
     Represents a user-space system.
     """
 
-    controller: Optional[str] = None
-    lock_cmd: Optional[str] = None
+    controller: str | None = None
+    lock_cmd: str | None = None
 
     def __post_init__(self):
         self.controller = self.controller or self.get_controller()

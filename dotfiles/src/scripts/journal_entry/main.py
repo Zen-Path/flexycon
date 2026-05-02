@@ -8,7 +8,6 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from typing import Optional
 
 from common.args import add_date_args, resolve_date
 from common.helpers import ensure_directory_interactive
@@ -58,7 +57,7 @@ def open_journal_entry(target_date):
     subprocess.run([editor, file_path])
 
 
-def get_journal_entry_path(target_date) -> Optional[Path]:
+def get_journal_entry_path(target_date) -> Path | None:
     journal_home_path = os.getenv("JOURNAL_HOME")
     if not journal_home_path:
         raise EnvironmentError("JOURNAL_HOME environment variable is not set.")

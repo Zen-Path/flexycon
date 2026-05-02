@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any
 
 import humanize
 from colorama import Fore, Style, init
@@ -13,8 +13,8 @@ def print_table(data, headers):
 
 
 def format_operations(
-    operations_data: List[Dict[str, Any]], filename_max_size: int = 100
-) -> List[List[str]]:
+    operations_data: list[dict[str, Any]], filename_max_size: int = 100
+) -> list[list[str]]:
     """
     Format rclone operations for display in a table.
     """

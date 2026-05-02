@@ -8,7 +8,6 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Optional
 
 from common.helpers import run_command
 from common.logger import logger, setup_logging
@@ -146,7 +145,7 @@ def init_submodules():
     run_command(["git", "submodule", "update", "--recursive", "--remote"])
 
 
-def get_dotdrop_profile() -> Optional[str]:
+def get_dotdrop_profile() -> str | None:
     """
     Resolve the active dotdrop profile from the environment or user variables
     file.

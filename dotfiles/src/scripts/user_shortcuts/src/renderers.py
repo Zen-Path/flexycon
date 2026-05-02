@@ -1,5 +1,4 @@
 import platform
-from typing import List
 
 from common.logger import logger
 from common.variables import flex_home_parts
@@ -12,7 +11,7 @@ OPEN_COMMANDS = {
 
 
 class ZshBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
+    def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
         """
         Target:
         # downloads
@@ -53,7 +52,7 @@ ZSH = ZshBookmarkRenderer(
 
 
 class NVimBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
+    def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
         result = []
         if bookmark.description:
             result.append(f"-- {bookmark.description}")
@@ -78,7 +77,7 @@ NVIM = NVimBookmarkRenderer(
 
 
 class YaziBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias_segments: List[str], bookmark: Bookmark) -> str:
+    def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
         verb = "Open" if bookmark.type == "d" else "Reveal"
         type_readable = "dir" if bookmark.type == "d" else "file"
         description_fmt = (

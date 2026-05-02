@@ -1,7 +1,7 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from common.logger import logger, setup_logging
 
@@ -12,7 +12,7 @@ from scripts.svg_generator.data import references
 def generate_svg(
     grid: list[list[int]],
     colors: list[str],
-    config: Dict[str, Any] | None = None,
+    config: dict[str, Any] | None = None,
     output_file: Path | str = "blueprint.svg",
     coordinate_start: int = 1,
 ):

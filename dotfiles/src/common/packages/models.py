@@ -5,7 +5,6 @@ import shutil
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Type
 
 from common.helpers import resolve_path
 
@@ -15,11 +14,11 @@ class Package:
     """Represents a software package with metadata."""
 
     identifier: str
-    managers: List[Type[PackageManager]]
-    name: Optional[str] = None
-    description: Optional[str] = None
-    is_gui: Optional[bool] = False
-    destination: Optional[List[str]] = None
+    managers: list[type[PackageManager]]
+    name: str | None = None
+    description: str | None = None
+    is_gui: bool | None = False
+    destination: list[str] | None = None
     condition: bool = True
 
     def __post_init__(self):
@@ -27,7 +26,7 @@ class Package:
             self.name = self.identifier
 
     @property
-    def resolved_path(self) -> Optional[Path]:
+    def resolved_path(self) -> Path | None:
         return resolve_path(self.destination) if self.destination else None
 
 

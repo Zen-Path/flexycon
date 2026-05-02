@@ -9,14 +9,13 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional
 
 from common.helpers import notify, run_command, run_command_background
 from common.logger import logger, setup_logging
 from common.packages.clipboard_utilities import copy_file, copy_text
 
 
-def prompt_dmenu(prompt: str, options: Optional[list[str]] = None) -> Optional[str]:
+def prompt_dmenu(prompt: str, options: list[str] | None = None) -> str | None:
     result = subprocess.run(
         ["dmenu", "-i", "-p", prompt],
         input="\n".join(options if options else []),
@@ -33,7 +32,7 @@ def get_help_text():
     )
 
 
-def action_interactive_trash(paths: List[Path]):
+def action_interactive_trash(paths: list[Path]):
     for path in paths:
         choice = prompt_dmenu(f"Really trash '{path}'?", ["Yes", "No", "Cancel"])
 
@@ -45,21 +44,21 @@ def action_interactive_trash(paths: List[Path]):
             notify("Trash complete", f"{path} trashed.")
 
 
-def action_trash(paths: List[Path]):
+def action_trash(paths: list[Path]):
     run_command(["trash-put", *[str(path) for path in paths]])
 
 
-def action_open_editor(paths: List[Path]):
+def action_open_editor(paths: list[Path]):
     if shutil.which("gimp"):
         run_command_background(["gimp", *[str(path) for path in paths]])
 
 
-def action_flip(paths: List[Path]):
+def action_flip(paths: list[Path]):
     for path in paths:
         run_command(["magick", str(path), "-flop", str(path)])
 
 
-def action_group(paths: List[Path]):
+def action_group(paths: list[Path]):
     default_name = datetime.now().strftime("%F_%T")
     choice = prompt_dmenu("Group file(s) where?", [default_name])
     if not choice:
@@ -81,7 +80,7 @@ def action_group(paths: List[Path]):
         )
 
 
-def action_show_help(paths: List[Path]):
+def action_show_help(paths: list[Path]):
     notify("nsxiv actions", get_help_text())
 
 
@@ -94,21 +93,21 @@ def action_get_info(paths):
     notify("File information", "\n".join(formatted))
 
 
-def action_rotate(paths: List[Path], degrees: int = 90):
+def action_rotate(paths: list[Path], degrees: int = 90):
     for path in paths:
         run_command(["magick", str(path), "-rotate", str(degrees), str(path)])
 
 
-def action_update_wallpaper(paths: List[Path]):
+def action_update_wallpaper(paths: list[Path]):
     run_command(["setbg", str(paths[0])])
 
 
-def action_copy_image(paths: List[Path]):
+def action_copy_image(paths: list[Path]):
     copy_file(paths[0])
     notify("Image copied", f"Image {paths[0]} copied to clipboard")
 
 
-def action_copy_path(paths: List[Path]):
+def action_copy_path(paths: list[Path]):
     copy_text(str(paths[0]))
     notify("Path copied", f"Path {paths[0]} copied to clipboard")
 
