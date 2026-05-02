@@ -10,8 +10,7 @@ from common.logger import logger
 from common.variables import flex_data_path
 from scripts.installer.data.packages import packages
 from scripts.installer.main import process_packages
-from scripts.user_shortcuts.data.shortcuts import shortcuts
-from scripts.user_shortcuts.main import AVAILABLE_RENDERERS
+from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcuts
 
 VENV_DIR = Path(".venv")
 VENV_BIN = VENV_DIR / ("Scripts" if platform.system() == "Windows" else "bin")
@@ -280,7 +279,7 @@ def install():
 
     logger.info("⚙️ Generating shortcuts...")
     for renderer in AVAILABLE_RENDERERS:
-        renderer.process(shortcuts)
+        renderer.process(get_active_shortcuts())
 
     logger.info("⚙️ Installing configuration...")
 

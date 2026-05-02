@@ -14,6 +14,23 @@ from scripts.user_shortcuts.src.renderers import NVIM, YAZI, ZSH
 AVAILABLE_RENDERERS = [ZSH, NVIM, YAZI]
 
 
+# TODO: find a better way to render the shortcuts from another script, this is flimsy
+def get_active_shortcuts(shortcuts=shortcuts):
+    result = []
+    for shortcut in shortcuts:
+        if not shortcut.condition:
+            logger.warning(
+                f"- Skipped bookmark {shortcut.name!r} due to condition not being met"
+            )
+            continue
+
+        if not resolve_path(shortcut.path_parts).exists():
+            logger.debug(f"- Bookmark {shortcut.name!r} doesn't point to a real file")
+
+        result.append(shortcut)
+    return result
+
+
 def build_parser():
     parser = argparse.ArgumentParser(
         description="Generate bookmarks for various tools."
@@ -47,25 +64,13 @@ def main():
         print(format_bookmarks(shortcuts))
         return
 
-    active_shortcuts = []
-    for shortcut in shortcuts:
-        if not shortcut.condition:
-            logger.warning(
-                f"- Skipped bookmark {shortcut.name!r} due to condition not being met"
-            )
-            continue
-
-        if not resolve_path(shortcut.path_parts).exists():
-            logger.debug(f"- Bookmark {shortcut.name!r} doesn't point to a real file")
-
-        active_shortcuts.append(shortcut)
-
     active_renderers = AVAILABLE_RENDERERS
     if args.renderer:
         active_renderers = [
             r for r in AVAILABLE_RENDERERS if r.name.lower() == args.renderer
         ]
 
+    active_shortcuts = get_active_shortcuts(shortcuts)
     for renderer in active_renderers:
         renderer.process(active_shortcuts)
 
