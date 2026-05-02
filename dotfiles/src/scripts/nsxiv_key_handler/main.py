@@ -77,7 +77,7 @@ def action_group(paths: List[Path]):
         notify(
             "Move complete",
             f"{paths[0].name} moved to {destdir.parent}.",
-            icon=str(Path(destdir, paths[0].name)),
+            icon_path=Path(destdir, paths[0].name),
         )
 
 

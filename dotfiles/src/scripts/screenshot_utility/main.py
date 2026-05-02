@@ -82,7 +82,7 @@ class ScreenshotUtility:
             notify(
                 "Screenshot captured",
                 f"Saved at {str(output_path)!r}",
-                icon=output_path,
+                icon_path=output_path,
             )
 
     def compose_output_path(self, capture_type, name=None, ext="png"):
