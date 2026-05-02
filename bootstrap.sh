@@ -16,11 +16,11 @@ VERBOSE="false"
 # Loop through all arguments passed to the script
 for arg in "$@"; do
     case $arg in
-        -h|--help)
+        -h | --help)
             show_help
             exit 0
             ;;
-        -v|--verbose)
+        -v | --verbose)
             VERBOSE=true
             ;;
     esac
@@ -66,7 +66,8 @@ log "🔧 Installing current project and dependencies..."
 
 $VENV_PIP install $PIP_FLAGS -e .
 
-$VENV_PYTHON flexycon.py $APP_FLAGS setup
-$VENV_PYTHON flexycon.py $APP_FLAGS install
+FLEXY_PATH="dotfiles/src/scripts/flexy/main.py"
+$VENV_PYTHON "$FLEXY_PATH" $APP_FLAGS setup
+$VENV_PYTHON "$FLEXY_PATH" $APP_FLAGS install
 
 log "✅ Bootsrap complete."

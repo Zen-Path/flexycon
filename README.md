@@ -60,9 +60,9 @@ cd flexycon
 ./bootstrap.sh
 ```
 
-Later on, when you've made some changes to your config and want to apply them, run `./flexycon.py install`.
+Later on, when you've made some changes to your config and want to apply them, run `flexy install`.
 
-When testing changes to the venv, or just need a clean slate, run `./flexycon.py clean` and it will do just that.
+When testing changes to the venv, or just need a clean slate, run `flexy clean` and it will do just that.
 
 NOTE: the recommended location for installing flexycon is `~/.local/src/flexycon`, but if you've installed it
 somewhere else, update the `FLEXYCON_HOME` environmental variable.
