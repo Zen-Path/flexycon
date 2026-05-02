@@ -79,6 +79,7 @@ def main():
 
     if args.insert_char:
         run_command(["xdotool", "type", char])
+        logger.info("Character inserted.")
 
     if not args.no_copy:
         subprocess.run(["xclip", "-selection", "clipboard"], input=char.encode())
