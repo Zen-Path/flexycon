@@ -6,7 +6,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Callable, Literal
 
 from common.logger import logger
 
@@ -95,11 +95,24 @@ def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
     return user_resp in positive_resp
 
 
-def notify(title: str, message: str | None = None, icon_path: str | Path | None = None):
+def notify(
+    title: str,
+    message: str | None = None,
+    icon_path: str | Path | None = None,
+    callback: Callable[[], None] | None = None,
+    open_image_onclick: bool = False,
+):
     """
-    Send a desktop notification.
-    If an icon is provided, adds an action to open the image file.
+    Send a desktop notification. Accepts either a custom callback OR
+    an action to open the image (icon), but not both.
     """
+
+    # Enforce mutual exclusivity
+    if callback and open_image_onclick:
+        raise ValueError(
+            "You cannot provide both a 'callback' and 'open_image_onclick'."
+        )
+
     cmd = ["notify-send", title]
 
     if message:
@@ -108,16 +121,30 @@ def notify(title: str, message: str | None = None, icon_path: str | Path | None 
     if icon_path:
         icon_path = str(icon_path)
         cmd.extend(["-i", icon_path])
-        # Add the action. Format: "action_token=Label"
-        cmd.append("--action=open_image=Open Image Location")
+
+    # Determine which action to use, if any
+    action_token = None
+    if open_image_onclick and icon_path:
+        action_token = "open_image"
+        cmd.append(f"--action={action_token}=Open Image")
+    elif callback:
+        action_token = "custom_callback"
+        cmd.append(f"--action={action_token}=Click Me")
 
     try:
-        # We use check_output to capture the action string returned by notify-send
-        # This will block until the notification is clicked or expires
+        # If no action was defined, fire and forget (non-blocking)
+        if not action_token:
+            subprocess.Popen(cmd)
+            return
+
+        # If an action exists, block and wait for user input
         result = subprocess.check_output(cmd, text=True).strip()
 
         if result == "open_image" and icon_path:
             subprocess.Popen(["xdg-open", icon_path])
+
+        elif result == "custom_callback" and callback:
+            callback()
 
     except Exception as e:
         logger.error(f"Notification failed: {e}")

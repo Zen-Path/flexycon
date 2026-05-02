@@ -77,6 +77,7 @@ def action_group(paths: list[Path]):
             "Move complete",
             f"{paths[0].name} moved to {destdir.parent}.",
             icon_path=Path(destdir, paths[0].name),
+            open_image_onclick=True,
         )
 
 

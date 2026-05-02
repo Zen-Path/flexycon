@@ -83,6 +83,7 @@ class ScreenshotUtility:
                 "Screenshot captured",
                 f"Saved at {str(output_path)!r}",
                 icon_path=output_path,
+                open_image_onclick=True,
             )
 
     def compose_output_path(self, capture_type, name=None, ext="png"):
