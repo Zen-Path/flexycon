@@ -282,8 +282,9 @@ def install():
         return
 
     logger.info("⚙️ Generating shortcuts...")
+    active_shortcuts = get_active_shortcuts()
     for renderer in AVAILABLE_RENDERERS:
-        renderer.process(get_active_shortcuts())
+        renderer.process(active_shortcuts)
 
     logger.info("⚙️ Installing configuration...")
 
