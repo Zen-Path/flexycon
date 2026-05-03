@@ -31,7 +31,8 @@ dependencies = [
     "ruff==0.14.13",     # linter and formatter
 
     # test
-    "pytest==8.4.2", # for running test suites
+    "pytest==8.4.2",     # for running test suites
+    "pytest-cov==7.1.0", # for test coverage analytics
 
     # mypy types
     "types-PyYAML==6.0.12.20250915",
