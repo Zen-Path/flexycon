@@ -79,20 +79,35 @@ def write_to_file(content: str, path: Path):
     )
 
 
-def prompt_user(prompt, positive_resp=["y"], negative_resp=["n"], default="n"):
-    possible_resp = positive_resp + negative_resp
-    if default not in possible_resp:
-        return False
+def prompt_bool(prompt: str, default: bool | None = None) -> bool | None:
+    """
+    Prompts the user for a yes/no response.
 
-    default_index = possible_resp.index(default)
-    possible_resp[default_index] = possible_resp[default_index].upper()
+    Args:
+        prompt: The question to display.
+        default: The value to return if input is invalid or interrupted.
+
+    Returns:
+        True if 'y', 'yes', '1', False if 'n', 'no', '0', otherwise the default value.
+    """
+    if default is True:
+        hint = "Y/n"
+    elif default is False:
+        hint = "y/N"
+    else:
+        hint = "y/n"
 
     try:
-        user_resp = input(f"> {prompt} ({'/'.join(possible_resp)}): ").strip().lower()
-    except KeyboardInterrupt:
-        exit()
+        user_input = input(f"{prompt} ({hint}): ").strip().lower()
+    except (KeyboardInterrupt, EOFError):
+        return default
 
-    return user_resp in positive_resp
+    if user_input in ("y", "yes", "1"):
+        return True
+    if user_input in ("n", "no", "0"):
+        return False
+
+    return default
 
 
 def notify(
@@ -161,7 +176,7 @@ def set_notifications_status(status: str):
 def ensure_directory_interactive(path):
     if not os.path.exists(path):
         print(f":: The directory '{path}' does not exist.")
-        user_resp = prompt_user("Would you like to create the directory?")
+        user_resp = prompt_bool("Would you like to create the directory?")
         if user_resp:
             os.makedirs(path)
         else:
