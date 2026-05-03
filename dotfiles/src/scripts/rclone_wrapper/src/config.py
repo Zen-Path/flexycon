@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from common.helpers import load_json
 from common.logger import logger
@@ -28,7 +29,7 @@ class LocalConfig(BaseModel):
 def load_global_config() -> GlobalConfig | None:
     """Load and validate the global configuration."""
     xdg_config_home = os.getenv("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))
-    global_path = os.path.join(xdg_config_home, "flexycon", "sync", "config.json")
+    global_path = Path(xdg_config_home, "flexycon", "sync", "config.json")
 
     data = load_json(global_path)
     if not data:
@@ -43,7 +44,7 @@ def load_global_config() -> GlobalConfig | None:
 
 def load_local_config() -> LocalConfig | None:
     """Load and validate the local configuration."""
-    local_path = os.path.join(os.getcwd(), ".sync-config.json")
+    local_path = Path(os.getcwd(), ".sync-config.json")
 
     data = load_json(local_path)
     if not data:
