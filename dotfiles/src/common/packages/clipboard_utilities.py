@@ -196,7 +196,7 @@ def copy_text(text: str):
     ClipboardManager.copy_text(text)
 
 
-def copy_file(path: str | Path, mime_type: str | None = None):
+def copy_file(path: Path, mime_type: str | None = None):
     """
     Copies a file to the clipboard.
     On Desktop OSs, this allows 'Pasting' the file into folders.
