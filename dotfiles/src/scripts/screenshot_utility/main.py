@@ -6,6 +6,7 @@ import argparse
 import os
 import subprocess
 from datetime import datetime
+from pathlib import Path
 
 from common.helpers import ensure_directories_exist, notify
 from common.packages.clipboard_utilities import copy_file
@@ -38,7 +39,7 @@ class MaimUtility:
         """Convert the color array to a string representation."""
         return ",".join(f"{c:.1f}" for c in self.color)
 
-    def run(self, output_path, select=False):
+    def run(self, output_path: Path, select=False):
         """Run maim with the configured options."""
         cmd = [
             "maim",
@@ -59,7 +60,7 @@ class MaimUtility:
             cmd.extend(["--select", "--nodrag", "--highlight"])
 
         cmd.extend(["--delay", str(self.delay)])
-        cmd.append(output_path)
+        cmd.append(str(output_path))
 
         ensure_directories_exist(output_path)
 
@@ -74,7 +75,7 @@ class ScreenshotUtility:
             output_dir or f"{os.getenv('XDG_PICTURES_DIR', '~/Pictures')}/Screenshots"
         )
 
-    def _capture(self, output_path, copy_output, select=False):
+    def _capture(self, output_path: Path, copy_output, select=False):
         response = self.maim.run(output_path, select)
 
         if response and copy_output:
@@ -86,12 +87,12 @@ class ScreenshotUtility:
                 open_image_onclick=True,
             )
 
-    def compose_output_path(self, capture_type, name=None, ext="png"):
+    def compose_output_path(self, capture_type, name=None, ext="png") -> Path:
         """Generate a file path to the output directory with the current timestamp."""
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         name_fmt = f"-{name[:100].replace(' ', '-')}" if name else ""
 
-        return os.path.join(
+        return Path(
             self.output_dir, f"{timestamp}_{capture_type}{name_fmt}.{ext}".lower()
         )
 

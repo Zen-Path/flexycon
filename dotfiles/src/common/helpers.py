@@ -184,11 +184,11 @@ def ensure_directory_interactive(path):
             sys.exit(1)
 
 
-def ensure_directories_exist(file_path):
+def ensure_directories_exist(path: Path):
     """
     Ensure all directories leading to the given file path exist.
     """
-    directory = os.path.dirname(file_path)
+    directory = os.path.dirname(path)
     if directory:
         os.makedirs(directory, exist_ok=True)
 
