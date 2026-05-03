@@ -165,8 +165,8 @@ def notify(
         logger.error(f"Notification failed: {e}")
 
 
-def get_notifications_paused_status():
-    return run_command(["dunstctl", "is-paused"])
+def get_notifications_paused_status() -> bool:
+    return run_command(["dunstctl", "is-paused"]).output.strip().lower() == "true"
 
 
 def set_notifications_status(status: str):

@@ -81,9 +81,7 @@ def main():
     recording_icon = RECORDING_ICON_PATH.read_text().strip() or "⏺️"
 
     # Notifications can be paused to prevent interruptions
-    are_notifications_paused = (
-        get_notifications_paused_status().output.strip().lower() == "true"
-    )
+    are_notifications_paused = get_notifications_paused_status()
     notifications_suffix = "⏸️" if are_notifications_paused else ""
 
     print(f"{recording_icon}-{notifications_suffix}🔔")
