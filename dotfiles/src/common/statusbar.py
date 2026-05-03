@@ -31,7 +31,7 @@ def handle_block_button(actions):
         button = MouseButton(int(block_button))
         logger.debug(f"Handling button {button}.")
     except ValueError:
-        logger.warn(
+        logger.warning(
             f"Value of BLOCK_BUTTON is {int(block_button)}, which is not a valid MouseButton value."
         )
         return False
@@ -40,7 +40,7 @@ def handle_block_button(actions):
     if action:
         action()
     else:
-        logger.warn(f"Button {button} doesn't have an associated action to it.")
+        logger.warning(f"Button {button} doesn't have an associated action to it.")
         return False
 
     return True
