@@ -8,7 +8,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from common.helpers import ensure_directories_exist, notify
+from common.helpers import notify
 from common.packages.clipboard_utilities import copy_file
 
 
@@ -62,7 +62,7 @@ class MaimUtility:
         cmd.extend(["--delay", str(self.delay)])
         cmd.append(str(output_path))
 
-        ensure_directories_exist(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
 
         result = subprocess.run(cmd)
         return result.returncode == 0

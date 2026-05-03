@@ -184,15 +184,6 @@ def ensure_directory_interactive(path):
             sys.exit(1)
 
 
-def ensure_directories_exist(path: Path):
-    """
-    Ensure all directories leading to the given file path exist.
-    """
-    directory = os.path.dirname(path)
-    if directory:
-        os.makedirs(directory, exist_ok=True)
-
-
 def parse_range(range_raw: str) -> tuple[tuple[int, int] | None, str | None]:
     """Parse 'start:end' string into two integers."""
     if not range_raw or ":" not in range_raw:
