@@ -1,5 +1,6 @@
 import os
 from enum import Enum
+from typing import Any, Callable
 
 from common.logger import logger
 
@@ -20,7 +21,7 @@ class MouseButton(Enum):
     EXTRA_3 = 8
 
 
-def handle_block_button(actions):
+def handle_block_button(actions: dict[MouseButton, Callable[[], Any]]):
     """Handle block button events."""
     block_button = os.environ.get("BLOCK_BUTTON")
     if not block_button:
