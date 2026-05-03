@@ -169,8 +169,8 @@ def get_notifications_paused_status() -> bool:
     return run_command(["dunstctl", "is-paused"]).output.strip().lower() == "true"
 
 
-def set_notifications_status(status: str):
-    return run_command(["dunstctl", "set-paused", status])
+def set_notifications_status(status: Literal["true", "false", "toggle"]) -> int:
+    return run_command(["dunstctl", "set-paused", status]).success
 
 
 def ensure_directory_interactive(path):
