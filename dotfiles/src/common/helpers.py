@@ -173,14 +173,23 @@ def set_notifications_status(status: Literal["true", "false", "toggle"]) -> int:
     return run_command(["dunstctl", "set-paused", status]).success
 
 
-def ensure_directory_interactive(path):
-    if not os.path.exists(path):
-        print(f":: The directory '{path}' does not exist.")
-        user_resp = prompt_bool("Would you like to create the directory?")
-        if user_resp:
-            os.makedirs(path)
+def ensure_directory_interactive(path: Path):
+    """
+    Interactively ensure all directories leading to the path exist.
+    """
+    # Check the directory part, since 'path' might be a file
+    directory = path if path.suffix == "" else path.parent
+
+    if not directory.exists():
+        print(f":: The directory '{directory}' does not exist.")
+
+        user_resp = prompt_bool("Create the directory?", default=True)
+
+        if user_resp is True:
+            directory.mkdir(parents=True, exist_ok=True)
+            print(f"\n:: Created directory: {directory}")
         else:
-            print(":: Operation cancelled by user.")
+            print("\n:: Operation cancelled by user.")
             sys.exit(1)
 
 

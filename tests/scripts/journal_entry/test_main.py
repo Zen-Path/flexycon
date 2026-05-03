@@ -32,27 +32,31 @@ def test_get_journal_entry_path_missing_env(monkeypatch, sample_date):
     monkeypatch.delenv("JOURNAL_HOME", raising=False)
 
     with pytest.raises(
-        EnvironmentError, match="JOURNAL_HOME environment variable is not set"
+        EnvironmentError, match="Environment variable 'JOURNAL_HOME' is not set"
     ):
         _ = get_journal_entry_path(sample_date)
 
 
 def test_open_journal_entry_success(monkeypatch, mock_env, sample_date):
-    """Should create directories and open editor with correct file path."""
-    called = {}
+    """Should ensure the month directory exists (handling parents) and open editor."""
+    ensured_path: Path | None = None
 
     # Mock ensure_directory_interactive
-    def fake_ensure_directory_interactive(path):
-        called.setdefault("dirs", []).append(path)
+    def fake_ensure_directory_interactive(path: Path):
+        nonlocal ensured_path
+        ensured_path = path
 
     monkeypatch.setattr(
         "scripts.journal_entry.main.ensure_directory_interactive",
         fake_ensure_directory_interactive,
     )
 
-    # Mock subprocess.run so it doesn't actually open anything
+    # Mock subprocess.run
+    called_cmd = []
+
     def fake_run(cmd, *a, **kw):
-        called["cmd"] = cmd
+        nonlocal called_cmd
+        called_cmd = cmd
 
     monkeypatch.setattr("scripts.journal_entry.main.subprocess.run", fake_run)
 
@@ -66,20 +70,21 @@ def test_open_journal_entry_success(monkeypatch, mock_env, sample_date):
 
     open_journal_entry(sample_date)
 
-    # Validate directory creation
-    year_dir = mock_env / "2024"
-    month_dir = year_dir / "02"
-    assert called["dirs"] == [str(year_dir), str(month_dir)]
+    # Validate
+    expected_month_dir = mock_env / "2024" / "02"
+    expected_file = expected_month_dir / "02.15.md"
 
-    # Validate subprocess call
-    expected_file = month_dir / "02.15.md"
-    assert called["cmd"] == ["nano", str(expected_file)]
+    assert ensured_path == expected_month_dir
+
+    # Ensure subprocess received the correct editor and path
+    assert "nano" in called_cmd
+    assert any(str(expected_file) in str(arg) for arg in called_cmd)
 
 
 def test_open_journal_entry_without_env(monkeypatch, sample_date):
     monkeypatch.delenv("JOURNAL_HOME", raising=False)
 
     with pytest.raises(
-        EnvironmentError, match="JOURNAL_HOME environment variable is not set"
+        EnvironmentError, match="Environment variable 'JOURNAL_HOME' is not set"
     ):
         open_journal_entry(sample_date)

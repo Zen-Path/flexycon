@@ -7,6 +7,7 @@ import logging
 import os
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from common.args import add_date_args, resolve_date
@@ -33,26 +34,23 @@ def build_parser():
     return parser
 
 
-def open_journal_entry(target_date):
-    year = str(target_date.year)
-    month_num = f"{target_date.month:02}"
-    day = f"{target_date.day:02}"
+def open_journal_entry(target_date: datetime):
+    year_fmt = str(target_date.year)
+    month_num_fmt = f"{target_date.month:02}"
+    day_fmt = f"{target_date.day:02}"
 
     journal_home_path = os.getenv("JOURNAL_HOME")
     if not journal_home_path:
-        raise EnvironmentError("JOURNAL_HOME environment variable is not set.")
+        raise EnvironmentError("Environment variable 'JOURNAL_HOME' is not set.")
 
-    journal_year_dir = os.path.join(journal_home_path, year)
-    journal_month_dir = os.path.join(journal_year_dir, month_num)
+    file_name = f"{month_num_fmt}.{day_fmt}.md"
+    file_path = Path(journal_home_path) / year_fmt / month_num_fmt / file_name
+    logger.info(f"File path: {file_path!r}")
 
-    ensure_directory_interactive(journal_year_dir)
-    ensure_directory_interactive(journal_month_dir)
-
-    file_path = os.path.join(journal_month_dir, f"{month_num}.{day}.md")
-    logger.info(f"File path: {file_path}")
+    ensure_directory_interactive(file_path.parent)
 
     editor = os.getenv("EDITOR", "vim")
-    logger.debug(f"Editor: {editor}")
+    logger.debug(f"Editor: {editor!r}")
 
     subprocess.run([editor, file_path])
 
@@ -60,7 +58,7 @@ def open_journal_entry(target_date):
 def get_journal_entry_path(target_date) -> Path | None:
     journal_home_path = os.getenv("JOURNAL_HOME")
     if not journal_home_path:
-        raise EnvironmentError("JOURNAL_HOME environment variable is not set.")
+        raise EnvironmentError("Environment variable 'JOURNAL_HOME' is not set.")
 
     return (
         Path(journal_home_path)
