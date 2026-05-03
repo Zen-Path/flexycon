@@ -208,7 +208,7 @@ def parse_range(range_raw: str) -> tuple[tuple[int, int] | None, str | None]:
         return None, "'range' values must be integers"
 
 
-def load_json(path: Path):
+def load_json(path: Path) -> str | None:
     """Load a JSON file if it exists."""
     if not os.path.isfile(path):
         return None
