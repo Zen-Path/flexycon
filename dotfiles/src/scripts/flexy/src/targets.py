@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from common.helpers import run_command
+from common.helpers import remove_files_by_pattern, run_command
 from common.logger import logger
 from common.variables import flex_data_path
 from scripts.installer.data.packages import packages
@@ -68,19 +68,6 @@ def target(name=None, description=None):
         return func
 
     return decorator
-
-
-def remove_targets(targets):
-    for target in targets:
-        for path in Path(".").rglob(target):
-            try:
-                if path.is_dir():
-                    shutil.rmtree(path)
-                else:
-                    path.unlink()
-                logger.debug(f"Removed {path}")
-            except Exception as e:
-                logger.warning(e)
 
 
 def remove_flexycon_data():
@@ -317,7 +304,7 @@ def install():
 def clean():
     """Remove caches and temporary files"""
     logger.info("🧹 Removing clean targets...")
-    remove_targets(CLEAN_TARGETS)
+    remove_files_by_pattern(CLEAN_TARGETS)
 
     remove_empty_dirs()
 
@@ -330,6 +317,6 @@ def uninstall():
     clean_precommit()
 
     logger.info("🔪 Removing uninstall targets...")
-    remove_targets(UNINSTALL_TARGETS)
+    remove_files_by_pattern(UNINSTALL_TARGETS)
 
     remove_flexycon_data()

@@ -2,11 +2,12 @@ import json
 import os
 import re
 import secrets
+import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Literal
+from typing import Callable, Literal, Sequence
 
 from common.logger import logger
 
@@ -191,6 +192,24 @@ def ensure_directory_interactive(path: Path):
         else:
             print("\n:: Operation cancelled by user.")
             sys.exit(1)
+
+
+def remove_files_by_pattern(patterns: Sequence[str]) -> None:
+    """
+    Recursively deletes files and directories matching the given glob patterns.
+    """
+    for pattern in patterns:
+        for path in Path(".").rglob(pattern):
+            try:
+                if path.is_dir() and not path.is_symlink():
+                    shutil.rmtree(path)
+                else:
+                    # Using missing_ok for unlinking to avoid race conditions
+                    path.unlink(missing_ok=True)
+
+                logger.debug(f"Removed {path!r}.")
+            except Exception as e:
+                logger.warning(f"Failed to remove {path!r}: {e}")
 
 
 def parse_range(range_raw: str) -> tuple[tuple[int, int] | None, str | None]:
