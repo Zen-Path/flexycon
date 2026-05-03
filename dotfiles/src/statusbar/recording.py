@@ -27,19 +27,24 @@ RECORDING_PID_PATH = Path("/tmp/recording_pid")
 
 
 def stop_recording():
-    if not RECORDING_PID_PATH.exists():
+    recording_pid = None
+    try:
+        with RECORDING_PID_PATH.open() as f:
+            content = f.read().strip()
+        recording_pid = int(content)
+
+        os.kill(recording_pid, signal.SIGTERM)
+
+    except FileNotFoundError:
         return
-
-    with RECORDING_PID_PATH.open() as f:
-        try:
-            recording_pid = int(f.read().strip())
-            os.kill(recording_pid, signal.SIGTERM)
-        except ValueError:
-            print("Invalid PID in file.")
-        except ProcessLookupError:
-            print(f"No such process: {recording_pid}")
-
-    RECORDING_PID_PATH.unlink(missing_ok=True)
+    except ValueError:
+        logger.error(f"Invalid PID in file: {RECORDING_PID_PATH!r}")
+    except ProcessLookupError:
+        logger.error(f"No such process: {recording_pid!r}")
+    except PermissionError:
+        logger.error(f"Permissions denied for PID {recording_pid!r}.")
+    finally:
+        RECORDING_PID_PATH.unlink(missing_ok=True)
 
 
 # TODO: Implement pause recording feature
