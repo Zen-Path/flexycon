@@ -53,7 +53,7 @@ def action_group(paths: list[Path]):
     choice = Dmenu.run(prompt="Group file(s) where?", choices=[default_name])
     if not choice:
         notify("No directory entered, cancelled.")
-        sys.exit(1)
+        return
 
     destdir = Path.cwd() / choice
     destdir.mkdir(parents=True, exist_ok=True)
