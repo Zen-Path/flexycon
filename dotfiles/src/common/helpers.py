@@ -374,10 +374,28 @@ def split_into_words(name: str, boundaries: list[str] = [" ", "-", "_"]) -> list
     return tokens
 
 
+@dataclass
+class ScreenLocker:
+    cmd: list[str]
+    req_wayland: bool = False
+    req_x11: bool = False
+
+
 class System:
     """
     Represents a user-space system.
     """
+
+    SCREEN_LOCKER_REGISTRY = {
+        "slock": ScreenLocker(["slock"], req_x11=True),
+        "i3lock": ScreenLocker(["i3lock"], req_x11=True),
+        "xlock": ScreenLocker(["xlock"], req_x11=True),
+        "swaylock": ScreenLocker(["swaylock"], req_wayland=True),
+        "hyprlock": ScreenLocker(["hyprlock"], req_wayland=True),
+        "xdg-screensaver": ScreenLocker(["xdg-screensaver", "lock"]),
+        "gnome-screensaver": ScreenLocker(["gnome-screensaver-command", "-l"]),
+        "loginctl": ScreenLocker(["loginctl", "lock-session"]),
+    }
 
     @classmethod
     def _get_linux_controller(cls) -> Literal["systemctl", "loginctl"] | None:
@@ -393,16 +411,38 @@ class System:
         return "systemctl" if "systemd" in init_path else "loginctl"
 
     @classmethod
-    def get_lock_cmd(cls) -> Literal["slock"] | None:
-        """Locates the preferred screen locker executable."""
-        return "slock" if shutil.which("slock") else None
+    def _get_lock_cmd(cls) -> list[str] | None:
+        """Determines the appropriate lock command based on environment and availability."""
+        if sys.platform == "darwin":
+            # Note: doesn't immediately lock the screen unless "Require password after
+            # screen saver begins or display is turned off" is set to "Immediately" in
+            # the user's settings
+            return ["pmset", "displaysleepnow"]
+
+        session_type = os.environ.get("XDG_SESSION_TYPE", "").lower()
+        is_wayland = (session_type == "wayland") or ("WAYLAND_DISPLAY" in os.environ)
+        is_x11 = (session_type == "x11") or ("DISPLAY" in os.environ)
+
+        for locker in cls.SCREEN_LOCKER_REGISTRY.values():
+            if not shutil.which(locker.cmd[0]):
+                continue
+
+            if locker.req_x11 and not is_x11:
+                continue
+
+            if locker.req_wayland and not is_wayland:
+                continue
+
+            return locker.cmd
+
+        return None
 
     @classmethod
-    def lock_screen(cls, lock_cmd: str | None = None):
+    def lock_screen(cls):
         """Lock the screen."""
-        cmd = lock_cmd or cls.get_lock_cmd()
+        cmd = cls._get_lock_cmd()
         if cmd:
-            run_command([cmd])
+            run_command(cmd)
         else:
             logger.error("No screen locker found.")
 
