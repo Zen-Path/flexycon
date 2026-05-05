@@ -114,6 +114,7 @@ def prompt_bool(prompt: str, default: bool | None = None) -> bool | None:
 def notify(
     title: str,
     message: str | None = None,
+    urgency: Literal["low", "normal", "critical"] = "normal",
     icon_path: str | Path | None = None,
     callback: Callable[[], None] | None = None,
     open_image_onclick: bool = False,
@@ -129,7 +130,7 @@ def notify(
             "You cannot provide both a 'callback' and 'open_image_onclick'."
         )
 
-    cmd = ["notify-send", title]
+    cmd = ["notify-send", title, "--urgency", urgency]
 
     if message:
         cmd.append(message)
