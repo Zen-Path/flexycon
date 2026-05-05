@@ -6,7 +6,7 @@ import shutil
 import subprocess
 import sys
 
-from common.helpers import Dmenu
+from common.helpers import Dmenu, notify, run_command
 from common.logger import logger
 
 # Map of keyboard layouts with their full names
@@ -26,10 +26,8 @@ layout_full_names = {
 def get_current_layout():
     """Fetch the current keyboard layout."""
     try:
-        result = subprocess.run(
-            ["setxkbmap", "-query"], capture_output=True, text=True, check=True
-        )
-        for line in result.stdout.splitlines():
+        result = run_command(["setxkbmap", "-query"])
+        for line in result.output.splitlines():
             if line.startswith("layout:"):
                 return line.split()[1]
     except subprocess.CalledProcessError:
@@ -40,13 +38,10 @@ def get_current_layout():
 def get_available_layouts():
     """Get the available keyboard layouts using localectl."""
     try:
-        result = subprocess.run(
+        result = run_command(
             ["localectl", "list-x11-keymap-layouts"],
-            capture_output=True,
-            text=True,
-            check=True,
         )
-        layouts = result.stdout.splitlines()
+        layouts = result.output.splitlines()
         return layouts
     except subprocess.CalledProcessError:
         logger.error("Unable to list x11 keymap layouts.")
@@ -81,7 +76,7 @@ def restart_remapd():
     """Restart the remapd service if it's available."""
     if shutil.which("remapd"):
         try:
-            subprocess.run(["killall", "remapd"], check=True)
+            run_command(["killall", "remapd"])
             logger.debug("remapd killed successfully.")
             # Restart remapd if necessary (customize based on how you restart it)
             subprocess.Popen(["remapd"])
@@ -95,8 +90,8 @@ def restart_remapd():
 def set_keyboard_layout(layout):
     """Set the chosen keyboard layout."""
     try:
-        subprocess.run(["setxkbmap", layout], check=True)
-        subprocess.run(["notify-send", f"Keyboard layout changed to {layout}"])
+        run_command(["setxkbmap", layout])
+        notify(f"Keyboard layout changed to {layout}")
     except subprocess.CalledProcessError:
         logger.error(f"Unable to set layout to {layout}.")
         sys.exit(1)

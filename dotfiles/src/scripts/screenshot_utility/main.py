@@ -9,7 +9,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from common.helpers import Dmenu, notify
+from common.helpers import Dmenu, notify, run_command
 from common.logger import logger, setup_logging
 from common.packages.clipboard_utilities import copy_file
 
@@ -41,7 +41,7 @@ class MaimUtility:
         """Convert the color array to a string representation."""
         return ",".join(f"{c:.1f}" for c in self.color)
 
-    def run(self, output_path: Path, select=False):
+    def run(self, output_path: Path, select=False) -> bool:
         """Run maim with the configured options."""
         cmd = [
             "maim",
@@ -66,8 +66,7 @@ class MaimUtility:
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        result = subprocess.run(cmd)
-        return result.returncode == 0
+        return run_command(cmd).success
 
 
 class ScreenshotUtility:

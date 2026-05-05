@@ -5,6 +5,8 @@ import subprocess
 from abc import ABC, abstractmethod
 from pathlib import Path
 
+from common.helpers import run_command
+
 
 class ClipboardProvider(ABC):
     """Abstract interface for OS-specific clipboard backends."""
@@ -53,7 +55,7 @@ class XClipProvider(ClipboardProvider):
 
     @classmethod
     def clear(cls):
-        subprocess.run([cls.command, "-sel", "clip", "/dev/null"], check=True)
+        run_command([cls.command, "-sel", "clip", "/dev/null"])
 
 
 class XSelProvider(ClipboardProvider):
@@ -76,7 +78,7 @@ class XSelProvider(ClipboardProvider):
 
     @classmethod
     def clear(cls):
-        subprocess.run([cls.command, "--clipboard", "--clear"], check=True)
+        run_command([cls.command, "--clipboard", "--clear"])
 
 
 class WaylandProvider(ClipboardProvider):
@@ -94,7 +96,7 @@ class WaylandProvider(ClipboardProvider):
 
     @classmethod
     def clear(cls):
-        subprocess.run([cls.command, "--clear"], check=True)
+        run_command([cls.command, "--clear"])
 
 
 # macOS
@@ -111,11 +113,11 @@ class MacProvider(ClipboardProvider):
     def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # macOS uses AppleScript to handle 'file objects' for Finder pasting
         script = f'set the clipboard to (POSIX file "{file_path.absolute()}")'
-        subprocess.run(["osascript", "-e", script], check=True)
+        run_command(["osascript", "-e", script])
 
     @classmethod
     def clear(cls):
-        subprocess.run(["osascript", "-e", 'set the clipboard to ""'], check=True)
+        run_command(["osascript", "-e", 'set the clipboard to ""'])
 
 
 # Windows
@@ -136,11 +138,11 @@ class WindowsProvider(ClipboardProvider):
     def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # Set-Clipboard -Path automatically handles the FileDropList format
         cmd = f"Set-Clipboard -Path {str(file_path.absolute())!r}"
-        subprocess.run([cls.command, "-Command", cmd], check=True)
+        run_command([cls.command, "-Command", cmd])
 
     @classmethod
     def clear(cls):
-        subprocess.run([cls.command, "-Command", "Clear-Clipboard"], check=True)
+        run_command([cls.command, "-Command", "Clear-Clipboard"])
 
 
 # Manager

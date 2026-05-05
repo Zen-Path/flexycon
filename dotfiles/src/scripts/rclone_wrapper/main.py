@@ -5,7 +5,6 @@
 import argparse
 import json
 import logging
-import subprocess
 import sys
 import tempfile
 
@@ -66,7 +65,7 @@ def main():
 
     command = build_rclone_command(args, config)
     if not args.dry_run:
-        subprocess.run(command)
+        run_command(command)
         return
 
     result = run_command(command)

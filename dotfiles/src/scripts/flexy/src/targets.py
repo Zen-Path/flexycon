@@ -140,8 +140,8 @@ def get_dotdrop_profile() -> str | None:
     if not USER_VARIABLES_PATH.exists():
         logger.info("Installing bootstrap profile to generate user variables file.")
         try:
-            subprocess.run(
-                [VENV_BIN / "dotdrop", "install", "--profile", "bootstrap"], check=True
+            run_command(
+                [str(VENV_BIN / "dotdrop"), "install", "--profile", "bootstrap"]
             )
         except KeyboardInterrupt:
             sys.exit(0)

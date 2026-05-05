@@ -5,7 +5,7 @@
 import os
 import subprocess
 
-from common.helpers import notify
+from common.helpers import notify, run_command
 from common.statusbar import EDITOR, TERMINAL, MouseButton
 
 # Environment variables
@@ -16,12 +16,9 @@ NEWS_DB = os.path.join(NEWS_DIR, "newsraft.sqlite3")
 NEWS_DB_BACKUP = os.path.join(NEWS_DIR, "newsraft_backup.sqlite3")
 
 
-def reload_newsraft():
+def reload_newsraft() -> bool:
     """Reload newsraft's contents."""
-    result = subprocess.run(
-        ["newsraft", "-e", "reload-all"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    return result.returncode == 0
+    return run_command(["newsraft", "-e", "reload-all"]).success
 
 
 def get_unread_items_count():
@@ -39,18 +36,9 @@ def get_unread_items_count():
     return unread_count
 
 
-def get_unread_newsraft():
+def get_unread_newsraft() -> bool:
     """Get unread items count using newsraft."""
-    try:
-        result = subprocess.run(
-            ["newsraft", "-e", "print-unread-items-count"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True,
-        )
-        return result.stdout.strip()
-    except Exception:
-        return None
+    return run_command(["newsraft", "-e", "print-unread-items-count"]).success
 
 
 def get_unread_db(db_file):
