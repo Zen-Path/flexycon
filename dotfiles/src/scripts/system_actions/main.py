@@ -2,129 +2,19 @@
 
 # {{@@ header() @@}}
 
-import os
-import shutil
-import signal
+import argparse
+import logging
 import subprocess
-from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-import psutil
-
-
-def get_parent_process_chain(start_pid=None):
-    """
-    Traverse the parent chain of the current process (or a given process) and collect
-    a list of tuples (process_name, pid).
-
-    Args:
-        start_pid (int, optional): PID of the process to start traversal from.
-                                   Defaults to the current process.
-
-    Returns:
-        list of tuple: [(name, pid), ...]
-    """
-
-    process_chain = []
-    current_process = psutil.Process(start_pid) if start_pid else psutil.Process()
-
-    while current_process:
-        process_chain.append((current_process.name(), current_process.pid))
-        current_process = current_process.parent()
-
-    return process_chain
-
-
-class WindowManager:
-    """Base class for window managers."""
-
-    def __init__(self, display_name: str, process_name: str):
-        self.display_name = display_name
-        self.process_name = process_name
-        self.pid = None
-
-    def __repr__(self):
-        return f"{self.display_name} ({self.process_name})"
-
-    def terminate(self):
-        psutil.Process(self.pid).terminate()
-
-    def fetch_pid(self):
-        # TODO: except psutil.NoSuchProcess:
-        process_chain = get_parent_process_chain()
-
-        for name, pid in process_chain:
-            if name == self.process_name:
-                self.pid = pid
-                return self.pid
-
-        self.pid = None
-        return None
-
-
-class Dwm(WindowManager):
-    def __init__(self):
-        super().__init__("DWM", "dwm")
-
-    def refresh(self):
-        os.kill(self.pid, signal.SIGHUP)
-
-
-class I3(WindowManager):
-    def __init__(self):
-        super().__init__("i3", "i3")
-
-
-class Openbox(WindowManager):
-    def __init__(self):
-        super().__init__("Openbox", "openbox")
-
-
-@dataclass
-class System:
-    """
-    Represents a user-space system.
-    """
-
-    controller: str | None = None
-    lock_cmd: str | None = None
-
-    def __post_init__(self):
-        self.controller = self.controller or self.get_controller()
-        self.lock_cmd = self.lock_cmd or self.get_lock_cmd()
-
-    @classmethod
-    def get_controller(cls) -> str:
-        """
-        Determines the system's controller based on the init system in use.
-        Returns 'systemctl' if systemd is detected, otherwise 'loginctl'.
-        """
-        init_path = os.path.realpath("/sbin/init")
-        return "systemctl" if "systemd" in init_path else "loginctl"
-
-    def get_lock_cmd(self):
-        return "slock" if shutil.which("slock") else None
-
-    def lock_screen(self):
-        """Lock the screen."""
-        if self.lock_cmd:
-            os.system(self.lock_cmd)
-
-    def sleep(self):
-        """Put the system to sleep."""
-        os.system(f"{self.controller} suspend -i")
-
-    def power_off(self):
-        """Power off the system."""
-        os.system(f"{self.controller} poweroff -i")
-
-    def reboot(self):
-        """Reboot the system."""
-        os.system(f"{self.controller} reboot -i")
-
-    def hibernate(self):
-        """Hibernate the system."""
-        os.system(f"{self.controller} hibernate -i")
+from common.apps.window_manager import Dwm
+from common.helpers import (
+    System,
+    get_notifications_paused_status,
+    notify,
+    set_notifications_status,
+)
+from common.logger import logger, setup_logging
 
 
 class SystemAction:
@@ -141,30 +31,27 @@ class SystemAction:
         """
         Handle the execution of a quick action, managing dunst state and restoring it.
         """
-        original_state = subprocess.getoutput("dunstctl is-paused").strip() == "true"
-        subprocess.run(["dunstctl", "set-paused", "true"])
+        original_notifications_paused_state = get_notifications_paused_status()
+        set_notifications_status("true")
 
         start_time = datetime.now()
 
-        print(system.lock_cmd)
+        logger.debug(system.lock_cmd)
+
         action()
         system.lock_screen()
         # wait_for_display(polling_rate)
 
         elapsed_time = datetime.now() - start_time
 
-        if not original_state:
-            subprocess.run(["dunstctl", "set-paused", "false"])
+        if not original_notifications_paused_state:
+            set_notifications_status("false")
 
         elapsed_str = str(timedelta(seconds=elapsed_time.total_seconds())).split(".")[0]
-        subprocess.run(
-            [
-                "notify-send",
-                "--urgency",
-                "low",
-                "Welcome back!",
-                f"You've been gone for {elapsed_str}.",
-            ]
+        notify(
+            title="Welcome back!",
+            message=f"You've been gone for {elapsed_str}.",
+            urgency="low",
         )
 
 
@@ -184,6 +71,7 @@ class SystemActionsMenu:
             case _:
                 return None
 
+    # TODO: build a dmenu interface in common
     def _dmenu_prompt(self, question):
         menu_input = "\n".join(self.actions_map.keys())
 
@@ -194,10 +82,11 @@ class SystemActionsMenu:
             capture_output=True,
         ).stdout.strip()
 
-        print("choice", choice)
-        print(self.actions_map)
-        print(choice in self.actions_map)
-        print(self.actions_map[choice])
+        logger.debug("choice", choice)
+        logger.debug(self.actions_map)
+        logger.debug(choice in self.actions_map)
+        logger.debug(self.actions_map[choice])
+
         if choice not in self.actions_map:
             return None
 
@@ -211,18 +100,29 @@ class Display:
     # def turn_off(self):
 
 
+def build_parser():
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(description="Execute certain system actions.")
+
+    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+
+    return parser
+
+
 def main():
+    args = build_parser().parse_args()
+
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
+
     window_manger = Dwm()
-    system = System(lock_cmd="slock")
-    _ = Display
 
     system_actions = filter(
         None,
         [
-            SystemAction("Sleep", "😴", lambda: system.sleep),
-            SystemAction("Lock", "🔒", lambda: system.lock_screen),
-            SystemAction("Power Off", "🔌", lambda: system.power_off),
-            SystemAction("Reboot", "🔄", lambda: system.reboot),
+            SystemAction("Sleep", "😴", lambda: System.sleep),
+            SystemAction("Lock", "🔒", lambda: System.lock_screen),
+            SystemAction("Power Off", "🔌", lambda: System.power_off),
+            SystemAction("Reboot", "🔄", lambda: System.reboot),
             SystemAction(
                 f"Terminate {window_manger.display_name}",
                 "☠️",
@@ -239,16 +139,16 @@ def main():
             ),
             # SystemAction("Display Off", "📺", lambda *_:
             #   QuickAction.turn_off_display()),
-            SystemAction("Hibernate", "🐻", lambda: system.hibernate),
+            SystemAction("Hibernate", "🐻", lambda: System.hibernate),
         ],
     )
 
     system_actions_menu = SystemActionsMenu(system_actions)
     selected_action = system_actions_menu.prompt()
 
-    print("selected_action", selected_action)
+    logger.debug("selected_action", selected_action)
     if selected_action:
-        SystemAction.run(selected_action, system)
+        SystemAction.run(selected_action, System)
 
 
 if __name__ == "__main__":

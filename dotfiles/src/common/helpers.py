@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Literal, Sequence
 
+import psutil
 from common.logger import logger
 
 
@@ -371,3 +372,79 @@ def split_into_words(name: str, boundaries: list[str] = [" ", "-", "_"]) -> list
     tokens = split_tokens(tokens, split_acronyms)
 
     return tokens
+
+
+class System:
+    """
+    Represents a user-space system.
+    """
+
+    @classmethod
+    def get_controller(cls) -> Literal["systemctl", "loginctl"]:
+        """
+        Determines the system's controller based on the init system in use.
+        Returns 'systemctl' if systemd is detected, otherwise 'loginctl'.
+        """
+        init_path = os.path.realpath("/sbin/init")
+        return "systemctl" if "systemd" in init_path else "loginctl"
+
+    @classmethod
+    def get_lock_cmd(cls) -> Literal["slock"] | None:
+        """Locates the preferred screen locker executable."""
+        return "slock" if shutil.which("slock") else None
+
+    @classmethod
+    def lock_screen(cls, lock_cmd: str | None = None):
+        """Lock the screen."""
+        cmd = lock_cmd or cls.get_lock_cmd()
+        if cmd:
+            run_command([cmd])
+        else:
+            logger.error("No screen locker found.")
+
+    @classmethod
+    def sleep(cls, controller: str | None = None):
+        """Put the system to sleep."""
+        ctrl = controller or cls.get_controller()
+        run_command([ctrl, "suspend", "-i"])
+
+    @classmethod
+    def power_off(cls, controller: str | None = None):
+        """Power off the system."""
+        ctrl = controller or cls.get_controller()
+        run_command([ctrl, "poweroff", "-i"])
+
+    @classmethod
+    def reboot(cls, controller: str | None = None):
+        """Reboot the system."""
+        ctrl = controller or cls.get_controller()
+        run_command([ctrl, "reboot", "-i"])
+
+    @classmethod
+    def hibernate(cls, controller: str | None = None):
+        """Hibernate the system."""
+        ctrl = controller or cls.get_controller()
+        run_command([ctrl, "hibernate", "-i"])
+
+
+def get_parent_process_chain(start_pid=None):
+    """
+    Traverse the parent chain of the current process (or a given process) and collect
+    a list of tuples (process_name, pid).
+
+    Args:
+        start_pid (int, optional): PID of the process to start traversal from.
+                                   Defaults to the current process.
+
+    Returns:
+        list of tuple: [(name, pid), ...]
+    """
+
+    process_chain = []
+    current_process = psutil.Process(start_pid) if start_pid else psutil.Process()
+
+    while current_process:
+        process_chain.append((current_process.name(), current_process.pid))
+        current_process = current_process.parent()
+
+    return process_chain
