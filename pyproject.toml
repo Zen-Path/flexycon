@@ -16,6 +16,7 @@ dependencies = [
     "colorama==0.4.6",      # for colored text
     "python-dotenv==1.1.1", # for loading env variables
     "PyYAML==6.0.3",        # for parsing yaml files
+    "psutil==7.2.2",        # for processes management
 
     # script
     "GitPython==3.1.44",  # for git_logs
