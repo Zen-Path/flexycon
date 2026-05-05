@@ -176,24 +176,27 @@ def set_notifications_status(status: Literal["true", "false", "toggle"]) -> int:
     return run_command(["dunstctl", "set-paused", status]).success
 
 
-def ensure_directory_interactive(path: Path):
+def ensure_directory_interactive(path: Path) -> bool:
     """
     Interactively ensure all directories leading to the path exist.
     """
     # Check the directory part, since 'path' might be a file
     directory = path if path.suffix == "" else path.parent
 
-    if not directory.exists():
-        print(f":: The directory '{directory}' does not exist.")
+    if directory.exists():
+        return True
 
-        user_resp = prompt_bool("Create the directory?", default=True)
+    logger.info(f"Directory {str(directory)!r} does not exist.")
 
-        if user_resp is True:
-            directory.mkdir(parents=True, exist_ok=True)
-            print(f"\n:: Created directory: {directory}")
-        else:
-            print("\n:: Operation cancelled by user.")
-            sys.exit(1)
+    user_resp = prompt_bool("Create the directory?", default=True)
+
+    if user_resp is True:
+        directory.mkdir(parents=True, exist_ok=True)
+        logger.info(f"Created directory: {directory!r}")
+        return True
+    else:
+        logger.debug("Operation cancelled by user.")
+        return False
 
 
 def remove_files_by_pattern(patterns: Sequence[str]) -> None:
