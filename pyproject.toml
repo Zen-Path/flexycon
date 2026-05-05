@@ -91,3 +91,8 @@ target-version = "py314"
     line-ending               = "auto"
     quote-style               = "double"
     skip-magic-trailing-comma = false
+
+[tool.pyright]
+# Setting platform to "" means we don't target any particular platform, thus we don't
+# get "unreachable" code warnings when we write cross-platform code
+pythonPlatform = ""
