@@ -56,7 +56,6 @@
     "glassit.alpha": 235,
     "prettier.proseWrap": "always",
     "python.analysis.autoFormatStrings": true,
-    "python.analysis.autoImportCompletions": true,
     "python.analysis.diagnosticMode": "workspace",
     "python.analysis.inlayHints.callArgumentNames": "all",
     "python.analysis.inlayHints.functionReturnTypes": true,
