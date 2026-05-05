@@ -6,7 +6,7 @@
         "editor.defaultFormatter": "vscode.html-language-features"
     },
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "[xml]": {
         "editor.defaultFormatter": "DotJoshJohnson.xml"
