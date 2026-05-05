@@ -7,6 +7,7 @@ import subprocess
 import sys
 
 from common.helpers import Dmenu
+from common.logger import logger
 
 # Map of keyboard layouts with their full names
 layout_full_names = {
@@ -32,7 +33,7 @@ def get_current_layout():
             if line.startswith("layout:"):
                 return line.split()[1]
     except subprocess.CalledProcessError:
-        print("Error: Unable to get current layout.")
+        logger.error("Unable to get current layout.")
         sys.exit(1)
 
 
@@ -48,7 +49,7 @@ def get_available_layouts():
         layouts = result.stdout.splitlines()
         return layouts
     except subprocess.CalledProcessError:
-        print("Error: Unable to list x11 keymap layouts.")
+        logger.error("Unable to list x11 keymap layouts.")
         sys.exit(1)
 
 
@@ -72,7 +73,7 @@ def prompt_layout(formatted_layouts, current_layout):
             list_view_item_count=15,
         )
     except subprocess.CalledProcessError:
-        print("Error: dmenu failed to run.")
+        logger.error("dmenu failed to run.")
         sys.exit(1)
 
 
@@ -81,14 +82,14 @@ def restart_remapd():
     if shutil.which("remapd"):
         try:
             subprocess.run(["killall", "remapd"], check=True)
-            print("remapd killed successfully.")
+            logger.debug("remapd killed successfully.")
             # Restart remapd if necessary (customize based on how you restart it)
             subprocess.Popen(["remapd"])
-            print("remapd restarted successfully.")
+            logger.debug("remapd restarted successfully.")
         except subprocess.CalledProcessError:
-            print("Failed to restart remapd.")
+            logger.error("Failed to restart remapd.")
     else:
-        print("remapd is not available in this environment.")
+        logger.error("remapd is not available in this environment.")
 
 
 def set_keyboard_layout(layout):
@@ -97,7 +98,7 @@ def set_keyboard_layout(layout):
         subprocess.run(["setxkbmap", layout], check=True)
         subprocess.run(["notify-send", f"Keyboard layout changed to {layout}"])
     except subprocess.CalledProcessError:
-        print(f"Error: Unable to set layout to {layout}.")
+        logger.error(f"Unable to set layout to {layout}.")
         sys.exit(1)
 
 
@@ -112,12 +113,12 @@ def main():
         layout_code = chosen_layout.split(" - ")[0]
         if layout_code in available_layouts:
             set_keyboard_layout(layout_code)
-            print(f"Keyboard layout set to: {layout_code}")
+            logger.info(f"Keyboard layout set to: {layout_code}")
             restart_remapd()  # Call restart_remapd from here
         else:
-            print("Invalid layout selected.")
+            logger.error("Invalid layout selected.")
     else:
-        print("No layout chosen.")
+        logger.warning("No layout chosen.")
 
 
 if __name__ == "__main__":

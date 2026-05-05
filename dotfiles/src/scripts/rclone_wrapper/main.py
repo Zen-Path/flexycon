@@ -61,7 +61,7 @@ def main():
         config = load_config()
         logger.debug(json.dumps(config, indent=2))
     except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
+        logger.error(e)
         sys.exit(1)
 
     command = build_rclone_command(args, config)
@@ -87,7 +87,7 @@ def main():
         log_data = {"operations": operations_data, "stats": stats}
         tmp.write(json.dumps(log_data))
 
-        print(f"Temporary log file created at: {tmp.name}")
+        logger.debug(f"Temporary log file created at: {tmp.name}")
 
 
 if __name__ == "__main__":

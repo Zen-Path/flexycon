@@ -3,12 +3,14 @@
 # {{@@ header() @@}}
 
 import argparse
+import logging
 import os
 import subprocess
 from datetime import datetime
 from pathlib import Path
 
 from common.helpers import Dmenu, notify
+from common.logger import logger, setup_logging
 from common.packages.clipboard_utilities import copy_file
 
 
@@ -143,7 +145,7 @@ def prompt_user(actions):
     if choice in actions:
         actions[choice]()
     else:
-        print("Invalid choice.")
+        logger.warning("Invalid choice.")
 
 
 def build_parser():
@@ -210,6 +212,8 @@ def build_parser():
 
 def main():
     args = build_parser().parse_args()
+
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 
     screenshot_utility = ScreenshotUtility(
         output_dir=args.output_directory if args.output_directory else None
