@@ -380,11 +380,15 @@ class System:
     """
 
     @classmethod
-    def get_controller(cls) -> Literal["systemctl", "loginctl"]:
+    def _get_linux_controller(cls) -> Literal["systemctl", "loginctl"] | None:
         """
         Determines the system's controller based on the init system in use.
         Returns 'systemctl' if systemd is detected, otherwise 'loginctl'.
         """
+        if sys.platform != "linux":
+            logger.warning(f"Method isn't supported for {sys.platform!r}")
+            return None
+
         init_path = os.path.realpath("/sbin/init")
         return "systemctl" if "systemd" in init_path else "loginctl"
 
@@ -403,28 +407,54 @@ class System:
             logger.error("No screen locker found.")
 
     @classmethod
-    def sleep(cls, controller: str | None = None):
+    def sleep(cls):
         """Put the system to sleep."""
-        ctrl = controller or cls.get_controller()
-        run_command([ctrl, "suspend", "-i"])
+        if sys.platform == "darwin":
+            run_command(["pmset", "sleepnow"])
+        elif sys.platform == "linux":
+            if cmd := cls._get_linux_controller():
+                run_command([cmd, "suspend", "-i"])
+        else:
+            logger.warning(f"Method isn't supported for {sys.platform!r}")
 
     @classmethod
-    def power_off(cls, controller: str | None = None):
+    def power_off(cls):
         """Power off the system."""
-        ctrl = controller or cls.get_controller()
-        run_command([ctrl, "poweroff", "-i"])
+        if sys.platform == "darwin":
+            run_command(
+                ["osascript", "-e", 'tell app "loginwindow" to «event aevtrsdn»']
+            )
+        elif sys.platform == "linux":
+            if cmd := cls._get_linux_controller():
+                run_command([cmd, "poweroff", "-i"])
+        else:
+            logger.warning(f"Method isn't supported for {sys.platform!r}")
 
     @classmethod
-    def reboot(cls, controller: str | None = None):
+    def reboot(cls):
         """Reboot the system."""
-        ctrl = controller or cls.get_controller()
-        run_command([ctrl, "reboot", "-i"])
+        if sys.platform == "darwin":
+            run_command(
+                ["osascript", "-e", 'tell app "loginwindow" to «event aevtrrst»']
+            )
+        elif sys.platform == "linux":
+            if cmd := cls._get_linux_controller():
+                run_command([cmd, "reboot", "-i"])
+        else:
+            logger.warning(f"Method isn't supported for {sys.platform!r}")
 
     @classmethod
-    def hibernate(cls, controller: str | None = None):
+    def hibernate(cls):
         """Hibernate the system."""
-        ctrl = controller or cls.get_controller()
-        run_command([ctrl, "hibernate", "-i"])
+        if sys.platform == "darwin":
+            # Standard hibernation isn't exposed gracefully in macOS user-space.
+            # We use sleep as a safe default.
+            run_command(["pmset", "sleepnow"])
+        elif sys.platform == "linux":
+            if cmd := cls._get_linux_controller():
+                run_command([cmd, "hibernate", "-i"])
+        else:
+            logger.warning(f"Method isn't supported for {sys.platform!r}")
 
 
 def get_parent_process_chain(start_pid=None):
