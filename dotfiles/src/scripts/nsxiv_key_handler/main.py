@@ -57,7 +57,7 @@ def action_group(paths: list[Path]):
 
     destdir = Path.cwd() / choice
     destdir.mkdir(parents=True, exist_ok=True)
-    notify("Directory created", f"Located at '{destdir}'")
+    notify("Directory created", f"Located at {str(destdir)}")
 
     for path in paths:
         shutil.move(path, destdir)

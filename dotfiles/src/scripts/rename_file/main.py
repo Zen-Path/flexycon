@@ -79,7 +79,7 @@ def rename_path(path: Path, transform_func):
         logger.debug(f"Renamed: {path.name} -> {new_path.name}")
 
     except Exception as e:
-        logger.error(f"Error renaming '{path}': {e}")
+        logger.error(f"Error renaming {str(path)!r}: {e}")
 
 
 def build_parser(converters_map):

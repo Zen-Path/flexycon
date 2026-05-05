@@ -192,7 +192,7 @@ def setup_virtual_env():
     logger.info("⚙️ Create virtual environment if it doesn't exist...")
 
     if not VENV_DIR.exists():
-        logger.info(f"🐍 Creating Python venv in '{VENV_DIR}'...")
+        logger.info(f"🐍 Creating Python venv in {str(VENV_DIR)!r}...")
         run_command([PYTHON_BIN, "-m", "venv", str(VENV_DIR)])
 
     logger.info("♻️ Updating pip...")
@@ -265,7 +265,9 @@ def install():
     """Install and apply configuration"""
 
     if not VENV_DIR.exists():
-        logger.error(f"Missing venv at '{VENV_DIR}'. Run the 'setup' target first.")
+        logger.error(
+            f"Missing venv at {str(VENV_DIR)!r}. Run the 'setup' target first."
+        )
         return
 
     logger.info("⚙️ Generating shortcuts...")

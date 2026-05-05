@@ -29,7 +29,7 @@ def process_packages(packages: list[Package], dry_run: bool = False):
 
     for package in packages:
         if not package.condition:
-            logger.warning(f"Skipping '{package.name}': unmet condition.")
+            logger.warning(f"Skipping {package.name!r}: unmet condition.")
             continue
 
         # Find the first available manager
@@ -46,10 +46,10 @@ def process_packages(packages: list[Package], dry_run: bool = False):
                 break
 
         if not available_manager:
-            logger.warning(f"Skipping '{package.name}': no available manager found.")
+            logger.warning(f"Skipping {package.name!r}: no available manager found.")
             continue
 
-        logger.info(f"Installing '{package.name}' using {available_manager.__name__}.")
+        logger.info(f"Installing {package.name!r} using {available_manager.__name__}.")
         if not dry_run:
             available_manager.install(package)
 

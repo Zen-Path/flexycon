@@ -135,7 +135,7 @@ class WindowsProvider(ClipboardProvider):
     @classmethod
     def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # Set-Clipboard -Path automatically handles the FileDropList format
-        cmd = f"Set-Clipboard -Path '{file_path.absolute()}'"
+        cmd = f"Set-Clipboard -Path {str(file_path.absolute())!r}"
         subprocess.run([cls.command, "-Command", cmd], check=True)
 
     @classmethod

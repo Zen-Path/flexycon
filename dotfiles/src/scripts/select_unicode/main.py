@@ -69,7 +69,7 @@ def main():
         return
 
     char, name = selection_parts
-    logger.info(f"char: '{char}', name: '{name}'")
+    logger.info(f"char: {str(char)!r}, name: {str(name)!r}")
 
     if args.insert_char:
         run_command(["xdotool", "type", char])
@@ -80,7 +80,7 @@ def main():
         logger.info("Character copied.")
 
         if not args.no_notify:
-            notify("Character copied", f"'{char}' was copied.")
+            notify("Character copied", f"{str(char)!r} was copied.")
 
 
 if __name__ == "__main__":
