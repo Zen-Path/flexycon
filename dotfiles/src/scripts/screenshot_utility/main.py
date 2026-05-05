@@ -8,7 +8,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from common.helpers import notify
+from common.helpers import Dmenu, notify
 from common.packages.clipboard_utilities import copy_file
 
 
@@ -138,15 +138,7 @@ class ScreenshotUtility:
 def prompt_user(actions):
     options = list(actions.keys())
 
-    choice = (
-        subprocess.run(
-            ["dmenu", "-i", "-l", "-1", "-p", "Screenshot"],
-            input="\n".join(options).encode(),
-            stdout=subprocess.PIPE,
-        )
-        .stdout.decode()
-        .strip()
-    )
+    choice = Dmenu.run(prompt="Screenshot", choices=options, list_view_item_count=-1)
 
     if choice in actions:
         actions[choice]()

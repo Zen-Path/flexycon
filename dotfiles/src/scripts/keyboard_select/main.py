@@ -6,6 +6,8 @@ import shutil
 import subprocess
 import sys
 
+from common.helpers import Dmenu
+
 # Map of keyboard layouts with their full names
 layout_full_names = {
     "us": "English (US)",
@@ -63,15 +65,12 @@ def format_layouts(available_layouts, layout_full_names):
 
 def prompt_layout(formatted_layouts, current_layout):
     """Prompt the user to select a layout, displaying the current layout."""
-    dmenu_prompt = f"Select Keyboard Layout (current: {current_layout}):"
     try:
-        result = subprocess.run(
-            ["dmenu", "-i", "-l", "15", "-p", dmenu_prompt],
-            input="\n".join(formatted_layouts),
-            capture_output=True,
-            text=True,
+        return Dmenu.run(
+            prompt=f"Select Keyboard Layout (current: {current_layout})",
+            choices=formatted_layouts,
+            list_view_item_count=15,
         )
-        return result.stdout.strip()
     except subprocess.CalledProcessError:
         print("Error: dmenu failed to run.")
         sys.exit(1)

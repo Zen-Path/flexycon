@@ -4,11 +4,11 @@
 
 import argparse
 import logging
-import subprocess
 from datetime import datetime, timedelta
 
 from common.apps.window_manager import Dwm
 from common.helpers import (
+    Dmenu,
     System,
     get_notifications_paused_status,
     notify,
@@ -56,31 +56,17 @@ class SystemAction:
 
 
 class SystemActionsMenu:
-    def __init__(self, actions, prompter="dmenu"):
+    def __init__(self, actions):
         self.actions = actions
-        self.prompter = prompter
         self.actions_map = {str(action): action.function for action in self.actions}
 
-    def prompt(self, question="System Action"):
+    def prompt(self, prompt="System Action"):
         """
         Display a list of actions and return a selected action.
         """
-        match self.prompter:
-            case "dmenu":
-                return self._dmenu_prompt(question)
-            case _:
-                return None
-
-    # TODO: build a dmenu interface in common
-    def _dmenu_prompt(self, question):
-        menu_input = "\n".join(self.actions_map.keys())
-
-        choice = subprocess.run(
-            ["dmenu", "-i", "-l", "-1", "-p", question],
-            input=menu_input,
-            text=True,
-            capture_output=True,
-        ).stdout.strip()
+        choice = Dmenu.run(
+            prompt=prompt, choices=[str(key) for key in self.actions_map.keys()]
+        )
 
         logger.debug("choice", choice)
         logger.debug(self.actions_map)

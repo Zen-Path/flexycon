@@ -6,23 +6,9 @@ import argparse
 import logging
 import subprocess
 
-from common.helpers import notify, run_command
+from common.helpers import Dmenu, notify, run_command
 from common.logger import logger, setup_logging
 from scripts.select_unicode.data import CHARS
-
-
-def user_prompt(options: list[str]) -> str:
-    """Run dmenu with input text and return selection."""
-    try:
-        result = subprocess.run(
-            ["dmenu", "-p", "Select char", "-l", "30"],
-            input="\n".join(options).encode(),
-            capture_output=True,
-            check=True,
-        )
-        return result.stdout.decode().strip()
-    except subprocess.CalledProcessError:
-        return ""
 
 
 def format_char_entries(chars: dict[str, str]) -> list[str]:
@@ -63,9 +49,17 @@ def main():
     logger.debug(f"char_categories: {char_categories}")
 
     # Prompt user for a category or common emojis
-    selection = user_prompt(char_categories + format_char_entries(CHARS["emoji"]))
+    selection = Dmenu.run(
+        prompt="Emoji",
+        choices=char_categories + format_char_entries(CHARS["emoji"]),
+        list_view_item_count=30,
+    )
     if selection in char_categories:
-        selection = user_prompt(format_char_entries(CHARS[selection]))
+        selection = Dmenu.run(
+            prompt="Emoji",
+            choices=format_char_entries(CHARS[selection]),
+            list_view_item_count=30,
+        )
 
     selection_parts = selection.split(" - ", maxsplit=1)
     logger.info(f"Selection parts: {selection_parts}")

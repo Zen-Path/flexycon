@@ -518,3 +518,34 @@ def get_parent_process_chain(start_pid=None):
         current_process = current_process.parent()
 
     return process_chain
+
+
+class Dmenu:
+    @classmethod
+    def run(
+        cls,
+        prompt: str,
+        choices: list[str],
+        case_insensitive: bool = True,
+        list_view_item_count: int | None = None,
+    ) -> str:
+        cmd = ["dmenu", "-p", prompt]
+
+        if case_insensitive:
+            cmd.append("-i")
+
+        if list_view_item_count is not None:
+            # TODO: check this logic on linux
+            cmd.append("-l")
+
+            if list_view_item_count > 0:
+                cmd.append(str(list_view_item_count))
+
+        result = subprocess.run(
+            cmd,
+            input="\n".join(choices),
+            capture_output=True,
+            text=True,
+        )
+
+        return result.stdout.strip()

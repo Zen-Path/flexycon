@@ -5,24 +5,13 @@
 import argparse
 import logging
 import shutil
-import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 
-from common.helpers import notify, run_command, run_command_background
+from common.helpers import Dmenu, notify, run_command, run_command_background
 from common.logger import logger, setup_logging
 from common.packages.clipboard_utilities import copy_file, copy_text
-
-
-def prompt_dmenu(prompt: str, options: list[str] | None = None) -> str | None:
-    result = subprocess.run(
-        ["dmenu", "-i", "-p", prompt],
-        input="\n".join(options if options else []),
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
-    return result
 
 
 def get_help_text():
@@ -34,8 +23,9 @@ def get_help_text():
 
 def action_interactive_trash(paths: list[Path]):
     for path in paths:
-        choice = prompt_dmenu(f"Really trash '{path}'?", ["Yes", "No", "Cancel"])
-
+        choice = Dmenu.run(
+            prompt=f"Really trash {path!r}?", choices=["Yes", "No", "Cancel"]
+        )
         if choice == "Cancel":
             break
 
@@ -60,7 +50,7 @@ def action_flip(paths: list[Path]):
 
 def action_group(paths: list[Path]):
     default_name = datetime.now().strftime("%F_%T")
-    choice = prompt_dmenu("Group file(s) where?", [default_name])
+    choice = Dmenu.run(prompt="Group file(s) where?", choices=[default_name])
     if not choice:
         notify("No directory entered, cancelled.")
         sys.exit(1)
