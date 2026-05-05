@@ -55,6 +55,12 @@
     "gitlens.hovers.currentLine.over": "line",
     "glassit.alpha": 235,
     "prettier.proseWrap": "always",
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.inlayHints.callArgumentNames": "all",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.pytestParameters": true,
     "python.analysis.typeCheckingMode": "standard",
     "python.languageServer": "Pylance",
     "search.exclude": {
