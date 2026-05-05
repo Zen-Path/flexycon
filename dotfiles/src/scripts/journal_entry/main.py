@@ -34,7 +34,7 @@ def build_parser():
     return parser
 
 
-def open_journal_entry(target_date: datetime):
+def open_journal_entry(target_date: datetime) -> bool:
     year_fmt = str(target_date.year)
     month_num_fmt = f"{target_date.month:02}"
     day_fmt = f"{target_date.day:02}"
@@ -45,14 +45,16 @@ def open_journal_entry(target_date: datetime):
 
     file_name = f"{month_num_fmt}.{day_fmt}.md"
     file_path = Path(journal_home_path) / year_fmt / month_num_fmt / file_name
-    logger.info(f"File path: {file_path!r}")
+    logger.info(f"File path: {str(file_path)!r}")
 
-    ensure_directory_interactive(file_path.parent)
+    if not ensure_directory_interactive(file_path.parent):
+        return False
 
     editor = os.getenv("EDITOR", "vim")
     logger.debug(f"Editor: {editor!r}")
 
     subprocess.run([editor, file_path])
+    return True
 
 
 def get_journal_entry_path(target_date) -> Path | None:
@@ -80,13 +82,15 @@ def main():
         path = get_journal_entry_path(target_date)
         if not path:
             logger.error(
-                "Could not find journal entry for %s", target_date.strftime("%Y-%m-%d")
+                f"Could not find journal entry for {target_date.strftime('%Y-%m-%d')}"
             )
             sys.exit(1)
+
         print(path)
         return
 
-    open_journal_entry(target_date)
+    if not open_journal_entry(target_date):
+        sys.exit(1)
 
 
 if __name__ == "__main__":

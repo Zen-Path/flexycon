@@ -45,6 +45,7 @@ def test_open_journal_entry_success(monkeypatch, mock_env, sample_date):
     def fake_ensure_directory_interactive(path: Path):
         nonlocal ensured_path
         ensured_path = path
+        return True
 
     monkeypatch.setattr(
         "scripts.journal_entry.main.ensure_directory_interactive",
