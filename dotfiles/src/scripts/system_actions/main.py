@@ -220,7 +220,7 @@ def main():
         None,
         [
             SystemAction("Sleep", "😴", lambda: system.sleep),
-            SystemAction("Lock", "🔒", lambda: system.lock),
+            SystemAction("Lock", "🔒", lambda: system.lock_screen),
             SystemAction("Power Off", "🔌", lambda: system.power_off),
             SystemAction("Reboot", "🔄", lambda: system.reboot),
             SystemAction(
