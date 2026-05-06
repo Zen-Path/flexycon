@@ -80,7 +80,7 @@ def main():
         logger.info("Character copied.")
 
         if not args.no_notify:
-            NotificationSystem.run("Character copied", f"{str(char)!r} was copied.")
+            NotificationSystem.run("Character copied", f"Copied {str(char)!r}.")
 
 
 if __name__ == "__main__":
