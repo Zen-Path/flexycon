@@ -2,12 +2,14 @@
 
 # {{@@ header() @@}}
 
+import argparse
+import logging
 import shutil
 import subprocess
 import sys
 
 from common.helpers import Dmenu, NotificationSystem, run_command
-from common.logger import logger
+from common.logger import logger, setup_logging
 
 # Map of keyboard layouts with their full names
 layout_full_names = {
@@ -97,7 +99,19 @@ def set_keyboard_layout(layout):
         sys.exit(1)
 
 
+def build_parser():
+    parser = argparse.ArgumentParser(description="Select keyboard layout.")
+
+    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+
+    return parser
+
+
 def main():
+    args = build_parser().parse_args()
+
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
+
     current_layout = get_current_layout()
     available_layouts = get_available_layouts()
 
