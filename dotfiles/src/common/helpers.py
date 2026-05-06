@@ -148,9 +148,9 @@ def remove_files_by_pattern(patterns: Sequence[str]) -> None:
                     # Using missing_ok for unlinking to avoid race conditions
                     path.unlink(missing_ok=True)
 
-                logger.debug(f"Removed {path!r}.")
+                logger.debug(f"Removed {str(path)!r}.")
             except Exception as e:
-                logger.warning(f"Failed to remove {path!r}: {e}")
+                logger.warning(f"Failed to remove {str(path)!r}: {e}")
 
 
 def parse_range(range_raw: str) -> tuple[tuple[int, int] | None, str | None]:

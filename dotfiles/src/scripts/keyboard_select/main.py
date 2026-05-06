@@ -91,9 +91,9 @@ def set_keyboard_layout(layout):
     """Set the chosen keyboard layout."""
     try:
         run_command(["setxkbmap", layout])
-        NotificationSystem.run(f"Keyboard layout changed to {layout}")
+        NotificationSystem.run(f"Keyboard layout changed to {layout!r}")
     except subprocess.CalledProcessError:
-        logger.error(f"Unable to set layout to {layout}.")
+        logger.error(f"Unable to set layout to {layout!r}.")
         sys.exit(1)
 
 
@@ -108,7 +108,7 @@ def main():
         layout_code = chosen_layout.split(" - ")[0]
         if layout_code in available_layouts:
             set_keyboard_layout(layout_code)
-            logger.info(f"Keyboard layout set to: {layout_code}")
+            logger.info(f"Keyboard layout set to {layout_code!r}.")
             restart_remapd()  # Call restart_remapd from here
         else:
             logger.error("Invalid layout selected.")

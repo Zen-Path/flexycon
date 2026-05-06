@@ -170,7 +170,7 @@ def install_temp_profile() -> Path:
         raise RuntimeError("Could not find temporary install path in output.")
 
     temp_path = Path(match.group(1))
-    logger.debug(f"Temp path: {temp_path}")
+    logger.debug(f"Temp path {str(temp_path)!r}")
     return temp_path
 
 
@@ -180,7 +180,7 @@ def copy_shell_profile_from_temp(temp_path: Path):
     src = temp_path / home.relative_to(home.anchor) / ".zprofile"
     dst = home / ".zprofile"
     shutil.copy2(src, dst)
-    logger.debug(f"Copied {src} → {dst}")
+    logger.debug(f"Copied {str(src)!r} -> {str(dst)!r}")
 
 
 # === TARGETS ===
