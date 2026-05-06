@@ -466,23 +466,26 @@ class Dmenu:
         prompt: str,
         choices: list[str],
         case_insensitive: bool = True,
-        list_view_item_count: int | None = None,
+        list_view_item_count: int = 0,
     ) -> str:
-        cmd = ["dmenu", "-p", prompt]
+        """
+        Prompt dmenu with a list of choices.
+
+        NOTE: setting 'list_view_item_count' to '0' disables the vertical list view.
+        """
+        prompt_fmt = prompt.strip(" :")
+        cmd = ["dmenu", "-p", prompt_fmt]
 
         if case_insensitive:
             cmd.append("-i")
 
-        if list_view_item_count is not None:
-            # TODO: check this logic on linux
-            cmd.append("-l")
+        if list_view_item_count != 0:
+            cmd.extend(["-l", str(list_view_item_count)])
 
-            if list_view_item_count > 0:
-                cmd.append(str(list_view_item_count))
-
+        choices_fmt = list(filter(bool, map(str.strip, choices)))
         result = subprocess.run(
             cmd,
-            input="\n".join(choices),
+            input="\n".join(choices_fmt),
             capture_output=True,
             text=True,
         )
