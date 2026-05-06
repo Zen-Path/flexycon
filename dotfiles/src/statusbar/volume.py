@@ -3,7 +3,7 @@
 # {{@@ header() @@}}
 
 
-from common.helpers import notify, run_command
+from common.helpers import NotificationSystem, run_command
 from common.logger import logger
 from common.statusbar import (
     EDITOR,
@@ -35,7 +35,7 @@ ACTIONS = {
         run_command(["pkill", "-RTMIN+10", STATUSBAR]),
     ),
     MouseButton.MIDDLE: toggle_mute,
-    MouseButton.RIGHT: lambda: notify(
+    MouseButton.RIGHT: lambda: NotificationSystem.run(
         "📢 Volume module",
         "Show sound volume, 🔇 if muted.\n"
         "\n<b>Actions</b>\n"

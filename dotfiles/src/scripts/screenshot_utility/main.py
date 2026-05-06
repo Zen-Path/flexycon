@@ -9,7 +9,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from common.helpers import Dmenu, notify, run_command
+from common.helpers import Dmenu, NotificationSystem, run_command
 from common.logger import logger, setup_logging
 from common.packages.clipboard_utilities import copy_file
 
@@ -81,7 +81,7 @@ class ScreenshotUtility:
 
         if response and copy_output:
             copy_file(output_path)
-            notify(
+            NotificationSystem.run(
                 "Screenshot captured",
                 f"Saved at {str(output_path)!r}",
                 icon_path=output_path,

@@ -9,10 +9,8 @@ import signal
 from pathlib import Path
 
 from common.helpers import (
-    get_notifications_paused_status,
-    notify,
+    NotificationSystem,
     run_command,
-    set_notifications_status,
 )
 from common.logger import logger, setup_logging
 from common.statusbar import (
@@ -50,8 +48,8 @@ def stop_recording():
 # TODO: Implement pause recording feature
 ACTIONS = {
     MouseButton.LEFT: lambda: stop_recording,
-    MouseButton.MIDDLE: lambda: set_notifications_status("toggle"),
-    MouseButton.RIGHT: lambda: notify(
+    MouseButton.MIDDLE: lambda: NotificationSystem.set_paused("toggle"),
+    MouseButton.RIGHT: lambda: NotificationSystem.run(
         "⏺️ Recording module",
         "Shows recording status and info.\n"
         "\n<b>Actions</b>\n"
@@ -86,7 +84,7 @@ def main():
     recording_icon = RECORDING_ICON_PATH.read_text().strip() or "⏺️"
 
     # Notifications can be paused to prevent interruptions
-    are_notifications_paused = get_notifications_paused_status()
+    are_notifications_paused = NotificationSystem.get_paused()
     notifications_suffix = "⏸️" if are_notifications_paused else ""
 
     print(f"{recording_icon}-{notifications_suffix}🔔")

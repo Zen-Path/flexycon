@@ -9,7 +9,12 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from common.helpers import Dmenu, notify, run_command, run_command_background
+from common.helpers import (
+    Dmenu,
+    NotificationSystem,
+    run_command,
+    run_command_background,
+)
 from common.logger import logger, setup_logging
 from common.packages.clipboard_utilities import copy_file, copy_text
 
@@ -31,7 +36,7 @@ def action_interactive_trash(paths: list[Path]):
 
         if choice == "Yes":
             run_command(["trash-put", str(path)])
-            notify("Trash complete", f"{path} trashed.")
+            NotificationSystem.run("Trash complete", f"{path} trashed.")
 
 
 def action_trash(paths: list[Path]):
@@ -52,18 +57,18 @@ def action_group(paths: list[Path]):
     default_name = datetime.now().strftime("%F_%T")
     choice = Dmenu.run(prompt="Group file(s) where?", choices=[default_name])
     if not choice:
-        notify("No directory entered, cancelled.")
+        NotificationSystem.run("No directory entered, cancelled.")
         return
 
     destdir = Path.cwd() / choice
     destdir.mkdir(parents=True, exist_ok=True)
-    notify("Directory created", f"Located at {str(destdir)}")
+    NotificationSystem.run("Directory created", f"Located at {str(destdir)}")
 
     for path in paths:
         shutil.move(path, destdir)
 
     if len(paths) == 1:
-        notify(
+        NotificationSystem.run(
             "Move complete",
             f"{paths[0].name} moved to {destdir.parent}.",
             icon_path=Path(destdir, paths[0].name),
@@ -72,7 +77,7 @@ def action_group(paths: list[Path]):
 
 
 def action_show_help(paths: list[Path]):
-    notify("nsxiv actions", get_help_text())
+    NotificationSystem.run("nsxiv actions", get_help_text())
 
 
 def action_get_info(paths):
@@ -81,7 +86,7 @@ def action_get_info(paths):
     for line in mediainfo.splitlines():
         line = line.replace(":", ": <b>", 1) + "</b>"
         formatted.append(line)
-    notify("File information", "\n".join(formatted))
+    NotificationSystem.run("File information", "\n".join(formatted))
 
 
 def action_rotate(paths: list[Path], degrees: int = 90):
@@ -95,12 +100,12 @@ def action_update_wallpaper(paths: list[Path]):
 
 def action_copy_image(paths: list[Path]):
     copy_file(paths[0])
-    notify("Image copied", f"Image {paths[0]} copied to clipboard")
+    NotificationSystem.run("Image copied", f"Image {paths[0]} copied to clipboard")
 
 
 def action_copy_path(paths: list[Path]):
     copy_text(str(paths[0]))
-    notify("Path copied", f"Path {paths[0]} copied to clipboard")
+    NotificationSystem.run("Path copied", f"Path {paths[0]} copied to clipboard")
 
 
 ACTIONS = {

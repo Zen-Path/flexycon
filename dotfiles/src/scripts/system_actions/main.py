@@ -9,10 +9,8 @@ from datetime import datetime, timedelta
 from common.apps.window_manager import Dwm
 from common.helpers import (
     Dmenu,
+    NotificationSystem,
     System,
-    get_notifications_paused_status,
-    notify,
-    set_notifications_status,
 )
 from common.logger import logger, setup_logging
 
@@ -31,8 +29,8 @@ class SystemAction:
         """
         Handle the execution of a quick action, managing dunst state and restoring it.
         """
-        original_notifications_paused_state = get_notifications_paused_status()
-        set_notifications_status("true")
+        original_notifications_paused_state = NotificationSystem.get_paused() or False
+        NotificationSystem.set_paused(True)
 
         start_time = datetime.now()
 
@@ -45,10 +43,10 @@ class SystemAction:
         elapsed_time = datetime.now() - start_time
 
         if not original_notifications_paused_state:
-            set_notifications_status("false")
+            NotificationSystem.set_paused(False)
 
         elapsed_str = str(timedelta(seconds=elapsed_time.total_seconds())).split(".")[0]
-        notify(
+        NotificationSystem.run(
             title="Welcome back!",
             message=f"You've been gone for {elapsed_str}.",
             urgency="low",

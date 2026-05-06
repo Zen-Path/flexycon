@@ -6,7 +6,7 @@ import shutil
 import subprocess
 import sys
 
-from common.helpers import Dmenu, notify, run_command
+from common.helpers import Dmenu, NotificationSystem, run_command
 from common.logger import logger
 
 # Map of keyboard layouts with their full names
@@ -91,7 +91,7 @@ def set_keyboard_layout(layout):
     """Set the chosen keyboard layout."""
     try:
         run_command(["setxkbmap", layout])
-        notify(f"Keyboard layout changed to {layout}")
+        NotificationSystem.run(f"Keyboard layout changed to {layout}")
     except subprocess.CalledProcessError:
         logger.error(f"Unable to set layout to {layout}.")
         sys.exit(1)

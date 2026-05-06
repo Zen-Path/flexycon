@@ -5,7 +5,7 @@
 import os
 import subprocess
 
-from common.helpers import notify, run_command
+from common.helpers import NotificationSystem, run_command
 from common.statusbar import EDITOR, TERMINAL, MouseButton
 
 # Environment variables
@@ -62,18 +62,18 @@ def get_unread_db(db_file):
 
 def handle_reload():
     """Reload all items and notify user."""
-    notify("News Update", "Updating news, please wait...")
+    NotificationSystem.run("News Update", "Updating news, please wait...")
     if reload_newsraft():
         unread_count = get_unread_items_count()
         if unread_count:
-            notify("News Update", f"Newsraft has {unread_count} items!")
+            NotificationSystem.run("News Update", f"Newsraft has {unread_count} items!")
         else:
-            notify(
+            NotificationSystem.run(
                 "News Update",
                 "Update succeeded, but unread count could not be retrieved.",
             )
     else:
-        notify("News Update Failed", "Unable to update the news.")
+        NotificationSystem.run("News Update Failed", "Unable to update the news.")
 
 
 def handle_block_button(button_id):
@@ -84,7 +84,7 @@ def handle_block_button(button_id):
         case MouseButton.MIDDLE.value:
             handle_reload()
         case MouseButton.RIGHT.value:
-            notify(
+            NotificationSystem.run(
                 " News module",
                 "Shows unread news items.\n"
                 "\n<b>Actions:</b>\n"

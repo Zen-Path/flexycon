@@ -112,70 +112,6 @@ def prompt_bool(prompt: str, default: bool | None = None) -> bool | None:
     return default
 
 
-def notify(
-    title: str,
-    message: str | None = None,
-    urgency: Literal["low", "normal", "critical"] = "normal",
-    icon_path: str | Path | None = None,
-    callback: Callable[[], None] | None = None,
-    open_image_onclick: bool = False,
-):
-    """
-    Send a desktop notification. Accepts either a custom callback OR
-    an action to open the image (icon), but not both.
-    """
-
-    # Enforce mutual exclusivity
-    if callback and open_image_onclick:
-        raise ValueError(
-            "You cannot provide both a 'callback' and 'open_image_onclick'."
-        )
-
-    cmd = ["notify-send", title, "--urgency", urgency]
-
-    if message:
-        cmd.append(message)
-
-    if icon_path:
-        icon_path = str(icon_path)
-        cmd.extend(["-i", icon_path])
-
-    # Determine which action to use, if any
-    action_token = None
-    if open_image_onclick and icon_path:
-        action_token = "open_image"
-        cmd.append(f"--action={action_token}=Open Image")
-    elif callback:
-        action_token = "custom_callback"
-        cmd.append(f"--action={action_token}=Click Me")
-
-    try:
-        # If no action was defined, fire and forget (non-blocking)
-        if not action_token:
-            subprocess.Popen(cmd)
-            return
-
-        # If an action exists, block and wait for user input
-        result = subprocess.check_output(cmd, text=True).strip()
-
-        if result == "open_image" and icon_path:
-            subprocess.Popen(["xdg-open", icon_path])
-
-        elif result == "custom_callback" and callback:
-            callback()
-
-    except Exception as e:
-        logger.error(f"Notification failed: {e}")
-
-
-def get_notifications_paused_status() -> bool:
-    return run_command(["dunstctl", "is-paused"]).output.strip().lower() == "true"
-
-
-def set_notifications_status(status: Literal["true", "false", "toggle"]) -> int:
-    return run_command(["dunstctl", "set-paused", status]).success
-
-
 def ensure_directory_interactive(path: Path) -> bool:
     """
     Interactively ensure all directories leading to the path exist.
@@ -552,3 +488,90 @@ class Dmenu:
         )
 
         return result.stdout.strip()
+
+
+class NotificationSystem:
+    @classmethod
+    def run(
+        cls,
+        title: str,
+        message: str | None = None,
+        urgency: Literal["low", "normal", "critical"] = "normal",
+        icon_path: str | Path | None = None,
+        callback: Callable[[], None] | None = None,
+        open_image_onclick: bool = False,
+    ):
+        """
+        Send a desktop notification. Accepts either a custom callback OR
+        an action to open the image (icon), but not both.
+        """
+
+        # Enforce mutual exclusivity
+        if callback and open_image_onclick:
+            raise ValueError(
+                "You cannot provide both a 'callback' and 'open_image_onclick'."
+            )
+
+        cmd = ["notify-send", title, "--urgency", urgency]
+
+        if message:
+            cmd.append(message)
+
+        if icon_path:
+            icon_path = str(icon_path)
+            cmd.extend(["-i", icon_path])
+
+        # Determine which action to use, if any
+        action_token = None
+        if open_image_onclick and icon_path:
+            action_token = "open_image"
+            cmd.append(f"--action={action_token}=Open Image")
+        elif callback:
+            action_token = "custom_callback"
+            cmd.append(f"--action={action_token}=Click Me")
+
+        try:
+            # If no action was defined, fire and forget (non-blocking)
+            if not action_token:
+                subprocess.Popen(cmd)
+                return
+
+            # If an action exists, block and wait for user input
+            cmd_output = run_command(cmd).output
+
+            if cmd_output == "open_image" and icon_path:
+                subprocess.Popen(["xdg-open", icon_path])
+
+            elif cmd_output == "custom_callback" and callback:
+                callback()
+
+        except Exception as e:
+            logger.error(f"Notification failed: {e}")
+
+    @classmethod
+    def get_paused(cls) -> bool | None:
+        if not shutil.which("dunstctl"):
+            return None
+
+        result = run_command(["dunstctl", "is-paused"])
+        if not result.success:
+            return None
+
+        return result.output.strip().lower() == "true"
+
+    @classmethod
+    def set_paused(cls, status: bool | Literal["toggle"]) -> bool | None:
+        if not shutil.which("dunstctl"):
+            return None
+
+        status_str = ""
+        if status == "toggle":
+            status_str = "toggle"
+        else:
+            status_str = str(status).lower()
+
+        result = run_command(["dunstctl", "set-paused", status_str])
+        if not result.success:
+            return None
+
+        return result.success
