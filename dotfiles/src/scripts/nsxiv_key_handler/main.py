@@ -29,14 +29,15 @@ def get_help_text():
 def action_interactive_trash(paths: list[Path]):
     for path in paths:
         choice = Dmenu.run(
-            prompt=f"Really trash {path!r}?", choices=["Yes", "No", "Cancel"]
-        )
-        if choice == "Cancel":
-            break
+            prompt=f"Confirm trash {str(path)!r}?", choices=["Yes", "No", "Cancel"]
+        ).lower()
 
-        if choice == "Yes":
+        if choice == "yes":
             run_command(["trash-put", str(path)])
-            NotificationSystem.run("Trash complete", f"{path} trashed.")
+            NotificationSystem.run("File trashed", f"Trashed {str(path)!r}.")
+
+        elif choice == "cancel":
+            break
 
 
 def action_trash(paths: list[Path]):
