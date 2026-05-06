@@ -36,9 +36,13 @@ def get_unread_items_count():
     return unread_count
 
 
-def get_unread_newsraft() -> bool:
+def get_unread_newsraft() -> int | None:
     """Get unread items count using newsraft."""
-    return run_command(["newsraft", "-e", "print-unread-items-count"]).success
+    result = run_command(["newsraft", "-e", "print-unread-items-count"])
+    if result.success:
+        return int(result.output)
+
+    return None
 
 
 def get_unread_db(db_file):
