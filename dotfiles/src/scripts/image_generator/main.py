@@ -6,7 +6,7 @@ from typing import Any
 from common.logger import logger, setup_logging
 
 # Only needed for demo
-from scripts.svg_generator.data import references
+from scripts.image_generator.data import references
 
 
 def generate_svg(
