@@ -2,6 +2,7 @@ import argparse
 import logging
 import sys
 
+from common.helpers import get_version
 from common.logger import logger, setup_logging
 from scripts.media_manager.src.core import (
     handle_audio,
@@ -51,6 +52,10 @@ def build_parser():
     for sp in [image, video, audio, pdf]:
         sp.add_argument(
             "-v", "--verbose", action="store_true", help="enable debug output"
+        )
+
+        parser.add_argument(
+            "--version", action="version", version=f"%(prog)s {get_version()}"
         )
 
     return parser

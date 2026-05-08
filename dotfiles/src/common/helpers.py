@@ -5,12 +5,28 @@ import secrets
 import shutil
 import subprocess
 import sys
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Literal, Sequence
 
 import psutil
 from common.logger import logger
+
+
+def get_version() -> str:
+    pyproject_path = (
+        Path(__file__).resolve().parent.parent.parent.parent / "pyproject.toml"
+    )
+
+    try:
+        with open(pyproject_path, "rb") as f:
+            data = tomllib.load(f)
+        version = data["project"]["version"]
+    except Exception:
+        version = "0.0.0-dev"
+
+    return version
 
 
 @dataclass

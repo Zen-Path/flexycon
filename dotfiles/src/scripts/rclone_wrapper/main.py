@@ -8,7 +8,7 @@ import logging
 import sys
 import tempfile
 
-from common.helpers import run_command
+from common.helpers import get_version, run_command
 from common.logger import logger, setup_logging
 from scripts.rclone_wrapper.src.config import load_config
 from scripts.rclone_wrapper.src.formatting import (
@@ -46,6 +46,9 @@ def build_parser():
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
     )
 
     return parser

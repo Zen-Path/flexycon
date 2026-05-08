@@ -5,6 +5,7 @@
 import argparse
 import logging
 
+from common.helpers import get_version
 from common.logger import logger, setup_logging
 from common.packages.models import Package
 from scripts.installer.data.packages import packages
@@ -21,6 +22,9 @@ def build_parser():
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
     )
 
     return parser

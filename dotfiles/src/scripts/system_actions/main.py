@@ -11,6 +11,7 @@ from common.helpers import (
     Dmenu,
     NotificationSystem,
     System,
+    get_version,
 )
 from common.logger import logger, setup_logging
 
@@ -90,6 +91,9 @@ def build_parser():
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
     )
 
     return parser

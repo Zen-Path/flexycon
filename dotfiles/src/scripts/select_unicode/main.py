@@ -6,7 +6,7 @@ import argparse
 import logging
 import subprocess
 
-from common.helpers import Dmenu, NotificationSystem, run_command
+from common.helpers import Dmenu, NotificationSystem, get_version, run_command
 from common.logger import logger, setup_logging
 from scripts.select_unicode.data import CHARS
 
@@ -38,6 +38,9 @@ def build_parser():
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
     )
 
     return parser

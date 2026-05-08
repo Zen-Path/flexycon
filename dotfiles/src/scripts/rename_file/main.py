@@ -7,7 +7,7 @@ import logging
 import os
 from pathlib import Path
 
-from common.helpers import split_into_words
+from common.helpers import get_version, split_into_words
 from common.logger import logger, setup_logging
 from scripts.rename_file.src.converters import (
     to_camel_case,
@@ -98,6 +98,9 @@ def build_parser(converters_map):
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
     )
 
     return parser

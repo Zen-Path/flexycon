@@ -5,7 +5,7 @@
 import argparse
 import logging
 
-from common.helpers import resolve_path
+from common.helpers import get_version, resolve_path
 from common.logger import logger, setup_logging
 from scripts.user_shortcuts.data.shortcuts import shortcuts
 from scripts.user_shortcuts.src.formatting import format_bookmarks
@@ -53,6 +53,9 @@ def build_parser():
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
     )
 
     return parser
