@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import sys
 import tomllib
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Literal, Sequence
@@ -594,3 +595,13 @@ class NotificationSystem:
             return None
 
         return result.success
+
+
+def remove_diacritics(text):
+    # Normalize to decompose characters (e.g., 'ă' becomes 'a' + '˘')
+    normalized = unicodedata.normalize("NFD", text)
+
+    # Filter out the "combining" marks (category 'Mn')
+    result = "".join(c for c in normalized if unicodedata.category(c) != "Mn")
+
+    return result
