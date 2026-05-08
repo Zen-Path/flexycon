@@ -2,7 +2,7 @@ from typing import Any
 
 import humanize
 from colorama import Fore, Style, init
-from common.helpers import truncate
+from common.helpers import remove_diacritics, truncate
 from tabulate import tabulate
 
 init(autoreset=True)
@@ -46,7 +46,8 @@ def format_operations(
 
     for op in sorted_data:
         op_type = str(op.get("type") or "")
-        op_file = str(op.get("file") or "")
+        op_file = remove_diacritics(str(op.get("file") or ""))
+        # op_file = str(op.get("file") or "")
         op_size = int(op.get("size") or 0)
 
         # Remap types
