@@ -25,7 +25,9 @@ def build_parser():
         help=("specify the number of spaces used for the json file's indentation"),
     )
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
 
     return parser
 

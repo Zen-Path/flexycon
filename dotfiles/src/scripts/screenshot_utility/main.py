@@ -206,7 +206,9 @@ def build_parser():
         help="Set the output directory for screenshots",
     )
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
 
     return parser
 

@@ -49,7 +49,9 @@ def build_parser():
 
     # Keep verbose at the end of the arguments
     for sp in [image, video, audio, pdf]:
-        sp.add_argument("--verbose", action="store_true", help="enable debug output")
+        sp.add_argument(
+            "-v", "--verbose", action="store_true", help="enable debug output"
+        )
 
     return parser
 

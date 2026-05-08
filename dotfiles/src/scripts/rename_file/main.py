@@ -96,7 +96,9 @@ def build_parser(converters_map):
 
     parser.add_argument("targets", nargs="+", help="files or directories to rename")
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
 
     return parser
 

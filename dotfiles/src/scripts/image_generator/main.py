@@ -99,7 +99,9 @@ def build_parser():
         "--no-frame", action="store_true", help="hide labels and margins"
     )
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
 
     return parser
 

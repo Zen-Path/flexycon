@@ -35,7 +35,10 @@ def build_parser():
         action="store_true",
         help="do not notify user of the selected char",
     )
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
 
     return parser
 

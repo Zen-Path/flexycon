@@ -16,7 +16,9 @@ def build_parser(targets):
     for name, meta in targets.items():
         subparsers.add_parser(name, help=meta["description"])
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
 
     return parser
 

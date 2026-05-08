@@ -19,7 +19,9 @@ def build_parser():
         "--dry-run", action="store_true", help="preview packages to be installed"
     )
 
-    parser.add_argument("--verbose", action="store_true", help="enable debug output")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
 
     return parser
 
