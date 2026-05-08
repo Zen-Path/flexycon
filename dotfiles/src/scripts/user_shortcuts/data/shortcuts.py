@@ -1,10 +1,10 @@
-import platform
+import sys
 
 from common.variables import flex_home_parts
 from scripts.user_shortcuts.src.models import Bookmark
 from scripts.user_shortcuts.src.renderers import YAZI
 
-system = platform.system()
+system = sys.platform
 
 flex_dotfiles = flex_home_parts + ["dotfiles"]
 flex_config = flex_dotfiles + ["config"]
@@ -108,28 +108,28 @@ shortcuts: list[Bookmark] = [
         path_parts=["$HOME", "Library"],
         aliases={"default": ["l", "i", "b"], YAZI.name: ["L"]},
         description="library",
-        condition=system == "Darwin",
+        condition=system == "darwin",
     ),
     Bookmark(
         type="d",
         path_parts=["$HOME", "Library", "Application Support"],
         aliases={"default": ["l", "i", "b", "s"], YAZI.name: ["l", "s"]},
         description="library application support",
-        condition=system == "Darwin",
+        condition=system == "darwin",
     ),
     Bookmark(
         type="d",
         path_parts=["$HOME", "Library", "Application Support", "Code"],
         aliases={"default": ["l", "i", "b", "v"], YAZI.name: ["l", "v"]},
         description="library vscode",
-        condition=system == "Darwin",
+        condition=system == "darwin",
     ),
     Bookmark(
         type="d",
         path_parts=["$HOME", "Library", "Application Support", "Firefox"],
         aliases={"default": ["l", "i", "b", "f"], YAZI.name: ["l", "f"]},
         description="library firefox",
-        condition=system == "Darwin",
+        condition=system == "darwin",
     ),
     # User Config
     Bookmark(
@@ -349,20 +349,20 @@ shortcuts: list[Bookmark] = [
         path_parts=["/", "mnt"],
         aliases={"default": ["m", "n"], YAZI.name: ["M"]},
         description="mount",
-        condition=system == "Linux",
+        condition=system == "linux",
     ),
     Bookmark(
         type="d",
         path_parts=["/", "Volumes"],
         aliases={"default": ["v", "o", "l"], YAZI.name: ["V"]},
         description="volumes",
-        condition=system == "Darwin",
+        condition=system == "darwin",
     ),
     Bookmark(
         type="d",
         path_parts=["$APPDATA"],
         aliases={"default": ["a", "p", "p", "d"], YAZI.name: ["A"]},
         description="app data",
-        condition=system == "Windows",
+        condition=system == "win32",
     ),
 ]

@@ -1,7 +1,7 @@
 import mimetypes
-import platform
 import shutil
 import subprocess
+import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
 
@@ -157,14 +157,14 @@ class ClipboardManager:
         if cls._provider:
             return cls._provider
 
-        sys_name = platform.system()
+        sys_name = sys.platform
         potential_providers = []
 
-        if sys_name == "Linux":
+        if sys_name == "linux":
             potential_providers = [WaylandProvider, XSelProvider, XClipProvider]
-        elif sys_name == "Darwin":
+        elif sys_name == "darwin":
             potential_providers = [MacProvider]
-        elif sys_name == "Windows":
+        elif sys_name == "win32":
             potential_providers = [WindowsProvider]
 
         for provider in potential_providers:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import platform
 import shutil
+import sys
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
@@ -38,7 +38,7 @@ class PackageManager(ABC):
     @classmethod
     def check_availability(cls) -> bool:
         """Check if the package manager is available on the system."""
-        is_platform_same = cls.PLATFORM is None or platform.system() == cls.PLATFORM
+        is_platform_same = cls.PLATFORM is None or sys.platform == cls.PLATFORM
         return is_platform_same and shutil.which(cls.COMMAND) is not None
 
     @classmethod

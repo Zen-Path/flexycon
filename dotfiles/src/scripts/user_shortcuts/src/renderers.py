@@ -1,12 +1,12 @@
-import platform
+import sys
 
 from common.logger import logger
 from common.variables import flex_home_parts
 from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
 
 OPEN_COMMANDS = {
-    "Darwin": "open",
-    "Linux": "xdg-open",
+    "darwin": "open",
+    "linux": "xdg-open",
 }
 
 
@@ -23,7 +23,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
             result.append(f"# {bookmark.description}")
 
         path = self._get_path(bookmark)
-        command = OPEN_COMMANDS.get(platform.system(), "$EDITOR")
+        command = OPEN_COMMANDS.get(sys.platform, "$EDITOR")
 
         alias_name = "".join(alias_segments)
         alias_value = (

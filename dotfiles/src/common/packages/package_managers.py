@@ -6,7 +6,7 @@ from common.packages.models import Package, PackageManager
 
 
 class Brew(PackageManager):
-    PLATFORM = "Darwin"
+    PLATFORM = "darwin"
     COMMAND = "brew"
 
     @classmethod
@@ -28,7 +28,7 @@ class Brew(PackageManager):
 
 
 class Yay(PackageManager):
-    PLATFORM = "Linux"
+    PLATFORM = "linux"
     COMMAND = "yay"
 
     @classmethod
@@ -56,7 +56,7 @@ class Yay(PackageManager):
 
 
 class Chocolatey(PackageManager):
-    PLATFORM = "Windows"
+    PLATFORM = "win32"
     COMMAND = "choco"
 
     @classmethod

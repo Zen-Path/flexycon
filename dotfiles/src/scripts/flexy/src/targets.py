@@ -1,5 +1,4 @@
 import os
-import platform
 import re
 import shutil
 import subprocess
@@ -14,7 +13,7 @@ from scripts.installer.main import process_packages
 from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcuts
 
 VENV_DIR = Path(".venv")
-VENV_BIN = VENV_DIR / ("Scripts" if platform.system() == "Windows" else "bin")
+VENV_BIN = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin")
 PIP_BIN = str(VENV_BIN / "pip")
 PYTHON_BIN = shutil.which("python3") or "python"
 
@@ -207,12 +206,12 @@ def install_system_packages():
     """Setup project and install dependencies"""
     logger.info("📦 Installing system packages...")
 
-    system = platform.system()
-    if system == "Darwin" and shutil.which("brew") is None:
+    system = sys.platform
+    if system == "darwin" and shutil.which("brew") is None:
         logger.warning(
             "Homebrew is not installed. Please install it from https://brew.sh/"
         )
-    elif system == "Windows" and shutil.which("choco") is None:
+    elif system == "win32" and shutil.which("choco") is None:
         logger.warning(
             "Chocolatey is not installed. Please install it from https://chocolatey.org/install"
         )

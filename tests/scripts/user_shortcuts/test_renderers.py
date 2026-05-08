@@ -1,6 +1,6 @@
 # ruff: noqa: E501
 
-import platform
+import sys
 
 import pytest
 from scripts.user_shortcuts.src.models import Bookmark
@@ -206,7 +206,7 @@ def test_compose_bookmark(
     monkeypatch,
     mock_env,
 ):
-    monkeypatch.setattr(platform, "system", lambda: "Darwin")
+    monkeypatch.setattr(sys, "platform", "darwin")
 
     bm = Bookmark(
         type=type,
@@ -223,14 +223,14 @@ def test_compose_bookmark(
 @pytest.mark.parametrize(
     "platform_name, expected",
     [
-        ("Darwin", 'alias unit="open /Users/mock/University/Timetable.pdf"\n'),
-        ("Linux", 'alias unit="xdg-open /Users/mock/University/Timetable.pdf"\n'),
-        ("Windows", 'alias unit="$EDITOR /Users/mock/University/Timetable.pdf"\n'),
-        ("Unknown", 'alias unit="$EDITOR /Users/mock/University/Timetable.pdf"\n'),
+        ("darwin", 'alias unit="open /Users/mock/University/Timetable.pdf"\n'),
+        ("linux", 'alias unit="xdg-open /Users/mock/University/Timetable.pdf"\n'),
+        ("win32", 'alias unit="$EDITOR /Users/mock/University/Timetable.pdf"\n'),
+        ("unknown", 'alias unit="$EDITOR /Users/mock/University/Timetable.pdf"\n'),
     ],
 )
 def test_compose_platforms(platform_name, expected, monkeypatch, mock_env):
-    monkeypatch.setattr(platform, "system", lambda: platform_name)
+    monkeypatch.setattr(sys, "platform", platform_name)
     bm = Bookmark(
         type="f",
         aliases={"default": [""]},
