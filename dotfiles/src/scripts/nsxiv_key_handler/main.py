@@ -162,7 +162,7 @@ ACTIONS = {
 }
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Key handler for nsixv.")
 
     parser.add_argument(

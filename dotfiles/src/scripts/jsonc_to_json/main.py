@@ -11,7 +11,7 @@ from common.helpers import get_version
 from common.logger import logger, setup_logging
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Convert a jsonc file to json.")
 
     parser.add_argument("input_file", help="the jsonc file")

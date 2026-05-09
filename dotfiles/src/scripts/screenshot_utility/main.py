@@ -22,7 +22,7 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
     return lookup.get(choice)
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Screenshot Utility")
 

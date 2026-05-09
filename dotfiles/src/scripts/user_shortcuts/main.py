@@ -31,7 +31,7 @@ def get_active_shortcuts(shortcuts=shortcuts):
     return result
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Generate bookmarks for various tools."
     )

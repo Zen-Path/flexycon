@@ -12,7 +12,7 @@ from scripts.media_manager.src.core import (
 )
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Media Manager CLI")
 
     subparsers = parser.add_subparsers(dest="media_type", required=True)

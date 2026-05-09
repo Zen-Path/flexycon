@@ -15,7 +15,7 @@ from common.helpers import ensure_directory_interactive, get_version
 from common.logger import logger, setup_logging
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Open a journal entry in the user's $EDITOR for a date."
         "If no $EDITOR is found, it defaults to 'vim'."

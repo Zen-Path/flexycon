@@ -11,7 +11,7 @@ from common.packages.models import Package
 from scripts.package_installer.data.packages import packages
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Generate bookmarks for various tools."
     )

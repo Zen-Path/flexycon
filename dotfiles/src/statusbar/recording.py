@@ -61,7 +61,7 @@ ACTIONS = {
 }
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Statusbar script to manage recordings."
     )

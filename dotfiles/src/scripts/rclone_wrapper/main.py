@@ -19,7 +19,7 @@ from scripts.rclone_wrapper.src.formatting import (
 from scripts.rclone_wrapper.src.rclone import build_rclone_command, parse_rclone_output
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Wrapper around rclone with persistent config."
     )

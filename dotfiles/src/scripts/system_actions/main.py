@@ -85,7 +85,7 @@ class Display:
     # def turn_off(self):
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Execute certain system actions.")
 

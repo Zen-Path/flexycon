@@ -99,7 +99,7 @@ def set_keyboard_layout(layout):
         sys.exit(1)
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Select keyboard layout.")
 
     parser.add_argument(
