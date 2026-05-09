@@ -4,85 +4,110 @@
 
 import argparse
 import logging
+import sys
+import threading
+import time
 from datetime import datetime, timedelta
+from typing import Callable
 
 from common.apps.window_manager import Dwm
 from common.helpers import (
     Dmenu,
     NotificationSystem,
+    PromptOption,
     System,
     get_version,
+    run_command,
 )
 from common.logger import logger, setup_logging
 
 
-class SystemAction:
-    def __init__(self, name, emoji, function):
-        self.name = name
-        self.emoji = emoji
-        self.function = function
+def prompt_user(options: list[PromptOption]) -> str | int | None:
+    """Prompt the user and return the selected action ID."""
+    lookup = {opt.display_text(): opt.id for opt in options}
 
-    def __str__(self):
-        return f"{self.name} {self.emoji}"
+    choice = Dmenu.run(
+        prompt="System Action", choices=list(lookup.keys()), list_view_item_count=-1
+    )
 
-    @classmethod
-    def run(cls, action, system):
-        """
-        Handle the execution of a quick action, managing dunst state and restoring it.
-        """
-        original_notifications_paused_state = NotificationSystem.get_paused() or False
-        NotificationSystem.set_paused(True)
-
-        start_time = datetime.now()
-
-        logger.debug(system.lock_cmd)
-
-        action()
-        system.lock_screen()
-        # wait_for_display(polling_rate)
-
-        elapsed_time = datetime.now() - start_time
-
-        if not original_notifications_paused_state:
-            NotificationSystem.set_paused(False)
-
-        elapsed_str = str(timedelta(seconds=elapsed_time.total_seconds())).split(".")[0]
-        NotificationSystem.run(
-            title="Welcome back!",
-            message=f"You've been gone for {elapsed_str}.",
-            urgency="low",
-        )
+    return lookup.get(choice)
 
 
-class SystemActionsMenu:
-    def __init__(self, actions):
-        self.actions = actions
-        self.actions_map = {str(action): action.function for action in self.actions}
+def execute_special_action(action_func: Callable | None = None):
+    """
+    Handle locking, pausing notifications, tracking time, and ghost-wake prevention.
+    If action_func is None, it simply locks the screen.
+    """
+    if sys.platform != "linux":
+        if action_func:
+            action_func()
+        else:
+            System.lock_screen()
 
-    def prompt(self, prompt="System Action"):
-        """
-        Display a list of actions and return a selected action.
-        """
-        choice = Dmenu.run(
-            prompt=prompt, choices=[str(key) for key in self.actions_map.keys()]
-        )
+        return
 
-        logger.debug("choice", choice)
-        logger.debug(self.actions_map)
-        logger.debug(choice in self.actions_map)
-        logger.debug(self.actions_map[choice])
+    original_notifications_paused_state = NotificationSystem.get_paused() or False
+    NotificationSystem.set_paused(True)
 
-        if choice not in self.actions_map:
-            return None
+    start_time = datetime.now()
 
-        return self.actions_map[choice]
+    # Turn off Caps Lock just in case
+    try:
+        xset_out = run_command(["xset", "q"]).output
+        if "Caps Lock:   on" in xset_out:
+            run_command(["xdotool", "key", "Caps_Lock"])
+    except FileNotFoundError:
+        logger.debug("'xset' or 'xdotool' not found, skipping Caps Lock check.")
 
+    # Lock the screen asynchronously
+    # We must thread this, otherwise the script blocks and never calls sleep()
+    def lock_worker():
+        System.lock_screen()
 
-class Display:
-    def __init__(self, name=None):
-        self.name = name
+    lock_thread = threading.Thread(target=lock_worker, daemon=True)
+    lock_thread.start()
 
-    # def turn_off(self):
+    # Give slock a second to initialize
+    time.sleep(1)
+
+    # Ghost-wake prevention setup
+    watcher_stop_event = threading.Event()
+
+    def ghost_wake_watcher():
+        # Wait 45 seconds. If the system was asleep, this pauses and resumes upon wake.
+        watcher_stop_event.wait(45.0)
+        if not watcher_stop_event.is_set() and lock_thread.is_alive():
+            logger.warning("Ghost wake detected. Re-suspending...")
+            if action_func:
+                action_func()
+                ghost_wake_watcher()  # Watch again after the next wake
+
+    # Execute the sleep/hibernate command if provided
+    if action_func:
+        action_func()
+        # Upon waking up, start the ghost watcher
+        watcher_thread = threading.Thread(target=ghost_wake_watcher, daemon=True)
+        watcher_thread.start()
+
+    # Wait for the user to unlock the screen
+    lock_thread.join()
+
+    # User unlocked. Cancel the ghost-wake watcher
+    watcher_stop_event.set()
+
+    elapsed_time = datetime.now() - start_time
+
+    if not original_notifications_paused_state:
+        NotificationSystem.set_paused(False)
+
+    elapsed_str = str(timedelta(seconds=elapsed_time.total_seconds())).split(".")[0]
+    logger.debug(f"Elapsed time: {elapsed_str}")
+
+    NotificationSystem.run(
+        title="Welcome back!",
+        message=f"You've been gone for {elapsed_str}.",
+        urgency="low",
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -91,9 +116,22 @@ def build_parser() -> argparse.ArgumentParser:
         prog="system_actions", description="Execute certain system actions."
     )
 
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable debug output"
-    )
+    subparsers = parser.add_subparsers(dest="action", help="System actions")
+
+    for sp in [
+        subparsers.add_parser("sleep", help="Put the system to sleep"),
+        subparsers.add_parser("lock", help="Lock the screen"),
+        subparsers.add_parser("power-off", help="Power off the system"),
+        subparsers.add_parser("reboot", help="Reboot the system"),
+        subparsers.add_parser("terminate-wm", help="Terminate the window manager"),
+        subparsers.add_parser("refresh-wm", help="Refresh the window manager"),
+        subparsers.add_parser("display-off", help="Turn off display"),
+        subparsers.add_parser("hibernate", help="Hibernate the system"),
+    ]:
+        sp.add_argument(
+            "-v", "--verbose", action="store_true", help="enable debug output"
+        )
+
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {get_version()}"
     )
@@ -106,41 +144,46 @@ def main():
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
 
-    window_manger = Dwm()
+    wm = Dwm()
 
-    system_actions = filter(
-        None,
-        [
-            SystemAction("Sleep", "😴", lambda: System.sleep),
-            SystemAction("Lock", "🔒", lambda: System.lock_screen),
-            SystemAction("Power Off", "🔌", lambda: System.power_off),
-            SystemAction("Reboot", "🔄", lambda: System.reboot),
-            SystemAction(
-                f"Terminate {window_manger.display_name}",
-                "☠️",
-                lambda: window_manger.terminate,
-            ),
-            (
-                SystemAction(
-                    f"Refresh {window_manger.display_name}",
-                    "♻️",
-                    lambda: window_manger.refresh(),
-                )
-                if hasattr(window_manger, "refresh")
-                else None
-            ),
-            # SystemAction("Display Off", "📺", lambda *_:
-            #   QuickAction.turn_off_display()),
-            SystemAction("Hibernate", "🐻", lambda: System.hibernate),
-        ],
-    )
+    all_options = [
+        PromptOption(
+            "sleep", "Sleep", "😴", lambda: execute_special_action(System.sleep)
+        ),
+        PromptOption("lock", "Lock", "🔒", lambda: execute_special_action()),
+        PromptOption("power-off", "Power Off", "🔌", System.power_off),
+        PromptOption("reboot", "Reboot", "🔄", System.reboot),
+        PromptOption("terminate-wm", f"Terminate {wm.display_name}", "☠️", wm.terminate),
+        PromptOption("refresh-wm", f"Refresh {wm.display_name}", "♻️", wm.refresh)
+        if hasattr(wm, "refresh")
+        else None,
+        PromptOption(
+            "display-off",
+            "Display Off",
+            "📺",
+            lambda: run_command(["xset", "dpms", "force", "off"]),
+        ),
+        PromptOption(
+            "hibernate",
+            "Hibernate",
+            "🐻",
+            lambda: execute_special_action(System.hibernate),
+        ),
+    ]
+    options = list(filter(None, all_options))
 
-    system_actions_menu = SystemActionsMenu(system_actions)
-    selected_action = system_actions_menu.prompt()
+    action_id = args.action or prompt_user(options)
 
-    logger.debug("selected_action", selected_action)
-    if selected_action:
-        SystemAction.run(selected_action, System)
+    if not action_id:
+        return
+
+    selected = next((opt for opt in options if opt.id == action_id), None)
+
+    if selected and selected.action:
+        logger.debug(f"Executing {selected.label!r}")
+        selected.action()
+    else:
+        logger.error(f"Action {action_id!r} has no associated function.")
 
 
 if __name__ == "__main__":
