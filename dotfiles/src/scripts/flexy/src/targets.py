@@ -8,8 +8,8 @@ from pathlib import Path
 from common.helpers import remove_files_by_pattern, run_command
 from common.logger import logger
 from common.variables import flex_data_path
-from scripts.installer.data.packages import packages
-from scripts.installer.main import process_packages
+from scripts.package_installer.data.packages import packages
+from scripts.package_installer.main import process_packages
 from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcuts
 
 VENV_DIR = Path(".venv")

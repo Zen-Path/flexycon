@@ -8,7 +8,7 @@ import logging
 from common.helpers import get_version
 from common.logger import logger, setup_logging
 from common.packages.models import Package
-from scripts.installer.data.packages import packages
+from scripts.package_installer.data.packages import packages
 
 
 def build_parser():
