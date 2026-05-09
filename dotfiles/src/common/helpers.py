@@ -477,6 +477,19 @@ def get_parent_process_chain(start_pid=None):
     return process_chain
 
 
+@dataclass
+class PromptOption:
+    id: str | int
+    label: str
+    symbol: str | None = None
+
+    def display_text(self, separator: str = " ") -> str:
+        """The human-readable string shown in the prompt."""
+        if self.symbol:
+            return f"{self.symbol}{separator}{self.label}"
+        return self.label
+
+
 class Dmenu:
     @classmethod
     def run(

@@ -6,19 +6,20 @@ import argparse
 import logging
 from pathlib import Path
 
-from common.helpers import Dmenu, ScreenshotUtility, get_version
+from common.helpers import Dmenu, PromptOption, ScreenshotUtility, get_version
 from common.logger import logger, setup_logging
 
 
-def prompt_user(actions):
-    options = list(actions.keys())
+def prompt_user(options: list[PromptOption]) -> str | int | None:
+    # Create a mapping of "Displayed String" -> "Original ID"
+    lookup = {opt.display_text(): opt.id for opt in options}
 
-    choice = Dmenu.run(prompt="Screenshot", choices=options, list_view_item_count=-1)
+    display_list = list(lookup.keys())
+    choice = Dmenu.run(
+        prompt="Screenshot", choices=display_list, list_view_item_count=-1
+    )
 
-    if choice in actions:
-        actions[choice]()
-    else:
-        logger.warning("Invalid choice.")
+    return lookup.get(choice)
 
 
 def build_parser():
@@ -83,53 +84,39 @@ def build_parser():
     return parser
 
 
+ACTIONS = [
+    PromptOption("area", "Area", "🔳"),
+    PromptOption("window", "Window", "🪟"),
+    PromptOption("screen", "Screen", "🖥️"),
+    PromptOption("full", "Full Screen", "🌍"),
+]
+
+
 def main():
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 
-    output_dir = args.output_directory if args.output_directory else None
+    action = args.action or prompt_user(ACTIONS)
 
-    # TODO: unify action handling logic into a registry
-
-    if not args.action:
-        actions = {
-            "🔳 Area": lambda: ScreenshotUtility.area(
-                output_dir=output_dir, copy_output=args.copy_output
-            ),
-            "🪟 Window": lambda: ScreenshotUtility.window(
-                output_dir=output_dir, copy_output=args.copy_output
-            ),
-            "🖥️ Screen": lambda: ScreenshotUtility.screen(
-                output_dir=output_dir, copy_output=args.copy_output
-            ),
-            "🌍 Full Screen": lambda: ScreenshotUtility.full_screen(
-                output_dir=output_dir, copy_output=args.copy_output
-            ),
-        }
-        prompt_user(actions)
+    if not action:
         return
 
-    match args.action:
+    common = {"output_dir": args.output_directory, "copy_output": args.copy_output}
+
+    match action:
         case "area":
-            ScreenshotUtility.area(output_dir=output_dir, copy_output=args.copy_output)
+            ScreenshotUtility.area(**common)
         case "window":
             ScreenshotUtility.window(
                 window=args.window_id,
                 include_window_name=args.include_name,
-                output_dir=output_dir,
-                copy_output=args.copy_output,
+                **common,
             )
         case "screen":
-            ScreenshotUtility.screen(
-                screen=args.screen_id,
-                output_dir=output_dir,
-                copy_output=args.copy_output,
-            )
+            ScreenshotUtility.screen(screen=args.screen_id, **common)
         case "full":
-            ScreenshotUtility.full_screen(
-                output_dir=output_dir, copy_output=args.copy_output
-            )
+            ScreenshotUtility.full_screen(**common)
         case _:
             raise ValueError(f"Unknown action: {args.action}")
 
