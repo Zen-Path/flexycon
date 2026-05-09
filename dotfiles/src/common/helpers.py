@@ -641,3 +641,28 @@ class Color:
 
     def __iter__(self):
         yield from self.to_tuple()
+
+
+@dataclass
+class Window:
+    id: int
+    name: str | None = None
+
+    @classmethod
+    def get_active_window(cls) -> Window | None:
+        # TODO: check on Linux
+        result = run_command(["xdotool", "getactivewindow"])
+        if not result.success:
+            return None
+
+        window_id = int(result.output)
+        return Window(window_id)
+
+    @classmethod
+    def get_window_name(cls, window_id: int) -> str | None:
+        # TODO: check on Linux
+        result = run_command(["xdotool", "getwindowname", str(window_id)])
+        if not result.success:
+            return None
+
+        return result.output
