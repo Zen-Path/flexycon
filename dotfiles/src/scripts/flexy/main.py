@@ -17,11 +17,12 @@ def build_parser(targets):
 
     # Dynamically add subcommands
     for name, meta in targets.items():
-        subparsers.add_parser(name, help=meta["description"])
+        sp = subparsers.add_parser(name, help=meta["description"])
 
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable debug output"
-    )
+        sp.add_argument(
+            "-v", "--verbose", action="store_true", help="enable debug output"
+        )
+
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {get_version()}"
     )
