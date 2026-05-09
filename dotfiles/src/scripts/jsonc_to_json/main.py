@@ -12,7 +12,9 @@ from common.logger import logger, setup_logging
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Convert a jsonc file to json.")
+    parser = argparse.ArgumentParser(
+        prog="jsonc_to_json", description="Convert a jsonc file to json."
+    )
 
     parser.add_argument("input_file", help="the jsonc file")
 

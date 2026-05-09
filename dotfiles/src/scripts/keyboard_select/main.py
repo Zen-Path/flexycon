@@ -100,7 +100,9 @@ def set_keyboard_layout(layout):
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Select keyboard layout.")
+    parser = argparse.ArgumentParser(
+        prog="keyboard_selector", description="Select keyboard layout."
+    )
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"

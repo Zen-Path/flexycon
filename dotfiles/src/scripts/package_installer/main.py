@@ -13,7 +13,7 @@ from scripts.package_installer.data.packages import packages
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Generate bookmarks for various tools."
+        prog="package_installer", description="Generate bookmarks for various tools."
     )
 
     parser.add_argument(

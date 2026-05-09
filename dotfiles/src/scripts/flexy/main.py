@@ -9,7 +9,9 @@ from scripts.flexy.src.targets import TARGETS
 
 
 def build_parser(targets):
-    parser = argparse.ArgumentParser(description="Help utility for managing flexycon.")
+    parser = argparse.ArgumentParser(
+        prog="flexy", description="Help utility for managing flexycon."
+    )
 
     subparsers = parser.add_subparsers(dest="command", required=True)
 

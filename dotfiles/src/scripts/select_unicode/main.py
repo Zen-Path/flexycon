@@ -21,7 +21,8 @@ def format_char_entries(chars: dict[str, str]) -> list[str]:
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
-        description="Prompt the user for a unicode character and copies or inserts it."
+        prog="select_unicode",
+        description="Prompt the user for a unicode character and copies or inserts it.",
     )
 
     parser.add_argument(

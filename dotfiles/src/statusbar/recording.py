@@ -63,7 +63,7 @@ ACTIONS = {
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Statusbar script to manage recordings."
+        prog="sb_recording", description="Statusbar script to manage recordings."
     )
 
     parser.add_argument(

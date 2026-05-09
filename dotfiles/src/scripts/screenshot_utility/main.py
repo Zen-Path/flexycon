@@ -24,7 +24,9 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(description="Screenshot Utility")
+    parser = argparse.ArgumentParser(
+        prog="screenshot_utility", description="Screenshot Utility"
+    )
 
     subparsers = parser.add_subparsers(dest="action", help="Actions")
 

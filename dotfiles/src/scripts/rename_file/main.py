@@ -84,7 +84,7 @@ def rename_path(path: Path, transform_func):
 
 def build_parser(converters_map):
     parser = argparse.ArgumentParser(
-        description="Rename files with different case styles."
+        prog="rename_file", description="Rename files with different case styles."
     )
 
     group = parser.add_mutually_exclusive_group(required=True)

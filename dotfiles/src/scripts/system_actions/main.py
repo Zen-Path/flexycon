@@ -87,7 +87,9 @@ class Display:
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(description="Execute certain system actions.")
+    parser = argparse.ArgumentParser(
+        prog="system_actions", description="Execute certain system actions."
+    )
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"

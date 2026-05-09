@@ -21,7 +21,8 @@ from scripts.rclone_wrapper.src.rclone import build_rclone_command, parse_rclone
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Wrapper around rclone with persistent config."
+        prog="rclone_wrapper",
+        description="Wrapper around rclone with persistent config.",
     )
 
     parser.add_argument("source", help="source path")

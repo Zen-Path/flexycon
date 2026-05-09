@@ -40,7 +40,8 @@ def get_commit_messages_on_date(repo, branch_name, date, exclude_commits=set()):
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="List Git commits in a repo for all branches by a date."
+        prog="git_logs",
+        description="List Git commits in a repo for all branches by a date.",
     )
 
     add_date_args(parser)
