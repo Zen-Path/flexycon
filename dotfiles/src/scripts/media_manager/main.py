@@ -54,9 +54,9 @@ def build_parser():
             "-v", "--verbose", action="store_true", help="enable debug output"
         )
 
-        parser.add_argument(
-            "--version", action="version", version=f"%(prog)s {get_version()}"
-        )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
+    )
 
     return parser
 
