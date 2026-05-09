@@ -47,7 +47,7 @@ description = " Flexible programmatic configuration."
 name = "flexycon"
 readme = "README.md"
 requires-python = ">=3.12"
-version = "1.2.0"
+version = "1.3.0"
 
     [project.scripts]
     flexy = "scripts.flexy.main:main"
@@ -96,3 +96,14 @@ target-version = "py314"
 # Setting platform to "" means we don't target any particular platform, thus we don't
 # get "unreachable" code warnings when we write cross-platform code
 pythonPlatform = ""
+
+[tool.bumpversion]
+allow_dirty     = true
+current_version = "1.3.0"
+parse           = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+replace         = "{new_version}"
+search          = "{current_version}"
+serialize       = ["{major}.{minor}.{patch}"]
+
+    [[tool.bumpversion.files]]
+    filename = "pyproject.toml"
