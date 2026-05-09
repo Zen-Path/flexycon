@@ -91,7 +91,7 @@ def build_parser(converters_map):
     for dest, (short, long, desc, func) in converters_map.items():
         args = [arg for arg in (short, long) if arg]  # ignore None flags
         group.add_argument(
-            *args, action="store_true", help=f"Convert to {desc}", dest=dest
+            *args, action="store_true", help=f"convert to {desc}", dest=dest
         )
 
     parser.add_argument("targets", nargs="+", help="files or directories to rename")
