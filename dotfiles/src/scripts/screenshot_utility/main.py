@@ -26,57 +26,39 @@ def build_parser():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Screenshot Utility")
 
-    # Create subparsers for actions
-    subparsers = parser.add_subparsers(dest="action", help="Screenshot action")
+    subparsers = parser.add_subparsers(dest="action", help="Actions")
 
-    # Area action
-    subparsers.add_parser("area", help="Capture a selected area")
+    area_p = subparsers.add_parser("area", help="Capture area")
 
-    # Window action
-    window_parser = subparsers.add_parser(
-        "window", help="Capture the active or specified window"
-    )
-    window_parser.add_argument(
-        "-w", "--window-id", type=int, help="Specify a window ID"
-    )
-    window_parser.add_argument(
-        "-n",
-        "--include-name",
-        action="store_true",
-        help="Include window name in the file name",
-    )
-
-    # Screen action
-    screen_parser = subparsers.add_parser(
-        "screen", help="Capture the active or specified screen"
-    )
-    screen_parser.add_argument(
-        "-s", "--screen-id", type=int, help="Specify the screen ID"
-    )
-
-    # Full action
-    subparsers.add_parser("full", help="Capture all screens")
-
-    # Global options
-    parser.add_argument(
-        "--no-copy",
-        dest="copy_output",
+    window_p = subparsers.add_parser("window", help="Capture window")
+    window_p.add_argument("-w", "--window-id", type=int)
+    window_p.add_argument(
+        "--no-include-name",
+        dest="include_name",
         action="store_false",
         default=True,
-        help="Do not copy the screenshot to the clipboard",
+        help="do not include window name in file name",
     )
 
-    parser.add_argument(
-        "-d",
-        "--output-directory",
-        type=Path,
-        default=None,
-        help="Set the output directory for screenshots",
-    )
+    screen_p = subparsers.add_parser("screen", help="Capture screen")
+    screen_p.add_argument("-s", "--screen-id", type=int)
 
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable debug output"
-    )
+    full_p = subparsers.add_parser("full", help="Capture all")
+
+    for sp in [area_p, window_p, screen_p, full_p]:
+        sp.add_argument(
+            "--no-copy",
+            dest="copy_output",
+            action="store_false",
+            default=True,
+            help="do not copy screenshot to clipboard",
+        )
+        sp.add_argument("-d", "--output-directory", type=Path)
+
+        sp.add_argument(
+            "-v", "--verbose", action="store_true", help="enable debug output"
+        )
+
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {get_version()}"
     )
