@@ -605,3 +605,39 @@ def remove_diacritics(text):
     result = "".join(c for c in normalized if unicodedata.category(c) != "Mn")
 
     return result
+
+
+@dataclass
+class Color:
+    r: float = 0.0
+    g: float = 0.0
+    b: float = 0.0
+    a: float = 1.0
+
+    @classmethod
+    def from_hex(cls, hex_str: str):
+        """Creates a Color object from #RRGGBB or #RRGGBBAA strings."""
+        hex_str = hex_str.lstrip("#")
+        lv = len(hex_str)
+
+        # Default alpha to 1.0 if not provided in hex
+        alpha = 1.0
+
+        if lv == 6:
+            r, g, b = tuple(int(hex_str[i : i + 2], 16) for i in (0, 2, 4))
+        elif lv == 8:
+            r, g, b, a_int = tuple(int(hex_str[i : i + 2], 16) for i in (0, 2, 4, 6))
+            alpha = round(a_int / 255.0, 2)
+        else:
+            raise ValueError(f"Invalid hex color: {hex_str}")
+
+        return cls(float(r), float(g), float(b), alpha)
+
+    def to_tuple(self) -> tuple[float, float, float, float]:
+        return (self.r, self.g, self.b, self.a)
+
+    def __str__(self) -> str:
+        return f"{self.r:.1f},{self.g:.1f},{self.b:.1f},{self.a:.1f}"
+
+    def __iter__(self):
+        yield from self.to_tuple()
