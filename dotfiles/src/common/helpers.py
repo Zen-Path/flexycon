@@ -10,7 +10,7 @@ import unicodedata
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Callable, Literal, Sequence
+from typing import Any, Callable, Literal, Sequence
 
 import psutil
 from common.logger import logger
@@ -482,6 +482,7 @@ class PromptOption:
     id: str | int
     label: str
     symbol: str | None = None
+    action: Callable[[], Any] | None = None
 
     def display_text(self, separator: str = " ") -> str:
         """The human-readable string shown in the prompt."""
