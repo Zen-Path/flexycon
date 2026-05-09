@@ -63,29 +63,29 @@ power_manager() {
 }
 
 choices="\
-sleep 😴
-lock 🔒
-power off 🔌
-reboot 🔄
-exit $WM 🚪
-update $WM 
-display off 📺
-hibernate 🐻
+😴 sleep
+🔒 lock
+🔌 power off
+🔄 reboot
+🚪 exit $WM
+ update $WM
+📺 display off
+🐻 hibernate
 "
 
 choice="$(printf "%s" "$choices" | dmenu -i -l -1 -p "Action")"
 
 case "$choice" in
-    'sleep 😴') power_manager 'suspend' ;;
-    'lock 🔒') power_manager 'lock' ;;
-    'power off 🔌') $ctl poweroff -i ;;
-    'reboot 🔄') $ctl reboot -i ;;
-    "exit $WM 🚪") kill -TERM "$(wmpid)" ;;
-    "update $WM ")
+    '😴 sleep') power_manager 'suspend' ;;
+    '🔒 lock') power_manager 'lock' ;;
+    '🔌 power off') $ctl poweroff -i ;;
+    '🔄 reboot') $ctl reboot -i ;;
+    "🚪 exit $WM") kill -TERM "$(wmpid)" ;;
+    " update $WM")
         echo "wmpid: $(wmpid)"
         kill -HUP "$(wmpid)"
         ;;
-    'display off 📺') xset dpms force off ;;
-    'hibernate 🐻') power_manager 'hibernate' ;;
+    '📺 display off') xset dpms force off ;;
+    '🐻 hibernate') power_manager 'hibernate' ;;
     *) exit 1 ;;
 esac
