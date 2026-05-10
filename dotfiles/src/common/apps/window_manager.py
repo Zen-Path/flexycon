@@ -2,7 +2,7 @@ import os
 import signal
 
 import psutil
-from common.helpers import get_parent_process_chain
+from common.helpers import get_parent_process_chain, run_command
 from common.logger import logger
 
 
@@ -63,6 +63,10 @@ class Dwm(WindowManager):
 class I3(WindowManager):
     def __init__(self):
         super().__init__("i3", "i3")
+
+    def refresh(self):
+        if self.pid:
+            run_command(["i3-msg", "restart"])
 
 
 class Openbox(WindowManager):
