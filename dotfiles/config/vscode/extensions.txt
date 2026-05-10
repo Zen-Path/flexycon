@@ -16,4 +16,5 @@ takumii.markdowntable
 tamasfe.even-better-toml
 timonwong.shellcheck
 yandeu.five-server
+yoavbls.pretty-ts-errors
 yzhang.markdown-all-in-one
