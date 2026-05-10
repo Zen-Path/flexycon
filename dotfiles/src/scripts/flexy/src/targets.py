@@ -344,7 +344,6 @@ def clean():
             "dist",
             "build",
             "*.egg-info",
-            "node_modules",
             "htmlcov",
             ".DS_Store",
         },
@@ -365,6 +364,8 @@ def uninstall():
     clean_precommit()
 
     logger.info("🔪 Removing uninstall targets...")
-    remove_files_by_pattern(patterns={".venv"}, global_excludes={".git"})
+    remove_files_by_pattern(
+        patterns={".venv", "node_modules"}, global_excludes={".git"}
+    )
 
     remove_flexycon_data()
