@@ -484,6 +484,7 @@ class PromptOption:
     id: str | int
     label: str
     symbol: str | None = None
+    help_text: str | None = None
     action: Callable[[], Any] | None = None
 
     def display_text(self, separator: str = " ") -> str:
