@@ -8,10 +8,7 @@ import os
 import signal
 from pathlib import Path
 
-from common.helpers import (
-    NotificationSystem,
-    run_command,
-)
+from common.helpers import NotificationSystem, run_command
 from common.logger import logger, setup_logging
 from common.statusbar import (
     EDITOR,
@@ -47,7 +44,7 @@ def stop_recording():
 
 # TODO: Implement pause recording feature
 ACTIONS = {
-    MouseButton.LEFT: lambda: stop_recording,
+    MouseButton.LEFT: stop_recording,
     MouseButton.MIDDLE: lambda: NotificationSystem.set_paused("toggle"),
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         "⏺️ Recording module",
@@ -67,7 +64,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Enable debug output"
+        "-v", "--verbose", action="store_true", help="enable debug output"
     )
 
     return parser
@@ -77,6 +74,7 @@ def main():
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+    logger.debug(args)
 
     handle_block_button(ACTIONS)
 
