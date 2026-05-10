@@ -72,3 +72,19 @@ class I3(WindowManager):
 class Openbox(WindowManager):
     def __init__(self):
         super().__init__("Openbox", "openbox")
+
+
+SUPPORTED_WMS = [Dwm, I3, Openbox]
+
+
+def get_active_window_manager() -> WindowManager | None:
+    """
+    Returns an initialized instance of the currently running
+    window manager, or None if none are detected.
+    """
+    for wm_class in SUPPORTED_WMS:
+        instance = wm_class()
+        if instance.is_running():
+            return instance
+
+    return None
