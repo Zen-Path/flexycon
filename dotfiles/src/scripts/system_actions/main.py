@@ -110,7 +110,7 @@ def execute_special_action(action_func: Callable[[], None] | None = None):
     )
 
 
-def build_parser() -> argparse.ArgumentParser:
+def build_parser(options: list[PromptOption]) -> argparse.ArgumentParser:
     """Parse command-line arguments."""
     global_parent = argparse.ArgumentParser(add_help=False)
     global_parent.add_argument(
@@ -130,62 +130,84 @@ def build_parser() -> argparse.ArgumentParser:
     # SUBCOMMANDS
     subparsers = parser.add_subparsers(dest="action", help="System actions")
 
-    subparsers.add_parser(
-        "sleep", parents=[global_parent], help="Put the system to sleep"
-    )
-    subparsers.add_parser("lock", parents=[global_parent], help="Lock the screen")
-    subparsers.add_parser(
-        "power-off", parents=[global_parent], help="Power off the system"
-    )
-    subparsers.add_parser("reboot", parents=[global_parent], help="Reboot the system")
-    subparsers.add_parser(
-        "terminate-wm", parents=[global_parent], help="Terminate the window manager"
-    )
-    subparsers.add_parser(
-        "refresh-wm", parents=[global_parent], help="Refresh the window manager"
-    )
-    subparsers.add_parser(
-        "display-off", parents=[global_parent], help="Turn off display"
-    )
-    subparsers.add_parser(
-        "hibernate", parents=[global_parent], help="Hibernate the system"
-    )
+    for opt in options:
+        subparsers.add_parser(
+            str(opt.id),
+            parents=[global_parent],
+            help=opt.help_text if opt.help_text else "",
+        )
 
     return parser
 
 
 def main():
-    args = build_parser().parse_args()
-
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-
     wm = Dwm()
 
     all_options = [
         PromptOption(
-            "sleep", "Sleep", "😴", lambda: execute_special_action(System.sleep)
+            id="sleep",
+            label="Sleep",
+            symbol="😴",
+            help_text="Put the system to sleep",
+            action=lambda: execute_special_action(System.sleep),
         ),
-        PromptOption("lock", "Lock", "🔒", lambda: execute_special_action()),
-        PromptOption("power-off", "Power Off", "🔌", System.power_off),
-        PromptOption("reboot", "Reboot", "🔄", System.reboot),
-        PromptOption("terminate-wm", f"Terminate {wm.display_name}", "☠️", wm.terminate),
-        PromptOption("refresh-wm", f"Refresh {wm.display_name}", "♻️", wm.refresh)
+        PromptOption(
+            id="lock",
+            label="Lock",
+            symbol="🔒",
+            help_text="Lock the screen",
+            action=lambda: execute_special_action(),
+        ),
+        PromptOption(
+            id="power-off",
+            label="Power Off",
+            symbol="🔌",
+            help_text="Power off the system",
+            action=System.power_off,
+        ),
+        PromptOption(
+            id="reboot",
+            label="Reboot",
+            symbol="🔄",
+            help_text="Reboot the system",
+            action=System.reboot,
+        ),
+        PromptOption(
+            id="terminate-wm",
+            label=f"Terminate {wm.display_name}",
+            symbol="☠️",
+            help_text="Terminate the window manager",
+            action=wm.terminate,
+        ),
+        PromptOption(
+            id="refresh-wm",
+            label=f"Refresh {wm.display_name}",
+            symbol="♻️",
+            help_text="Refresh the window manager",
+            action=wm.refresh,
+        )
         if hasattr(wm, "refresh")
         else None,
         PromptOption(
-            "display-off",
-            "Display Off",
-            "📺",
-            lambda: run_command(["xset", "dpms", "force", "off"]),
+            id="display-off",
+            label="Display Off",
+            symbol="📺",
+            help_text="Turn off display",
+            action=lambda: run_command(["xset", "dpms", "force", "off"]),
         ),
         PromptOption(
-            "hibernate",
-            "Hibernate",
-            "🐻",
-            lambda: execute_special_action(System.hibernate),
+            id="hibernate",
+            label="Hibernate",
+            symbol="🐻",
+            help_text="Hibernate the system",
+            action=lambda: execute_special_action(System.hibernate),
         ),
     ]
     options = list(filter(None, all_options))
+
+    args = build_parser(options).parse_args()
+
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
 
     action_id = args.action or prompt_user(options)
 
