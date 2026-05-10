@@ -112,28 +112,43 @@ def execute_special_action(action_func: Callable[[], None] | None = None):
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(
-        prog="system_actions", description="Execute certain system actions."
+    global_parent = argparse.ArgumentParser(add_help=False)
+    global_parent.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
     )
 
-    subparsers = parser.add_subparsers(dest="action", help="System actions")
-
-    for sp in [
-        subparsers.add_parser("sleep", help="Put the system to sleep"),
-        subparsers.add_parser("lock", help="Lock the screen"),
-        subparsers.add_parser("power-off", help="Power off the system"),
-        subparsers.add_parser("reboot", help="Reboot the system"),
-        subparsers.add_parser("terminate-wm", help="Terminate the window manager"),
-        subparsers.add_parser("refresh-wm", help="Refresh the window manager"),
-        subparsers.add_parser("display-off", help="Turn off display"),
-        subparsers.add_parser("hibernate", help="Hibernate the system"),
-    ]:
-        sp.add_argument(
-            "-v", "--verbose", action="store_true", help="enable debug output"
-        )
+    parser = argparse.ArgumentParser(
+        prog="system_actions",
+        description="Execute certain system actions.",
+        parents=[global_parent],
+    )
 
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {get_version()}"
+    )
+
+    # SUBCOMMANDS
+    subparsers = parser.add_subparsers(dest="action", help="System actions")
+
+    subparsers.add_parser(
+        "sleep", parents=[global_parent], help="Put the system to sleep"
+    )
+    subparsers.add_parser("lock", parents=[global_parent], help="Lock the screen")
+    subparsers.add_parser(
+        "power-off", parents=[global_parent], help="Power off the system"
+    )
+    subparsers.add_parser("reboot", parents=[global_parent], help="Reboot the system")
+    subparsers.add_parser(
+        "terminate-wm", parents=[global_parent], help="Terminate the window manager"
+    )
+    subparsers.add_parser(
+        "refresh-wm", parents=[global_parent], help="Refresh the window manager"
+    )
+    subparsers.add_parser(
+        "display-off", parents=[global_parent], help="Turn off display"
+    )
+    subparsers.add_parser(
+        "hibernate", parents=[global_parent], help="Hibernate the system"
     )
 
     return parser
