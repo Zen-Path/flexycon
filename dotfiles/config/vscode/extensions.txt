@@ -13,6 +13,7 @@ ms-python.vscode-python-envs
 pkief.material-icon-theme
 remisa.shellman
 rpinski.shebang-snippets
+ryu1kn.partial-diff
 streetsidesoftware.code-spell-checker
 takumii.markdowntable
 tamasfe.even-better-toml
