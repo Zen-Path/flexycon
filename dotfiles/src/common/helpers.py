@@ -10,7 +10,7 @@ import unicodedata
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Literal
+from typing import Any, Callable, Generator, Literal
 
 import psutil
 from common.logger import logger
@@ -55,7 +55,7 @@ def run_command(command: list[str]) -> CommandResult:
 
     logger.debug(f"Running {command} with id {cmd_identifier!r}")
 
-    output = []
+    output: list[str] = []
     with subprocess.Popen(
         command,
         stdout=subprocess.PIPE,
@@ -287,7 +287,7 @@ def split_acronyms(token: str) -> list[str]:
     if not re.search(r"[A-Z]", token):
         return [token]
 
-    parts = []
+    parts: list[str] = []
     i = 0
     n = len(token)
 
@@ -333,10 +333,13 @@ def split_into_words(name: str, boundaries: list[str] = [" ", "-", "_"]) -> list
     else:
         tokens = [name]
 
-    def split_tokens(tokens: list[str], splitter) -> list[str]:
-        result = []
+    def split_tokens(
+        tokens: list[str], splitter: Callable[[str], list[str]]
+    ) -> list[str]:
+        result: list[str] = []
         for token in tokens:
             result.extend(splitter(token))
+
         return [t for t in result if t]
 
     def split_numbers(token: str) -> list[str]:
@@ -649,7 +652,7 @@ class NotificationSystem:
         return result.success
 
 
-def remove_diacritics(text):
+def remove_diacritics(text: str) -> str:
     # Normalize to decompose characters (e.g., 'ă' becomes 'a' + '˘')
     normalized = unicodedata.normalize("NFD", text)
 
@@ -691,7 +694,7 @@ class Color:
     def __str__(self) -> str:
         return f"{self.r:.1f},{self.g:.1f},{self.b:.1f},{self.a:.1f}"
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[float]:
         yield from self.to_tuple()
 
 
@@ -830,7 +833,11 @@ class ScreenshotUtility:
         )
 
     @classmethod
-    def area(cls, output_dir: Path | None = None, copy_output=False) -> bool:
+    def area(
+        cls,
+        output_dir: Path | None = None,
+        copy_output: bool = False,
+    ) -> bool:
         """Capture a selected area."""
         output_path = cls._compose_output_path("area", output_dir=output_dir)
         return cls._capture(output_path, copy_output, select=True)
@@ -839,9 +846,9 @@ class ScreenshotUtility:
     def window(
         cls,
         window: Window | None = None,
-        include_window_name=False,
+        include_window_name: bool = False,
         output_dir: Path | None = None,
-        copy_output=False,
+        copy_output: bool = False,
     ) -> bool:
         """Capture a window."""
         if window is None:
@@ -866,7 +873,7 @@ class ScreenshotUtility:
         cls,
         screen: int | None = None,
         output_dir: Path | None = None,
-        copy_output=False,
+        copy_output: bool = False,
     ) -> bool:
         """Capture a screen."""
         # TODO: Implement logic for targeting a single screen
@@ -874,7 +881,11 @@ class ScreenshotUtility:
         return cls._capture(output_path, copy_output)
 
     @classmethod
-    def full_screen(cls, output_dir: Path | None = None, copy_output=False) -> bool:
+    def full_screen(
+        cls,
+        output_dir: Path | None = None,
+        copy_output: bool = False,
+    ) -> bool:
         """Capture all screens."""
         output_path = cls._compose_output_path("full", output_dir=output_dir)
         return cls._capture(output_path, copy_output)

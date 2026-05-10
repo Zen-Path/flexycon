@@ -30,7 +30,7 @@ LEVEL_NAME_MAP = {
 
 
 class ColoredFormatter(logging.Formatter):
-    def format(self, record):
+    def format(self, record: logging.LogRecord) -> str:
         # Patch the levelname
         if record.levelno in LEVEL_NAME_MAP:
             record.levelname = LEVEL_NAME_MAP[record.levelno]
@@ -63,7 +63,7 @@ def setup_logging(
     logger.addHandler(handler)
 
 
-def test_logging_fmt(logger):
+def test_logging_fmt(logger: logging.Logger):
     logger.debug("Debugging info")
     logger.info("General info")
     logger.warning("Something may be wrong")
