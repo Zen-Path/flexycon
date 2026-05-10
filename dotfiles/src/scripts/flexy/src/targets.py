@@ -345,6 +345,7 @@ def clean():
             "build",
             "*.egg-info",
             "node_modules",
+            "htmlcov",
             ".DS_Store",
         },
         global_excludes={".git", ".venv"},
