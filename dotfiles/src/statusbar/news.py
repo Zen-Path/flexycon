@@ -10,7 +10,7 @@ from common.statusbar import EDITOR, TERMINAL, MouseButton
 
 # Environment variables
 NEWS_DIR = os.path.join(
-    os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share")), "newsraft"
+    os.getenv("XDG_DATA_HOME", os.path.expanduser("~/.local/share")), "newsraft"
 )
 NEWS_DB = os.path.join(NEWS_DIR, "newsraft.sqlite3")
 NEWS_DB_BACKUP = os.path.join(NEWS_DIR, "newsraft_backup.sqlite3")
@@ -101,7 +101,7 @@ def handle_block_button(button_id):
 
 
 def main():
-    block_button = os.environ.get("BLOCK_BUTTON")
+    block_button = os.getenv("BLOCK_BUTTON")
     if block_button:
         handle_block_button(int(block_button))
 

@@ -4,8 +4,8 @@ from typing import Any, Callable
 
 from common.logger import logger
 
-TERMINAL = os.environ.get("TERMINAL", "alacritty")
-EDITOR = os.environ.get("EDITOR", "nvim")
+TERMINAL = os.getenv("TERMINAL", "alacritty")
+EDITOR = os.getenv("EDITOR", "nvim")
 STATUSBAR = os.getenv("STATUSBAR", "dwmblocks")
 
 
@@ -23,7 +23,7 @@ class MouseButton(Enum):
 
 def handle_block_button(actions: dict[MouseButton, Callable[[], Any]]):
     """Handle block button events."""
-    block_button = os.environ.get("BLOCK_BUTTON")
+    block_button = os.getenv("BLOCK_BUTTON")
     if not block_button:
         logger.debug("Variable BLOCK_BUTTON is not set.")
         return False

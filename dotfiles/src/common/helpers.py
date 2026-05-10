@@ -263,9 +263,9 @@ def get_display_server() -> Literal["X11", "Wayland"] | None:
     Returns the display server currently in use, or ``None`` if it can't
     be detected.
     """
-    display_env_val = os.environ.get("DISPLAY")
+    display_env_val = os.getenv("DISPLAY")
 
-    if os.environ.get("WAYLAND_DISPLAY"):
+    if os.getenv("WAYLAND_DISPLAY"):
         return "Wayland"
     elif display_env_val and display_env_val != "needs-to-be-defined":
         return "X11"
@@ -404,7 +404,7 @@ class System:
             # the user's settings
             return ["pmset", "displaysleepnow"]
 
-        session_type = os.environ.get("XDG_SESSION_TYPE", "").lower()
+        session_type = os.getenv("XDG_SESSION_TYPE", "").lower()
         is_wayland = (session_type == "wayland") or ("WAYLAND_DISPLAY" in os.environ)
         is_x11 = (session_type == "x11") or ("DISPLAY" in os.environ)
 
