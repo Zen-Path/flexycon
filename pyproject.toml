@@ -47,7 +47,7 @@ description = " Flexible programmatic configuration."
 name = "flexycon"
 readme = "README.md"
 requires-python = ">=3.12"
-version = "1.4.7"
+version = "1.4.8"
 
     [project.scripts]
     flexy = "scripts.flexy.main:main"
@@ -93,12 +93,13 @@ target-version = "py314"
     skip-magic-trailing-comma = false
 
 [tool.pyright]
-pythonPlatform   = "All"
-typeCheckingMode = "strict"
+pythonPlatform         = "All"
+reportMissingTypeStubs = "none"
+typeCheckingMode       = "strict"
 
 [tool.bumpversion]
 allow_dirty     = true
-current_version = "1.4.7"
+current_version = "1.4.8"
 parse           = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 replace         = "{new_version}"
 search          = "{current_version}"
