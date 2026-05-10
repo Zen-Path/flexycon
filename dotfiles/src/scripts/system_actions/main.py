@@ -33,7 +33,7 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
     return lookup.get(choice)
 
 
-def execute_special_action(action_func: Callable | None = None):
+def execute_special_action(action_func: Callable[[], None] | None = None):
     """
     Handle locking, pausing notifications, tracking time, and ghost-wake prevention.
     If action_func is None, it simply locks the screen.
