@@ -13,6 +13,7 @@ class Bookmark:
     type: Literal["d", "f"]
     path_parts: list[str]
     aliases: dict[str, list[str]]
+    resolved_alias: list[str] | None = None
     description: str | None = None
     activate_python_env: bool = False
     condition: bool = True
@@ -42,7 +43,7 @@ class BookmarkRenderer(ABC):
     def process(self, bookmarks: list[Bookmark]) -> None:
         logger.info(f"[{self.name}] Processing bookmarks...")
 
-        processed_bookmarks = []
+        processed_bookmarks: list[Bookmark] = []
         for bookmark in bookmarks:
             alias = self.resolve_alias(bookmark)
 
@@ -53,10 +54,11 @@ class BookmarkRenderer(ABC):
                 )
                 continue
 
-            processed_bookmarks.append((alias, bookmark))
+            bookmark.resolved_alias = alias
+            processed_bookmarks.append(bookmark)
 
             logger.debug(
-                f"- Added alias {''.join(alias)!r} for bookmark {bookmark.name!r}"
+                f"- Added alias {''.join(alias)!r:<6} for bookmark {bookmark.name!r}"
             )
 
         content = self.compose_output_file(processed_bookmarks)
@@ -83,13 +85,18 @@ class BookmarkRenderer(ABC):
     def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
         pass
 
-    def compose_bookmarks(self, bookmarks: list[tuple[list[str], Bookmark]]) -> str:
+    # NOTE: we pass in resolved_alias with the bookmark itself, but we split it when we
+    # compose. Maybe there's a better way to do it, but since each Renderer may resolve
+    # to a different alias, we use this for now.
+    def compose_bookmarks(self, bookmarks: list[Bookmark]) -> str:
         return "\n".join(
             [
-                self.compose_bookmark(alias_segments, bookmark)
-                for [alias_segments, bookmark] in bookmarks
+                self.compose_bookmark(
+                    alias_segments=bookmark.resolved_alias or [], bookmark=bookmark
+                )
+                for bookmark in bookmarks
             ]
         )
 
-    def compose_output_file(self, bookmarks) -> str:
+    def compose_output_file(self, bookmarks: list[Bookmark]) -> str:
         return self.compose_bookmarks(bookmarks)

@@ -18,7 +18,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         alias dwn="cd /Users/user/Downloads && ls"
         hash -d dwn=/Users/user/Downloads
         """
-        result = []
+        result: list[str] = []
         if bookmark.description:
             result.append(f"# {bookmark.description}")
 
@@ -53,7 +53,7 @@ ZSH = ZshBookmarkRenderer(
 
 class NVimBookmarkRenderer(BookmarkRenderer):
     def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
-        result = []
+        result: list[str] = []
         if bookmark.description:
             result.append(f"-- {bookmark.description}")
 

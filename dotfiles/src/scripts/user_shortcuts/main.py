@@ -9,14 +9,15 @@ from common.helpers import get_version, resolve_path
 from common.logger import logger, setup_logging
 from scripts.user_shortcuts.data.shortcuts import shortcuts
 from scripts.user_shortcuts.src.formatting import format_bookmarks
+from scripts.user_shortcuts.src.models import Bookmark
 from scripts.user_shortcuts.src.renderers import NVIM, YAZI, ZSH
 
 AVAILABLE_RENDERERS = [ZSH, NVIM, YAZI]
 
 
 # TODO: find a better way to render the shortcuts from another script, this is flimsy
-def get_active_shortcuts(shortcuts=shortcuts):
-    result = []
+def get_active_shortcuts(shortcuts: list[Bookmark] = shortcuts) -> list[Bookmark]:
+    result: list[Bookmark] = []
     for shortcut in shortcuts:
         if not shortcut.condition:
             logger.warning(

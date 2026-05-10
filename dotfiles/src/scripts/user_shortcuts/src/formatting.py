@@ -11,7 +11,7 @@ DESCRIPTION_WIDTH = 25
 
 def format_aliases(aliases: dict[str, list[str]]) -> str:
     """Format aliases like 'doc, d (Yazi)' if groups differ."""
-    parts = []
+    parts: list[str] = []
     for group, keys in aliases.items():
         joined = "".join(keys)
         if group != "default":
@@ -21,18 +21,18 @@ def format_aliases(aliases: dict[str, list[str]]) -> str:
     return "; ".join(parts)
 
 
-def get_default_alias(bm) -> str:
+def get_default_alias(bookmark: Bookmark) -> str:
     """Return the first default alias (for sorting)."""
-    return bm.aliases.get("default", [""])[0]
+    return bookmark.aliases.get("default", [""])[0]
 
 
-def format_bookmarks(bookmarks) -> str:
+def format_bookmarks(bookmarks: list[Bookmark]) -> str:
     groups = {"d": "Directories", "f": "Files"}
     by_type: dict[str, list[Bookmark]] = {t: [] for t in groups}
     for bm in bookmarks:
         by_type.get(bm.type, []).append(bm)
 
-    lines = []
+    lines: list[str] = []
     for t, heading in groups.items():
         if not by_type[t]:
             continue
