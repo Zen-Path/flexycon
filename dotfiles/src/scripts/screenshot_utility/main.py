@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 from typing import TypedDict
 
-from common.helpers import Dmenu, PromptOption, ScreenshotUtility, get_version
+from common.helpers import PromptOption, ScreenshotUtility, get_version, prompt_options
 from common.logger import logger, setup_logging
 
 
@@ -21,9 +21,17 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
     lookup = {opt.display_text(): opt.id for opt in options}
 
     display_list = list(lookup.keys())
-    choice = Dmenu.run(
-        prompt="Screenshot", choices=display_list, list_view_item_count=-1
+    result = prompt_options(
+        prompt="Screenshot",
+        options=display_list,
+        prefer_gui=True,
+        list_view_item_count=-1,
     )
+
+    if result is None:
+        return None
+
+    _idx, choice = result
 
     return lookup.get(choice)
 

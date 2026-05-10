@@ -130,6 +130,105 @@ def prompt_bool(prompt: str, default: bool | None = None) -> bool | None:
     return default
 
 
+def prompt_options(
+    prompt: str,
+    options: list[str],
+    default: int | None = None,
+    prefer_gui: bool = False,
+    list_view_item_count: int = 0,
+) -> tuple[int, str] | None:
+    """
+    Prompts the user to select an option from a list with an optional default.
+
+    Args:
+        prompt: The question to display.
+        options: List of strings to choose from.
+        default: The index of the default option (0-based). Negative indexes are allowed.
+        prefer_gui: Display the options with a GUI or in the terminal
+        list_view_item_count: For Dmenu, how many list items will be displayed at once
+
+    Returns:
+        A tuple of (index, choice_str). If input is empty or invalid,
+        returns the default tuple. Returns None if no default exists.
+    """
+    if not options:
+        return None
+
+    # Normalize default index
+    resolved_default = None
+    if default is not None:
+        if 0 <= default < len(options):
+            resolved_default = default
+        elif -len(options) <= default < 0:
+            resolved_default = len(options) + default
+
+    # Display hint as 1-based for the user (-1 on a list of 3 becomes [3])
+    hint = f" [{resolved_default + 1}]" if resolved_default is not None else ""
+
+    prompt_fmt = prompt.strip(" :")
+
+    if prefer_gui:
+        selection = None
+
+        if shutil.which("dmenu"):
+            selection = Dmenu.run(
+                prompt=prompt_fmt,
+                choices=options,
+                list_view_item_count=list_view_item_count,
+            )
+
+        # TODO: implement an interface
+        if shutil.which("choose"):
+            try:
+                selection = subprocess.run(
+                    "choose",
+                    input="\n".join(options),
+                    capture_output=True,
+                    text=True,
+                ).stdout
+            except Exception as e:
+                logger.error(e)
+                pass
+
+        if selection:
+            try:
+                # Find the index of the selected string
+                idx = options.index(selection)
+                return (idx, options[idx])
+            except ValueError:
+                pass
+
+        # If user hit Esc or selection failed, try default
+        if resolved_default is not None:
+            return (resolved_default, options[resolved_default])
+
+    print(f":: {prompt_fmt}:")
+    for i, option in enumerate(options, 1):
+        suffix = " (default)" if (i - 1) == resolved_default else ""
+        print(f"{i}. {option}{suffix}")
+
+    try:
+        user_input = input(f"\n> Select an option{hint}: ").strip()
+    except (KeyboardInterrupt, EOFError):
+        user_input = ""
+
+    # Handle empty input
+    if not user_input and resolved_default is not None:
+        return (resolved_default, options[resolved_default])
+
+    # Handle numeric input
+    if user_input.isdigit():
+        idx = int(user_input) - 1
+        if 0 <= idx < len(options):
+            return (idx, options[idx])
+
+    # Handle invalid input
+    if resolved_default is not None:
+        return (resolved_default, options[resolved_default])
+
+    return None
+
+
 def ensure_directory_interactive(path: Path) -> bool:
     """
     Interactively ensure all directories leading to the path exist.

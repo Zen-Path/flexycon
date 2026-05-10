@@ -12,11 +12,11 @@ from typing import Callable
 
 from common.apps.window_manager import get_active_window_manager
 from common.helpers import (
-    Dmenu,
     NotificationSystem,
     PromptOption,
     System,
     get_version,
+    prompt_options,
     run_command,
 )
 from common.logger import logger, setup_logging
@@ -26,9 +26,16 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
     """Prompt the user and return the selected action ID."""
     lookup = {opt.display_text(): opt.id for opt in options}
 
-    choice = Dmenu.run(
-        prompt="System Action", choices=list(lookup.keys()), list_view_item_count=-1
+    result = prompt_options(
+        prompt="System Action",
+        options=list(lookup.keys()),
+        list_view_item_count=-1,
     )
+
+    if result is None:
+        return None
+
+    _idx, choice = result
 
     return lookup.get(choice)
 
