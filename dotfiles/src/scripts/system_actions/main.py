@@ -128,7 +128,7 @@ def build_parser(options: list[PromptOption]) -> argparse.ArgumentParser:
     )
 
     # SUBCOMMANDS
-    subparsers = parser.add_subparsers(dest="action", help="System actions")
+    subparsers = parser.add_subparsers(dest="action_id", help="System actions")
 
     for opt in options:
         subparsers.add_parser(
@@ -210,19 +210,21 @@ def main():
     args = build_parser(options).parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
+    logger.debug(args)
 
-    action_id = args.action or prompt_user(options)
+    action_id = args.action_id or prompt_user(options)
 
     if not action_id:
+        logger.debug("No action was chosen.")
         return
 
     selected = next((opt for opt in options if opt.id == action_id), None)
 
     if selected and selected.action:
-        logger.debug(f"Executing {selected.label!r}")
+        logger.debug(f"Executing action {selected.id!r}.")
         selected.action()
     else:
-        logger.error(f"Action {action_id!r} has no associated function.")
+        logger.error(f"Unknown action {action_id!r}.")
 
 
 if __name__ == "__main__":
