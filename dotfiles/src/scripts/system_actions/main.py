@@ -10,7 +10,7 @@ import time
 from datetime import datetime, timedelta
 from typing import Callable
 
-from common.apps.window_manager import Dwm
+from common.apps.window_manager import get_active_window_manager
 from common.helpers import (
     Dmenu,
     NotificationSystem,
@@ -141,7 +141,7 @@ def build_parser(options: list[PromptOption]) -> argparse.ArgumentParser:
 
 
 def main():
-    wm = Dwm()
+    wm = get_active_window_manager()
 
     all_options = [
         PromptOption(
@@ -178,15 +178,17 @@ def main():
             symbol="☠️",
             help_text="Terminate the window manager",
             action=wm.terminate,
-        ),
+        )
+        if wm
+        else None,
         PromptOption(
             id="refresh-wm",
             label=f"Refresh {wm.display_name}",
             symbol="♻️",
             help_text="Refresh the window manager",
-            action=wm.refresh,
+            action=getattr(wm, "refresh", None),
         )
-        if hasattr(wm, "refresh")
+        if wm and hasattr(wm, "refresh")
         else None,
         PromptOption(
             id="display-off",
