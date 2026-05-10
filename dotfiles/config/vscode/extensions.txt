@@ -1,9 +1,9 @@
 asvetliakov.vscode-neovim
+charliermarsh.ruff
 cstrap.python-snippets
 esbenp.prettier-vscode
 hoovercj.vscode-settings-cycler
 jdinhlife.gruvbox
-ms-python.black-formatter
 ms-python.debugpy
 ms-python.python
 ms-python.vscode-pylance
