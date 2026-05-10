@@ -36,7 +36,9 @@ CLEAN_TARGETS = [
     ".DS_Store",
 ]
 
-EMPTY_EXCLUDE_TARGETS = [".git"]
+DEFAULT_GLOBAL_EXCLUDES: set[str] = {".git", "__pycache__", "node_modules", ".venv"}
+# We define this relatively, but it will be resolved against the runtime environment
+DEFAULT_PROTECTED_ROOTS: set[Path] = {Path("dotfiles")}
 
 
 # === HELPER ===
@@ -94,25 +96,60 @@ def clean_precommit():
         logger.error(e)
 
 
-def remove_empty_dirs():
-    logger.info("🧹 Removing empty directories.")
+def remove_empty_dirs(
+    base_dir: str | Path = ".",
+    global_excludes: set[str] | None = None,
+    protected_roots: set[Path] | None = None,
+) -> None:
+    """
+    Removes empty directories bottom-up, respecting global name exclusions
+    and specific protected root paths.
 
-    empty_dirs = []
-    for root, dirs, files in os.walk(".", topdown=True):
-        # modify dirs in-place to prevent walking excluded folders
-        dirs[:] = [d for d in dirs if d not in EMPTY_EXCLUDE_TARGETS]
+    :param base_dir: The root directory to start the cleanup from.
+    :param global_excludes: Set of exact directory names to ignore everywhere.
+    :param protected_roots: Set of exact Path roots to protect.
+    """
+    if global_excludes is None:
+        global_excludes = set()
+
+    if protected_roots is None:
+        protected_roots = set()
+
+    # Normalize base_path and protected roots for safety
+    base_path = Path(base_dir).resolve()
+    resolved_protected = {p.resolve() for p in protected_roots}
+
+    logger.info(f"🧹 Removing empty directories in '{base_path}'.")
+
+    # topdown=False ensures we process leaf directories before their parents
+    for root, dirs, _files in os.walk(base_path, topdown=False):
+        root_path = Path(root).resolve()
+
+        # SKIP LOGIC A: Is the current tree protected?
+        if any(root_path.is_relative_to(prot) for prot in resolved_protected):
+            continue
+
+        if any(part in global_excludes for part in root_path.parts):
+            continue
 
         for d in dirs:
-            dir_path = Path(root) / d
-            if not any(dir_path.iterdir()):
-                empty_dirs.append(dir_path)
+            dir_path = root_path / d
 
-    for d in empty_dirs:
-        try:
-            d.rmdir()
-            logger.debug(f"Removed {d}")
-        except Exception as e:
-            logger.warning(e)
+            # SKIP LOGIC B: Is this specific subdirectory protected?
+            if any(dir_path.is_relative_to(prot) for prot in resolved_protected):
+                continue
+
+            if d in global_excludes:
+                continue
+
+            # ATTEMPT REMOVAL
+            try:
+                # iterdir() yields all contents (including hidden files and broken symlinks)
+                if not any(dir_path.iterdir()):
+                    dir_path.rmdir()
+                    logger.debug(f"Removed empty directory {str(dir_path)!r}")
+            except OSError as e:
+                logger.warning(f"Could not remove {str(dir_path)!r}: {e}")
 
 
 def init_submodules():
@@ -307,7 +344,9 @@ def clean():
     logger.info("🧹 Removing clean targets...")
     remove_files_by_pattern(CLEAN_TARGETS)
 
-    remove_empty_dirs()
+    remove_empty_dirs(
+        global_excludes=DEFAULT_GLOBAL_EXCLUDES, protected_roots=DEFAULT_PROTECTED_ROOTS
+    )
 
 
 @target()
