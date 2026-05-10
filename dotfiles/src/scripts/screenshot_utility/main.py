@@ -101,28 +101,38 @@ def main():
         "copy_output": getattr(args, "copy_output", True),
     }
 
+    # NOTE: not going the 'system_actions' way of generating the parser from the options,
+    # because some parsers require additional arguments, and it would be a mess.
     options = [
-        PromptOption("area", "Area", "🔳", lambda: ScreenshotUtility.area(**common)),
         PromptOption(
-            "window",
-            "Window",
-            "🪟",
-            lambda: ScreenshotUtility.window(
+            id="area",
+            label="Area",
+            symbol="🔳",
+            action=lambda: ScreenshotUtility.area(**common),
+        ),
+        PromptOption(
+            id="window",
+            label="Window",
+            symbol="🪟",
+            action=lambda: ScreenshotUtility.window(
                 window=getattr(args, "window_id", None),
                 include_window_name=getattr(args, "include_name", True),
                 **common,
             ),
         ),
         PromptOption(
-            "screen",
-            "Screen",
-            "🖥️",
-            lambda: ScreenshotUtility.screen(
+            id="screen",
+            label="Screen",
+            symbol="🖥️",
+            action=lambda: ScreenshotUtility.screen(
                 screen=getattr(args, "screen_id", None), **common
             ),
         ),
         PromptOption(
-            "full", "Full Screen", "🌍", lambda: ScreenshotUtility.full_screen(**common)
+            id="full",
+            label="Full Screen",
+            symbol="🌍",
+            action=lambda: ScreenshotUtility.full_screen(**common),
         ),
     ]
 
