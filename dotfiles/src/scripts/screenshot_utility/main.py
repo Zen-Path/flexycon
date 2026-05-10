@@ -5,9 +5,15 @@
 import argparse
 import logging
 from pathlib import Path
+from typing import TypedDict
 
 from common.helpers import Dmenu, PromptOption, ScreenshotUtility, get_version
 from common.logger import logger, setup_logging
+
+
+class ScreenshotOptions(TypedDict):
+    output_dir: Path | None
+    copy_output: bool
 
 
 def prompt_user(options: list[PromptOption]) -> str | int | None:
@@ -86,8 +92,12 @@ def main():
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
     logger.debug(args)
 
-    common = {
-        "output_dir": getattr(args, "output_directory", None),
+    common: ScreenshotOptions = {
+        "output_dir": (
+            Path(getattr(args, "output_directory"))
+            if hasattr(args, "output_directory")
+            else None
+        ),
         "copy_output": getattr(args, "copy_output", True),
     }
 
