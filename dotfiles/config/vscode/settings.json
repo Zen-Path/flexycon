@@ -65,6 +65,16 @@
     "search.exclude": {
         "**/.git": true
     },
+    "settings.cycle": [
+        {
+            "id": "pythonInlayHints",
+            "overrideWorkspaceSettings": false,
+            "values": [
+                { "python.analysis.inlayHints.callArgumentNames": "all" },
+                { "python.analysis.inlayHints.callArgumentNames": "off" }
+            ]
+        }
+    ],
     "window.menuBarVisibility": "toggle",
     "window.zoomLevel": 1,
     "workbench.colorTheme": "Gruvbox Dark Hard",

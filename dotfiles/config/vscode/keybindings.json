@@ -6,5 +6,9 @@
     {
         "command": "vscode-neovim.stop",
         "key": "alt+shift+v"
+    },
+    {
+        "command": "settings.cycle.pythonInlayHints",
+        "key": "ctrl+alt+i"
     }
 ]
