@@ -5,10 +5,10 @@ import logging
 
 from common.helpers import get_version
 from common.logger import logger, setup_logging
-from scripts.flexy.src.targets import TARGETS
+from scripts.flexy.src.targets import TARGETS, TargetInfo
 
 
-def build_parser(targets):
+def build_parser(targets: dict[str, TargetInfo]):
     parser = argparse.ArgumentParser(
         prog="flexy", description="Help utility for managing flexycon."
     )

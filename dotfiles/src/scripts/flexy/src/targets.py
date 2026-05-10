@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any, Callable, TypedDict, TypeVar
 
 from common.helpers import remove_files_by_pattern, run_command
 from common.logger import logger
@@ -23,28 +24,41 @@ USER_VARIABLES_PATH = Path("uservariables.yaml")
 # === HELPER ===
 
 
-# Registry to store all decorated functions
-TARGETS = {}
+class TargetInfo(TypedDict):
+    name: str
+    description: str
+    fn: Callable[..., Any]
 
 
-def target(name=None, description=None):
+TARGETS: dict[str, TargetInfo] = {}
+
+F = TypeVar("F", bound=Callable[..., Any])
+
+
+def target(name: str | None = None, description: str | None = None) -> Callable[[F], F]:
     """Decorator to mark functions as CLI targets."""
 
-    def decorator(func):
-        target_name = (name or func.__name__).replace(" ", "_")
+    def decorator(func: F) -> F:
+        # Use provided name or fall back to function name
+        target_name: str = (name or func.__name__).replace(" ", "_")
 
-        description_fmt = (description or func.__doc__ or "").strip()
+        # Format description from argument or docstring
+        raw_doc: str = description or func.__doc__ or ""
+        description_fmt: str = raw_doc.strip()
+
         if description_fmt:
+            # Lowercase the first letter for consistent CLI formatting
             description_fmt = description_fmt[:1].lower() + description_fmt[1:]
 
         if target_name in TARGETS:
-            raise ValueError(f"Duplicate target name: {target_name}")
+            raise ValueError(f"Duplicate target name {target_name!r}.")
 
         TARGETS[target_name] = {
             "name": target_name,
             "description": description_fmt,
             "fn": func,
         }
+
         return func
 
     return decorator
