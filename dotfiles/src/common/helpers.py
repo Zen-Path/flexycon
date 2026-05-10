@@ -515,14 +515,23 @@ class Dmenu:
             cmd.extend(["-l", str(list_view_item_count)])
 
         choices_fmt = list(filter(bool, map(str.strip, choices)))
-        result = subprocess.run(
-            cmd,
-            input="\n".join(choices_fmt),
-            capture_output=True,
-            text=True,
-        )
 
-        return result.stdout.strip()
+        try:
+            result = subprocess.run(
+                cmd,
+                input="\n".join(choices_fmt),
+                capture_output=True,
+                text=True,
+            )
+            return result.stdout.strip()
+
+        except FileNotFoundError:
+            logger.error("Binary 'dmenu' not found.")
+            return ""
+
+        except Exception as e:
+            logger.error(f"Command failed: {e}")
+            return ""
 
 
 class NotificationSystem:
@@ -725,7 +734,16 @@ class Maim:
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        return run_command(cmd).success
+        try:
+            return run_command(cmd).success
+
+        except FileNotFoundError:
+            logger.error("Binary 'maim' not found.")
+            return False
+
+        except Exception as e:
+            logger.error(f"Command failed: {e}")
+            return False
 
 
 class ScreenshotUtility:
