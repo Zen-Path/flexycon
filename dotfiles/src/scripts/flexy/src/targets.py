@@ -19,27 +19,6 @@ PYTHON_BIN = shutil.which("python3") or "python"
 
 USER_VARIABLES_PATH = Path("uservariables.yaml")
 
-UNINSTALL_TARGETS = [
-    ".venv",
-    "venv",
-]
-
-CLEAN_TARGETS = [
-    ".mypy_cache",
-    ".pytest_cache",
-    ".ruff_cache",
-    "__pycache__",
-    "dist",
-    "build",
-    "*.egg-info",
-    "node_modules",
-    ".DS_Store",
-]
-
-DEFAULT_GLOBAL_EXCLUDES: set[str] = {".git", "__pycache__", "node_modules", ".venv"}
-# We define this relatively, but it will be resolved against the runtime environment
-DEFAULT_PROTECTED_ROOTS: set[Path] = {Path("dotfiles")}
-
 
 # === HELPER ===
 
@@ -342,10 +321,24 @@ def install():
 def clean():
     """Remove caches and temporary files"""
     logger.info("🧹 Removing clean targets...")
-    remove_files_by_pattern(CLEAN_TARGETS)
+    remove_files_by_pattern(
+        patterns={
+            ".mypy_cache",
+            ".pytest_cache",
+            ".ruff_cache",
+            "__pycache__",
+            "dist",
+            "build",
+            "*.egg-info",
+            "node_modules",
+            ".DS_Store",
+        },
+        global_excludes={".git", ".venv"},
+    )
 
     remove_empty_dirs(
-        global_excludes=DEFAULT_GLOBAL_EXCLUDES, protected_roots=DEFAULT_PROTECTED_ROOTS
+        global_excludes={".git", "__pycache__", "node_modules", ".venv"},
+        protected_roots=None,
     )
 
 
@@ -357,6 +350,6 @@ def uninstall():
     clean_precommit()
 
     logger.info("🔪 Removing uninstall targets...")
-    remove_files_by_pattern(UNINSTALL_TARGETS)
+    remove_files_by_pattern(patterns={".venv"}, global_excludes={".git"})
 
     remove_flexycon_data()
