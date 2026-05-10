@@ -71,8 +71,8 @@ somewhere else, update the `FLEXYCON_HOME` environmental variable.
 
 ## Mac
 
-![Full Screen](./docs/static/mac-full-screen.png "Full screen")
+![Full Screen](./docs/static/mac_full-screen.png "Full screen")
 
 ## Linux
 
-![Full Screen](./docs/static/full-screen_tile.png "Full screen")
+![Full Screen](./docs/static/linux_full-screen.png "Full screen")
