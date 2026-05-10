@@ -889,3 +889,43 @@ class ScreenshotUtility:
         """Capture all screens."""
         output_path = cls._compose_output_path("full", output_dir=output_dir)
         return cls._capture(output_path, copy_output)
+
+
+class SoundUtility:
+    @classmethod
+    def get_volume(cls) -> tuple[int, bool] | None:
+        """Returns the volume and mute status, or None."""
+        # Should return something like this:
+        # - 'Volume: 0.55'
+        # - 'Volume: 0.50 [MUTED]'
+        result = run_command(["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"])
+        if not result.success:
+            return None
+
+        volume_info = result.output
+        if volume_info.startswith("Could not connect to"):
+            return None
+
+        is_muted = "[MUTED]" in volume_info
+
+        return (round(float(volume_info.split(" ")[1]) * 100), is_muted)
+
+    @classmethod
+    def update_volume(cls, diff: int) -> bool:
+        """
+        Usage:
+            - update_volume(2) to increase volume by 2
+            - update_volume(-2) to decrease it by 2
+        """
+        return run_command(
+            [
+                "wpctl",
+                "set-volume",
+                "@DEFAULT_SINK@",
+                f"{abs(diff)}%{'-' if diff < 0 else '+'}",
+            ]
+        ).success
+
+    @classmethod
+    def toggle_mute(cls):
+        run_command(["wpctl", "set-mute", "@DEFAULT_SINK@", "toggle"])

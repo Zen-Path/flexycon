@@ -3,8 +3,11 @@
 # {{@@ header() @@}}
 
 
-from common.helpers import NotificationSystem, run_command
-from common.logger import logger
+import argparse
+import logging
+
+from common.helpers import NotificationSystem, SoundUtility, run_command
+from common.logger import logger, setup_logging
 from common.statusbar import (
     EDITOR,
     STATUSBAR,
@@ -14,19 +17,16 @@ from common.statusbar import (
 )
 
 
-def update_volume(amount: int):
-    run_command(
-        [
-            "wpctl",
-            "set-volume",
-            "@DEFAULT_SINK@",
-            f"{abs(amount)}%{'-' if amount < 0 else '+'}",
-        ]
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="sb_volume", description="Statusbar script for sound volume."
     )
 
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
 
-def toggle_mute():
-    run_command(["wpctl", "set-mute", "@DEFAULT_SINK@", "toggle"])
+    return parser
 
 
 ACTIONS = {
@@ -34,7 +34,7 @@ ACTIONS = {
         run_command(["setsid", "-w", "-f", TERMINAL, "-e", "pulsemixer"]),
         run_command(["pkill", "-RTMIN+10", STATUSBAR]),
     ),
-    MouseButton.MIDDLE: toggle_mute,
+    MouseButton.MIDDLE: SoundUtility.toggle_mute,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         "📢 Volume module",
         "Show sound volume, 🔇 if muted.\n"
@@ -44,41 +44,38 @@ ACTIONS = {
         "- Right click to show this message\n"
         "- Scroll to update",
     ),
-    MouseButton.SCROLL_UP: lambda: update_volume(2),
-    MouseButton.SCROLL_DOWN: lambda: update_volume(-2),
+    MouseButton.SCROLL_UP: lambda: SoundUtility.update_volume(2),
+    MouseButton.SCROLL_DOWN: lambda: SoundUtility.update_volume(-2),
     MouseButton.EXTRA_3: lambda: run_command([TERMINAL, "-e", EDITOR, __file__]),
 }
 
 
 def main():
+    args = build_parser().parse_args()
+
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+    logger.debug(args)
+
     handle_block_button(ACTIONS)
 
-    # Should return something like this:
-    # - 'Volume: 0.55'
-    # - 'Volume: 0.50 [MUTED]'
-    volume_info = run_command(
-        ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
-    ).output.strip()
-
-    logger.debug(f"Volume info: {volume_info}")
-
-    if volume_info.startswith("Could not connect to"):
+    volume_result = SoundUtility.get_volume()
+    if volume_result is None:
         print("⛔ Connection")
         return
 
-    volume_int = round(float(volume_info.split(" ")[1]) * 100)
+    volume, is_muted = volume_result
 
-    if "[MUTED]" in volume_info:
+    if is_muted:
         icon = "🔇"
     else:
-        if volume_int >= 70:
+        if volume >= 70:
             icon = "🔊"
-        elif volume_int >= 30:
+        elif volume >= 30:
             icon = "🔉"
         else:
             icon = "🔈"
 
-    print(f"{icon}{volume_int}%")
+    print(f"{icon}{volume}%")
 
 
 if __name__ == "__main__":
