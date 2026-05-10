@@ -5,8 +5,8 @@
 import os
 import subprocess
 
-from common.helpers import NotificationSystem, run_command
-from common.statusbar import EDITOR, TERMINAL, MouseButton
+from common.helpers import NotificationSystem, run_command, run_command_background
+from common.statusbar import EDITOR, TERMINAL, MouseButton, handle_block_button
 
 # Environment variables
 NEWS_DIR = os.path.join(
@@ -80,30 +80,25 @@ def handle_reload():
         NotificationSystem.run("News Update Failed", "Unable to update the news.")
 
 
-def handle_block_button(button_id):
-    """Handle block button events."""
-    match button_id:
-        case MouseButton.LEFT.value:
-            subprocess.Popen([TERMINAL, "-e", "newsraft"])
-        case MouseButton.MIDDLE.value:
-            handle_reload()
-        case MouseButton.RIGHT.value:
-            NotificationSystem.run(
-                " News module",
-                "Shows unread news items.\n"
-                "\n<b>Actions:</b>\n"
-                "- Left click opens newsraft\n"
-                "- Middle click syncs RSS feeds\n"
-                "\n<b>Note:</b> Only one instance of newsraft may be running at a time.",
-            )
-        case MouseButton.EXTRA_3.value:
-            subprocess.Popen([TERMINAL, "-e", EDITOR, __file__])
+ACTIONS = {
+    MouseButton.LEFT: lambda: run_command_background([TERMINAL, "-e", "newsraft"]),
+    MouseButton.MIDDLE: handle_reload,
+    MouseButton.RIGHT: lambda: NotificationSystem.run(
+        " News module",
+        "Shows unread news items.\n"
+        "\n<b>Actions:</b>\n"
+        "- Left click opens newsraft\n"
+        "- Middle click syncs RSS feeds\n"
+        "\n<b>Note:</b> Only one instance of newsraft may be running at a time.",
+    ),
+    MouseButton.EXTRA_3: lambda: run_command_background(
+        [TERMINAL, "-e", EDITOR, __file__]
+    ),
+}
 
 
 def main():
-    block_button = os.getenv("BLOCK_BUTTON")
-    if block_button:
-        handle_block_button(int(block_button))
+    handle_block_button(ACTIONS)
 
     unread_count = get_unread_items_count()
     if not unread_count:
