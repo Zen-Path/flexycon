@@ -1,6 +1,7 @@
 asvetliakov.vscode-neovim
 charliermarsh.ruff
 cstrap.python-snippets
+eamodio.gitlens
 esbenp.prettier-vscode
 hoovercj.vscode-settings-cycler
 jdinhlife.gruvbox
