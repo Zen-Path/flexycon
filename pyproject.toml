@@ -47,7 +47,7 @@ description = " Flexible programmatic configuration."
 name = "flexycon"
 readme = "README.md"
 requires-python = ">=3.12"
-version = "1.4.4"
+version = "1.4.5"
 
     [project.scripts]
     flexy = "scripts.flexy.main:main"
@@ -93,13 +93,11 @@ target-version = "py314"
     skip-magic-trailing-comma = false
 
 [tool.pyright]
-# Setting platform to "" means we don't target any particular platform, thus we don't
-# get "unreachable" code warnings when we write cross-platform code
-pythonPlatform = ""
+pythonPlatform = "All"
 
 [tool.bumpversion]
 allow_dirty     = true
-current_version = "1.4.4"
+current_version = "1.4.5"
 parse           = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 replace         = "{new_version}"
 search          = "{current_version}"
