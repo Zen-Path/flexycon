@@ -37,20 +37,20 @@ editor = '{{@@ env["EDITOR"] @@}}'
 - [Setup](#setup)
     - [Dependencies](#dependencies)
     - [Installation](#installation)
-- [Gallery](#gallery)
+- [Preview](#preview)
     - [Mac](#mac)
     - [Linux](#linux)
 
-# Setup
+## Setup
 
-## Dependencies
+### Dependencies
 
 Make sure you have the following installed:
 
 - `git`
 - `python >= 3.13`
 
-## Installation
+### Installation
 
 To install and initialize the project:
 
@@ -67,12 +67,12 @@ When testing changes to the venv, or just need a clean slate, run `flexy clean` 
 NOTE: the recommended location for installing flexycon is `~/.local/src/flexycon`, but if you've installed it
 somewhere else, update the `FLEXYCON_HOME` environmental variable.
 
-# Gallery
+## Preview
 
-## Mac
+### Mac
 
 ![Full Screen](./docs/static/mac_full-screen.png "Full screen")
 
-## Linux
+### Linux
 
 ![Full Screen](./docs/static/linux_full-screen.png "Full screen")
