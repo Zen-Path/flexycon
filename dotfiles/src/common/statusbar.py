@@ -21,11 +21,11 @@ class MouseButton(Enum):
     EXTRA_3 = 8
 
 
-def handle_block_button(actions: dict[MouseButton, Callable[[], Any]]):
+def handle_block_button(actions: dict[MouseButton, Callable[[], Any]]) -> bool:
     """Handle block button events."""
     block_button = os.getenv("BLOCK_BUTTON")
-    if not block_button:
-        logger.debug("Variable BLOCK_BUTTON is not set.")
+    if block_button is None:
+        logger.debug("Variable 'BLOCK_BUTTON' is not set.")
         return False
 
     try:
@@ -33,15 +33,15 @@ def handle_block_button(actions: dict[MouseButton, Callable[[], Any]]):
         logger.debug(f"Handling button {button}.")
     except ValueError:
         logger.warning(
-            f"Value of BLOCK_BUTTON is {int(block_button)}, which is not a valid MouseButton value."
+            f"Invalid MouseButton value from 'BLOCK_BUTTON': {int(block_button)}."
         )
         return False
 
     action = actions.get(button)
-    if action:
-        action()
-    else:
-        logger.warning(f"Button {button} doesn't have an associated action to it.")
+    if not action:
+        logger.warning(f"Button {button} has no action defined.")
         return False
+
+    action()
 
     return True
