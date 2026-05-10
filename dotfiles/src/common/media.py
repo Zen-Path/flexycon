@@ -65,7 +65,7 @@ def convert_video_to_mp4(input_path: Path, output_path: Path | None = None) -> P
     Output path: <filename>.mp4
     """
     if not output_path:
-        filename, extension = os.path.splitext(input_path)
+        filename, _extension = os.path.splitext(input_path)
         output_path = Path(f"{filename}.mp4")
 
     # fmt: off
@@ -210,7 +210,7 @@ def convert_pdf_to_png(input_path: Path, output_path: Path | None = None) -> Pat
     Output path: <filename>-compressed<extension>
     """
     if not output_path:
-        filename, extension = os.path.splitext(input_path)
+        filename, _extension = os.path.splitext(input_path)
         output_path = Path(f"{filename}.png")
 
     # fmt: off
