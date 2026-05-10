@@ -12,8 +12,7 @@
         "editor.defaultFormatter": "DotJoshJohnson.xml"
     },
     "cSpell.enabledFileTypes": {},
-    "chat.agentsControl.enabled": false,
-    "chat.commandCenter.enabled": false,
+    "chat.agentsControl.enabled": "hidden",
     "diffEditor.hideUnchangedRegions.enabled": true,
     "diffEditor.ignoreTrimWhitespace": false,
     "diffEditor.maxComputationTime": 3000,
@@ -74,7 +73,6 @@
             ]
         }
     ],
-    "window.menuBarVisibility": "toggle",
     "window.zoomLevel": 1,
     "workbench.colorTheme": "Gruvbox Dark Hard",
     "workbench.iconTheme": "material-icon-theme",
