@@ -454,7 +454,7 @@ class System:
             logger.warning(f"Method isn't supported for {sys.platform!r}")
 
 
-def get_parent_process_chain(start_pid=None):
+def get_parent_process_chain(start_pid: int | None = None) -> list[tuple[str, int]]:
     """
     Traverse the parent chain of the current process (or a given process) and collect
     a list of tuples (process_name, pid).
@@ -467,8 +467,10 @@ def get_parent_process_chain(start_pid=None):
         list of tuple: [(name, pid), ...]
     """
 
-    process_chain = []
-    current_process = psutil.Process(start_pid) if start_pid else psutil.Process()
+    process_chain: list[tuple[str, int]] = []
+    current_process: psutil.Process | None = (
+        psutil.Process(start_pid) if start_pid else psutil.Process()
+    )
 
     while current_process:
         process_chain.append((current_process.name(), current_process.pid))

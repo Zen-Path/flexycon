@@ -11,7 +11,7 @@ class WindowManager:
     def __init__(self, display_name: str, process_name: str):
         self.display_name = display_name
         self.process_name = process_name
-        self.pid = None
+        self.pid: int | None = None
 
     def __repr__(self):
         return f"{self.display_name} ({self.process_name})"
@@ -19,7 +19,7 @@ class WindowManager:
     def terminate(self):
         psutil.Process(self.pid).terminate()
 
-    def fetch_pid(self):
+    def fetch_pid(self) -> int | None:
         # TODO: except psutil.NoSuchProcess:
         process_chain = get_parent_process_chain()
 
