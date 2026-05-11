@@ -8,7 +8,12 @@ import shutil
 import subprocess
 import sys
 
-from common.helpers import Dmenu, NotificationSystem, get_version, run_command
+from common.helpers import (
+    NotificationSystem,
+    get_version,
+    prompt_options,
+    run_command,
+)
 from common.logger import logger, setup_logging
 
 # Map of keyboard layouts with their full names
@@ -25,78 +30,92 @@ layout_full_names = {
 }
 
 
-def get_current_layout():
+def get_current_layout() -> str | None:
     """Fetch the current keyboard layout."""
     try:
         result = run_command(["setxkbmap", "-query"])
         for line in result.output.splitlines():
             if line.startswith("layout:"):
                 return line.split()[1]
+
     except subprocess.CalledProcessError:
         logger.error("Unable to get current layout.")
-        sys.exit(1)
+
+    return None
 
 
-def get_available_layouts():
+def get_available_layouts() -> list[str] | None:
     """Get the available keyboard layouts using localectl."""
     try:
         result = run_command(
             ["localectl", "list-x11-keymap-layouts"],
         )
-        layouts = result.output.splitlines()
-        return layouts
+        return result.output.splitlines()
+
     except subprocess.CalledProcessError:
         logger.error("Unable to list x11 keymap layouts.")
-        sys.exit(1)
+
+    return None
 
 
-def format_layouts(available_layouts, layout_full_names):
+def format_layouts(
+    available_layouts: list[str], layout_full_names: dict[str, str]
+) -> list[str]:
     """Combine the shorthand and long names if available."""
-    formatted_layouts = []
+    formatted_layouts: list[str] = []
     for layout in available_layouts:
         if layout in layout_full_names:
             formatted_layouts.append(f"{layout} - {layout_full_names[layout]}")
         else:
             formatted_layouts.append(layout)
+
     return formatted_layouts
 
 
-def prompt_layout(formatted_layouts, current_layout):
+def prompt_layout(
+    formatted_layouts: list[str], current_layout: str | None
+) -> tuple[int, str] | None:
     """Prompt the user to select a layout, displaying the current layout."""
-    try:
-        return Dmenu.run(
-            prompt=f"Select Keyboard Layout (current: {current_layout})",
-            choices=formatted_layouts,
-            list_view_item_count=15,
-        )
-    except subprocess.CalledProcessError:
-        logger.error("dmenu failed to run.")
-        sys.exit(1)
+    current_layout_fmt = f" (current: {current_layout})" if current_layout else ""
+    return prompt_options(
+        prompt=f"Select Keyboard Layout{current_layout_fmt}",
+        options=formatted_layouts,
+        list_view_item_count=15,
+    )
 
 
-def restart_remapd():
+def restart_remapd() -> bool:
     """Restart the remapd service if it's available."""
-    if shutil.which("remapd"):
-        try:
-            run_command(["killall", "remapd"])
-            logger.debug("remapd killed successfully.")
-            # Restart remapd if necessary (customize based on how you restart it)
-            subprocess.Popen(["remapd"])
-            logger.debug("remapd restarted successfully.")
-        except subprocess.CalledProcessError:
-            logger.error("Failed to restart remapd.")
-    else:
-        logger.error("remapd is not available in this environment.")
+    if not shutil.which("remapd"):
+        logger.error("Binary 'remapd' not found.")
+        return False
+
+    try:
+        run_command(["killall", "remapd"])
+        logger.debug("Killed 'remapd'.")
+
+        subprocess.Popen(["remapd"])
+        logger.debug("Restarted 'remapd'.")
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to restart 'remapd': {e}")
+
+    return False
 
 
-def set_keyboard_layout(layout):
+def set_keyboard_layout(layout: str) -> bool:
     """Set the chosen keyboard layout."""
     try:
-        run_command(["setxkbmap", layout])
-        NotificationSystem.run(f"Keyboard layout changed to {layout!r}")
+        result = run_command(["setxkbmap", layout]).success
+        if result:
+            NotificationSystem.run(f"Keyboard layout changed to {layout!r}")
+        return result
+
     except subprocess.CalledProcessError:
         logger.error(f"Unable to set layout to {layout!r}.")
-        sys.exit(1)
+
+    return False
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -119,22 +138,31 @@ def main():
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
 
-    current_layout = get_current_layout()
     available_layouts = get_available_layouts()
+    if not available_layouts:
+        sys.exit(1)
 
+    current_layout = get_current_layout()
     formatted_layouts = format_layouts(available_layouts, layout_full_names)
-    chosen_layout = prompt_layout(formatted_layouts, current_layout)
 
-    if chosen_layout:
-        layout_code = chosen_layout.split(" - ")[0]
-        if layout_code in available_layouts:
-            set_keyboard_layout(layout_code)
-            logger.info(f"Keyboard layout set to {layout_code!r}.")
-            restart_remapd()  # Call restart_remapd from here
-        else:
-            logger.error("Invalid layout selected.")
-    else:
+    prompt_result = prompt_layout(formatted_layouts, current_layout)
+    if not prompt_result:
         logger.warning("No layout chosen.")
+        sys.exit(1)
+
+    _idx, layout = prompt_result
+
+    layout_code = layout.split(" - ")[0]
+    if layout_code not in available_layouts:
+        logger.error(f"Invalid layout selected {layout_code!r}.")
+        sys.exit(1)
+
+    if not set_keyboard_layout(layout_code):
+        logger.error("Could not set keyboard layout.")
+        sys.exit(1)
+
+    logger.info(f"Keyboard layout set to {layout_code!r}.")
+    restart_remapd()  # Call restart_remapd from here
 
 
 if __name__ == "__main__":
