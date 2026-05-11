@@ -24,7 +24,6 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
     result = prompt_options(
         prompt="Screenshot",
         options=display_list,
-        prefer_gui=True,
         list_view_item_count=-1,
     )
 

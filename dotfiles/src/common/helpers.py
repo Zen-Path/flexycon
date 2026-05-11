@@ -134,7 +134,7 @@ def prompt_options(
     prompt: str,
     options: list[str],
     default: int | None = None,
-    prefer_gui: bool = False,
+    prefer_gui: bool = True,
     list_view_item_count: int = 0,
 ) -> tuple[int, str] | None:
     """
