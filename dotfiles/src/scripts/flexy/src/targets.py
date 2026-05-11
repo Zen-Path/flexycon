@@ -347,7 +347,7 @@ def clean():
             "htmlcov",
             ".DS_Store",
         },
-        global_excludes={".git", ".venv"},
+        global_excludes={".git", "node_modules", ".venv"},
     )
 
     remove_empty_dirs(
