@@ -76,7 +76,7 @@ def main():
 
     result = run_command(command)
 
-    operations_data, stats = parse_rclone_output(result)
+    operations_data, stats = parse_rclone_output(result.output)
     formatted_operations = format_operations(operations_data)
 
     print_table(formatted_operations, headers=["Type", "Filepath", "Size Fmt", "Size"])

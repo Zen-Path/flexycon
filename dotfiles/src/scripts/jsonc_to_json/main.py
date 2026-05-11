@@ -44,7 +44,7 @@ def main():
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
 
     with open(args.input_file, "r") as f:
-        data = commentjson.load(f)
+        data = commentjson.load(f)  # type: ignore
 
     with open(args.output_file, "w") as f:
         json.dump(data, f, indent=args.indentation)

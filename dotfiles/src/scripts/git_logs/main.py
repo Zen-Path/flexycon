@@ -14,25 +14,36 @@ from git import InvalidGitRepositoryError, Repo
 from scripts.git_logs.src.repos import GIT_REPOS
 
 
-def get_main_branch(repo):
+def get_main_branch(repo: Repo) -> str | None:
     for name in ["main", "master"]:
         if name in repo.heads:
             return name
     return None
 
 
-def get_commit_messages_on_date(repo, branch_name, date, exclude_commits=set()):
+def get_commit_messages_on_date(
+    repo: Repo,
+    branch_name: str,
+    date: datetime,
+    exclude_commits: set[str] = set(),
+) -> list[str]:
     date_str = date.strftime("%Y-%m-%d")
 
-    messages = []
-    seen = set()
+    messages: list[str] = []
+    seen: set[str] = set()
     for commit in repo.iter_commits(branch_name):
         if commit.hexsha in exclude_commits:
             continue
         commit_date = datetime.fromtimestamp(commit.authored_date).date()
         if commit_date.isoformat() == date_str:
             if commit.hexsha not in seen:
-                messages.append(f"- {commit.summary}")
+                commit_summary = commit.summary
+                commit_summary_str = (
+                    bytes.decode(commit_summary)
+                    if isinstance(commit_summary, bytes)
+                    else commit_summary
+                )
+                messages.append(f"- {commit_summary_str}")
                 seen.add(commit.hexsha)
 
     return messages
@@ -64,7 +75,7 @@ def main():
     target_date = resolve_date(args)
     logger.info(f"Target date: {target_date.strftime('%Y-%m-%d')}\n")
 
-    all_repo_outputs = []
+    all_repo_outputs: list[str] = []
 
     for git_repo in GIT_REPOS:
         if not git_repo.path.exists():
@@ -76,7 +87,7 @@ def main():
             if not main_branch:
                 continue
 
-            repo_sections = []
+            repo_sections: list[str] = []
 
             main_commits = list(repo.iter_commits(main_branch))
             main_commit_shas = {c.hexsha for c in main_commits}

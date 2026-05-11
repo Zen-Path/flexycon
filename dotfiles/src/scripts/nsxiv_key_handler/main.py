@@ -8,6 +8,7 @@ import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Callable, TypedDict
 
 from common.helpers import (
     Dmenu,
@@ -19,6 +20,13 @@ from common.helpers import (
 from common.logger import logger, setup_logging
 from common.media import flip_image
 from common.packages.clipboard_utilities import copy_file, copy_text
+
+ActionFunc = Callable[[list[Path]], None]
+
+
+class Action(TypedDict):
+    desc: str
+    func: ActionFunc
 
 
 def get_help_text():
@@ -83,9 +91,9 @@ def action_show_help(paths: list[Path]):
     NotificationSystem.run("nsxiv actions", get_help_text())
 
 
-def action_get_info(paths):
+def action_get_info(paths: list[Path]):
     mediainfo = run_command(["mediainfo", str(paths[0])]).output
-    formatted = []
+    formatted: list[str] = []
     for line in mediainfo.splitlines():
         line = line.replace(":", ": <b>", 1) + "</b>"
         formatted.append(line)
@@ -111,7 +119,7 @@ def action_copy_path(paths: list[Path]):
     NotificationSystem.run("Path copied", f"Path {paths[0]} copied to clipboard")
 
 
-ACTIONS = {
+ACTIONS: dict[str, Action] = {
     "d": {
         "desc": "Interactive trash",
         "func": action_interactive_trash,

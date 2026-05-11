@@ -1,3 +1,5 @@
+import argparse
+
 from common.logger import logger
 from common.media import (
     compress_image,
@@ -11,7 +13,7 @@ from common.media import (
 )
 
 
-def handle_image(args):
+def handle_image(args: argparse.Namespace):
     for i, input_path in enumerate(args.input):
         output_path = args.output[i] if args.output else None
 
@@ -25,7 +27,7 @@ def handle_image(args):
             rotate_image(input_path, args.rotate, output_path)
 
 
-def handle_video(args):
+def handle_video(args: argparse.Namespace):
     for i, input_path in enumerate(args.input):
         output_path = args.output[i] if args.output else None
 
@@ -43,8 +45,8 @@ def handle_video(args):
             extract_audio_from_video(input_path, output_path)
 
 
-def handle_audio(args):
-    for i, input_path in enumerate(args.input):
+def handle_audio(args: argparse.Namespace):
+    for i, _input_path in enumerate(args.input):
         _ = args.output[i] if args.output else None
 
         if args.convert:
@@ -54,7 +56,7 @@ def handle_audio(args):
             pass
 
 
-def handle_pdf(args):
+def handle_pdf(args: argparse.Namespace):
     for i, input_path in enumerate(args.input):
         output_path = args.output[i] if args.output else None
 

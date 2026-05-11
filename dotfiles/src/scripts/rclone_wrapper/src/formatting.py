@@ -8,7 +8,7 @@ from tabulate import tabulate
 init(autoreset=True)
 
 
-def print_table(data, headers):
+def print_table(data: list[list[str]], headers: list[str]):
     print(tabulate(data, headers=headers, tablefmt="simple_outline"))
 
 
@@ -42,7 +42,7 @@ def format_operations(
         operations_data, key=lambda x: (x["type"], x["file"], int(x["size"]))
     )
 
-    formatted_result = []
+    formatted_result: list[list[str]] = []
 
     for op in sorted_data:
         op_type = str(op.get("type") or "")

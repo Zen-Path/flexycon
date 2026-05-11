@@ -27,11 +27,11 @@ def build_rclone_command(args, config) -> list[str]:
     return command
 
 
-def parse_rclone_output(result):
+def parse_rclone_output(output: str):
     operations_data = []
     stats = {}
 
-    for line in result.output.splitlines():
+    for line in output.splitlines():
         if not line:
             continue
 
