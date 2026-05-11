@@ -8,7 +8,7 @@ from common.logger import logger, setup_logging
 from scripts.flexy.src.targets import TARGETS, TargetInfo
 
 
-def build_parser(targets: dict[str, TargetInfo]):
+def build_parser(targets: dict[str, TargetInfo]) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="flexy", description="Help utility for managing flexycon."
     )
