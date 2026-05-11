@@ -22,6 +22,11 @@ packages = [
         description="Yet another cross-platform graphical process/system monitor",
     ),
     Package(
+        identifier="choose",
+        managers=[Brew],
+        description="Dmenu-like utility for macOS",
+    ),
+    Package(
         identifier="dust",
         managers=[Brew, Yay],
         description="More intuitive version of du in rust",
