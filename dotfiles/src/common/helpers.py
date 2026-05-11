@@ -617,7 +617,7 @@ class PromptOption:
     def display_text(self, separator: str = " ") -> str:
         """The human-readable string shown in the prompt."""
         if self.symbol:
-            return f"{self.symbol}{separator}{self.label}"
+            return f"{self.label}{separator}{self.symbol}"
         return self.label
 
 
