@@ -96,6 +96,10 @@ alias verbp='bump-my-version bump patch'
 alias verbm='bump-my-version bump minor'
 alias verbM='bump-my-version bump major'
 
+# Flexy
+alias flexyi='flexy install'
+alias flexyc='flexy clean'
+
 # Rclone
 alias rc='rclone'
 alias rcw='rclone_wrapper'
