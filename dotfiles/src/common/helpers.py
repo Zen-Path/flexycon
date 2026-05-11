@@ -911,13 +911,12 @@ class ScreenshotUtility:
         cls,
         capture_type: Literal["area", "window", "screen", "full"],
         output_dir: Path | None = None,
-        name: str | None = None,
+        name: str = "",
         ext: str = "png",
         include_timestamp: bool = True,
     ) -> Path:
         """Generate a file path to the output directory with the current timestamp."""
-        name_fmt = f"-{name[:100]}" if name else ""
-
+        name_fmt = name[:100]
         timestamp_fmt = (
             datetime.now().strftime("%Y-%m-%d_%H-%M-%S") if include_timestamp else ""
         )
@@ -957,9 +956,9 @@ class ScreenshotUtility:
         if window is None:
             return cls.screen(output_dir=output_dir, copy_output=copy_output)
 
-        window_name = None
+        window_name = ""
         if include_window_name:
-            window_name = Window.get_window_name(window.id)
+            window_name = Window.get_window_name(window.id) or ""
 
         output_path = cls._compose_output_path(
             "window", name=window_name, output_dir=output_dir
