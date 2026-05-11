@@ -34,7 +34,11 @@ def get_version() -> str:
 @dataclass
 class CommandResult:
     return_code: int
-    output: str
+    raw_output: str
+
+    @property
+    def output(self) -> str:
+        return self.raw_output.strip()
 
     @property
     def success(self) -> bool:
@@ -74,7 +78,7 @@ def run_command(command: list[str]) -> CommandResult:
         f"Command with id {cmd_identifier!r} finished with return code {return_code}"
     )
 
-    return CommandResult(return_code=return_code, output="\n".join(output))
+    return CommandResult(return_code=return_code, raw_output="\n".join(output))
 
 
 def run_command_background(command: list[str]):
