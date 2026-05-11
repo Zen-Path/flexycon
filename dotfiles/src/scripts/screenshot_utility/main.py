@@ -99,12 +99,9 @@ def main():
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
     logger.debug(args)
 
+    raw_output_dir = getattr(args, "output_directory", None)
     common: ScreenshotOptions = {
-        "output_dir": (
-            Path(getattr(args, "output_directory"))
-            if hasattr(args, "output_directory")
-            else None
-        ),
+        "output_dir": Path(raw_output_dir) if raw_output_dir else None,
         "copy_output": getattr(args, "copy_output", True),
     }
 
