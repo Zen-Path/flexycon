@@ -56,6 +56,18 @@ def rotate_image(
     return output_path
 
 
+def flip_image(input_path: Path, output_path: Path | None = None) -> Path:
+    """
+    Flips an image. (i.e. abc -> cba)
+    """
+    if not output_path:
+        output_path = input_path
+
+    run_command(["magick", str(object=input_path), "-flop", str(output_path)])
+
+    return output_path
+
+
 # VIDEOS
 
 

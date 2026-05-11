@@ -17,6 +17,7 @@ from common.helpers import (
     run_command_background,
 )
 from common.logger import logger, setup_logging
+from common.media import flip_image
 from common.packages.clipboard_utilities import copy_file, copy_text
 
 
@@ -52,7 +53,7 @@ def action_open_editor(paths: list[Path]):
 
 def action_flip(paths: list[Path]):
     for path in paths:
-        run_command(["magick", str(path), "-flop", str(path)])
+        flip_image(path)
 
 
 def action_group(paths: list[Path]):
