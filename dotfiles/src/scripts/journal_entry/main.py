@@ -63,7 +63,7 @@ def open_journal_entry(target_date: datetime) -> bool:
     return True
 
 
-def get_journal_entry_path(target_date) -> Path | None:
+def get_journal_entry_path(target_date: datetime) -> Path | None:
     journal_home_path = os.getenv("JOURNAL_HOME")
     if not journal_home_path:
         raise EnvironmentError("Environment variable 'JOURNAL_HOME' is not set.")
