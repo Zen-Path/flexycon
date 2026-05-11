@@ -91,6 +91,11 @@ alias pfr='pip freeze | grep -v "^-e" > requirements.txt'
 # Pip Install from Requirements
 alias pir='pip install -r requirements.txt'
 
+# Version Bumping
+alias verbp='bump-my-version bump patch'
+alias verbm='bump-my-version bump minor'
+alias verbM='bump-my-version bump major'
+
 # Rclone
 alias rc='rclone'
 alias rcw='rclone_wrapper'
