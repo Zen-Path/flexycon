@@ -191,12 +191,12 @@ suppress_preload = false
 
 fetchers = [
     # Mimetype
-    { id = "mime", url = "*/", run = "mime.dir", prio = "high" },
-    { id = "mime", url = "local://*", run = "mime-ext.local", prio = "high" },
-    { id = "mime", url = "remote://*", run = "mime-ext.remote", prio = "high" },
+    { group = "mime", url = "*/", run = "mime.dir", prio = "high" },
+    { group = "mime", url = "local://*", run = "mime-ext.local", prio = "high" },
+    { group = "mime", url = "remote://*", run = "mime-ext.remote", prio = "high" },
 
-    { id = "git", url = "*", run = "git" },
-    { id = "git", url = "*/", run = "git" },
+    { group = "git", url = "*", run = "git" },
+    { group = "git", url = "*/", run = "git" },
 ]
 preloaders = [
     # Image
