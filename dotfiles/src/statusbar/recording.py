@@ -8,7 +8,7 @@ import os
 import signal
 from pathlib import Path
 
-from common.cmd_utilities import run_cmd
+from common.cmd_utilities import run_cmd_background
 from common.helpers import NotificationSystem
 from common.logger import logger, setup_logging
 from common.statusbar import (
@@ -55,7 +55,7 @@ ACTIONS = {
         "- Middle click to toggle notifications\n"
         "- Right click to show this message\n",
     ),
-    MouseButton.EXTRA_3: lambda: run_cmd([TERMINAL, "-e", EDITOR, __file__]),
+    MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
 }
 
 

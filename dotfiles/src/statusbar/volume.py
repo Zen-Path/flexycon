@@ -6,7 +6,7 @@
 import argparse
 import logging
 
-from common.cmd_utilities import run_cmd
+from common.cmd_utilities import run_cmd, run_cmd_background
 from common.helpers import NotificationSystem, SoundUtility
 from common.logger import logger, setup_logging
 from common.statusbar import (
@@ -47,7 +47,7 @@ ACTIONS = {
     ),
     MouseButton.SCROLL_UP: lambda: SoundUtility.update_volume(2),
     MouseButton.SCROLL_DOWN: lambda: SoundUtility.update_volume(-2),
-    MouseButton.EXTRA_3: lambda: run_cmd([TERMINAL, "-e", EDITOR, __file__]),
+    MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
 }
 
 
