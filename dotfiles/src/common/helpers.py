@@ -633,7 +633,7 @@ class Dmenu:
         choices: list[str],
         case_insensitive: bool = True,
         list_view_item_count: int = 0,
-    ) -> str:
+    ) -> str | None:
         """
         Prompt dmenu with a list of choices.
 
@@ -657,15 +657,15 @@ class Dmenu:
                 capture_output=True,
                 text=True,
             )
-            return result.stdout.strip()
+            return result.stdout.strip() if result.returncode == 0 else None
 
         except FileNotFoundError:
             logger.error("Binary 'dmenu' not found.")
-            return ""
+            return None
 
         except Exception as e:
             logger.error(f"Command failed: {e}")
-            return ""
+            return None
 
 
 class NotificationSystem:

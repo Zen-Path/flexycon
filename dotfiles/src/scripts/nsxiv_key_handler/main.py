@@ -11,9 +11,9 @@ from pathlib import Path
 from typing import Callable, TypedDict
 
 from common.helpers import (
-    Dmenu,
     NotificationSystem,
     get_version,
+    prompt_options,
     run_command,
     run_command_background,
 )
@@ -38,16 +38,21 @@ def get_help_text():
 
 def action_interactive_trash(paths: list[Path]):
     for path in paths:
-        choice = Dmenu.run(
-            prompt=f"Confirm trash {str(path)!r}?", choices=["Yes", "No", "Cancel"]
-        ).lower()
+        prompt_result = prompt_options(
+            prompt=f"Confirm trash {str(path)!r}?", options=["Yes", "No", "Cancel"]
+        )
+
+        if prompt_result is None:
+            continue
+
+        _idx, choice = prompt_result
+
+        if choice == "cancel":
+            break
 
         if choice == "yes":
             run_command(["trash-put", str(path)])
             NotificationSystem.run("File trashed", f"Trashed {str(path)!r}.")
-
-        elif choice == "cancel":
-            break
 
 
 def action_trash(paths: list[Path]):
@@ -66,7 +71,16 @@ def action_flip(paths: list[Path]):
 
 def action_group(paths: list[Path]):
     default_name = datetime.now().strftime("%F_%T")
-    choice = Dmenu.run(prompt="Group file(s) where?", choices=[default_name])
+    prompt_result = prompt_options(
+        prompt="Group file(s) where?", options=[default_name]
+    )
+
+    if prompt_result is None:
+        logger.error("Could not group files due to empty selection.")
+        return
+
+    _idx, choice = prompt_result
+
     if not choice:
         NotificationSystem.run("No directory entered, cancelled.")
         return

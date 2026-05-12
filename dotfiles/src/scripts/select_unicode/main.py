@@ -5,8 +5,14 @@
 import argparse
 import logging
 import subprocess
+import sys
 
-from common.helpers import Dmenu, NotificationSystem, get_version, run_command
+from common.helpers import (
+    NotificationSystem,
+    get_version,
+    prompt_options,
+    run_command,
+)
 from common.logger import logger, setup_logging
 from scripts.select_unicode.data import CHARS
 
@@ -56,17 +62,30 @@ def main():
     logger.debug(f"char_categories: {char_categories}")
 
     # Prompt user for a category or common emojis
-    selection = Dmenu.run(
+    prompt_result = prompt_options(
         prompt="Emoji",
-        choices=char_categories + format_char_entries(CHARS["emoji"]),
+        options=char_categories + format_char_entries(CHARS["emoji"]),
         list_view_item_count=30,
     )
+
+    if prompt_result is None:
+        logger.error("Selection is empty.")
+        sys.exit(1)
+
+    _idx, selection = prompt_result
+
     if selection in char_categories:
-        selection = Dmenu.run(
+        prompt_result = prompt_options(
             prompt="Emoji",
-            choices=format_char_entries(CHARS[selection]),
+            options=format_char_entries(CHARS[selection]),
             list_view_item_count=30,
         )
+
+        if prompt_result is None:
+            logger.error("Selection is empty.")
+            sys.exit(1)
+
+        _idx, selection = prompt_result
 
     selection_parts = selection.split(" - ", maxsplit=1)
     logger.info(f"Selection parts: {selection_parts}")
