@@ -8,9 +8,10 @@ import shutil
 import sqlite3
 import time
 from datetime import datetime
+from pathlib import Path
 
 
-def extract_schema(db_path, output_file):
+def extract_schema(db_path: Path, output_file: Path):
     """Extract the database schema and save it to a file."""
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -25,7 +26,7 @@ def extract_schema(db_path, output_file):
     print(f"Base schema saved to {output_file}")
 
 
-def generate_diff(old_db, new_db, output_dir):
+def generate_diff(old_db: Path, new_db: Path, output_dir: Path):
     """Generate a diff between two databases and save it."""
     os.makedirs(output_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S-%f")
@@ -57,7 +58,7 @@ def generate_diff(old_db, new_db, output_dir):
     print(f"Diff saved to {diff_file}")
 
 
-def restore_database(base_schema, diffs_dir, output_db):
+def restore_database(base_schema: Path, diffs_dir: Path, output_db: Path):
     """Restore a database from the base schema and a series of diff files."""
     if os.path.exists(output_db):
         os.remove(output_db)
@@ -79,7 +80,7 @@ def restore_database(base_schema, diffs_dir, output_db):
     print(f"Database restored to {output_db}")
 
 
-def generate_test_data(output_dir, base_db, num_backups=10):
+def generate_test_data(output_dir: Path, base_db: Path, num_backups: int = 10):
     """Generate test data with incremental changes and save diffs."""
     os.makedirs(output_dir, exist_ok=True)
 
@@ -95,11 +96,11 @@ def generate_test_data(output_dir, base_db, num_backups=10):
     conn.commit()
     conn.close()
 
-    extract_schema(base_db, os.path.join(output_dir, "base_schema.sql"))
+    extract_schema(base_db, Path(output_dir, "base_schema.sql"))
 
     previous_db = base_db
     for i in range(1, num_backups + 1):
-        new_db = os.path.join(output_dir, f"db_{i}.db")
+        new_db = Path(output_dir, f"db_{i}.db")
         shutil.copy(previous_db, new_db)
 
         conn = sqlite3.connect(new_db)
