@@ -11,15 +11,9 @@ from datetime import datetime, timedelta
 from typing import Callable
 
 from common.apps.window_manager import get_active_window_manager
-from common.helpers import (
-    NotificationSystem,
-    PromptOption,
-    System,
-    get_version,
-    prompt_options,
-    run_command,
-)
+from common.helpers import NotificationSystem, System, get_version, run_command
 from common.logger import logger, setup_logging
+from common.prompt_utilities import PromptOption, prompt_options
 
 
 def prompt_user(options: list[PromptOption]) -> str | int | None:

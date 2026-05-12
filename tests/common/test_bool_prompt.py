@@ -1,5 +1,5 @@
 import pytest
-from common.helpers import prompt_bool
+from common.prompt_utilities import prompt_bool
 
 
 @pytest.mark.parametrize("user_input", ["y", "yes", "1", "  Y  ", "YES", "YeS", "yEs"])

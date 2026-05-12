@@ -7,8 +7,9 @@ import logging
 from pathlib import Path
 from typing import TypedDict
 
-from common.helpers import PromptOption, ScreenshotUtility, get_version, prompt_options
+from common.helpers import ScreenshotUtility, get_version
 from common.logger import logger, setup_logging
+from common.prompt_utilities import PromptOption, prompt_options
 
 
 class ScreenshotOptions(TypedDict):

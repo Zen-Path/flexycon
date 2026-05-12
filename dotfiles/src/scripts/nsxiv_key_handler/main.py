@@ -13,13 +13,13 @@ from typing import Callable, TypedDict
 from common.helpers import (
     NotificationSystem,
     get_version,
-    prompt_options,
     run_command,
     run_command_background,
 )
 from common.logger import logger, setup_logging
 from common.media import flip_image
 from common.packages.clipboard_utilities import copy_file, copy_text
+from common.prompt_utilities import prompt_options
 
 ActionFunc = Callable[[list[Path]], None]
 

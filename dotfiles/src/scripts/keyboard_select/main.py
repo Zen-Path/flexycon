@@ -8,13 +8,9 @@ import shutil
 import subprocess
 import sys
 
-from common.helpers import (
-    NotificationSystem,
-    get_version,
-    prompt_options,
-    run_command,
-)
+from common.helpers import NotificationSystem, get_version, run_command
 from common.logger import logger, setup_logging
+from common.prompt_utilities import prompt_options
 
 # Map of keyboard layouts with their full names
 layout_full_names = {
