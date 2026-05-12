@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import Any
 
 from common.helpers import load_json
 from common.logger import logger
@@ -27,10 +26,16 @@ class LocalConfig(BaseModel):
         return self
 
 
+class Config(BaseModel):
+    """Resolved config from global and local config"""
+
+    ignore: list[str]
+
+
 def load_global_config() -> GlobalConfig | None:
     """Load and validate the global configuration."""
-    xdg_config_home = os.getenv("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))
-    global_path = Path(xdg_config_home, "flexycon", "sync", "config.json")
+    config_home = Path(os.getenv("XDG_CONFIG_HOME") or Path.home() / ".config")
+    global_path = config_home / "flexycon" / "sync" / "config.json"
 
     data = load_json(global_path)
     if not data:
@@ -39,14 +44,13 @@ def load_global_config() -> GlobalConfig | None:
     try:
         return GlobalConfig.model_validate(data)
     except ValidationError as e:
-        logger.error(f"Error validating global config at {global_path}: {e}")
+        logger.error(f"Problem validating global config at {str(global_path)!r}: {e}")
         return None
 
 
 def load_local_config() -> LocalConfig | None:
     """Load and validate the local configuration."""
-    local_path = Path(os.getcwd(), ".sync-config.json")
-
+    local_path = Path.cwd() / ".sync-config.json"
     data = load_json(local_path)
     if not data:
         return None
@@ -54,11 +58,11 @@ def load_local_config() -> LocalConfig | None:
     try:
         return LocalConfig.model_validate(data)
     except ValidationError as e:
-        logger.error(f"Error validating local config at {local_path}: {e}")
+        logger.error(f"Problem validating local config at {str(local_path)!r}: {e}")
         return None
 
 
-def load_config() -> dict[str, Any]:
+def load_config() -> Config:
     """
     Combine global and local configs according to business rules.
     """
@@ -76,6 +80,6 @@ def load_config() -> dict[str, Any]:
             # Append to global ignores
             ignore_patterns.extend(local_cfg.ignore_append)
 
-    ignore_patterns = list(set(ignore_patterns))
+    ignore_patterns = list(dict.fromkeys(ignore_patterns))
 
-    return {"ignore": ignore_patterns}
+    return Config(ignore=ignore_patterns)

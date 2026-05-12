@@ -13,9 +13,10 @@ from common.helpers import get_version
 from common.logger import logger, setup_logging
 from scripts.rclone_wrapper.src.config import load_config
 from scripts.rclone_wrapper.src.formatting import (
-    format_operations,
     format_stats,
+    prepare_table_rows,
     print_table,
+    transform_operations,
 )
 from scripts.rclone_wrapper.src.rclone import build_rclone_command, parse_rclone_output
 
@@ -60,40 +61,46 @@ def main():
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-
     logger.debug(args)
 
     try:
         config = load_config()
-        logger.debug(json.dumps(config, indent=2))
+        logger.debug(f"Config:\n{json.dumps(config.model_dump(), indent=2)}")
     except Exception as e:
         logger.error(e)
         sys.exit(1)
 
     command = build_rclone_command(args, config)
-    if not args.dry_run:
-        run_cmd(command)
-        return
-
     result = run_cmd(command)
 
-    operations_data, stats = parse_rclone_output(result.output)
-    formatted_operations = format_operations(operations_data)
+    if not args.dry_run:
+        sys.exit(result.return_code)
 
-    print_table(formatted_operations, headers=["Type", "Filepath", "Size Fmt", "Size"])
+    raw_ops, stats = parse_rclone_output(result.output)
+    processed_ops = transform_operations(raw_ops)
+    formatted_rows = prepare_table_rows(processed_ops)
 
-    formatted_stats = format_stats(stats)
-    print_table(
-        [[k, v] for k, v in formatted_stats.items()], headers=["Field", "Value"]
-    )
+    if len(formatted_rows) > 0:
+        print_table(
+            formatted_rows, headers=["Update Type", "Filepath", "Size Fmt", "Size"]
+        )
+
+    if stats is not None:
+        stats_rows = format_stats(stats)
+        print_table(stats_rows, headers=["Field", "Value"])
 
     # Create a temporary log file that holds the table data
     # Useful in cases when the some useful data is truncated
     with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json") as tmp:
-        log_data = {"operations": operations_data, "stats": stats}
-        tmp.write(json.dumps(log_data))
+        log_data = {
+            "operations": [op.model_dump() for op in processed_ops],
+            "stats": stats.model_dump() if stats else None,
+        }
+        tmp.write(json.dumps(log_data, indent=2))
 
-        logger.debug(f"Temporary log file created at: {tmp.name}")
+        print(f"Log file created at {tmp.name!r}")
+
+    sys.exit(result.return_code)
 
 
 if __name__ == "__main__":

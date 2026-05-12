@@ -1,9 +1,14 @@
 import argparse
 import json
-from typing import Any
+import sys
+
+from common.logger import logger
+from pydantic import ValidationError
+from scripts.rclone_wrapper.src.config import Config
+from scripts.rclone_wrapper.src.models import RcloneOperation, RcloneStats
 
 
-def build_rclone_command(args: argparse.Namespace, config: dict[str, Any]) -> list[str]:
+def build_rclone_command(args: argparse.Namespace, config: Config) -> list[str]:
     command = ["rclone"]
 
     match args.action:
@@ -12,7 +17,7 @@ def build_rclone_command(args: argparse.Namespace, config: dict[str, Any]) -> li
         case "sync" | "s":
             command.extend(["sync", "--track-renames"])
         case _:
-            return []
+            raise ValueError(f"Unsupported action {args.action!r}")
 
     if args.dry_run:
         command.extend(["--dry-run", "--use-json-log"])
@@ -21,7 +26,7 @@ def build_rclone_command(args: argparse.Namespace, config: dict[str, Any]) -> li
 
     command.append("--create-empty-src-dirs")
 
-    for ignore_pattern in config["ignore"]:
+    for ignore_pattern in config.ignore:
         command.extend(["--exclude", ignore_pattern])
 
     command.extend([args.source, args.destination])
@@ -29,9 +34,11 @@ def build_rclone_command(args: argparse.Namespace, config: dict[str, Any]) -> li
     return command
 
 
-def parse_rclone_output(output: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    operations_data: list[dict[str, Any]] = []
-    stats: dict[str, Any] = {}
+def parse_rclone_output(
+    output: str,
+) -> tuple[list[RcloneOperation], RcloneStats | None]:
+    operations: list[RcloneOperation] = []
+    stats = None
 
     for line in output.splitlines():
         if not line:
@@ -39,16 +46,18 @@ def parse_rclone_output(output: str) -> tuple[list[dict[str, Any]], dict[str, An
 
         log_obj = json.loads(line)
 
-        if log_obj.get("stats"):
-            stats = log_obj["stats"]
+        if "stats" in log_obj:
+            try:
+                logger.debug(f"Rclone stats:\n{log_obj['stats']}")
+                stats = RcloneStats.model_validate(log_obj["stats"])
+            except ValidationError as e:
+                logger.error(f"Problem validating stats: {e}.")
 
         if log_obj.get("skipped"):
-            operations_data.append(
-                {
-                    "type": log_obj.get("skipped"),
-                    "file": log_obj.get("object"),
-                    "size": log_obj.get("size", 0),
-                }
-            )
+            try:
+                operations.append(RcloneOperation.model_validate(log_obj))
+            except ValidationError as e:
+                logger.error(f"Problem validating operation: {e}.")
+                sys.exit(1)
 
-    return operations_data, stats
+    return operations, stats

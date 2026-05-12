@@ -1,104 +1,128 @@
-from typing import Any
-
 import humanize
 from colorama import Fore, Style, init
-from common.helpers import remove_diacritics, truncate
+from common.helpers import truncate
+from scripts.rclone_wrapper.src.models import (
+    OperationStyle,
+    ProcessedOperation,
+    RcloneOperation,
+    RcloneStats,
+)
 from tabulate import tabulate
 
 init(autoreset=True)
+
+
+OPERATION_REGISTRY: dict[str, OperationStyle] = {
+    "copy": OperationStyle(short_name="copy", color=Fore.GREEN),
+    "move": OperationStyle(short_name="move", color=Fore.YELLOW),
+    "delete": OperationStyle(short_name="delete", color=Fore.LIGHTRED_EX),
+    "update modification time": OperationStyle(
+        short_name="update mod time", color=Fore.BLUE
+    ),
+    "remove directory": OperationStyle(short_name="dir remove", color=Fore.RED),
+    "make directory": OperationStyle(short_name="dir make", color=Fore.MAGENTA),
+    "set directory modification time": OperationStyle(
+        short_name="dir mod time", color=Fore.LIGHTBLUE_EX
+    ),
+}
 
 
 def print_table(data: list[list[str]], headers: list[str]):
     print(tabulate(data, headers=headers, tablefmt="simple_outline"))
 
 
-def format_operations(
-    operations_data: list[dict[str, Any]], filename_max_size: int = 100
+def resolve_operation_info(raw_type: str) -> tuple[str, str, str | None]:
+    """Resolves raw rclone 'skipped' type to (short_name, color, destination)"""
+    if raw_type.startswith("move to "):
+        dest = raw_type.replace("move to ", "")
+        return "move", Fore.YELLOW, dest
+
+    style = OPERATION_REGISTRY.get(raw_type)
+    if style:
+        return style.short_name, style.color, None
+
+    return raw_type, Fore.LIGHTBLACK_EX, None
+
+
+def transform_operations(raw_ops: list[RcloneOperation]) -> list[ProcessedOperation]:
+    processed: list[ProcessedOperation] = []
+
+    for op in raw_ops:
+        short_name, color, destination = resolve_operation_info(op.raw_type)
+        processed.append(
+            ProcessedOperation(
+                display_type=short_name,
+                display_file=op.raw_file,
+                size=op.size,
+                color=color,
+                destination=destination,
+            )
+        )
+
+    return processed
+
+
+def prepare_table_rows(
+    ops: list[ProcessedOperation], max_width: int = 100
 ) -> list[list[str]]:
-    """
-    Format rclone operations for display in a table.
-    """
-    # Define colors for operation types
-    ACTIONS_FMT = {
-        "copy": Fore.GREEN,
-        "move": Fore.YELLOW,
-        "delete": Fore.RED,
-        "dir remove": Fore.MAGENTA,
-        "dir make": Fore.BLUE,
-        "dir mod time": Fore.CYAN,
-        "update mod time": Fore.CYAN,
-    }
+    sorted_ops = sorted(ops, key=lambda x: (x.display_type, x.display_file, x.size))
 
-    # Normalize type names
-    TYPE_REMAP = {
-        "set directory modification time": "dir mod time",
-        "remove directory": "dir remove",
-        "make directory": "dir make",
-        "update modification time": "update mod time",
-    }
+    rows: list[list[str]] = []
+    for op in sorted_ops:
+        file_path = (
+            f"'{op.display_file}' -> '{op.destination}'"
+            if op.destination
+            else op.display_file
+        )
 
-    # Sort operations by type, then file, then size (numerically)
-    sorted_data = sorted(
-        operations_data, key=lambda x: (x["type"], x["file"], int(x["size"]))
-    )
-
-    formatted_result: list[list[str]] = []
-
-    for op in sorted_data:
-        op_type = str(op.get("type") or "")
-        op_file = remove_diacritics(str(op.get("file") or ""))
-        # op_file = str(op.get("file") or "")
-        op_size = int(op.get("size") or 0)
-
-        # Remap types
-        op_type = TYPE_REMAP.get(op_type, op_type)
-
-        # Special handling for moves
-        if op_type.startswith("move to"):
-            destination = op_type.replace("move to ", "")
-            op_file = f"{op_file} -> {destination}"
-            op_type = "move"
-
-        # Determine size color
-        if op_size > 100_000_000:
+        if op.size > 100_000_000:
             size_color = Fore.RED
-        elif op_size > 1_000_000:
+        elif op.size > 1_000_000:
             size_color = Fore.YELLOW
         else:
             size_color = Fore.GREEN
 
-        # Build formatted row
         row = [
-            f"{ACTIONS_FMT.get(op_type, Fore.LIGHTBLACK_EX)}{op_type}{Style.RESET_ALL}",
-            f"{Fore.WHITE}{truncate(op_file, filename_max_size, truncate_from_end=False)}{Style.RESET_ALL}",
-            f"{Fore.MAGENTA}{humanize.naturalsize(op_size)}{Style.RESET_ALL}",
-            f"{size_color}{op_size}{Style.RESET_ALL}",
+            f"{op.color}{op.display_type}{Style.RESET_ALL}",
+            f"{Fore.WHITE}{truncate(file_path, max_width, truncate_from_end=False)}{Style.RESET_ALL}",
+            f"{Fore.MAGENTA}{humanize.naturalsize(op.size)}{Style.RESET_ALL}",
+            f"{size_color}{op.size}{Style.RESET_ALL}",
         ]
+        rows.append(row)
 
-        formatted_result.append(row)
-
-    return formatted_result
+    return rows
 
 
-def format_stats(stats: dict[str, Any]) -> dict[str, Any]:
-    result: dict[str, Any] = {}
+def ratio_fmt(current: int | float, total: int | float, is_size: bool = False) -> str:
+    if is_size:
+        return (
+            f"{humanize.naturalsize(int(current))} / {humanize.naturalsize(int(total))}"
+        )
+    return f"{current} / {total}"
 
-    result["bytes"] = (
-        f"{humanize.naturalsize(int(stats['bytes']))} / {humanize.naturalsize(int(stats['totalBytes']))}"
-    )
-    result["transfers"] = f"{stats['transfers']} / {stats['totalTransfers']}"
-    result["checks"] = f"{stats['checks']} / {stats['totalChecks']}"
 
-    for field in [
-        "listed",
-        "deletedDirs",
-        "deletes",
-        "renames",
-        "errors",
-        "fatalError",
-        "retryError",
-        "elapsedTime",
-    ]:
-        result[field] = stats[field]
+def alert_fmt(value: int | bool) -> str:
+    if value:
+        return f"{Fore.RED}{value}{Style.RESET_ALL}"
+    return str(value)
 
-    return result
+
+def format_stats(stats: RcloneStats) -> list[list[str]]:
+    """
+    Transforms stats into formatted rows for table display.
+    """
+    display_map = [
+        ("Bytes Transferred", ratio_fmt(stats.bytes, stats.total_bytes, is_size=True)),
+        ("Transfers", ratio_fmt(stats.transfers, stats.total_transfers)),
+        ("Checks", ratio_fmt(stats.checks, stats.total_checks)),
+        ("Listed", stats.listed),
+        ("Directories Deleted", stats.deleted_dirs),
+        ("Files Deleted", stats.deletes),
+        ("Renames", stats.renames),
+        ("Errors", alert_fmt(stats.errors)),
+        ("Fatal Error", alert_fmt(stats.fatal_error)),
+        ("Retry Error", alert_fmt(stats.retry_error)),
+        ("Elapsed Time", f"{stats.elapsed_time:.2f}s"),
+    ]
+
+    return [[str(label), str(val)] for label, val in display_map]
