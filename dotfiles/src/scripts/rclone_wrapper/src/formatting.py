@@ -80,8 +80,8 @@ def format_operations(
     return formatted_result
 
 
-def format_stats(stats):
-    result = {}
+def format_stats(stats: dict[str, Any]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
 
     result["bytes"] = (
         f"{humanize.naturalsize(int(stats['bytes']))} / {humanize.naturalsize(int(stats['totalBytes']))}"

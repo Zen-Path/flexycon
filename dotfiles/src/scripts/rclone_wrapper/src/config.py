@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Any
 
 from common.helpers import load_json
 from common.logger import logger
@@ -57,7 +58,7 @@ def load_local_config() -> LocalConfig | None:
         return None
 
 
-def load_config() -> dict:
+def load_config() -> dict[str, Any]:
     """
     Combine global and local configs according to business rules.
     """

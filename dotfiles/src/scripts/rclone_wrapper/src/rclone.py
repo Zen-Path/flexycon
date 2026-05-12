@@ -1,7 +1,9 @@
+import argparse
 import json
+from typing import Any
 
 
-def build_rclone_command(args, config) -> list[str]:
+def build_rclone_command(args: argparse.Namespace, config: dict[str, Any]) -> list[str]:
     command = ["rclone"]
 
     match args.action:
@@ -27,9 +29,9 @@ def build_rclone_command(args, config) -> list[str]:
     return command
 
 
-def parse_rclone_output(output: str):
-    operations_data = []
-    stats = {}
+def parse_rclone_output(output: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    operations_data: list[dict[str, Any]] = []
+    stats: dict[str, Any] = {}
 
     for line in output.splitlines():
         if not line:
