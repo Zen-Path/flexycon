@@ -212,6 +212,22 @@ def copy_shell_profile_from_temp(temp_path: Path):
     logger.debug(f"Copied {str(src)!r} -> {str(dst)!r}")
 
 
+def upgrade_yazi_packages() -> bool:
+    logger.debug("📦 Upgrading yazi packages...")
+
+    try:
+        result = run_command(["ya", "pkg", "upgrade"]).success
+        logger.debug(f"Upgrade {'successful' if result else 'failed'}.")
+        return result
+
+    except KeyboardInterrupt:
+        sys.exit(1)
+
+    except Exception as e:
+        logger.error(f"Unable to upgrade yazi packages: {e}")
+        return False
+
+
 # === TARGETS ===
 
 
@@ -287,6 +303,8 @@ def setup():
         run_command([str(precommit_bin), "install-hooks"])
     else:
         logger.error("'pre-commit' not found. Skipping installation.")
+
+    upgrade_yazi_packages()
 
 
 @target()
