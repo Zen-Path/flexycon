@@ -378,9 +378,9 @@
             "dst": "~/.local/bin/rclone_wrapper",
             "chmod": "755"
         },
-        "f_rename_file": {
-            "src": "src/scripts/rename_file/main.py",
-            "dst": "~/.local/bin/rename_file",
+        "f_file_renamer": {
+            "src": "src/scripts/file_renamer/main.py",
+            "dst": "~/.local/bin/file_renamer",
             "chmod": "755"
         },
         "f_sdir": {
@@ -599,7 +599,7 @@
                 "f_noisereduce",
                 "f_pkgsize",
                 "f_rclone_wrapper",
-                "f_rename_file",
+                "f_file_renamer",
                 "f_sdir",
                 "f_user_shortcuts",
                 "f_tag",
