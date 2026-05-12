@@ -1,7 +1,6 @@
 import json
 import os
 import re
-import secrets
 import shutil
 import subprocess
 import sys
@@ -13,6 +12,7 @@ from pathlib import Path
 from typing import Callable, Generator, Literal
 
 import psutil
+from common.cmd_utilities import run_cmd
 from common.logger import logger
 from common.prompt_utilities import prompt_bool
 
@@ -32,67 +32,9 @@ def get_version() -> str:
     return version
 
 
-@dataclass
-class CommandResult:
-    return_code: int
-    raw_output: str
-
-    @property
-    def output(self) -> str:
-        return self.raw_output.strip()
-
-    @property
-    def success(self) -> bool:
-        return self.return_code == 0
-
-    def __str__(self) -> str:
-        return self.output
-
-
 def resolve_path(path_parts: list[str]) -> Path:
     """Resolve a list of path parts into a single expanded path."""
     return Path(os.path.expandvars(os.path.join(*path_parts)))
-
-
-def run_command(command: list[str]) -> CommandResult:
-    """Run a shell command and return its result."""
-    cmd_identifier = secrets.token_hex(5)  # 8 hex chars
-
-    logger.debug(f"Running {command} with id {cmd_identifier!r}")
-
-    output: list[str] = []
-    with subprocess.Popen(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        universal_newlines=True,
-        bufsize=1,
-    ) as process:
-        if process.stdout is not None:
-            for line in process.stdout:
-                output.append(line)
-                logger.debug(line.strip())
-
-        return_code = process.wait()
-
-    logger.debug(
-        f"Command with id {cmd_identifier!r} finished with return code {return_code}"
-    )
-
-    return CommandResult(return_code=return_code, raw_output="\n".join(output))
-
-
-def run_command_background(command: list[str]):
-    """Launch a process and move on immediately."""
-    logger.debug(f"Running {command} in background.")
-
-    subprocess.Popen(
-        command,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True,  # detach from the current process group (Unix)
-        shell=False,
-    )
 
 
 def write_to_file(content: str, path: Path):
@@ -401,7 +343,7 @@ class System:
         """Lock the screen."""
         cmd = cls._get_lock_cmd()
         if cmd:
-            run_command(cmd)
+            run_cmd(cmd)
         else:
             logger.error("No screen locker found.")
 
@@ -409,10 +351,10 @@ class System:
     def sleep(cls):
         """Put the system to sleep."""
         if sys.platform == "darwin":
-            run_command(["pmset", "sleepnow"])
+            run_cmd(["pmset", "sleepnow"])
         elif sys.platform == "linux":
             if cmd := cls._get_linux_controller():
-                run_command([cmd, "suspend", "-i"])
+                run_cmd([cmd, "suspend", "-i"])
         else:
             logger.warning(f"Method isn't supported for {sys.platform!r}")
 
@@ -420,12 +362,10 @@ class System:
     def power_off(cls):
         """Power off the system."""
         if sys.platform == "darwin":
-            run_command(
-                ["osascript", "-e", 'tell app "loginwindow" to «event aevtrsdn»']
-            )
+            run_cmd(["osascript", "-e", 'tell app "loginwindow" to «event aevtrsdn»'])
         elif sys.platform == "linux":
             if cmd := cls._get_linux_controller():
-                run_command([cmd, "poweroff", "-i"])
+                run_cmd([cmd, "poweroff", "-i"])
         else:
             logger.warning(f"Method isn't supported for {sys.platform!r}")
 
@@ -433,12 +373,10 @@ class System:
     def reboot(cls):
         """Reboot the system."""
         if sys.platform == "darwin":
-            run_command(
-                ["osascript", "-e", 'tell app "loginwindow" to «event aevtrrst»']
-            )
+            run_cmd(["osascript", "-e", 'tell app "loginwindow" to «event aevtrrst»'])
         elif sys.platform == "linux":
             if cmd := cls._get_linux_controller():
-                run_command([cmd, "reboot", "-i"])
+                run_cmd([cmd, "reboot", "-i"])
         else:
             logger.warning(f"Method isn't supported for {sys.platform!r}")
 
@@ -448,10 +386,10 @@ class System:
         if sys.platform == "darwin":
             # Standard hibernation isn't exposed gracefully in macOS user-space.
             # We use sleep as a safe default.
-            run_command(["pmset", "sleepnow"])
+            run_cmd(["pmset", "sleepnow"])
         elif sys.platform == "linux":
             if cmd := cls._get_linux_controller():
-                run_command([cmd, "hibernate", "-i"])
+                run_cmd([cmd, "hibernate", "-i"])
         else:
             logger.warning(f"Method isn't supported for {sys.platform!r}")
 
@@ -528,7 +466,7 @@ class NotificationSystem:
                 return
 
             # If an action exists, block and wait for user input
-            cmd_output = run_command(cmd).output
+            cmd_output = run_cmd(cmd).output
 
             if cmd_output == "open_image" and icon_path:
                 subprocess.Popen(["xdg-open", icon_path])
@@ -544,7 +482,7 @@ class NotificationSystem:
         if not shutil.which("dunstctl"):
             return None
 
-        result = run_command(["dunstctl", "is-paused"])
+        result = run_cmd(["dunstctl", "is-paused"])
         if not result.success:
             return None
 
@@ -561,7 +499,7 @@ class NotificationSystem:
         else:
             status_str = str(status).lower()
 
-        result = run_command(["dunstctl", "set-paused", status_str])
+        result = run_cmd(["dunstctl", "set-paused", status_str])
         if not result.success:
             return None
 
@@ -622,7 +560,7 @@ class Window:
     @classmethod
     def get_active_window(cls) -> Window | None:
         # TODO: check on Linux
-        result = run_command(["xdotool", "getactivewindow"])
+        result = run_cmd(["xdotool", "getactivewindow"])
         if not result.success:
             return None
 
@@ -632,7 +570,7 @@ class Window:
     @classmethod
     def get_window_name(cls, window_id: int) -> str | None:
         # TODO: check on Linux
-        result = run_command(["xdotool", "getwindowname", str(window_id)])
+        result = run_cmd(["xdotool", "getwindowname", str(window_id)])
         if not result.success:
             return None
 
@@ -682,7 +620,7 @@ class Maim:
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         try:
-            return run_command(cmd).success
+            return run_cmd(cmd).success
 
         except FileNotFoundError:
             logger.error("Binary 'maim' not found.")
@@ -813,7 +751,7 @@ class SoundUtility:
         # Should return something like this:
         # - 'Volume: 0.55'
         # - 'Volume: 0.50 [MUTED]'
-        result = run_command(["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"])
+        result = run_cmd(["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"])
         if not result.success:
             return None
 
@@ -832,7 +770,7 @@ class SoundUtility:
             - update_volume(2) to increase volume by 2
             - update_volume(-2) to decrease it by 2
         """
-        return run_command(
+        return run_cmd(
             [
                 "wpctl",
                 "set-volume",
@@ -843,4 +781,4 @@ class SoundUtility:
 
     @classmethod
     def toggle_mute(cls):
-        run_command(["wpctl", "set-mute", "@DEFAULT_SINK@", "toggle"])
+        run_cmd(["wpctl", "set-mute", "@DEFAULT_SINK@", "toggle"])

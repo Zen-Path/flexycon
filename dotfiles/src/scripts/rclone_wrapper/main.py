@@ -8,7 +8,8 @@ import logging
 import sys
 import tempfile
 
-from common.helpers import get_version, run_command
+from common.cmd_utilities import run_cmd
+from common.helpers import get_version
 from common.logger import logger, setup_logging
 from scripts.rclone_wrapper.src.config import load_config
 from scripts.rclone_wrapper.src.formatting import (
@@ -71,10 +72,10 @@ def main():
 
     command = build_rclone_command(args, config)
     if not args.dry_run:
-        run_command(command)
+        run_cmd(command)
         return
 
-    result = run_command(command)
+    result = run_cmd(command)
 
     operations_data, stats = parse_rclone_output(result.output)
     formatted_operations = format_operations(operations_data)

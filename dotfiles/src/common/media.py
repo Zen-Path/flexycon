@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from common.helpers import run_command
+from common.cmd_utilities import run_cmd
 from common.logger import logger
 
 # IMAGES
@@ -19,7 +19,7 @@ def compress_image(input_path: Path, output_path: Path | None = None) -> Path | 
     match extension.lstrip("."):
         case "jpg" | "jpeg":
             # fmt: off
-            run_command([
+            run_cmd([
                 "ffmpeg",
                 "-i", str(input_path),
                 "-q:v", "10",
@@ -28,7 +28,7 @@ def compress_image(input_path: Path, output_path: Path | None = None) -> Path | 
             # fmt: on
         case "png":
             # fmt: off
-            run_command([
+            run_cmd([
                 "ffmpeg",
                 "-i", str(input_path),
                 "-compression_level", "9",
@@ -51,7 +51,7 @@ def rotate_image(
     if not output_path:
         output_path = input_path
 
-    run_command(["magick", str(input_path), "-rotate", str(degrees), str(output_path)])
+    run_cmd(["magick", str(input_path), "-rotate", str(degrees), str(output_path)])
 
     return output_path
 
@@ -63,7 +63,7 @@ def flip_image(input_path: Path, output_path: Path | None = None) -> Path:
     if not output_path:
         output_path = input_path
 
-    run_command(["magick", str(object=input_path), "-flop", str(output_path)])
+    run_cmd(["magick", str(object=input_path), "-flop", str(output_path)])
 
     return output_path
 
@@ -81,7 +81,7 @@ def convert_video_to_mp4(input_path: Path, output_path: Path | None = None) -> P
         output_path = Path(f"{filename}.mp4")
 
     # fmt: off
-    run_command([
+    run_cmd([
         "ffmpeg",
         "-fflags", "+genpts",
         "-i", str(input_path),
@@ -103,7 +103,7 @@ def compress_video(input_path: Path, output_path: Path | None = None) -> Path:
         output_path = Path(f"{filename}-compressed{extension}")
 
     # fmt: off
-    run_command([
+    run_cmd([
         "ffmpeg",
         "-i", str(input_path),
         "-vcodec", "libx264",
@@ -140,7 +140,7 @@ def rotate_video(
     elif deg == 0:
         # No rotation, just copy input
         # fmt: off
-        run_command([
+        run_cmd([
             "ffmpeg",
             "-i", str(input_path),
             "-c", "copy",
@@ -152,7 +152,7 @@ def rotate_video(
         vf = f"rotate={deg}*PI/180"
 
     # fmt: off
-    run_command([
+    run_cmd([
         "ffmpeg",
         "-i", str(input_path),
         "-vf", vf,
@@ -175,7 +175,7 @@ def extract_audio_from_video(input_path: Path, output_path: Path | None = None) 
         output_path = Path(f"{filename}-audio{extension}")
 
     # fmt: off
-    run_command([
+    run_cmd([
         "ffmpeg",
         "-i", str(input_path),
         "-q:a", "0",
@@ -199,7 +199,7 @@ def compress_pdf(input_path: Path, output_path: Path | None = None) -> Path:
         filename, extension = os.path.splitext(input_path)
         output_path = Path(f"{filename}-compressed{extension}")
 
-    run_command(
+    run_cmd(
         [
             "gs",
             "-sDEVICE=pdfwrite",
@@ -226,7 +226,7 @@ def convert_pdf_to_png(input_path: Path, output_path: Path | None = None) -> Pat
         output_path = Path(f"{filename}.png")
 
     # fmt: off
-    run_command(
+    run_cmd(
         [
             "magick",
             "-density", "300",
@@ -259,7 +259,7 @@ def trim_media(
         output_path = Path(f"{filename}-trimmed{extension}")
 
     # fmt: off
-    run_command([
+    run_cmd([
         "ffmpeg",
         "-i", str(input_path),
         "-ss", start_time,

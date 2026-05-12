@@ -7,7 +7,8 @@ import logging
 import subprocess
 import sys
 
-from common.helpers import NotificationSystem, get_version, run_command
+from common.cmd_utilities import run_cmd
+from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
 from common.prompt_utilities import prompt_options
 from scripts.select_unicode.data import CHARS
@@ -94,7 +95,7 @@ def main():
     logger.info(f"char: {str(char)!r}, name: {str(name)!r}")
 
     if args.insert_char:
-        run_command(["xdotool", "type", char])
+        run_cmd(["xdotool", "type", char])
         logger.info("Character inserted.")
 
     if not args.no_copy:

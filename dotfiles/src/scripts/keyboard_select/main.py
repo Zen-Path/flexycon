@@ -8,7 +8,8 @@ import shutil
 import subprocess
 import sys
 
-from common.helpers import NotificationSystem, get_version, run_command
+from common.cmd_utilities import run_cmd
+from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
 from common.prompt_utilities import prompt_options
 
@@ -29,7 +30,7 @@ layout_full_names = {
 def get_current_layout() -> str | None:
     """Fetch the current keyboard layout."""
     try:
-        result = run_command(["setxkbmap", "-query"])
+        result = run_cmd(["setxkbmap", "-query"])
         for line in result.output.splitlines():
             if line.startswith("layout:"):
                 return line.split()[1]
@@ -43,9 +44,7 @@ def get_current_layout() -> str | None:
 def get_available_layouts() -> list[str] | None:
     """Get the available keyboard layouts using localectl."""
     try:
-        result = run_command(
-            ["localectl", "list-x11-keymap-layouts"],
-        )
+        result = run_cmd(["localectl", "list-x11-keymap-layouts"])
         return result.output.splitlines()
 
     except subprocess.CalledProcessError:
@@ -87,7 +86,7 @@ def restart_remapd() -> bool:
         return False
 
     try:
-        run_command(["killall", "remapd"])
+        run_cmd(["killall", "remapd"])
         logger.debug("Killed 'remapd'.")
 
         subprocess.Popen(["remapd"])
@@ -103,7 +102,7 @@ def restart_remapd() -> bool:
 def set_keyboard_layout(layout: str) -> bool:
     """Set the chosen keyboard layout."""
     try:
-        result = run_command(["setxkbmap", layout]).success
+        result = run_cmd(["setxkbmap", layout]).success
         if result:
             NotificationSystem.run(f"Keyboard layout changed to {layout!r}")
         return result

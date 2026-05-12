@@ -6,7 +6,8 @@ import sys
 from pathlib import Path
 from typing import Any, Callable, TypedDict, TypeVar
 
-from common.helpers import remove_files_by_pattern, run_command
+from common.cmd_utilities import run_cmd
+from common.helpers import remove_files_by_pattern
 from common.logger import logger
 from common.variables import flex_data_path
 from scripts.package_installer.data.packages import packages
@@ -84,7 +85,7 @@ def clean_precommit():
         return
 
     try:
-        run_command([str(precommit_bin), "clean"])
+        run_cmd([str(precommit_bin), "clean"])
     except subprocess.CalledProcessError as e:
         logger.error(e)
 
@@ -151,10 +152,10 @@ def init_submodules():
         return
 
     logger.info("Initializing submodules...")
-    run_command(["git", "submodule", "init"])
+    run_cmd(["git", "submodule", "init"])
 
     logger.info("Updating submodules...")
-    run_command(["git", "submodule", "update", "--recursive", "--remote"])
+    run_cmd(["git", "submodule", "update", "--recursive", "--remote"])
 
 
 def get_dotdrop_profile() -> str | None:
@@ -169,9 +170,7 @@ def get_dotdrop_profile() -> str | None:
     if not USER_VARIABLES_PATH.exists():
         logger.info("Installing bootstrap profile to generate user variables file.")
         try:
-            run_command(
-                [str(VENV_BIN / "dotdrop"), "install", "--profile", "bootstrap"]
-            )
+            run_cmd([str(VENV_BIN / "dotdrop"), "install", "--profile", "bootstrap"])
         except KeyboardInterrupt:
             sys.exit(0)
 
@@ -192,7 +191,7 @@ def get_dotdrop_profile() -> str | None:
 
 def install_temp_profile() -> Path:
     """Install dotdrop profile to a temporary directory and return the temp path."""
-    output = run_command([f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"]).output
+    output = run_cmd([f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"]).output
     match = re.search(r'installed to tmp "([^"]+)"', output)
     if not match:
         logger.debug(f"Dotdrop output:\n{output}")
@@ -216,7 +215,7 @@ def upgrade_yazi_packages() -> bool:
     logger.debug("📦 Upgrading yazi packages...")
 
     try:
-        result = run_command(["ya", "pkg", "upgrade"]).success
+        result = run_cmd(["ya", "pkg", "upgrade"]).success
         logger.debug(f"Upgrade {'successful' if result else 'failed'}.")
         return result
 
@@ -238,13 +237,13 @@ def setup_virtual_env():
 
     if not VENV_DIR.exists():
         logger.info(f"🐍 Creating Python venv in {str(VENV_DIR)!r}...")
-        run_command([PYTHON_BIN, "-m", "venv", str(VENV_DIR)])
+        run_cmd([PYTHON_BIN, "-m", "venv", str(VENV_DIR)])
 
     logger.info("♻️ Updating pip...")
-    run_command([PIP_BIN, "install", "--upgrade", "pip"])
+    run_cmd([PIP_BIN, "install", "--upgrade", "pip"])
 
     logger.info("📦 Installing current project and dependencies...")
-    run_command([PIP_BIN, "install", "-e", "."])
+    run_cmd([PIP_BIN, "install", "-e", "."])
 
 
 @target()
@@ -285,7 +284,7 @@ def setup():
     # npm
     logger.info("📦 Installing npm packages...")
     if shutil.which("npm"):
-        run_command(["npm", "install"])
+        run_cmd(["npm", "install"])
     else:
         logger.error("'npm' not found. Skipping installation.")
 
@@ -294,13 +293,13 @@ def setup():
     precommit_bin = VENV_BIN / "pre-commit"
     if precommit_bin.exists():
         # Install the standard commit hook
-        run_command([str(precommit_bin), "install"])
+        run_cmd([str(precommit_bin), "install"])
 
         # Install the push hook (required for the UI tests)
-        run_command([str(precommit_bin), "install", "--hook-type", "pre-push"])
+        run_cmd([str(precommit_bin), "install", "--hook-type", "pre-push"])
 
         # Pre-install the environments so the first commit isn't slow
-        run_command([str(precommit_bin), "install-hooks"])
+        run_cmd([str(precommit_bin), "install-hooks"])
     else:
         logger.error("'pre-commit' not found. Skipping installation.")
 

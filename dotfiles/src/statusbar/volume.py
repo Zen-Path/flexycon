@@ -6,7 +6,8 @@
 import argparse
 import logging
 
-from common.helpers import NotificationSystem, SoundUtility, run_command
+from common.cmd_utilities import run_cmd
+from common.helpers import NotificationSystem, SoundUtility
 from common.logger import logger, setup_logging
 from common.statusbar import (
     EDITOR,
@@ -31,8 +32,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 ACTIONS = {
     MouseButton.LEFT: lambda: (
-        run_command(["setsid", "-w", "-f", TERMINAL, "-e", "pulsemixer"]),
-        run_command(["pkill", "-RTMIN+10", STATUSBAR]),
+        run_cmd(["setsid", "-w", "-f", TERMINAL, "-e", "pulsemixer"]),
+        run_cmd(["pkill", "-RTMIN+10", STATUSBAR]),
     ),
     MouseButton.MIDDLE: SoundUtility.toggle_mute,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
@@ -46,7 +47,7 @@ ACTIONS = {
     ),
     MouseButton.SCROLL_UP: lambda: SoundUtility.update_volume(2),
     MouseButton.SCROLL_DOWN: lambda: SoundUtility.update_volume(-2),
-    MouseButton.EXTRA_3: lambda: run_command([TERMINAL, "-e", EDITOR, __file__]),
+    MouseButton.EXTRA_3: lambda: run_cmd([TERMINAL, "-e", EDITOR, __file__]),
 }
 
 

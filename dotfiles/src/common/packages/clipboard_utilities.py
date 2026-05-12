@@ -5,7 +5,7 @@ import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from common.helpers import run_command
+from common.cmd_utilities import run_cmd
 
 
 class ClipboardProvider(ABC):
@@ -55,7 +55,7 @@ class XClipProvider(ClipboardProvider):
 
     @classmethod
     def clear(cls):
-        run_command([cls.command, "-sel", "clip", "/dev/null"])
+        run_cmd([cls.command, "-sel", "clip", "/dev/null"])
 
 
 class XSelProvider(ClipboardProvider):
@@ -78,7 +78,7 @@ class XSelProvider(ClipboardProvider):
 
     @classmethod
     def clear(cls):
-        run_command([cls.command, "--clipboard", "--clear"])
+        run_cmd([cls.command, "--clipboard", "--clear"])
 
 
 class WaylandProvider(ClipboardProvider):
@@ -96,7 +96,7 @@ class WaylandProvider(ClipboardProvider):
 
     @classmethod
     def clear(cls):
-        run_command([cls.command, "--clear"])
+        run_cmd([cls.command, "--clear"])
 
 
 # macOS
@@ -113,11 +113,11 @@ class MacProvider(ClipboardProvider):
     def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # macOS uses AppleScript to handle 'file objects' for Finder pasting
         script = f'set the clipboard to (POSIX file "{file_path.absolute()}")'
-        run_command(["osascript", "-e", script])
+        run_cmd(["osascript", "-e", script])
 
     @classmethod
     def clear(cls):
-        run_command(["osascript", "-e", 'set the clipboard to ""'])
+        run_cmd(["osascript", "-e", 'set the clipboard to ""'])
 
 
 # Windows
@@ -138,11 +138,11 @@ class WindowsProvider(ClipboardProvider):
     def copy_file(cls, file_path: Path, mime_type: str | None = None):
         # Set-Clipboard -Path automatically handles the FileDropList format
         cmd = f"Set-Clipboard -Path {str(file_path.absolute())!r}"
-        run_command([cls.command, "-Command", cmd])
+        run_cmd([cls.command, "-Command", cmd])
 
     @classmethod
     def clear(cls):
-        run_command([cls.command, "-Command", "Clear-Clipboard"])
+        run_cmd([cls.command, "-Command", "Clear-Clipboard"])
 
 
 # Manager

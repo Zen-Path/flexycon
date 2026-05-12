@@ -11,7 +11,8 @@ from datetime import datetime, timedelta
 from typing import Callable
 
 from common.apps.window_manager import get_active_window_manager
-from common.helpers import NotificationSystem, System, get_version, run_command
+from common.cmd_utilities import run_cmd
+from common.helpers import NotificationSystem, System, get_version
 from common.logger import logger, setup_logging
 from common.prompt_utilities import PromptOption, prompt_options
 
@@ -54,9 +55,9 @@ def execute_special_action(action_func: Callable[[], None] | None = None):
 
     # Turn off Caps Lock just in case
     try:
-        xset_out = run_command(["xset", "q"]).output
+        xset_out = run_cmd(["xset", "q"]).output
         if "Caps Lock:   on" in xset_out:
-            run_command(["xdotool", "key", "Caps_Lock"])
+            run_cmd(["xdotool", "key", "Caps_Lock"])
     except FileNotFoundError:
         logger.debug("'xset' or 'xdotool' not found, skipping Caps Lock check.")
 
@@ -196,7 +197,7 @@ def main():
             label="Display Off",
             symbol="📺",
             help_text="Turn off display",
-            action=lambda: run_command(["xset", "dpms", "force", "off"]),
+            action=lambda: run_cmd(["xset", "dpms", "force", "off"]),
         ),
         PromptOption(
             id="hibernate",

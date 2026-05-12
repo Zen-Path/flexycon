@@ -6,7 +6,8 @@ import os
 import shutil
 from pathlib import Path
 
-from common.helpers import NotificationSystem, run_command, run_command_background
+from common.cmd_utilities import run_cmd, run_cmd_background
+from common.helpers import NotificationSystem
 from common.logger import logger
 from common.statusbar import EDITOR, TERMINAL, MouseButton, handle_block_button
 
@@ -19,12 +20,12 @@ NEWS_DB_BACKUP = NEWS_DIR / "newsraft_backup.sqlite3"
 
 def reload_newsraft() -> bool:
     """Reload newsraft's contents."""
-    return run_command(["newsraft", "-e", "reload-all"]).success
+    return run_cmd(["newsraft", "-e", "reload-all"]).success
 
 
 def _get_unread_newsraft() -> int | None:
     """Get unread items count using newsraft."""
-    result = run_command(["newsraft", "-e", "print-unread-items-count"])
+    result = run_cmd(["newsraft", "-e", "print-unread-items-count"])
     if result.success:
         return int(result.output)
 
@@ -35,7 +36,7 @@ def _get_unread_db(db_path: Path) -> int | None:
     """Get unread items count directly from the database."""
     try:
         # TODO: maybe use sqlite module?
-        result = run_command(
+        result = run_cmd(
             [
                 "sqlite3",
                 f"file:{db_path}?mode=ro",
@@ -90,7 +91,7 @@ def handle_reload() -> bool:
 
 
 ACTIONS = {
-    MouseButton.LEFT: lambda: run_command_background([TERMINAL, "-e", "newsraft"]),
+    MouseButton.LEFT: lambda: run_cmd_background([TERMINAL, "-e", "newsraft"]),
     MouseButton.MIDDLE: handle_reload,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         " News module",
@@ -100,9 +101,7 @@ ACTIONS = {
         "- Middle click syncs RSS feeds\n"
         "\n<b>Note:</b> Only one instance of newsraft may be running at a time.",
     ),
-    MouseButton.EXTRA_3: lambda: run_command_background(
-        [TERMINAL, "-e", EDITOR, __file__]
-    ),
+    MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
 }
 
 

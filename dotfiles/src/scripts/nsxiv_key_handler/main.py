@@ -10,12 +10,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable, TypedDict
 
-from common.helpers import (
-    NotificationSystem,
-    get_version,
-    run_command,
-    run_command_background,
-)
+from common.cmd_utilities import run_cmd, run_cmd_background
+from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
 from common.media import flip_image
 from common.packages.clipboard_utilities import copy_file, copy_text
@@ -51,17 +47,17 @@ def action_interactive_trash(paths: list[Path]):
             break
 
         if choice == "yes":
-            run_command(["trash-put", str(path)])
+            run_cmd(["trash-put", str(path)])
             NotificationSystem.run("File trashed", f"Trashed {str(path)!r}.")
 
 
 def action_trash(paths: list[Path]):
-    run_command(["trash-put", *[str(path) for path in paths]])
+    run_cmd(["trash-put", *[str(path) for path in paths]])
 
 
 def action_open_editor(paths: list[Path]):
     if shutil.which("gimp"):
-        run_command_background(["gimp", *[str(path) for path in paths]])
+        run_cmd_background(["gimp", *[str(path) for path in paths]])
 
 
 def action_flip(paths: list[Path]):
@@ -106,7 +102,7 @@ def action_show_help(paths: list[Path]):
 
 
 def action_get_info(paths: list[Path]):
-    mediainfo = run_command(["mediainfo", str(paths[0])]).output
+    mediainfo = run_cmd(["mediainfo", str(paths[0])]).output
     formatted: list[str] = []
     for line in mediainfo.splitlines():
         line = line.replace(":", ": <b>", 1) + "</b>"
@@ -116,11 +112,11 @@ def action_get_info(paths: list[Path]):
 
 def action_rotate(paths: list[Path], degrees: int = 90):
     for path in paths:
-        run_command(["magick", str(path), "-rotate", str(degrees), str(path)])
+        run_cmd(["magick", str(path), "-rotate", str(degrees), str(path)])
 
 
 def action_update_wallpaper(paths: list[Path]):
-    run_command(["setbg", str(paths[0])])
+    run_cmd(["setbg", str(paths[0])])
 
 
 def action_copy_image(paths: list[Path]):

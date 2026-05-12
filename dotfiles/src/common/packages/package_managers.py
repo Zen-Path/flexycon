@@ -1,6 +1,6 @@
 import shutil
 
-from common.helpers import run_command
+from common.cmd_utilities import run_cmd
 from common.logger import logger
 from common.packages.models import Package, PackageManager
 
@@ -15,16 +15,16 @@ class Brew(PackageManager):
         if package.is_gui:
             command.append("--cask")
         command.append(package.identifier)
-        run_command(command)
+        run_cmd(command)
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
-        run_command([cls.COMMAND, "uninstall", package.identifier])
+        run_cmd([cls.COMMAND, "uninstall", package.identifier])
 
     @classmethod
     def update_all(cls) -> None:
-        run_command([cls.COMMAND, "update"])  # Syncs formulae
-        run_command([cls.COMMAND, "upgrade"])  # Upgrades packages
+        run_cmd([cls.COMMAND, "update"])  # Syncs formulae
+        run_cmd([cls.COMMAND, "upgrade"])  # Upgrades packages
 
 
 class Yay(PackageManager):
@@ -33,13 +33,11 @@ class Yay(PackageManager):
 
     @classmethod
     def install(cls, package: Package) -> None:
-        run_command(
-            [cls.COMMAND, "--sync", "--needed", "--noconfirm", package.identifier]
-        )
+        run_cmd([cls.COMMAND, "--sync", "--needed", "--noconfirm", package.identifier])
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
-        run_command(
+        run_cmd(
             [
                 cls.COMMAND,
                 "--remove",
@@ -52,7 +50,7 @@ class Yay(PackageManager):
 
     @classmethod
     def update_all(cls) -> None:
-        run_command([cls.COMMAND, "--sync", "--refresh", "--sysupgrade"])
+        run_cmd([cls.COMMAND, "--sync", "--refresh", "--sysupgrade"])
 
 
 class Chocolatey(PackageManager):
@@ -61,15 +59,15 @@ class Chocolatey(PackageManager):
 
     @classmethod
     def install(cls, package: Package) -> None:
-        run_command([cls.COMMAND, "upgrade", package.identifier])
+        run_cmd([cls.COMMAND, "upgrade", package.identifier])
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
-        run_command([cls.COMMAND, "uninstall", package.identifier])
+        run_cmd([cls.COMMAND, "uninstall", package.identifier])
 
     @classmethod
     def update_all(cls) -> None:
-        run_command([cls.COMMAND, "upgrade", "all", "--confirm"])
+        run_cmd([cls.COMMAND, "upgrade", "all", "--confirm"])
 
 
 class Git(PackageManager):
@@ -87,10 +85,10 @@ class Git(PackageManager):
 
         if package.resolved_path.exists() and (package.resolved_path / ".git").exists():
             # Pull changes for "update" logic
-            run_command([cls.COMMAND, "-C", str(package.resolved_path), "pull"])
+            run_cmd([cls.COMMAND, "-C", str(package.resolved_path), "pull"])
         else:
             # Fresh clone
-            run_command(
+            run_cmd(
                 [
                     cls.COMMAND,
                     "clone",
