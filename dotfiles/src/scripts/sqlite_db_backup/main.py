@@ -30,7 +30,7 @@ def generate_diff(old_db: Path, new_db: Path, output_dir: Path):
     """Generate a diff between two databases and save it."""
     os.makedirs(output_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S-%f")
-    diff_file = os.path.join(output_dir, f"{timestamp}.sql")
+    diff_file = output_dir / f"{timestamp}.sql"
 
     conn_old = sqlite3.connect(old_db)
     conn_new = sqlite3.connect(new_db)

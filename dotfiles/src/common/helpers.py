@@ -129,7 +129,7 @@ def parse_range(range_raw: str) -> tuple[tuple[int, int] | None, str | None]:
 
 def load_json(path: Path) -> str | None:
     """Load a JSON file if it exists."""
-    if not os.path.isfile(path):
+    if not path.is_file():
         return None
 
     try:
