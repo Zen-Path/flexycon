@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 from common.helpers import split_into_words
-from scripts.rename_file.src.converters import (
+from scripts.file_renamer.src.converters import (
     to_camel_case,
     to_camel_snake_case,
     to_flat_case,
