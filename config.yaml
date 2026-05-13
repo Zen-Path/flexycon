@@ -473,9 +473,9 @@
             "dst": "{{@@ d_bin_dst @@}}/setbg",
             "chmod": "755"
         },
-        "f_sysact": {
-            "src": "bin/sysact.sh",
-            "dst": "{{@@ d_bin_dst @@}}/sysact",
+        "f_system_actions": {
+            "src": "{{@@ d_src @@}}/scripts/system_actions/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/system_actions",
             "chmod": "755"
         },
 
@@ -589,6 +589,7 @@
                 "f_noisereduce",
                 "f_pkgsize",
                 "f_rclone_wrapper",
+                "f_system_actions",
                 "f_file_renamer",
                 "f_sdir",
                 "f_user_shortcuts",
@@ -718,7 +719,6 @@
                 "f_screenshot_utility",
                 "f_select_unicode",
                 "f_setbg",
-                "f_sysact",
 
                 # Statusbar
                 "f_sb_date",
