@@ -8,7 +8,12 @@ import logging
 from common.cmd_utilities import run_cmd_background
 from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
-from common.statusbar import EDITOR, TERMINAL, MouseButton, handle_block_button
+from common.statusbar import (
+    EDITOR,
+    TERMINAL,
+    MouseButton,
+    handle_block_button,
+)
 
 ACTIONS = {
     MouseButton.LEFT: lambda: 0,
@@ -17,11 +22,11 @@ ACTIONS = {
         "⏺️ SCRIPT_NAME",
         "SCRIPT_DESCRIPTION.\n"
         "\n<b>Actions</b>\n"
-        "- Left click to ACTION\n"
-        "- Middle click to ACTION\n"
-        "- Right click to show this message\n"
-        "- Extra button click to edit script\n"
-        "- Scroll to ACTION",
+        "- Left   : ACTION\n"
+        "- Middle : ACTION\n"
+        "- Right  : Show this message\n"
+        "- Scroll : ACTION\n"
+        "- Extra  : Edit this script",
     ),
     MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
 }
@@ -31,8 +36,8 @@ def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        prog="PROG_NAME",
-        description="DESCRIPTION.",
+        prog="sb_PROG_NAME",
+        description="Statusbar script for ACTION.",
     )
 
     parser.add_argument(

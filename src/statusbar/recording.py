@@ -9,7 +9,7 @@ import signal
 from pathlib import Path
 
 from common.cmd_utilities import run_cmd_background
-from common.helpers import NotificationSystem
+from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
 from common.statusbar import (
     EDITOR,
@@ -48,12 +48,13 @@ ACTIONS = {
     MouseButton.LEFT: stop_recording,
     MouseButton.MIDDLE: lambda: NotificationSystem.set_paused("toggle"),
     MouseButton.RIGHT: lambda: NotificationSystem.run(
-        "⏺️ Recording module",
+        "⏺️ Recording",
         "Shows recording status and info.\n"
         "\n<b>Actions</b>\n"
-        "- Left click to stop recording\n"
-        "- Middle click to toggle notifications\n"
-        "- Right click to show this message\n",
+        "- Left   : Stop recording\n"
+        "- Middle : Toggle notifications\n"
+        "- Right  : Show this message\n"
+        "- Extra  : Edit this script",
     ),
     MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
 }
@@ -61,17 +62,21 @@ ACTIONS = {
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="sb_recording", description="Statusbar script to manage recordings."
+        prog="sb_recording",
+        description="Statusbar script to manage screen recording.",
     )
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
     )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
+    )
 
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)

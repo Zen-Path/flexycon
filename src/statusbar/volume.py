@@ -7,7 +7,7 @@ import argparse
 import logging
 
 from common.cmd_utilities import run_cmd, run_cmd_background
-from common.helpers import NotificationSystem, SoundUtility
+from common.helpers import NotificationSystem, SoundUtility, get_version
 from common.logger import logger, setup_logging
 from common.statusbar import (
     EDITOR,
@@ -17,19 +17,6 @@ from common.statusbar import (
     handle_block_button,
 )
 
-
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        prog="sb_volume", description="Statusbar script for sound volume."
-    )
-
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable debug output"
-    )
-
-    return parser
-
-
 ACTIONS = {
     MouseButton.LEFT: lambda: (
         run_cmd(["setsid", "-w", "-f", TERMINAL, "-e", "pulsemixer"]),
@@ -37,13 +24,14 @@ ACTIONS = {
     ),
     MouseButton.MIDDLE: SoundUtility.toggle_mute,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
-        "📢 Volume module",
+        "📢 Volume",
         "Show sound volume, 🔇 if muted.\n"
         "\n<b>Actions</b>\n"
-        "- Left click to open 'pulsemixer'\n"
-        "- Middle click to mute\n"
-        "- Right click to show this message\n"
-        "- Scroll to update",
+        "- Left   : Open 'pulsemixer'\n"
+        "- Middle : Mute\n"
+        "- Right  : Show this message\n"
+        "- Scroll : Update sound volume\n"
+        "- Extra  : Edit this script",
     ),
     MouseButton.SCROLL_UP: lambda: SoundUtility.update_volume(2),
     MouseButton.SCROLL_DOWN: lambda: SoundUtility.update_volume(-2),
@@ -51,7 +39,25 @@ ACTIONS = {
 }
 
 
-def main():
+def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
+    parser = argparse.ArgumentParser(
+        prog="sb_volume",
+        description="Statusbar script to manage sound and get volume.",
+    )
+
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
+    )
+
+    return parser
+
+
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
