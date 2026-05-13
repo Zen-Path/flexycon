@@ -15,7 +15,7 @@ from common.helpers import split_into_words
         ("one-two-three", ["one", "two", "three"]),
     ],
 )
-def test_simple(input_str, expected):
+def test_simple(input_str: str, expected: list[str]):
     assert split_into_words(input_str) == expected
 
 
@@ -38,7 +38,7 @@ def test_simple(input_str, expected):
         ("___", []),
     ],
 )
-def test_boundaries(input_str, expected):
+def test_boundaries(input_str: str, expected: list[str]):
     assert split_into_words(input_str) == expected
 
 
@@ -64,7 +64,7 @@ def test_custom_boundaries():
         ("hereAreMultipleWords", ["here", "Are", "Multiple", "Words"]),
     ],
 )
-def test_camel_case(input_str, expected):
+def test_camel_case(input_str: str, expected: list[str]):
     assert split_into_words(input_str) == expected
 
 
@@ -75,7 +75,7 @@ def test_camel_case(input_str, expected):
         ("MyFileName", ["My", "File", "Name"]),
     ],
 )
-def test_pascal_case(input_str, expected):
+def test_pascal_case(input_str: str, expected: list[str]):
     assert split_into_words(input_str) == expected
 
 
@@ -86,7 +86,7 @@ def test_pascal_case(input_str, expected):
         ("parseURLString", ["parse", "URL", "String"]),
     ],
 )
-def test_acronyms(input_str, expected):
+def test_acronyms(input_str: str, expected: list[str]):
     assert split_into_words(input_str) == expected
 
 
@@ -99,7 +99,7 @@ def test_acronyms(input_str, expected):
         ("almost-Kebab-Case", ["almost", "Kebab", "Case"]),
     ],
 )
-def test_mixed_styles(input_str, expected):
+def test_mixed_styles(input_str: str, expected: list[str]):
     assert split_into_words(input_str) == expected
 
 
@@ -120,7 +120,7 @@ def test_mixed_styles(input_str, expected):
         ("data_2025_11_04_sample", ["data", "2025", "11", "04", "sample"]),
     ],
 )
-def test_numbers(input_str, expected):
+def test_numbers(input_str: str, expected: list[str]):
     assert split_into_words(input_str) == expected
 
 
@@ -138,5 +138,5 @@ def test_numbers(input_str, expected):
         ("hello123world456", ["hello", "123", "world", "456"]),
     ],
 )
-def test_complex_combinations(input_str, expected):
+def test_complex_combinations(input_str: str, expected: list[str]):
     assert split_into_words(input_str) == expected

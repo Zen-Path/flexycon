@@ -69,7 +69,7 @@ class BookmarkRenderer(ABC):
     def resolve_alias(self, bookmark: Bookmark) -> list[str] | None:
         return bookmark.aliases.get(self.name, bookmark.aliases.get("default"))
 
-    def _get_path(self, bookmark: Bookmark) -> str:
+    def get_path(self, bookmark: Bookmark) -> str:
         path_str = os.path.join(*bookmark.path_parts)
 
         if self.expand_vars:

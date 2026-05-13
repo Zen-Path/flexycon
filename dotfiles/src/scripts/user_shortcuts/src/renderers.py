@@ -22,7 +22,7 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         if bookmark.description:
             result.append(f"# {bookmark.description}")
 
-        path = self._get_path(bookmark)
+        path = self.get_path(bookmark)
         command = OPEN_COMMANDS.get(sys.platform, "$EDITOR")
 
         alias_name = "".join(alias_segments)
@@ -61,7 +61,7 @@ class NVimBookmarkRenderer(BookmarkRenderer):
             f"""vim.api.nvim_set_keymap(
     "c",
     ";{"".join(alias_segments)}",
-    "{self._get_path(bookmark)}",
+    "{self.get_path(bookmark)}",
     {{ noremap = true }}
 )"""
         )
@@ -88,7 +88,7 @@ class YaziBookmarkRenderer(BookmarkRenderer):
 
         # All yazi bookmarks should start with 'b'.
         alias_segments = ["b"] + alias_segments
-        path = self._get_path(bookmark)
+        path = self.get_path(bookmark)
         command = (
             f'"cd {path}"' if bookmark.type == "d" else f'["reveal {path}", "open"]'
         )

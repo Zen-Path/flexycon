@@ -11,7 +11,7 @@ from common.helpers import split_acronyms, truncate
         ("parseURLString", ["parse", "URL", "String"]),
     ],
 )
-def test_acronyms(token, expected):
+def test_acronyms(token: str, expected: list[str]):
     assert split_acronyms(token) == expected
 
 
@@ -28,7 +28,7 @@ def test_acronyms(token, expected):
         ("", 6, ""),
     ],
 )
-def test_truncate_simple(text, max_length, expected):
+def test_truncate_simple(text: str, max_length: int, expected: str):
     assert truncate(text, max_length) == expected
 
 
@@ -44,7 +44,9 @@ def test_truncate_simple(text, max_length, expected):
         ("HelloWorld", 6, False, "…World"),
     ],
 )
-def test_truncate_position(text, max_length, truncate_from_end, expected):
+def test_truncate_position(
+    text: str, max_length: int, truncate_from_end: bool, expected: str
+):
     assert truncate(text, max_length, truncate_from_end=truncate_from_end) == expected
 
 
@@ -65,7 +67,7 @@ def test_truncate_position(text, max_length, truncate_from_end, expected):
     ],
 )
 def test_truncate_placeholder(
-    text, max_length, placeholder, truncate_from_end, expected
+    text: str, max_length: int, placeholder: str, truncate_from_end: bool, expected: str
 ):
     assert truncate(text, max_length, placeholder, truncate_from_end) == expected
 

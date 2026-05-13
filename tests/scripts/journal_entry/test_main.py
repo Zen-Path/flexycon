@@ -1,19 +1,20 @@
 import os
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 import pytest
 from scripts.journal_entry.main import get_journal_entry_path, open_journal_entry
 
 
 @pytest.fixture
-def sample_date():
+def sample_date() -> datetime:
     """A fixed datetime object for predictable paths."""
     return datetime(2024, 2, 15)
 
 
 @pytest.fixture
-def mock_env(monkeypatch, tmp_path) -> Path:
+def mock_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Path:
     """Provide fake JOURNAL_HOME and EDITOR environment variables."""
     home = tmp_path / "journal_home"
     home.mkdir()
@@ -22,13 +23,15 @@ def mock_env(monkeypatch, tmp_path) -> Path:
     return home
 
 
-def test_get_journal_entry_path_with_env(sample_date, mock_env):
+def test_get_journal_entry_path_with_env(sample_date: datetime):
     path = get_journal_entry_path(sample_date)
     expected = Path(os.getenv("JOURNAL_HOME", "")) / "2024" / "02" / "02.15.md"
     assert path == expected
 
 
-def test_get_journal_entry_path_missing_env(monkeypatch, sample_date):
+def test_get_journal_entry_path_missing_env(
+    monkeypatch: pytest.MonkeyPatch, sample_date: datetime
+):
     monkeypatch.delenv("JOURNAL_HOME", raising=False)
 
     with pytest.raises(
@@ -37,7 +40,9 @@ def test_get_journal_entry_path_missing_env(monkeypatch, sample_date):
         _ = get_journal_entry_path(sample_date)
 
 
-def test_open_journal_entry_success(monkeypatch, mock_env, sample_date):
+def test_open_journal_entry_success(
+    monkeypatch: pytest.MonkeyPatch, mock_env: Path, sample_date: datetime
+):
     """Should ensure the month directory exists (handling parents) and open editor."""
     ensured_path: Path | None = None
 
@@ -53,21 +58,13 @@ def test_open_journal_entry_success(monkeypatch, mock_env, sample_date):
     )
 
     # Mock subprocess.run
-    called_cmd = []
+    called_cmd: list[str] = []
 
-    def fake_run(cmd, *a, **kw):
+    def fake_run(cmd: list[str], *a: Any, **kw: Any):
         nonlocal called_cmd
         called_cmd = cmd
 
     monkeypatch.setattr("scripts.journal_entry.main.subprocess.run", fake_run)
-
-    # Mock logger to suppress output
-    monkeypatch.setattr(
-        "scripts.journal_entry.main.logger",
-        type(
-            "L", (), {"info": lambda *a, **kw: None, "debug": lambda *a, **kw: None}
-        )(),
-    )
 
     open_journal_entry(sample_date)
 
@@ -82,7 +79,9 @@ def test_open_journal_entry_success(monkeypatch, mock_env, sample_date):
     assert any(str(expected_file) in str(arg) for arg in called_cmd)
 
 
-def test_open_journal_entry_without_env(monkeypatch, sample_date):
+def test_open_journal_entry_without_env(
+    monkeypatch: pytest.MonkeyPatch, sample_date: datetime
+):
     monkeypatch.delenv("JOURNAL_HOME", raising=False)
 
     with pytest.raises(

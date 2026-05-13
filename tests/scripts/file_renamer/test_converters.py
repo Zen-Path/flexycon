@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import TypedDict
 
 import pytest
 from common.helpers import split_into_words
@@ -19,7 +20,12 @@ from scripts.file_renamer.src.converters import (
 )
 
 
-def process_path(path_str: str):
+class PathData(TypedDict):
+    words: list[str]
+    ext: str
+
+
+def process_path(path_str: str) -> PathData:
     root, ext = os.path.splitext(Path(path_str).name)
     words = split_into_words(root)
     return {"words": words, "ext": ext}
@@ -33,7 +39,7 @@ def process_path(path_str: str):
         ("Hello World.ext", "helloWorld.ext"),
     ],
 )
-def test_camel_case(path, expected):
+def test_camel_case(path: str, expected: str):
     assert to_camel_case(**process_path(path)) == expected
 
 
@@ -45,7 +51,7 @@ def test_camel_case(path, expected):
         ("Hello World.ext", "Hello_World.ext"),
     ],
 )
-def test_camel_snake_case(path, expected):
+def test_camel_snake_case(path: str, expected: str):
     assert to_camel_snake_case(**process_path(path)) == expected
 
 
@@ -57,7 +63,7 @@ def test_camel_snake_case(path, expected):
         ("Hello World.ext", "helloworld.ext"),
     ],
 )
-def test_flat_case(path, expected):
+def test_flat_case(path: str, expected: str):
     assert to_flat_case(**process_path(path)) == expected
 
 
@@ -69,7 +75,7 @@ def test_flat_case(path, expected):
         ("Hello World.ext", "HELLOWORLD.EXT"),
     ],
 )
-def test_flat_upper_case(path, expected):
+def test_flat_upper_case(path: str, expected: str):
     assert to_flat_upper_case(**process_path(path)) == expected
 
 
@@ -81,7 +87,7 @@ def test_flat_upper_case(path, expected):
         ("Hello World.ext", "hello-world.ext"),
     ],
 )
-def test_kebab_case(path, expected):
+def test_kebab_case(path: str, expected: str):
     assert to_kebab_case(**process_path(path)) == expected
 
 
@@ -93,7 +99,7 @@ def test_kebab_case(path, expected):
         ("Hello World.ext", "HELLO-WORLD.EXT"),
     ],
 )
-def test_kebab_upper_case(path, expected):
+def test_kebab_upper_case(path: str, expected: str):
     assert to_kebab_upper_case(**process_path(path)) == expected
 
 
@@ -105,7 +111,7 @@ def test_kebab_upper_case(path, expected):
         ("Hello World.ext", "hello world.ext"),
     ],
 )
-def test_lower_case(path, expected):
+def test_lower_case(path: str, expected: str):
     assert to_lower_case(**process_path(path)) == expected
 
 
@@ -117,7 +123,7 @@ def test_lower_case(path, expected):
         ("Hello World.ext", "HelloWorld.ext"),
     ],
 )
-def test_pascal_case(path, expected):
+def test_pascal_case(path: str, expected: str):
     assert to_pascal_case(**process_path(path)) == expected
 
 
@@ -129,7 +135,7 @@ def test_pascal_case(path, expected):
         ("Hello World.ext", "hello_world.ext"),
     ],
 )
-def test_snake_case(path, expected):
+def test_snake_case(path: str, expected: str):
     assert to_snake_case(**process_path(path)) == expected
 
 
@@ -141,7 +147,7 @@ def test_snake_case(path, expected):
         ("Hello World.ext", "HELLO_WORLD.EXT"),
     ],
 )
-def test_snake_upper_case(path, expected):
+def test_snake_upper_case(path: str, expected: str):
     assert to_snake_upper_case(**process_path(path)) == expected
 
 
@@ -153,7 +159,7 @@ def test_snake_upper_case(path, expected):
         ("Hello World.ext", "Hello-World.ext"),
     ],
 )
-def test_train_case(path, expected):
+def test_train_case(path: str, expected: str):
     assert to_train_case(**process_path(path)) == expected
 
 
@@ -165,5 +171,5 @@ def test_train_case(path, expected):
         ("Hello World.ext", "HELLO WORLD.EXT"),
     ],
 )
-def test_upper_case(path, expected):
+def test_upper_case(path: str, expected: str):
     assert to_upper_case(**process_path(path)) == expected

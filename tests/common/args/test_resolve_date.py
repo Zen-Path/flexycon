@@ -6,29 +6,29 @@ from common.args import resolve_date
 
 
 @pytest.fixture
-def fixed_now(monkeypatch):
+def fixed_now(monkeypatch: pytest.MonkeyPatch) -> datetime:
     """
     Monkeypatch datetime.now() in the target module to return a fixed point in time.
     """
-    fixed_now = datetime(2024, 1, 1, 12, 0, 0)
+    fixed_val = datetime(2024, 1, 1, 12, 0, 0)
 
-    class FixedDateTime(datetime):
-        @classmethod
-        def now(cls, tz=None):
-            return fixed_now
+    class FixedDateTime:
+        @staticmethod
+        def now(tz=None) -> datetime:  # type: ignore
+            return fixed_val
 
     monkeypatch.setattr("common.args.datetime", FixedDateTime)
-    return fixed_now
+    return fixed_val
 
 
-def test_no_date_value(fixed_now):
+def test_no_date_value(fixed_now: datetime):
     args = Namespace(date_value=None, is_date_absolute=False)
     result = resolve_date(args)
     assert isinstance(result, datetime)
     assert result == fixed_now
 
 
-def test_absolute(monkeypatch):
+def test_absolute(monkeypatch: pytest.MonkeyPatch):
     called = {}
 
     def fake_parse_abs_date(value: str) -> datetime:
@@ -45,7 +45,7 @@ def test_absolute(monkeypatch):
     assert called["value"] == "2020-02-02"
 
 
-def test_relative_valid(fixed_now):
+def test_relative_valid(fixed_now: datetime):
     args = Namespace(
         date_value="5",
         is_date_absolute=False,

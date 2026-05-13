@@ -1,14 +1,21 @@
 # ruff: noqa: E501
 
 import sys
+from typing import Literal
 
 import pytest
 from scripts.user_shortcuts.src.models import Bookmark
-from scripts.user_shortcuts.src.renderers import NVIM, YAZI, ZSH, ZshBookmarkRenderer
+from scripts.user_shortcuts.src.renderers import (
+    NVIM,
+    YAZI,
+    ZSH,
+    BookmarkRenderer,
+    ZshBookmarkRenderer,
+)
 
 
 @pytest.fixture
-def mock_env(monkeypatch):
+def mock_env(monkeypatch: pytest.MonkeyPatch):
     """Provide fake environment variables."""
     monkeypatch.setenv("HOME", "/Users/mock")
     monkeypatch.setenv("COUNTRY", "United States of America")
@@ -45,7 +52,11 @@ def mock_env(monkeypatch):
         (YAZI, {ZSH.name: ["a", "b", "c"]}, None),
     ],
 )
-def test_resolve_alias(renderer, aliases, expected):
+def test_resolve_alias(
+    renderer: BookmarkRenderer,
+    aliases: dict[str, list[str]],
+    expected: list[str] | None,
+):
     bm = Bookmark(
         type="d",
         path_parts=[""],
@@ -54,6 +65,7 @@ def test_resolve_alias(renderer, aliases, expected):
     assert renderer.resolve_alias(bm) == expected
 
 
+@pytest.mark.usefixtures("mock_env")
 @pytest.mark.parametrize(
     "path_parts, expand_vars, escape_path, expected",
     [
@@ -78,7 +90,9 @@ def test_resolve_alias(renderer, aliases, expected):
         (["$HOME", "", "Students"], True, True, "/Users/mock/Students"),
     ],
 )
-def test_get_path(path_parts, expand_vars, escape_path, expected, mock_env):
+def test_get_path(
+    path_parts: list[str], expand_vars: bool, escape_path: bool, expected: str
+):
     bm = Bookmark(
         type="d",
         path_parts=path_parts,
@@ -89,14 +103,14 @@ def test_get_path(path_parts, expand_vars, escape_path, expected, mock_env):
         "", [""], expand_vars=expand_vars, escape_path=escape_path
     )
 
-    assert renderer._get_path(bm) == expected
+    assert renderer.get_path(bm) == expected
 
 
+@pytest.mark.usefixtures("mock_env")
 @pytest.mark.parametrize(
     "type, path_parts, alias, description, zsh_expected, nvim_expected, yazi_expected",
     [
-        # single-char alias
-        (
+        pytest.param(
             "d",
             ["$HOME"],
             ["h"],
@@ -113,9 +127,9 @@ def test_get_path(path_parts, expand_vars, escape_path, expected, mock_env):
             ")\n",
             # yazi
             "    { on = ['b', 'h'], run = \"cd /Users/mock\", desc = \"Open user home dir\" },",
+            id="single_char_alias",
         ),
-        # multi-char alias
-        (
+        pytest.param(
             "d",
             ["$HOME", "Documents"],
             ["d", "o", "c"],
@@ -134,9 +148,9 @@ def test_get_path(path_parts, expand_vars, escape_path, expected, mock_env):
             ")\n",
             # yazi
             "    { on = ['b', 'd', 'o', 'c'], run = \"cd /Users/mock/Documents\", desc = \"Open Documents dir\" },",
+            id="multi_char_alias",
         ),
-        # no description
-        (
+        pytest.param(
             "d",
             ["$HOME", "Documents"],
             ["d", "o", "c"],
@@ -153,9 +167,9 @@ def test_get_path(path_parts, expand_vars, escape_path, expected, mock_env):
             ")\n",
             # yazi
             "    { on = ['b', 'd', 'o', 'c'], run = \"cd /Users/mock/Documents\", desc = \"\" },",
+            id="no_description",
         ),
-        # requires shell quoting
-        (
+        pytest.param(
             "d",
             ["$HOME", "Student marks"],
             ["s", "t", "u", "m"],
@@ -172,9 +186,9 @@ def test_get_path(path_parts, expand_vars, escape_path, expected, mock_env):
             ")\n",
             # yazi
             "    { on = ['b', 's', 't', 'u', 'm'], run = \"cd '/Users/mock/Student marks'\", desc = \"\" },",
+            id="requires_shell_quoting",
         ),
-        # file
-        (
+        pytest.param(
             "f",
             ["$HOME", "University", "Timetable.pdf"],
             ["u", "n", "i", "t"],
@@ -192,19 +206,19 @@ def test_get_path(path_parts, expand_vars, escape_path, expected, mock_env):
             ")\n",
             # yazi
             "    { on = ['b', 'u', 'n', 'i', 't'], run = [\"reveal /Users/mock/University/Timetable.pdf\", \"open\"], desc = \"Reveal university timetable file\" },",
+            id="file",
         ),
     ],
 )
 def test_compose_bookmark(
-    type,
-    path_parts,
-    alias,
-    description,
-    zsh_expected,
-    nvim_expected,
-    yazi_expected,
-    monkeypatch,
-    mock_env,
+    type: Literal["d"] | Literal["f"],
+    path_parts: list[str],
+    alias: list[str],
+    description: str | None,
+    zsh_expected: str,
+    nvim_expected: str,
+    yazi_expected: str,
+    monkeypatch: pytest.MonkeyPatch,
 ):
     monkeypatch.setattr(sys, "platform", "darwin")
 
@@ -220,6 +234,7 @@ def test_compose_bookmark(
     assert YAZI.compose_bookmark(alias, bm) == yazi_expected
 
 
+@pytest.mark.usefixtures("mock_env")
 @pytest.mark.parametrize(
     "platform_name, expected",
     [
@@ -229,7 +244,11 @@ def test_compose_bookmark(
         ("unknown", 'alias unit="$EDITOR /Users/mock/University/Timetable.pdf"\n'),
     ],
 )
-def test_compose_platforms(platform_name, expected, monkeypatch, mock_env):
+def test_compose_platforms(
+    platform_name: Literal["darwin", "linux", "win32", "unknown"],
+    expected: str,
+    monkeypatch: pytest.MonkeyPatch,
+):
     monkeypatch.setattr(sys, "platform", platform_name)
     bm = Bookmark(
         type="f",
@@ -239,6 +258,7 @@ def test_compose_platforms(platform_name, expected, monkeypatch, mock_env):
     assert ZSH.compose_bookmark(["u", "n", "i", "t"], bm) == expected
 
 
+@pytest.mark.usefixtures("mock_env")
 @pytest.mark.parametrize(
     "renderer, expected",
     [
@@ -250,7 +270,7 @@ def test_compose_platforms(platform_name, expected, monkeypatch, mock_env):
         ),
     ],
 )
-def test_compose_activate_penv(renderer, expected, mock_env):
+def test_compose_activate_penv(renderer: BookmarkRenderer, expected: str):
     bm = Bookmark(
         type="d",
         path_parts=["$HOME", "Documents"],

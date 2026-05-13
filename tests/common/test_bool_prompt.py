@@ -3,32 +3,48 @@ from common.prompt_utilities import prompt_bool
 
 
 @pytest.mark.parametrize("user_input", ["y", "yes", "1", "  Y  ", "YES", "YeS", "yEs"])
-def test_positive_responses(monkeypatch, user_input):
+def test_positive_responses(monkeypatch: pytest.MonkeyPatch, user_input: str):
     """Checks that all truthy variations return True."""
-    monkeypatch.setattr("builtins.input", lambda _: user_input)
+
+    def mock_input(_: str) -> str:
+        return user_input
+
+    monkeypatch.setattr("builtins.input", mock_input)
     assert prompt_bool("Continue?") is True
 
 
 @pytest.mark.parametrize("user_input", ["n", "no", "0", "  NO  ", "nO", "No"])
-def test_negative_responses(monkeypatch, user_input):
+def test_negative_responses(monkeypatch: pytest.MonkeyPatch, user_input: str):
     """Checks that all falsy variations return False."""
-    monkeypatch.setattr("builtins.input", lambda _: user_input)
+
+    def mock_input(_: str) -> str:
+        return user_input
+
+    monkeypatch.setattr("builtins.input", mock_input)
     assert prompt_bool("Exit?") is False
 
 
 @pytest.mark.parametrize("user_input", ["", "maybe", "yees", "noo", "-1", "999"])
-def test_empty_or_invalid_input_returns_default(monkeypatch, user_input):
+def test_empty_or_invalid_input_returns_default(
+    monkeypatch: pytest.MonkeyPatch, user_input: str
+):
     """Ensures empty strings or garbage input fall back to the default."""
-    monkeypatch.setattr("builtins.input", lambda _: user_input)
+
+    def mock_input(_: str) -> str:
+        return user_input
+
+    monkeypatch.setattr("builtins.input", mock_input)
     for default_val in [True, False, None]:
         assert prompt_bool("Go?", default=default_val) is default_val
 
 
 @pytest.mark.parametrize("exception", [KeyboardInterrupt, EOFError])
-def test_exceptions_return_default(monkeypatch, exception):
+def test_exceptions_return_default(
+    monkeypatch: pytest.MonkeyPatch, exception: Exception
+):
     """Simulates Ctrl+C and Ctrl+D to ensure they return the default."""
 
-    def mock_raise(_):
+    def mock_raise(_: str):
         raise exception
 
     monkeypatch.setattr("builtins.input", mock_raise)
@@ -36,11 +52,11 @@ def test_exceptions_return_default(monkeypatch, exception):
         assert prompt_bool("Interrupted", default=default_val) is default_val
 
 
-def test_correct_hint_capitalization(monkeypatch):
+def test_correct_hint_capitalization(monkeypatch: pytest.MonkeyPatch):
     """Verifies the hint format"""
-    captured_prompts = []
+    captured_prompts: list[str] = []
 
-    def mock_input(prompt_str):
+    def mock_input(prompt_str: str) -> str:
         captured_prompts.append(prompt_str)
         return "y"
 
