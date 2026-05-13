@@ -501,7 +501,7 @@
             "chmod": "755"
         },
         "f_sb_tasks": {
-            "src": "{{@@ d_statusbar_src @@}}/tasks.sh",
+            "src": "{{@@ d_statusbar_src @@}}/tasks.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-tasks",
             "chmod": "755"
         },
