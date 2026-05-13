@@ -481,7 +481,7 @@
 
         # Statusbar
         "f_sb_battery": {
-            "src": "{{@@ d_statusbar_src @@}}/battery.sh",
+            "src": "{{@@ d_statusbar_src @@}}/battery.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-battery",
             "chmod": "755"
         },
