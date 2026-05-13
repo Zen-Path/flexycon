@@ -67,70 +67,70 @@
         # then we install everything else, which guarantees that the latest env
         # is used.
         "f_shell_profile": {
-            "src": "config/shell/profile.sh",
+            "src": "{{@@ d_config_src @@}}/shell/profile.sh",
             "dst": "~/.zprofile",
             "link": "nolink"
         },
         "f_shell_inputrc": {
-            "src": "config/shell/inputrc",
-            "dst": "~/.config/shell/inputrc",
+            "src": "{{@@ d_config_src @@}}/shell/inputrc",
+            "dst": "{{@@ d_config_dst @@}}/shell/inputrc",
             "link": "nolink"
         },
 
         # Whilst important, we're not going to include this in mandatory, since
         # we're using some env vars in its templates.
         "d_git": {
-            "src": "config/git",
-            "dst": "~/.config/git",
+            "src": "{{@@ d_config_src @@}}/git",
+            "dst": "{{@@ d_config_dst @@}}/git",
             "link": "nolink"
         },
 
         # Shell
         "f_zsh_config": {
-            "src": "config/zsh/config.sh",
-            "dst": "~/.config/zsh/.zshrc",
+            "src": "{{@@ d_config_src @@}}/zsh/config.sh",
+            "dst": "{{@@ d_config_dst @@}}/zsh/.zshrc",
             "link": "nolink"
         },
         "f_shell_aliases": {
-            "src": "config/shell/aliases.sh",
-            "dst": "~/.config/shell/aliases.sh",
+            "src": "{{@@ d_config_src @@}}/shell/aliases.sh",
+            "dst": "{{@@ d_config_dst @@}}/shell/aliases.sh",
             "link": "nolink"
         },
         "d_starship": {
-            "src": "config/starship",
-            "dst": "~/.config/starship"
+            "src": "{{@@ d_config_src @@}}/starship",
+            "dst": "{{@@ d_config_dst @@}}/starship"
         },
 
         # Package Managers
         "d_yay": {
-            "src": "config/yay",
-            "dst": "~/.config/yay"
+            "src": "{{@@ d_config_src @@}}/yay",
+            "dst": "{{@@ d_config_dst @@}}/yay"
         },
 
         # WM / Desktop Environment
         "d_x11": {
-            "src": "config/x11",
-            "dst": "~/.config/x11"
+            "src": "{{@@ d_config_src @@}}/x11",
+            "dst": "{{@@ d_config_dst @@}}/x11"
         },
         "f_x11_profile": {
-            "src": "config/x11/xprofile",
+            "src": "{{@@ d_config_src @@}}/x11/xprofile",
             "dst": "~/.xprofile"
         },
 
         # Terminal
         "d_alacritty": {
-            "src": "config/alacritty",
-            "dst": "~/.config/alacritty"
+            "src": "{{@@ d_config_src @@}}/alacritty",
+            "dst": "{{@@ d_config_dst @@}}/alacritty"
         },
         "d_kitty": {
-            "src": "config/kitty",
-            "dst": "~/.config/kitty"
+            "src": "{{@@ d_config_src @@}}/kitty",
+            "dst": "{{@@ d_config_dst @@}}/kitty"
         },
 
         # Text Editor
         "f_nvim_init": {
-            "src": "config/nvim/init.lua",
-            "dst": "~/.config/nvim/init.lua"
+            "src": "{{@@ d_config_src @@}}/nvim/init.lua",
+            "dst": "{{@@ d_config_dst @@}}/nvim/init.lua"
         },
 
         ## VSCode
@@ -145,15 +145,15 @@
 
         # Window management
         "f_skhd": {
-            "src": "config/skhd/config.conf",
-            "dst": "~/.config/skhd/skhdrc",
+            "src": "{{@@ d_config_src @@}}/skhd/config.conf",
+            "dst": "{{@@ d_config_dst @@}}/skhd/skhdrc",
             "actions": [
                 "skhd_restart"
             ]
         },
         "f_yabai": {
-            "src": "config/yabai/config.conf",
-            "dst": "~/.config/yabai/yabairc",
+            "src": "{{@@ d_config_src @@}}/yabai/config.conf",
+            "dst": "{{@@ d_config_dst @@}}/yabai/yabairc",
             "actions": [
                 "yabai_restart"
             ]
@@ -161,42 +161,42 @@
 
         # Programming
         "d_python": {
-            "src": "config/python",
-            "dst": "~/.config/python"
+            "src": "{{@@ d_config_src @@}}/python",
+            "dst": "{{@@ d_config_dst @@}}/python"
         },
 
         # File Manager
         "f_yazi_config": {
-            "src": "config/yazi/yazi.toml",
-            "dst": "~/.config/yazi/yazi.toml"
+            "src": "{{@@ d_config_src @@}}/yazi/yazi.toml",
+            "dst": "{{@@ d_config_dst @@}}/yazi/yazi.toml"
         },
         "f_yazi_keymap": {
-            "src": "config/yazi/keymap.toml",
-            "dst": "~/.config/yazi/keymap.toml"
+            "src": "{{@@ d_config_src @@}}/yazi/keymap.toml",
+            "dst": "{{@@ d_config_dst @@}}/yazi/keymap.toml"
         },
         "f_yazi_theme": {
-            "src": "config/yazi/theme.toml",
-            "dst": "~/.config/yazi/theme.toml"
+            "src": "{{@@ d_config_src @@}}/yazi/theme.toml",
+            "dst": "{{@@ d_config_dst @@}}/yazi/theme.toml"
         },
         "f_yazi_package": {
-            "src": "config/yazi/package.toml",
-            "dst": "~/.config/yazi/package.toml"
+            "src": "{{@@ d_config_src @@}}/yazi/package.toml",
+            "dst": "{{@@ d_config_dst @@}}/yazi/package.toml"
         },
         "f_yazi_init": {
-            "src": "config/yazi/init.lua",
-            "dst": "~/.config/yazi/init.lua"
+            "src": "{{@@ d_config_src @@}}/yazi/init.lua",
+            "dst": "{{@@ d_config_dst @@}}/yazi/init.lua"
         },
         "d_yazi_plugin_custom_rename": {
-            "src": "config/yazi/plugins/custom-rename.yazi",
-            "dst": "~/.config/yazi/plugins/custom-rename.yazi"
+            "src": "{{@@ d_config_src @@}}/yazi/plugins/custom-rename.yazi",
+            "dst": "{{@@ d_config_dst @@}}/yazi/plugins/custom-rename.yazi"
         },
         "d_yazi_plugin_custom_search": {
-            "src": "config/yazi/plugins/custom-search.yazi",
-            "dst": "~/.config/yazi/plugins/custom-search.yazi"
+            "src": "{{@@ d_config_src @@}}/yazi/plugins/custom-search.yazi",
+            "dst": "{{@@ d_config_dst @@}}/yazi/plugins/custom-search.yazi"
         },
         "d_yazi_plugin_parent_arrow": {
-            "src": "config/yazi/plugins/parent-arrow.yazi",
-            "dst": "~/.config/yazi/plugins/parent-arrow.yazi"
+            "src": "{{@@ d_config_src @@}}/yazi/plugins/parent-arrow.yazi",
+            "dst": "{{@@ d_config_dst @@}}/yazi/plugins/parent-arrow.yazi"
         },
 
         # Browser
@@ -225,95 +225,95 @@
 
         ## mpv
         "f_mpv_config": {
-            "src": "config/mpv/mpv.conf",
-            "dst": "~/.config/mpv/mpv.conf"
+            "src": "{{@@ d_config_src @@}}/mpv/mpv.conf",
+            "dst": "{{@@ d_config_dst @@}}/mpv/mpv.conf"
         },
         "f_mpv_input": {
-            "src": "config/mpv/input.conf",
-            "dst": "~/.config/mpv/input.conf"
+            "src": "{{@@ d_config_src @@}}/mpv/input.conf",
+            "dst": "{{@@ d_config_dst @@}}/mpv/input.conf"
         },
         "f_mpv_plugin_gallery_view_gallery_lua": {
-            "src": "config/mpv/plugins/mpv-gallery-view/script-modules/gallery.lua",
-            "dst": "~/.config/mpv/script-modules/gallery.lua"
+            "src": "{{@@ d_config_src @@}}/mpv/plugins/mpv-gallery-view/script-modules/gallery.lua",
+            "dst": "{{@@ d_config_dst @@}}/mpv/script-modules/gallery.lua"
         },
         "f_mpv_plugin_gallery_view_scripts_contact_sheet": {
-            "src": "config/mpv/plugins/mpv-gallery-view/scripts/contact-sheet.lua",
-            "dst": "~/.config/mpv/scripts/contact-sheet.lua",
+            "src": "{{@@ d_config_src @@}}/mpv/plugins/mpv-gallery-view/scripts/contact-sheet.lua",
+            "dst": "{{@@ d_config_dst @@}}/mpv/scripts/contact-sheet.lua",
         },
         "f_mpv_plugin_gallery_view_scripts_gallery_thumbgen": {
-            "src": "config/mpv/plugins/mpv-gallery-view/scripts/gallery-thumbgen.lua",
-            "dst": "~/.config/mpv/scripts/gallery-thumbgen.lua",
+            "src": "{{@@ d_config_src @@}}/mpv/plugins/mpv-gallery-view/scripts/gallery-thumbgen.lua",
+            "dst": "{{@@ d_config_dst @@}}/mpv/scripts/gallery-thumbgen.lua",
         },
         "f_mpv_plugin_gallery_view_scripts_playlist_view": {
-            "src": "config/mpv/plugins/mpv-gallery-view/scripts/playlist-view.lua",
-            "dst": "~/.config/mpv/scripts/playlist-view.lua",
+            "src": "{{@@ d_config_src @@}}/mpv/plugins/mpv-gallery-view/scripts/playlist-view.lua",
+            "dst": "{{@@ d_config_dst @@}}/mpv/scripts/playlist-view.lua",
         },
         "f_mpv_plugin_cursor_blur": {
-            "src": "config/mpv/plugins/cursor_blur.lua",
-            "dst": "~/.config/mpv/scripts/cursor_blur.lua"
+            "src": "{{@@ d_config_src @@}}/mpv/plugins/cursor_blur.lua",
+            "dst": "{{@@ d_config_dst @@}}/mpv/scripts/cursor_blur.lua"
         },
 
         "d_yt_dlp": {
-            "src": "config/yt-dlp",
-            "dst": "~/.config/yt-dlp"
+            "src": "{{@@ d_config_src @@}}/yt-dlp",
+            "dst": "{{@@ d_config_dst @@}}/yt-dlp"
         },
         "f_gallery_config": {
-            "src": "config/gallery-dl/config.jsonc",
-            "dst": "~/.config/gallery-dl/config.json",
+            "src": "{{@@ d_config_src @@}}/gallery-dl/config.jsonc",
+            "dst": "{{@@ d_config_dst @@}}/gallery-dl/config.json",
             "link": "nolink",
             "trans_install": "jsonc_to_json"
         },
 
         # Audio
         "f_pulse_daemon": {
-            "src": "config/pulse/daemon.conf",
-            "dst": "~/.config/pulse/daemon.conf"
+            "src": "{{@@ d_config_src @@}}/pulse/daemon.conf",
+            "dst": "{{@@ d_config_dst @@}}/pulse/daemon.conf"
         },
         "d_pipewire": {
-            "src": "config/pipewire",
-            "dst": "~/.config/pipewire"
+            "src": "{{@@ d_config_src @@}}/pipewire",
+            "dst": "{{@@ d_config_dst @@}}/pipewire"
         },
 
         # Programs
         "d_zathura": {
-            "src": "config/zathura",
-            "dst": "~/.config/zathura"
+            "src": "{{@@ d_config_src @@}}/zathura",
+            "dst": "{{@@ d_config_dst @@}}/zathura"
         },
         "d_newsraft": {
-            "src": "config/newsraft",
-            "dst": "~/.config/newsraft"
+            "src": "{{@@ d_config_src @@}}/newsraft",
+            "dst": "{{@@ d_config_dst @@}}/newsraft"
         },
         "d_bottom": {
-            "src": "config/bottom",
-            "dst": "~/.config/bottom"
+            "src": "{{@@ d_config_src @@}}/bottom",
+            "dst": "{{@@ d_config_dst @@}}/bottom"
         },
         "d_dunst": {
-            "src": "config/dunst",
-            "dst": "~/.config/dunst"
+            "src": "{{@@ d_config_src @@}}/dunst",
+            "dst": "{{@@ d_config_dst @@}}/dunst"
         },
         "d_gtk_3": {
-            "src": "config/gtk-3.0",
-            "dst": "~/.config/gtk-3.0"
+            "src": "{{@@ d_config_src @@}}/gtk-3.0",
+            "dst": "{{@@ d_config_dst @@}}/gtk-3.0"
         },
         "d_blugon": {
-            "src": "config/blugon",
-            "dst": "~/.config/blugon"
+            "src": "{{@@ d_config_src @@}}/blugon",
+            "dst": "{{@@ d_config_dst @@}}/blugon"
         },
 
         # Flexycon
         "f_flex_sync": {
-            "src": "config/flexycon/sync/config.json",
-            "dst": "~/.config/flexycon/sync/config.json"
+            "src": "{{@@ d_config_src @@}}/flexycon/sync/config.json",
+            "dst": "{{@@ d_config_dst @@}}/flexycon/sync/config.json"
         },
 
         # Linux
         "d_fontconfig": {
-            "src": "config/fontconfig",
-            "dst": "~/.config/fontconfig"
+            "src": "{{@@ d_config_src @@}}/fontconfig",
+            "dst": "{{@@ d_config_dst @@}}/fontconfig"
         },
         "f_mimeapps.list": {
-            "src": "config/mimeapps.list",
-            "dst": "~/.config/mimeapps.list"
+            "src": "{{@@ d_config_src @@}}/mimeapps.list",
+            "dst": "{{@@ d_config_dst @@}}/mimeapps.list"
         },
 
         # Share
@@ -326,193 +326,193 @@
         # Note: the dotfile key NEEDS to match the script name (without the prefix, of course)
         "f_compiler": {
             "src": "bin/compiler.sh",
-            "dst": "~/.local/bin/compiler",
+            "dst": "{{@@ d_bin_dst @@}}/compiler",
             "chmod": "755"
         },
         "f_continuous_diff": {
             "src": "{{@@ d_src @@}}/scripts/continuous_diff/main.py",
-            "dst": "~/.local/bin/continuous_diff",
+            "dst": "{{@@ d_bin_dst @@}}/continuous_diff",
             "chmod": "755"
         },
         "f_getkeys": {
             "src": "bin/getkeys.sh",
-            "dst": "~/.local/bin/getkeys",
+            "dst": "{{@@ d_bin_dst @@}}/getkeys",
             "chmod": "755"
         },
         "f_git_logs": {
             "src": "{{@@ d_src @@}}/scripts/git_logs/main.py",
-            "dst": "~/.local/bin/git_logs",
+            "dst": "{{@@ d_bin_dst @@}}/git_logs",
             "chmod": "755"
         },
         "f_if_installed": {
             "src": "bin/if_installed.sh",
-            "dst": "~/.local/bin/if_installed",
+            "dst": "{{@@ d_bin_dst @@}}/if_installed",
             "chmod": "755"
         },
         "f_imgconv": {
             "src": "bin/imgconv.sh",
-            "dst": "~/.local/bin/imgconv",
+            "dst": "{{@@ d_bin_dst @@}}/imgconv",
             "chmod": "755"
         },
         "f_journal_entry": {
             "src": "{{@@ d_src @@}}/scripts/journal_entry/main.py",
-            "dst": "~/.local/bin/journal_entry",
+            "dst": "{{@@ d_bin_dst @@}}/journal_entry",
             "chmod": "755"
         },
         "f_jsonc_to_json": {
             "src": "{{@@ d_src @@}}/scripts/jsonc_to_json/main.py",
-            "dst": "~/.local/bin/jsonc_to_json",
+            "dst": "{{@@ d_bin_dst @@}}/jsonc_to_json",
             "chmod": "755"
         },
         "f_noisereduce": {
             "src": "bin/noisereduce.sh",
-            "dst": "~/.local/bin/noisereduce",
+            "dst": "{{@@ d_bin_dst @@}}/noisereduce",
             "chmod": "755"
         },
         "f_nsxiv_exec_key_handler": {
             "src": "{{@@ d_src @@}}/scripts/nsxiv_key_handler/main.py",
-            "dst": "~/.config/nsxiv/exec/key-handler"
+            "dst": "{{@@ d_config_dst @@}}/nsxiv/exec/key-handler"
         },
         "f_rclone_wrapper": {
             "src": "{{@@ d_src @@}}/scripts/rclone_wrapper/main.py",
-            "dst": "~/.local/bin/rclone_wrapper",
+            "dst": "{{@@ d_bin_dst @@}}/rclone_wrapper",
             "chmod": "755"
         },
         "f_file_renamer": {
             "src": "{{@@ d_src @@}}/scripts/file_renamer/main.py",
-            "dst": "~/.local/bin/file_renamer",
+            "dst": "{{@@ d_bin_dst @@}}/file_renamer",
             "chmod": "755"
         },
         "f_sdir": {
             "src": "bin/sdir.sh",
-            "dst": "~/.local/bin/sdir",
+            "dst": "{{@@ d_bin_dst @@}}/sdir",
             "chmod": "755"
         },
         "f_user_shortcuts": {
             "src": "{{@@ d_src @@}}/scripts/user_shortcuts/main.py",
-            "dst": "~/.local/bin/user_shortcuts",
+            "dst": "{{@@ d_bin_dst @@}}/user_shortcuts",
             "chmod": "755"
         },
         "f_tag": {
             "src": "bin/tag.sh",
-            "dst": "~/.local/bin/tag",
+            "dst": "{{@@ d_bin_dst @@}}/tag",
             "chmod": "755"
         },
         "f_displayselect": {
             "src": "bin/displayselect.sh",
-            "dst": "~/.local/bin/displayselect",
+            "dst": "{{@@ d_bin_dst @@}}/displayselect",
             "chmod": "755"
         },
         "f_dmenuhandler": {
             "src": "bin/dmenuhandler.sh",
-            "dst": "~/.local/bin/dmenuhandler",
+            "dst": "{{@@ d_bin_dst @@}}/dmenuhandler",
             "chmod": "755"
         },
         "f_dmenupass": {
             "src": "bin/dmenupass.sh",
-            "dst": "~/.local/bin/dmenupass",
+            "dst": "{{@@ d_bin_dst @@}}/dmenupass",
             "chmod": "755"
         },
         "f_dmenurecord": {
             "src": "bin/dmenurecord.sh",
-            "dst": "~/.local/bin/dmenurecord",
+            "dst": "{{@@ d_bin_dst @@}}/dmenurecord",
             "chmod": "755"
         },
         "f_env_cmd_runner": {
             "src": "bin/env_cmd_runner.sh",
-            "dst": "~/.local/bin/env_cmd_runner",
+            "dst": "{{@@ d_bin_dst @@}}/env_cmd_runner",
             "chmod": "755"
         },
         "f_keyboard_select": {
             "src": "{{@@ d_src @@}}/scripts/keyboard_select/main.py",
-            "dst": "~/.local/bin/keyboard_select",
+            "dst": "{{@@ d_bin_dst @@}}/keyboard_select",
             "chmod": "755"
         },
         "f_mounter": {
             "src": "bin/mounter.sh",
-            "dst": "~/.local/bin/mounter",
+            "dst": "{{@@ d_bin_dst @@}}/mounter",
             "chmod": "755"
         },
         "f_unmounter": {
             "src": "bin/unmounter.sh",
-            "dst": "~/.local/bin/unmounter",
+            "dst": "{{@@ d_bin_dst @@}}/unmounter",
             "chmod": "755"
         },
         "f_nsxiv_rifle": {
             "src": "deps/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle.sh",
-            "dst": "~/.local/bin/nsxiv-rifle",
+            "dst": "{{@@ d_bin_dst @@}}/nsxiv-rifle",
             "chmod": "755"
         },
         "f_pkgsize": {
             "src": "bin/pkgsize.sh",
-            "dst": "~/.local/bin/pkgsize",
+            "dst": "{{@@ d_bin_dst @@}}/pkgsize",
             "chmod": "755"
         },
         "f_remapd": {
             "src": "bin/remapd.sh",
-            "dst": "~/.local/bin/remapd",
+            "dst": "{{@@ d_bin_dst @@}}/remapd",
             "chmod": "755"
         },
         "f_remaps": {
             "src": "bin/remaps.sh",
-            "dst": "~/.local/bin/remaps",
+            "dst": "{{@@ d_bin_dst @@}}/remaps",
             "chmod": "755"
         },
         "f_screenshot_utility": {
             "src": "{{@@ d_src @@}}/scripts/screenshot_utility/main.py",
-            "dst": "~/.local/bin/screenshot_utility",
+            "dst": "{{@@ d_bin_dst @@}}/screenshot_utility",
             "chmod": "755"
         },
         "f_select_unicode": {
             "src": "{{@@ d_src @@}}/scripts/select_unicode/main.py",
-            "dst": "~/.local/bin/select_unicode",
+            "dst": "{{@@ d_bin_dst @@}}/select_unicode",
             "chmod": "755"
         },
         "f_setbg": {
             "src": "bin/setbg.sh",
-            "dst": "~/.local/bin/setbg",
+            "dst": "{{@@ d_bin_dst @@}}/setbg",
             "chmod": "755"
         },
         "f_sysact": {
             "src": "bin/sysact.sh",
-            "dst": "~/.local/bin/sysact",
+            "dst": "{{@@ d_bin_dst @@}}/sysact",
             "chmod": "755"
         },
 
         # Statusbar
         "f_sb_battery": {
-            "src": "{{@@ d_src @@}}/statusbar/battery.sh",
-            "dst": "~/.local/bin/statusbar/sb-battery",
+            "src": "{{@@ d_statusbar_src @@}}/battery.sh",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-battery",
             "chmod": "755"
         },
         "f_sb_date": {
-            "src": "{{@@ d_src @@}}/statusbar/date.sh",
-            "dst": "~/.local/bin/statusbar/sb-date",
+            "src": "{{@@ d_statusbar_src @@}}/date.sh",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-date",
             "chmod": "755"
         },
         "f_sb_internet": {
-            "src": "{{@@ d_src @@}}/statusbar/internet.sh",
-            "dst": "~/.local/bin/statusbar/sb-internet",
+            "src": "{{@@ d_statusbar_src @@}}/internet.sh",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-internet",
             "chmod": "755"
         },
         "f_sb_news": {
-            "src": "{{@@ d_src @@}}/statusbar/news.py",
-            "dst": "~/.local/bin/statusbar/sb-news",
+            "src": "{{@@ d_statusbar_src @@}}/news.py",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-news",
             "chmod": "755"
         },
         "f_sb_tasks": {
-            "src": "{{@@ d_src @@}}/statusbar/tasks.sh",
-            "dst": "~/.local/bin/statusbar/sb-tasks",
+            "src": "{{@@ d_statusbar_src @@}}/tasks.sh",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-tasks",
             "chmod": "755"
         },
         "f_sb_volume": {
-            "src": "{{@@ d_src @@}}/statusbar/volume.py",
-            "dst": "~/.local/bin/statusbar/sb-volume",
+            "src": "{{@@ d_statusbar_src @@}}/volume.py",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-volume",
             "chmod": "755"
         },
         "f_sb_recording": {
-            "src": "{{@@ d_src @@}}/statusbar/recording.py",
-            "dst": "~/.local/bin/statusbar/sb-recording",
+            "src": "{{@@ d_statusbar_src @@}}/recording.py",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-recording",
             "chmod": "755"
         },
     },
@@ -610,6 +610,11 @@
             ],
             "variables": {
                 "d_src": "../src",
+                "d_config_src": "config",
+                "d_config_dst": "~/.config",
+                "d_bin_dst": "~/.local/bin",
+                "d_statusbar_src": "../src/statusbar",
+                "d_statusbar_dst": "~/.local/bin/statusbar",
                 "d_userscripts_src": "src/userscripts",
                 "d_userscripts_dst": "~/.config/flexycon/userscripts"
             }
