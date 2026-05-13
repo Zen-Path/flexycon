@@ -7,6 +7,7 @@ import json
 import logging
 
 import commentjson
+
 from common.helpers import get_version
 from common.logger import logger, setup_logging
 

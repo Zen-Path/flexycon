@@ -9,7 +9,7 @@ authors = [
 dependencies = [
     "pip>=26.0",
 
-    "dotdrop==1.15.0",      #  for dotfile management
+    "dotdrop==1.15.0",      # for dotfile management
     "python-magic==0.4.27", # for dotdrop on windows
 
     # util
@@ -48,18 +48,18 @@ description = " Flexible programmatic configuration."
 name = "flexycon"
 readme = "README.md"
 requires-python = ">=3.12"
-version = "1.19.2"
+version = "1.20.0"
 
     [project.scripts]
     flexy = "scripts.flexy.main:main"
 
 [tool.setuptools.packages.find]
-where = ["dotfiles/src"]
+where = ["src"]
 
 [tool.mypy]
 explicit_package_bases = true
 ignore_missing_imports = true
-mypy_path              = "dotfiles/src"
+mypy_path              = "src"
 strict_optional        = true
 
 [tool.pytest.ini_options]

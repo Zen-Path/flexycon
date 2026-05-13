@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 
+from pydantic import BaseModel, Field, ValidationError, model_validator
+
 from common.io_utilities import load_json
 from common.logger import logger
-from pydantic import BaseModel, Field, ValidationError, model_validator
 
 
 class GlobalConfig(BaseModel):

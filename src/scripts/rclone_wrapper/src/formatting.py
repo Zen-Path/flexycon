@@ -1,5 +1,7 @@
 import humanize
 from colorama import Fore, Style, init
+from tabulate import tabulate
+
 from common.string_utilities import truncate
 from scripts.rclone_wrapper.src.models import (
     OperationStyle,
@@ -7,7 +9,6 @@ from scripts.rclone_wrapper.src.models import (
     RcloneOperation,
     RcloneStats,
 )
-from tabulate import tabulate
 
 init(autoreset=True)
 

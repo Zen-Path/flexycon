@@ -330,7 +330,7 @@
             "chmod": "755"
         },
         "f_continuous_diff": {
-            "src": "src/scripts/continuous_diff/main.py",
+            "src": "{{@@ d_src @@}}/scripts/continuous_diff/main.py",
             "dst": "~/.local/bin/continuous_diff",
             "chmod": "755"
         },
@@ -340,7 +340,7 @@
             "chmod": "755"
         },
         "f_git_logs": {
-            "src": "src/scripts/git_logs/main.py",
+            "src": "{{@@ d_src @@}}/scripts/git_logs/main.py",
             "dst": "~/.local/bin/git_logs",
             "chmod": "755"
         },
@@ -355,12 +355,12 @@
             "chmod": "755"
         },
         "f_journal_entry": {
-            "src": "src/scripts/journal_entry/main.py",
+            "src": "{{@@ d_src @@}}/scripts/journal_entry/main.py",
             "dst": "~/.local/bin/journal_entry",
             "chmod": "755"
         },
         "f_jsonc_to_json": {
-            "src": "src/scripts/jsonc_to_json/main.py",
+            "src": "{{@@ d_src @@}}/scripts/jsonc_to_json/main.py",
             "dst": "~/.local/bin/jsonc_to_json",
             "chmod": "755"
         },
@@ -370,16 +370,16 @@
             "chmod": "755"
         },
         "f_nsxiv_exec_key_handler": {
-            "src": "src/scripts/nsxiv_key_handler/main.py",
+            "src": "{{@@ d_src @@}}/scripts/nsxiv_key_handler/main.py",
             "dst": "~/.config/nsxiv/exec/key-handler"
         },
         "f_rclone_wrapper": {
-            "src": "src/scripts/rclone_wrapper/main.py",
+            "src": "{{@@ d_src @@}}/scripts/rclone_wrapper/main.py",
             "dst": "~/.local/bin/rclone_wrapper",
             "chmod": "755"
         },
         "f_file_renamer": {
-            "src": "src/scripts/file_renamer/main.py",
+            "src": "{{@@ d_src @@}}/scripts/file_renamer/main.py",
             "dst": "~/.local/bin/file_renamer",
             "chmod": "755"
         },
@@ -389,7 +389,7 @@
             "chmod": "755"
         },
         "f_user_shortcuts": {
-            "src": "src/scripts/user_shortcuts/main.py",
+            "src": "{{@@ d_src @@}}/scripts/user_shortcuts/main.py",
             "dst": "~/.local/bin/user_shortcuts",
             "chmod": "755"
         },
@@ -424,7 +424,7 @@
             "chmod": "755"
         },
         "f_keyboard_select": {
-            "src": "src/scripts/keyboard_select/main.py",
+            "src": "{{@@ d_src @@}}/scripts/keyboard_select/main.py",
             "dst": "~/.local/bin/keyboard_select",
             "chmod": "755"
         },
@@ -459,12 +459,12 @@
             "chmod": "755"
         },
         "f_screenshot_utility": {
-            "src": "src/scripts/screenshot_utility/main.py",
+            "src": "{{@@ d_src @@}}/scripts/screenshot_utility/main.py",
             "dst": "~/.local/bin/screenshot_utility",
             "chmod": "755"
         },
         "f_select_unicode": {
-            "src": "src/scripts/select_unicode/main.py",
+            "src": "{{@@ d_src @@}}/scripts/select_unicode/main.py",
             "dst": "~/.local/bin/select_unicode",
             "chmod": "755"
         },
@@ -481,37 +481,37 @@
 
         # Statusbar
         "f_sb_battery": {
-            "src": "src/statusbar/battery.sh",
+            "src": "{{@@ d_src @@}}/statusbar/battery.sh",
             "dst": "~/.local/bin/statusbar/sb-battery",
             "chmod": "755"
         },
         "f_sb_date": {
-            "src": "src/statusbar/date.sh",
+            "src": "{{@@ d_src @@}}/statusbar/date.sh",
             "dst": "~/.local/bin/statusbar/sb-date",
             "chmod": "755"
         },
         "f_sb_internet": {
-            "src": "src/statusbar/internet.sh",
+            "src": "{{@@ d_src @@}}/statusbar/internet.sh",
             "dst": "~/.local/bin/statusbar/sb-internet",
             "chmod": "755"
         },
         "f_sb_news": {
-            "src": "src/statusbar/news.py",
+            "src": "{{@@ d_src @@}}/statusbar/news.py",
             "dst": "~/.local/bin/statusbar/sb-news",
             "chmod": "755"
         },
         "f_sb_tasks": {
-            "src": "src/statusbar/tasks.sh",
+            "src": "{{@@ d_src @@}}/statusbar/tasks.sh",
             "dst": "~/.local/bin/statusbar/sb-tasks",
             "chmod": "755"
         },
         "f_sb_volume": {
-            "src": "src/statusbar/volume.py",
+            "src": "{{@@ d_src @@}}/statusbar/volume.py",
             "dst": "~/.local/bin/statusbar/sb-volume",
             "chmod": "755"
         },
         "f_sb_recording": {
-            "src": "src/statusbar/recording.py",
+            "src": "{{@@ d_src @@}}/statusbar/recording.py",
             "dst": "~/.local/bin/statusbar/sb-recording",
             "chmod": "755"
         },
@@ -609,6 +609,7 @@
                 "f_flex_sync",
             ],
             "variables": {
+                "d_src": "../src",
                 "d_userscripts_src": "src/userscripts",
                 "d_userscripts_dst": "~/.config/flexycon/userscripts"
             }

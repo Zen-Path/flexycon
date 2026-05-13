@@ -7,10 +7,11 @@ import logging
 import traceback
 from datetime import datetime
 
+from git import InvalidGitRepositoryError, Repo
+
 from common.args import add_date_args, resolve_date
 from common.helpers import get_version
 from common.logger import logger, setup_logging
-from git import InvalidGitRepositoryError, Repo
 from scripts.git_logs.src.repos import GIT_REPOS
 
 

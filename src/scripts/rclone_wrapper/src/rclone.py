@@ -2,8 +2,9 @@ import argparse
 import json
 import sys
 
-from common.logger import logger
 from pydantic import ValidationError
+
+from common.logger import logger
 from scripts.rclone_wrapper.src.config import Config
 from scripts.rclone_wrapper.src.models import RcloneOperation, RcloneStats
 
