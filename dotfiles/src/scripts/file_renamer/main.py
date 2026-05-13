@@ -8,8 +8,9 @@ import os
 from pathlib import Path
 from typing import Callable
 
-from common.helpers import get_version, split_into_words
+from common.helpers import get_version
 from common.logger import logger, setup_logging
+from common.string_utilities import split_into_words
 from scripts.file_renamer.src.converters import (
     to_camel_case,
     to_camel_snake_case,

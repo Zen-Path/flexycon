@@ -1,6 +1,6 @@
 import os
 
-from common.helpers import truncate
+from common.string_utilities import truncate
 from scripts.user_shortcuts.src.models import Bookmark
 
 # Column widths

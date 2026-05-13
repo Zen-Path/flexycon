@@ -1,5 +1,5 @@
 import pytest
-from common.helpers import split_into_words
+from common.string_utilities import split_into_words
 
 
 @pytest.mark.parametrize(

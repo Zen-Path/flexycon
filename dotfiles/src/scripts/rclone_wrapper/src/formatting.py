@@ -1,6 +1,6 @@
 import humanize
 from colorama import Fore, Style, init
-from common.helpers import truncate
+from common.string_utilities import truncate
 from scripts.rclone_wrapper.src.models import (
     OperationStyle,
     ProcessedOperation,
