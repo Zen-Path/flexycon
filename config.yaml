@@ -491,7 +491,7 @@
             "chmod": "755"
         },
         "f_sb_internet": {
-            "src": "{{@@ d_statusbar_src @@}}/internet.sh",
+            "src": "{{@@ d_statusbar_src @@}}/internet.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-internet",
             "chmod": "755"
         },
