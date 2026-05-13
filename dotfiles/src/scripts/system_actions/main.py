@@ -12,9 +12,10 @@ from typing import Callable
 
 from common.apps.window_manager import get_active_window_manager
 from common.cmd_utilities import run_cmd
-from common.helpers import NotificationSystem, System, get_version
+from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
 from common.prompt_utilities import PromptOption, prompt_options
+from common.system_utilities import System
 
 
 def prompt_user(options: list[PromptOption]) -> str | int | None:

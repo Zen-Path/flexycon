@@ -1,7 +1,7 @@
 import os
 
-from common.helpers import get_display_server
 from common.packages.package_managers import Brew, Git, Package, Yay
+from common.system_utilities import get_display_server
 
 display_server = get_display_server()
 
