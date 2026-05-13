@@ -11,7 +11,8 @@ from datetime import datetime
 from pathlib import Path
 
 from common.args import add_date_args, resolve_date
-from common.helpers import ensure_directory_interactive, get_version
+from common.helpers import get_version
+from common.io_utilities import ensure_directory_interactive
 from common.logger import logger, setup_logging
 
 

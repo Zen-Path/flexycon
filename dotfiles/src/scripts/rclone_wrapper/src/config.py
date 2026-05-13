@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from common.helpers import load_json
+from common.io_utilities import load_json
 from common.logger import logger
 from pydantic import BaseModel, Field, ValidationError, model_validator
 

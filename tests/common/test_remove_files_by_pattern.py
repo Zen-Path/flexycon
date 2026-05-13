@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from common.helpers import remove_files_by_pattern
+from common.io_utilities import remove_files_by_pattern
 
 
 def test_remove_single_file(tmp_path: Path):

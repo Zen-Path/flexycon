@@ -4,7 +4,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Literal
 
-from common.helpers import resolve_path, write_to_file
+from common.helpers import resolve_path
+from common.io_utilities import write_to_file
 from common.logger import logger
 
 

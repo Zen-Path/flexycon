@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Callable, TypedDict, TypeVar
 
 from common.cmd_utilities import run_cmd
-from common.helpers import remove_files_by_pattern
+from common.io_utilities import remove_files_by_pattern
 from common.logger import logger
 from common.variables import flex_data_path
 from scripts.package_installer.data.packages import packages
