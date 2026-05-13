@@ -94,10 +94,10 @@ class NotificationSystem:
                 "You cannot provide both a 'callback' and 'open_image_onclick'."
             )
 
-        cmd = ["notify-send", title, "--urgency", urgency]
+        cmd = ["notify-send", title.strip(), "--urgency", urgency]
 
-        if message:
-            cmd.append(message)
+        if message is not None:
+            cmd.append(message.strip())
 
         if icon_path:
             icon_path = str(icon_path)
