@@ -78,6 +78,8 @@ def rename_path(path: Path, transform_func: ConverterFunc):
 
 
 def build_parser(converters_map: dict[str, ConverterRow]):
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
         prog="rename_file", description="Rename files with different case styles."
     )
@@ -103,13 +105,13 @@ def build_parser(converters_map: dict[str, ConverterRow]):
     return parser
 
 
-def main():
+def main() -> None:
     converters_map = map_converters(CONVERTERS)
 
     args = build_parser(converters_map).parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
-    logger.debug(f"CLI Arguments: {args}")
+    logger.debug(args)
 
     # Pick the first converter that is set
     transform = next(

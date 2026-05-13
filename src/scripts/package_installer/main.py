@@ -12,8 +12,11 @@ from scripts.package_installer.data.packages import packages
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
-        prog="package_installer", description="Generate bookmarks for various tools."
+        prog="package_installer",
+        description="Generate bookmarks for various tools.",
     )
 
     parser.add_argument(
@@ -60,10 +63,11 @@ def process_packages(packages: list[Package], dry_run: bool = False):
             available_manager.install(package)
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
+    logger.debug(args)
 
     process_packages(packages, args.dry_run)
 

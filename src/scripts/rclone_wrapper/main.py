@@ -7,6 +7,7 @@ import json
 import logging
 import sys
 import tempfile
+from typing import NoReturn
 
 from common.cmd_utilities import run_cmd
 from common.helpers import get_version
@@ -22,13 +23,15 @@ from scripts.rclone_wrapper.src.rclone import build_rclone_command, parse_rclone
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
         prog="rclone_wrapper",
         description="Wrapper around rclone with persistent config.",
     )
 
-    parser.add_argument("source", help="source path")
-    parser.add_argument("destination", help="destination path")
+    parser.add_argument("source", help="source target")
+    parser.add_argument("destination", help="destination target")
 
     parser.add_argument(
         "-a",
@@ -44,7 +47,7 @@ def build_parser() -> argparse.ArgumentParser:
         dest="dry_run",
         action="store_false",
         default=True,
-        help="actually perform the changes (default is dry-run)",
+        help="actually apply the changes",
     )
 
     parser.add_argument(
@@ -57,7 +60,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> NoReturn:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)

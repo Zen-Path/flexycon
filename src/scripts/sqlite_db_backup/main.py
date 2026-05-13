@@ -3,12 +3,16 @@
 # {{@@ header() @@}}
 
 import argparse
+import logging
 import os
 import shutil
 import sqlite3
 import time
 from datetime import datetime
 from pathlib import Path
+
+from common.helpers import get_version
+from common.logger import logger, setup_logging
 
 
 def extract_schema(db_path: Path, output_file: Path):
@@ -119,8 +123,11 @@ def generate_test_data(output_dir: Path, base_db: Path, num_backups: int = 10):
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
-        prog="sqlite_db_backup", description="SQLite Diff and Restore Utility"
+        prog="sqlite_db_backup",
+        description="SQLite diff and restore utility",
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -150,11 +157,21 @@ def build_parser() -> argparse.ArgumentParser:
         "--num-backups", type=int, default=10, help="number of backups to generate"
     )
 
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
+    )
+
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
+
+    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
+    logger.debug(args)
 
     if args.command == "diff":
         generate_diff(args.old_db, args.new_db, args.output_dir)

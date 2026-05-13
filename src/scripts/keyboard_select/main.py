@@ -114,8 +114,11 @@ def set_keyboard_layout(layout: str) -> bool:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
-        prog="keyboard_selector", description="Select keyboard layout."
+        prog="keyboard_selector",
+        description="Select keyboard layout.",
     )
 
     parser.add_argument(
@@ -128,10 +131,11 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
+    logger.debug(args)
 
     available_layouts = get_available_layouts()
     if not available_layouts:

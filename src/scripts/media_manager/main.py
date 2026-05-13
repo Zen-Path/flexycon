@@ -13,8 +13,11 @@ from scripts.media_manager.src.core import (
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
-        prog="media_manager", description="Media Manager CLI"
+        prog="media_manager",
+        description="Media manager utility",
     )
 
     subparsers = parser.add_subparsers(dest="media_type", required=True)
@@ -63,10 +66,11 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+    logger.debug(args)
 
     if args.output:
         if len(args.input) != len(args.output):

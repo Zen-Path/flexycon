@@ -39,6 +39,7 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
+
     global_parent = argparse.ArgumentParser(add_help=False)
     global_parent.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
@@ -95,7 +96,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)

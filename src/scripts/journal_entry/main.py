@@ -16,31 +16,6 @@ from common.io_utilities import ensure_directory_interactive
 from common.logger import logger, setup_logging
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        prog="journal_entry",
-        description="Open a journal entry in the user's $EDITOR for a date."
-        "If no $EDITOR is found, it defaults to 'vim'.",
-    )
-
-    add_date_args(parser)
-
-    parser.add_argument(
-        "--get-journal-entry-path",
-        action="store_true",
-        help="return the path of the journal entry",
-    )
-
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable debug output"
-    )
-    parser.add_argument(
-        "--version", action="version", version=f"%(prog)s {get_version()}"
-    )
-
-    return parser
-
-
 def open_journal_entry(target_date: datetime) -> bool:
     year_fmt = str(target_date.year)
     month_num_fmt = f"{target_date.month:02}"
@@ -77,10 +52,38 @@ def get_journal_entry_path(target_date: datetime) -> Path | None:
     )
 
 
-def main():
+def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
+    parser = argparse.ArgumentParser(
+        prog="journal_entry",
+        description="Open a journal entry in the user's $EDITOR for a date."
+        "If no $EDITOR is found, it defaults to 'vim'.",
+    )
+
+    add_date_args(parser)
+
+    parser.add_argument(
+        "--get-journal-entry-path",
+        action="store_true",
+        help="return the path of the journal entry",
+    )
+
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
+    )
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {get_version()}"
+    )
+
+    return parser
+
+
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+    logger.debug(args)
 
     target_date = resolve_date(args)
     logger.info(f"Target date: {target_date.strftime('%Y-%m-%d')}")

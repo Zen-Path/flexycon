@@ -92,8 +92,10 @@ COLORS = ["transparent", "#458588", "#cc241d", "#458588"]
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
-        prog="image_generator", description="Generate an svg image from a pixel map."
+        prog="image_generator",
+        description="Generate an svg image from a pixel map.",
     )
 
     parser.add_argument(

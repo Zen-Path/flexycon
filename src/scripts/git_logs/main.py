@@ -51,6 +51,8 @@ def get_commit_messages_on_date(
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
         prog="git_logs",
         description="List Git commits in a repo for all branches by a date.",
@@ -72,6 +74,7 @@ def main():
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+    logger.debug(args)
 
     target_date = resolve_date(args)
     logger.info(f"Target date: {target_date.strftime('%Y-%m-%d')}\n")

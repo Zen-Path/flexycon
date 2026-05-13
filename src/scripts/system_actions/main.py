@@ -115,6 +115,7 @@ def execute_special_action(action_func: Callable[[], None] | None = None):
 
 def build_parser(options: list[PromptOption]) -> argparse.ArgumentParser:
     """Parse command-line arguments."""
+
     global_parent = argparse.ArgumentParser(add_help=False)
     global_parent.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
@@ -143,7 +144,7 @@ def build_parser(options: list[PromptOption]) -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     wm = get_active_window_manager()
 
     all_options = [

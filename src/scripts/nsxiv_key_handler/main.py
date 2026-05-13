@@ -182,8 +182,11 @@ ACTIONS: dict[str, Action] = {
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
-        prog="nsxiv_key_handler", description="Key handler for nsixv."
+        prog="nsxiv_key_handler",
+        description="Key handler for nsixv.",
     )
 
     parser.add_argument(
@@ -202,10 +205,11 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+    logger.debug(args)
 
     # Read filenames from stdin
     files = [Path(line.strip()) for line in sys.stdin if line.strip()]

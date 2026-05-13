@@ -13,8 +13,11 @@ from common.logger import logger, setup_logging
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
-        prog="jsonc_to_json", description="Convert a jsonc file to json."
+        prog="jsonc_to_json",
+        description="Convert a jsonc file to json.",
     )
 
     parser.add_argument("input_file", help="the jsonc file")
@@ -39,10 +42,11 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
+    logger.debug(args)
 
     with open(args.input_file, "r") as f:
         data = commentjson.load(f)  # type: ignore

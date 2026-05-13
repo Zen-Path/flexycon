@@ -9,6 +9,8 @@ from scripts.flexy.src.targets import TARGETS, TargetInfo
 
 
 def build_parser(targets: dict[str, TargetInfo]) -> argparse.ArgumentParser:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
         prog="flexy", description="Help utility for managing flexycon."
     )
@@ -30,10 +32,11 @@ def build_parser(targets: dict[str, TargetInfo]) -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser(TARGETS).parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
+    logger.debug(args)
 
     if args.command in TARGETS:
         TARGETS[args.command]["fn"]()

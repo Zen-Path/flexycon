@@ -49,6 +49,7 @@ def monitor_file(path: Path):
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
         prog="continuous_diff",
         description="Showcase diff of the same file as it's being changed.",
@@ -68,10 +69,11 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
+    logger.debug(args)
 
     if args.target_path is None:
         logger.error("Missing target path.")
