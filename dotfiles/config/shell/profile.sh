@@ -69,7 +69,6 @@ export HISTFILE="$XDG_DATA_HOME/history"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export npm_config_cache="$XDG_CACHE_HOME/npm"
 # export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
-export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 # export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
@@ -79,6 +78,11 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 # {%@@- if os == "linux" +@@%}
 export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
 # {%@@- endif +@@%}
+
+## Python
+mkdir -p "$XDG_CACHE_HOME/python"
+export PYTHON_HISTORY="$XDG_CACHE_HOME/python/history.py"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 
 ## Misc files
 export FLEXYCON_HOME="$XDG_SRC_HOME/flexycon"
