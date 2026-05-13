@@ -112,6 +112,8 @@ class NotificationSystem:
             action_token = "custom_callback"
             cmd.append(f"--action={action_token}=Click Me")
 
+        logger.debug(f"Sending notification:\ntitle={title!r}\nmessage='{message}'")
+
         try:
             # If no action was defined, fire and forget (non-blocking)
             if not action_token:
