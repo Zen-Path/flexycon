@@ -574,20 +574,10 @@
                 "meta_mpv"
             ],
             "dotfiles": [
-                # Config
-                "f_shell_profile",
-                "f_shell_inputrc",
-                "f_zsh_config",
-                "f_shell_aliases",
-                "d_starship",
-                "d_git",
-                "f_nvim_init",
-                "d_python",
-                "d_yt_dlp",
-                "f_gallery_config",
-                "d_newsraft",
-                "d_bottom",
-                "f_flex_sync",
+                # NOTE: scripts need to be installed before config, since some
+                # transformations require some scripts to be present, for example,
+                # 'f_gallery_config' needs 'f_jsonc_to_json'
+
                 # Scripts
                 "f_compiler",
                 "f_continuous_diff",
@@ -603,6 +593,20 @@
                 "f_sdir",
                 "f_user_shortcuts",
                 "f_tag",
+                # Config
+                "f_shell_profile",
+                "f_shell_inputrc",
+                "f_zsh_config",
+                "f_shell_aliases",
+                "d_starship",
+                "d_git",
+                "f_nvim_init",
+                "d_python",
+                "d_yt_dlp",
+                "f_gallery_config",
+                "d_newsraft",
+                "d_bottom",
+                "f_flex_sync",
             ],
             "variables": {
                 "d_userscripts_src": "src/userscripts",
