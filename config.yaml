@@ -486,7 +486,7 @@
             "chmod": "755"
         },
         "f_sb_date": {
-            "src": "{{@@ d_statusbar_src @@}}/date.sh",
+            "src": "{{@@ d_statusbar_src @@}}/date.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-date",
             "chmod": "755"
         },
