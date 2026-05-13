@@ -22,7 +22,7 @@ packages = [
         description="Yet another cross-platform graphical process/system monitor",
     ),
     Package(
-        identifier="choose",
+        identifier="choose-gui",
         managers=[Brew],
         description="Dmenu-like utility for macOS",
     ),
