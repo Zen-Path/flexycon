@@ -72,7 +72,7 @@ ACTIONS = {
     MouseButton.LEFT: lambda: run_cmd_background([TERMINAL, "-e", "taskwarrior-tui"]),
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         " Tasks",
-        "Show due and overdue tasks\n"
+        "Show due and overdue tasks.\n"
         "\n<b>Actions</b>\n"
         "- Left  : Open 'taskwarrior-tui'\n"
         "- Right : Show this message\n"
@@ -84,6 +84,7 @@ ACTIONS = {
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
         prog="sb_tasks",
         description="Statusbar script for managing tasks.",

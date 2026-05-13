@@ -61,7 +61,7 @@ ACTIONS = {
     MouseButton.SCROLL_DOWN: lambda: adjust_backlight(-10),
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         " Battery",
-        "Show battery(ies) status\n"
+        "Show battery(ies) status.\n"
         "\n<b>Actions</b>\n"
         "- Scroll : Adjust backlight"
         "\n<b>Status</b>\n"
@@ -78,6 +78,7 @@ ACTIONS = {
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(
         prog="sb_battery",
         description="Statusbar script for battery levels and backlight.",

@@ -81,7 +81,7 @@ ACTIONS = {
     MouseButton.LEFT: show_info,
     MouseButton.MIDDLE: open_calcurse,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
-        "📅 Date module",
+        "📅 Date",
         "Show the current date and time.\n"
         "\n<b>Actions</b>\n"
         "- Left click to show calendar and appointments\n"
