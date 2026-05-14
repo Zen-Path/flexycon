@@ -11,7 +11,7 @@ from common.cmd_utilities import run_cmd
 from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
 from common.prompt_utilities import prompt_options
-from scripts.select_unicode.data import CHARS
+from scripts.unicode_selector.data import CHARS
 
 
 def format_char_entries(chars: dict[str, str]) -> list[str]:
@@ -25,7 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        prog="select_unicode",
+        prog="unicode_selector",
         description="Prompt the user for a unicode character and copies or inserts it.",
     )
 

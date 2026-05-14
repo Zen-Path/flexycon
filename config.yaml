@@ -463,9 +463,9 @@
             "dst": "{{@@ d_bin_dst @@}}/screenshot_utility",
             "chmod": "755"
         },
-        "f_select_unicode": {
-            "src": "{{@@ d_src @@}}/scripts/select_unicode/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/select_unicode",
+        "f_unicode_selector": {
+            "src": "{{@@ d_src @@}}/scripts/unicode_selector/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/unicode_selector",
             "chmod": "755"
         },
         "f_setbg": {
@@ -595,6 +595,7 @@
                 "f_sdir",
                 "f_user_shortcuts",
                 "f_tag",
+                "f_unicode_selector",
                 # Config
                 "f_shell_profile",
                 "f_shell_inputrc",
@@ -717,7 +718,6 @@
                 "f_remapd",
                 "f_remaps",
                 "f_screenshot_utility",
-                "f_select_unicode",
                 "f_setbg",
 
                 # Statusbar
