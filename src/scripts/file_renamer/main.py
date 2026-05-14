@@ -4,14 +4,11 @@
 
 import argparse
 import logging
-import os
 from pathlib import Path
-from typing import Callable
 
 from common.helpers import get_version
 from common.logger import logger, setup_logging
 from common.string_utilities import (
-    split_into_words,
     to_camel_case,
     to_camel_snake_case,
     to_flat_case,
@@ -25,9 +22,7 @@ from common.string_utilities import (
     to_train_case,
     to_upper_case,
 )
-
-type ConverterFunc = Callable[[list[str], str], str]
-type ConverterRow = tuple[str, str, str, ConverterFunc]
+from scripts.file_renamer.src.core import ConverterRow, rename_path
 
 CONVERTERS: list[ConverterRow] = [
     ("-l", "--lower-case", "lower case", to_lower_case),
@@ -54,27 +49,6 @@ def map_converters(converters: list[ConverterRow]) -> dict[str, ConverterRow]:
         result[dest_name] = converter
 
     return result
-
-
-def rename_path(path: Path, transform_func: ConverterFunc):
-    """Attempt to rename a file or directory, catching and logging errors."""
-    try:
-        root, ext = os.path.splitext(path.name)
-        words = split_into_words(root)
-
-        new_name = transform_func(words, ext)
-        logger.debug(f"Words={words}, ext={ext}, new_name={new_name}")
-
-        # Skip if name didn't change
-        if path.name == new_name:
-            return
-
-        new_path = path.with_name(new_name)
-        path.rename(new_path)
-        logger.debug(f"Renamed: {path.name} -> {new_path.name}")
-
-    except Exception as e:
-        logger.error(f"Error renaming {str(path)!r}: {e}")
 
 
 def build_parser(converters_map: dict[str, ConverterRow]):
