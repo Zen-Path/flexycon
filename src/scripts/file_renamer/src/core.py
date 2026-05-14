@@ -16,7 +16,7 @@ def rename_path(path: Path, transform_func: ConverterFunc):
         words = split_into_words(root)
 
         new_name = transform_func(words, ext)
-        logger.debug(f"Words={words}, ext={ext}, new_name={new_name}")
+        logger.debug(f"Words={words}, ext={ext!r}")
 
         # Skip if name didn't change
         if path.name == new_name:
@@ -24,7 +24,7 @@ def rename_path(path: Path, transform_func: ConverterFunc):
 
         new_path = path.with_name(new_name)
         path.rename(new_path)
-        logger.debug(f"Renamed: {path.name} -> {new_path.name}")
+        logger.info(f"Renamed {str(path.absolute())!r} -> {str(new_path)!r}")
 
     except Exception as e:
         logger.error(f"Error renaming {str(path)!r}: {e}")
