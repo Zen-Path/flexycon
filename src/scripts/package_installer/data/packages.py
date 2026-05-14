@@ -305,13 +305,6 @@ packages = [
         description="Local media server to download and manage files",
     ),
     Package(
-        identifier="https://github.com/Zen-Path/dwm-flexipatch",
-        managers=[Git],
-        destination=["$XDG_SRC_HOME", "dwm-flexipatch"],
-        description="A dwm build with preprocessor directives to decide which patches to include during build time.",
-        condition=display_server == "X11",
-    ),
-    Package(
         identifier="https://github.com/Zen-Path/dwmblocks-async",
         managers=[Git],
         destination=["$XDG_SRC_HOME", "dwmblocks-async"],

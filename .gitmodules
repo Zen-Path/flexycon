@@ -4,3 +4,6 @@
 [submodule "src/nsxiv-extra"]
 	path = dotfiles/deps/nsxiv-extra
 	url = https://github.com/Zen-Path/nsxiv-extra
+[submodule "dotfiles/deps/dwm-flexipatch"]
+	path = dotfiles/deps/dwm-flexipatch
+	url = https://github.com/Zen-Path/dwm-flexipatch
