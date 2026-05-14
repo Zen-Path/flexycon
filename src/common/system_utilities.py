@@ -8,11 +8,20 @@ from common.cmd_utilities import run_cmd
 from common.logger import logger
 
 
-def get_display_server() -> Literal["X11", "Wayland"] | None:
+def get_display_server() -> Literal["X11", "Wayland", "macOS", "Windows"] | None:
     """
     Returns the display server currently in use, or ``None`` if it can't
     be detected.
     """
+    if sys.platform == "darwin":
+        return "macOS"
+
+    if sys.platform == "win32":
+        return "Windows"
+
+    if sys.platform != "linux":
+        return None
+
     display_env_val = os.getenv("DISPLAY")
 
     if os.getenv("WAYLAND_DISPLAY"):
