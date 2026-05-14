@@ -5,7 +5,10 @@ import logging
 
 from common.helpers import get_version
 from common.logger import logger, setup_logging
-from scripts.flexy.src.targets import TARGETS, TargetInfo
+from scripts.flexy.src import targets
+from scripts.flexy.src.helpers import TARGETS, TargetInfo
+
+__all__ = ["targets"]
 
 
 def build_parser(targets: dict[str, TargetInfo]) -> argparse.ArgumentParser:
