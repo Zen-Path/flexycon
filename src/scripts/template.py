@@ -24,6 +24,7 @@ def build_parser() -> argparse.ArgumentParser:
         "-c",
         "--choice",
         choices=["one", "two", "three"],
+        metavar="METAVAR",
         help="HELP_MSG",
     )
 
@@ -88,12 +89,15 @@ def subparser_parser(options: list[str]) -> argparse.ArgumentParser:
     )
 
     # SUBCOMMANDS
-    subparsers = parser.add_subparsers(dest="DEST", help="HELP_MSG")
+    cmd_parent = argparse.ArgumentParser(add_help=False)
+    cmd_parent.add_argument("-s", "--max-size", type=int)
+
+    subparsers = parser.add_subparsers(dest="DEST", metavar="METAVAR", help="HELP_MSG")
 
     for opt in options:
         subparsers.add_parser(
-            opt,
-            parents=[global_parent],
+            name=opt,
+            parents=[global_parent, cmd_parent],
             help="HELP_MSG",
         )
 
