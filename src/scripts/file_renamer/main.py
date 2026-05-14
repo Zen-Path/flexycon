@@ -58,16 +58,18 @@ def build_parser(converters_map: dict[str, ConverterRow]):
         prog="rename_file", description="Rename files with different case styles."
     )
 
-    group = parser.add_mutually_exclusive_group(required=True)
+    group = parser.add_argument_group(title="converters")
     for dest, (short, long, desc, _func) in converters_map.items():
-        args = [arg for arg in (short, long) if arg]  # ignore None flags
         group.add_argument(
-            *args, action="store_true", help=f"convert to {desc}", dest=dest
+            short,
+            long,
+            dest=dest,
+            nargs="+",
+            type=Path,
+            action="extend",
+            metavar="PATH",
+            help=f"convert to {desc}",
         )
-
-    parser.add_argument(
-        "targets", nargs="+", type=Path, help="files or directories to rename"
-    )
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
@@ -87,25 +89,21 @@ def main() -> None:
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
     logger.debug(args)
 
-    # Pick the first converter that is set
-    transform = next(
-        (
-            func
-            for dest, (_short, _long, _desc, func) in converters_map.items()
-            if getattr(args, dest)
-        ),
-        None,
-    )
+    for dest, (_short, _long, _desc, transform) in converters_map.items():
+        # Get list of paths for a specific converter (e.g. args.kebab_case)
+        converter = getattr(args, dest)
 
-    if transform is None:
-        return
-
-    for target in args.targets:
-        if not target.exists():
-            logger.warning(f"Skipping non-existent path {str(target)!r}.")
+        if not converter:
             continue
 
-        rename_path(target, transform)
+        logger.debug(f"Using converter {dest!r}.")
+
+        for target in converter:
+            if not target.exists():
+                logger.warning(f"Skipping non-existent path {str(target)!r}.")
+                continue
+
+            rename_path(target, transform)
 
 
 if __name__ == "__main__":
