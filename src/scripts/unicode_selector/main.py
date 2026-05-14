@@ -4,12 +4,12 @@
 
 import argparse
 import logging
-import subprocess
 import sys
 
 from common.cmd_utilities import run_cmd
 from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
+from common.packages.clipboard_utilities import ClipboardManager
 from common.prompt_utilities import prompt_options
 from scripts.unicode_selector.data import CHARS
 
@@ -100,7 +100,7 @@ def main() -> None:
         logger.info("Character inserted.")
 
     if not args.no_copy:
-        subprocess.run(["xclip", "-selection", "clipboard"], input=char.encode())
+        ClipboardManager.copy_text(char)
         logger.info("Character copied.")
 
         if not args.no_notify:
