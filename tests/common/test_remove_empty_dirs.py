@@ -2,7 +2,8 @@ import logging
 from pathlib import Path
 
 import pytest
-from scripts.flexy.src.targets import remove_empty_dirs
+
+from common.io_utilities import remove_empty_dirs
 
 # --- STANDARD TESTS ---
 

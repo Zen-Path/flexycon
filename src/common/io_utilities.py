@@ -1,4 +1,5 @@
 import json
+import os
 import shutil
 from pathlib import Path
 
@@ -92,3 +93,57 @@ def remove_files_by_pattern(
                 logger.debug(f"Removed {str(path)!r}")
             except Exception as e:
                 logger.warning(f"Failed to remove {str(path)!r}: {e}")
+
+
+def remove_empty_dirs(
+    base_dir: str | Path = ".",
+    global_excludes: set[str] | None = None,
+    protected_roots: set[Path] | None = None,
+) -> None:
+    """
+    Removes empty directories bottom-up, respecting global name exclusions
+    and specific protected root paths.
+
+    :param base_dir: The root directory to start the cleanup from.
+    :param global_excludes: Set of exact directory names to ignore everywhere.
+    :param protected_roots: Set of exact Path roots to protect.
+    """
+    if global_excludes is None:
+        global_excludes = set()
+
+    if protected_roots is None:
+        protected_roots = set()
+
+    # Normalize base_path and protected roots for safety
+    base_path = Path(base_dir).resolve()
+    resolved_protected = {p.resolve() for p in protected_roots}
+
+    # topdown=False ensures we process leaf directories before their parents
+    for root, dirs, _files in os.walk(base_path, topdown=False):
+        root_path = Path(root).resolve()
+
+        # SKIP LOGIC A: Is the current tree protected?
+        if any(root_path.is_relative_to(prot) for prot in resolved_protected):
+            continue
+
+        if any(part in global_excludes for part in root_path.parts):
+            continue
+
+        for d in dirs:
+            dir_path = root_path / d
+
+            # SKIP LOGIC B: Is this specific subdirectory protected?
+            if any(dir_path.is_relative_to(prot) for prot in resolved_protected):
+                continue
+
+            if d in global_excludes:
+                continue
+
+            # ATTEMPT REMOVAL
+            try:
+                # iterdir() yields all contents (including hidden files and broken symlinks)
+                if not any(dir_path.iterdir()):
+                    dir_path.rmdir()
+                    logger.debug(f"Removed empty directory {str(dir_path)!r}")
+            except OSError as e:
+                logger.warning(f"Could not remove {str(dir_path)!r}: {e}")
