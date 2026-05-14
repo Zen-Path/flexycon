@@ -22,36 +22,87 @@ from common.string_utilities import (
     to_train_case,
     to_upper_case,
 )
-from scripts.file_renamer.src.core import ConverterRow, rename_path
+from scripts.file_renamer.src.core import ConverterRow, map_converters, rename_path
 
 CONVERTERS: list[ConverterRow] = [
-    ("-l", "--lower-case", "lower case", to_lower_case),
-    ("-u", "--upper-case", "UPPER CASE", to_upper_case),
-    ("-s", "--snake-case", "snake_case", to_snake_case),
-    ("-S", "--snake-upper-case", "SNAKE_UPPER", to_snake_upper_case),
-    ("-c", "--camel-case", "camelCase", to_camel_case),
-    ("-C", "--camel-snake-case", "Camel_Snake_Case", to_camel_snake_case),
-    ("-p", "--pascal-case", "PascalCase", to_pascal_case),
-    ("-t", "--train-case", "Train-Case", to_train_case),
-    ("-k", "--kebab-case", "kebab-case", to_kebab_case),
-    ("-K", "--kebab-upper-case", "KEBAB-CASE", to_kebab_upper_case),
-    ("-f", "--flat-case", "flatcase (destructive)", to_flat_case),
-    ("-F", "--flat-upper-case", "FLATCASE (destructive)", to_flat_upper_case),
+    ConverterRow(
+        short="-l",
+        long="--lower-case",
+        description="lower case",
+        transform_func=to_lower_case,
+    ),
+    ConverterRow(
+        short="-u",
+        long="--upper-case",
+        description="UPPER CASE",
+        transform_func=to_upper_case,
+    ),
+    ConverterRow(
+        short="-s",
+        long="--snake-case",
+        description="snake_case",
+        transform_func=to_snake_case,
+    ),
+    ConverterRow(
+        short="-S",
+        long="--snake-upper-case",
+        description="SNAKE_UPPER",
+        transform_func=to_snake_upper_case,
+    ),
+    ConverterRow(
+        short="-c",
+        long="--camel-case",
+        description="camelCase",
+        transform_func=to_camel_case,
+    ),
+    ConverterRow(
+        short="-C",
+        long="--camel-snake-case",
+        description="Camel_Snake_Case",
+        transform_func=to_camel_snake_case,
+    ),
+    ConverterRow(
+        short="-p",
+        long="--pascal-case",
+        description="PascalCase",
+        transform_func=to_pascal_case,
+    ),
+    ConverterRow(
+        short="-t",
+        long="--train-case",
+        description="Train-Case",
+        transform_func=to_train_case,
+    ),
+    ConverterRow(
+        short="-k",
+        long="--kebab-case",
+        description="kebab-case",
+        transform_func=to_kebab_case,
+    ),
+    ConverterRow(
+        short="-K",
+        long="--kebab-upper-case",
+        description="KEBAB-CASE",
+        transform_func=to_kebab_upper_case,
+    ),
+    ConverterRow(
+        short="-f",
+        long="--flat-case",
+        description="flatcase",
+        is_destructive=True,
+        transform_func=to_flat_case,
+    ),
+    ConverterRow(
+        short="-F",
+        long="--flat-upper-case",
+        description="FLATCASE",
+        is_destructive=True,
+        transform_func=to_flat_upper_case,
+    ),
 ]
 
 
-def map_converters(converters: list[ConverterRow]) -> dict[str, ConverterRow]:
-    result: dict[str, ConverterRow] = {}
-
-    for converter in converters:
-        short, long, _desc, _func = converter
-        dest_name = long.lstrip("-").replace("-", "_") if long else short.lstrip("-")
-        result[dest_name] = converter
-
-    return result
-
-
-def build_parser(converters_map: dict[str, ConverterRow]):
+def build_parser(converters_map: dict[str, ConverterRow]) -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
@@ -63,16 +114,16 @@ def build_parser(converters_map: dict[str, ConverterRow]):
     )
 
     group = parser.add_argument_group(title="converters")
-    for dest, (short, long, desc, _func) in converters_map.items():
+    for dest, converter in converters_map.items():
         group.add_argument(
-            short,
-            long,
+            converter.short,
+            converter.long,
             dest=dest,
             nargs="+",
             type=Path,
             action="extend",
             metavar="PATH",
-            help=f"convert to {desc}",
+            help=f"convert to {converter.description}{' (destructive)' if converter.is_destructive else ''}",
         )
 
     parser.add_argument(
@@ -93,21 +144,21 @@ def main() -> None:
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
     logger.debug(args)
 
-    for dest, (_short, _long, _desc, transform) in converters_map.items():
+    for dest, converter in converters_map.items():
         # Get list of paths for a specific converter (e.g. args.kebab_case)
-        converter = getattr(args, dest)
+        paths = getattr(args, dest)
 
-        if not converter:
+        if not paths:
             continue
 
         logger.debug(f"Using converter {dest!r}.")
 
-        for target in converter:
+        for target in paths:
             if not target.exists():
                 logger.warning(f"Skipping non-existent path {str(target)!r}.")
                 continue
 
-            rename_path(target, transform)
+            rename_path(target, converter.transform_func)
 
 
 if __name__ == "__main__":

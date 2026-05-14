@@ -1,15 +1,22 @@
 import os
 from pathlib import Path
-from typing import Callable
+from typing import Callable, NamedTuple
 
 from common.logger import logger
 from common.string_utilities import split_into_words
 
-type ConverterFunc = Callable[[list[str], str], str]
-type ConverterRow = tuple[str, str, str, ConverterFunc]
+type TransformFunc = Callable[[list[str], str], str]
 
 
-def rename_path(path: Path, transform_func: ConverterFunc):
+class ConverterRow(NamedTuple):
+    short: str
+    long: str
+    description: str
+    transform_func: TransformFunc
+    is_destructive: bool = False
+
+
+def rename_path(path: Path, transform_func: TransformFunc) -> None:
     """Attempt to rename a file or directory, catching and logging errors."""
     try:
         root, ext = os.path.splitext(path.name)
@@ -28,3 +35,13 @@ def rename_path(path: Path, transform_func: ConverterFunc):
 
     except Exception as e:
         logger.error(f"Error renaming {str(path)!r}: {e}")
+
+
+def map_converters(converters: list[ConverterRow]) -> dict[str, ConverterRow]:
+    result: dict[str, ConverterRow] = {}
+
+    for converter in converters:
+        dest_name = (converter.long or converter.short).lstrip("-").replace("-", "_")
+        result[dest_name] = converter
+
+    return result
