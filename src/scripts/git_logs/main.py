@@ -70,7 +70,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
