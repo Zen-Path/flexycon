@@ -5,13 +5,51 @@ import logging
 
 from common.helpers import get_version
 from common.logger import logger, setup_logging
-from scripts.flexy.src import targets
-from scripts.flexy.src.helpers import ACTIONS, ActionInfo
+from scripts.flexy.src.helpers import Action
+from scripts.flexy.src.targets import (
+    clean,
+    install,
+    install_system_packages,
+    setup,
+    setup_virtual_env,
+    uninstall,
+)
 
-__all__ = ["targets"]
+ACTIONS: list[Action] = [
+    Action(
+        name="install",
+        description="install and apply configuration",
+        fn=install,
+    ),
+    Action(
+        name="uninstall",
+        description="clean project and remove flexycon's data",
+        fn=uninstall,
+    ),
+    Action(
+        name="clean",
+        description="remove caches and temporary files",
+        fn=clean,
+    ),
+    Action(
+        name="setup",
+        description="setup venv, dependencies, packages etc",
+        fn=setup,
+    ),
+    Action(
+        name="install_packages",
+        description="setup project and install dependencies",
+        fn=install_system_packages,
+    ),
+    Action(
+        name="setup_venv",
+        description="create and setup a virtual environment",
+        fn=setup_virtual_env,
+    ),
+]
 
 
-def build_parser(actions: dict[str, ActionInfo]) -> argparse.ArgumentParser:
+def build_parser(actions: list[Action]) -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
@@ -29,15 +67,13 @@ def build_parser(actions: dict[str, ActionInfo]) -> argparse.ArgumentParser:
         "-v", "--verbose", action="store_true", help="enable debug output"
     )
 
-    subparsers = parser.add_subparsers(
-        dest="action", metavar="ACTION", required=True, help="System action"
-    )
+    subparsers = parser.add_subparsers(dest="action", metavar="ACTION", required=True)
 
-    for name, meta in actions.items():
+    for action in actions:
         subparsers.add_parser(
-            name=name,
+            name=action.name,
             parents=[cmd_parent],
-            help=meta["description"],
+            help=action.description,
         )
 
     return parser
@@ -49,8 +85,9 @@ def main() -> None:
     setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
     logger.debug(args)
 
-    if args.action in ACTIONS:
-        ACTIONS[args.action]["fn"]()
+    for action in ACTIONS:
+        if action.name == args.action:
+            action.fn()
 
 
 if __name__ == "__main__":

@@ -10,7 +10,6 @@ from scripts.flexy.src.helpers import (
     PYTHON_BIN,
     VENV_BIN,
     VENV_DIR,
-    action,
     clean_precommit,
     copy_shell_profile_from_temp,
     get_dotdrop_profile,
@@ -24,9 +23,7 @@ from scripts.package_installer.main import process_packages
 from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcuts
 
 
-@action()
 def setup_virtual_env():
-    """Create and setup a virtual environment"""
     logger.info("⚙️ Create virtual environment if it doesn't exist...")
 
     if not VENV_DIR.exists():
@@ -40,9 +37,7 @@ def setup_virtual_env():
     run_cmd([PIP_BIN, "install", "-e", "."])
 
 
-@action()
 def install_system_packages():
-    """Setup project and install dependencies"""
     logger.info("📦 Installing system packages...")
 
     system = sys.platform
@@ -58,7 +53,6 @@ def install_system_packages():
         process_packages(packages)
 
 
-@action()
 def setup():
     install_system_packages()
 
@@ -100,10 +94,7 @@ def setup():
     upgrade_yazi_packages()
 
 
-@action()
 def install():
-    """Install and apply configuration"""
-
     if not VENV_DIR.exists():
         logger.error(
             f"Missing venv at {str(VENV_DIR)!r}. Run the 'setup' target first."
@@ -142,9 +133,7 @@ def install():
     # TODO: Apply macOS default here
 
 
-@action()
 def clean():
-    """Remove caches and temporary files"""
     logger.info("🧹 Removing clean targets...")
     remove_files_by_pattern(
         patterns={
@@ -168,9 +157,7 @@ def clean():
     )
 
 
-@action()
 def uninstall():
-    """Clean project and remove flexycon's data"""
     clean()
 
     clean_precommit()

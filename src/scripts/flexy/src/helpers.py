@@ -4,7 +4,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Callable, TypedDict, TypeVar
+from typing import Any, Callable, NamedTuple
 
 from common.cmd_utilities import run_cmd
 from common.logger import logger
@@ -18,44 +18,10 @@ PYTHON_BIN = shutil.which("python3") or "python"
 USER_VARIABLES_PATH = Path("uservariables.yaml")
 
 
-class ActionInfo(TypedDict):
+class Action(NamedTuple):
     name: str
     description: str
     fn: Callable[..., Any]
-
-
-ACTIONS: dict[str, ActionInfo] = {}
-
-F = TypeVar("F", bound=Callable[..., Any])
-
-
-def action(name: str | None = None, description: str | None = None) -> Callable[[F], F]:
-    """Decorator to mark functions as CLI actions."""
-
-    def decorator(func: F) -> F:
-        # Use provided name or fall back to function name
-        action_name: str = (name or func.__name__).replace(" ", "_")
-
-        # Format description from argument or docstring
-        raw_doc: str = description or func.__doc__ or ""
-        description_fmt: str = raw_doc.strip()
-
-        if description_fmt:
-            # Lowercase the first letter for consistent CLI formatting
-            description_fmt = description_fmt[:1].lower() + description_fmt[1:]
-
-        if action_name in ACTIONS:
-            raise ValueError(f"Duplicate action name {action_name!r}.")
-
-        ACTIONS[action_name] = {
-            "name": action_name,
-            "description": description_fmt,
-            "fn": func,
-        }
-
-        return func
-
-    return decorator
 
 
 def remove_flexycon_data():
