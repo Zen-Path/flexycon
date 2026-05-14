@@ -7,3 +7,6 @@
 [submodule "dotfiles/deps/dwm-flexipatch"]
 	path = dotfiles/deps/dwm-flexipatch
 	url = https://github.com/Zen-Path/dwm-flexipatch
+[submodule "dotfiles/deps/dwmblocks-async"]
+	path = dotfiles/deps/dwmblocks-async
+	url = https://github.com/Zen-Path/dwmblocks-async

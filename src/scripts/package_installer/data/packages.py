@@ -305,13 +305,6 @@ packages = [
         description="Local media server to download and manage files",
     ),
     Package(
-        identifier="https://github.com/Zen-Path/dwmblocks-async",
-        managers=[Git],
-        destination=["$XDG_SRC_HOME", "dwmblocks-async"],
-        description="An efficient, lean, and asynchronous status feed generator for dwm.",
-        condition=display_server == "X11",
-    ),
-    Package(
         identifier="https://github.com/Zen-Path/dmenu-flexipatch",
         managers=[Git],
         destination=["$XDG_SRC_HOME", "dmenu-flexipatch"],
