@@ -48,7 +48,7 @@ description = " Flexible programmatic configuration."
 name = "flexycon"
 readme = "README.md"
 requires-python = ">=3.12"
-version = "1.20.13"
+version = "1.20.14"
 
     [project.scripts]
     flexy = "scripts.flexy.main:main"

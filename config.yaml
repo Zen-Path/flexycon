@@ -423,9 +423,9 @@
             "dst": "{{@@ d_bin_dst @@}}/env_cmd_runner",
             "chmod": "755"
         },
-        "f_keyboard_select": {
-            "src": "{{@@ d_src @@}}/scripts/keyboard_select/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/keyboard_select",
+        "f_keyboard_manager": {
+            "src": "{{@@ d_src @@}}/scripts/keyboard_manager/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/keyboard_manager",
             "chmod": "755"
         },
         "f_mounter": {
@@ -586,6 +586,7 @@
                 "f_if_installed",
                 "f_imgconv",
                 "f_jsonc_to_json",
+                "f_keyboard_manager",
                 "f_noisereduce",
                 "f_pkgsize",
                 "f_rclone_wrapper",
@@ -709,7 +710,6 @@
                 "f_dmenupass",
                 "f_dmenurecord",
                 "f_env_cmd_runner",
-                "f_keyboard_select",
                 "f_mounter",
                 "f_unmounter",
                 "f_nsxiv_exec_key_handler",

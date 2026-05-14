@@ -117,8 +117,8 @@ def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        prog="keyboard_selector",
-        description="Select keyboard layout.",
+        prog="keyboard_manager",
+        description="Select and manager keyboard layout.",
     )
 
     parser.add_argument(
