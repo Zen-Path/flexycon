@@ -10,13 +10,13 @@ from scripts.flexy.src.helpers import (
     PYTHON_BIN,
     VENV_BIN,
     VENV_DIR,
+    action,
     clean_precommit,
     copy_shell_profile_from_temp,
     get_dotdrop_profile,
     init_submodules,
     install_temp_profile,
     remove_flexycon_data,
-    target,
     upgrade_yazi_packages,
 )
 from scripts.package_installer.data.packages import packages
@@ -24,7 +24,7 @@ from scripts.package_installer.main import process_packages
 from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcuts
 
 
-@target()
+@action()
 def setup_virtual_env():
     """Create and setup a virtual environment"""
     logger.info("⚙️ Create virtual environment if it doesn't exist...")
@@ -40,7 +40,7 @@ def setup_virtual_env():
     run_cmd([PIP_BIN, "install", "-e", "."])
 
 
-@target()
+@action()
 def install_system_packages():
     """Setup project and install dependencies"""
     logger.info("📦 Installing system packages...")
@@ -58,7 +58,7 @@ def install_system_packages():
         process_packages(packages)
 
 
-@target()
+@action()
 def setup():
     install_system_packages()
 
@@ -100,7 +100,7 @@ def setup():
     upgrade_yazi_packages()
 
 
-@target()
+@action()
 def install():
     """Install and apply configuration"""
 
@@ -142,7 +142,7 @@ def install():
     # TODO: Apply macOS default here
 
 
-@target()
+@action()
 def clean():
     """Remove caches and temporary files"""
     logger.info("🧹 Removing clean targets...")
@@ -168,7 +168,7 @@ def clean():
     )
 
 
-@target()
+@action()
 def uninstall():
     """Clean project and remove flexycon's data"""
     clean()

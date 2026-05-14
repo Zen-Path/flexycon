@@ -18,23 +18,23 @@ PYTHON_BIN = shutil.which("python3") or "python"
 USER_VARIABLES_PATH = Path("uservariables.yaml")
 
 
-class TargetInfo(TypedDict):
+class ActionInfo(TypedDict):
     name: str
     description: str
     fn: Callable[..., Any]
 
 
-TARGETS: dict[str, TargetInfo] = {}
+ACTIONS: dict[str, ActionInfo] = {}
 
 F = TypeVar("F", bound=Callable[..., Any])
 
 
-def target(name: str | None = None, description: str | None = None) -> Callable[[F], F]:
-    """Decorator to mark functions as CLI targets."""
+def action(name: str | None = None, description: str | None = None) -> Callable[[F], F]:
+    """Decorator to mark functions as CLI actions."""
 
     def decorator(func: F) -> F:
         # Use provided name or fall back to function name
-        target_name: str = (name or func.__name__).replace(" ", "_")
+        action_name: str = (name or func.__name__).replace(" ", "_")
 
         # Format description from argument or docstring
         raw_doc: str = description or func.__doc__ or ""
@@ -44,11 +44,11 @@ def target(name: str | None = None, description: str | None = None) -> Callable[
             # Lowercase the first letter for consistent CLI formatting
             description_fmt = description_fmt[:1].lower() + description_fmt[1:]
 
-        if target_name in TARGETS:
-            raise ValueError(f"Duplicate target name {target_name!r}.")
+        if action_name in ACTIONS:
+            raise ValueError(f"Duplicate action name {action_name!r}.")
 
-        TARGETS[target_name] = {
-            "name": target_name,
+        ACTIONS[action_name] = {
+            "name": action_name,
             "description": description_fmt,
             "fn": func,
         }
