@@ -10,8 +10,8 @@ from typing import Callable
 
 from common.helpers import get_version
 from common.logger import logger, setup_logging
-from common.string_utilities import split_into_words
-from scripts.file_renamer.src.converters import (
+from common.string_utilities import (
+    split_into_words,
     to_camel_case,
     to_camel_snake_case,
     to_flat_case,

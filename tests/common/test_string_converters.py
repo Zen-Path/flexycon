@@ -3,8 +3,9 @@ from pathlib import Path
 from typing import TypedDict
 
 import pytest
-from common.string_utilities import split_into_words
-from scripts.file_renamer.src.converters import (
+
+from common.string_utilities import (
+    split_into_words,
     to_camel_case,
     to_camel_snake_case,
     to_flat_case,
