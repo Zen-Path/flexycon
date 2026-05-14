@@ -55,7 +55,11 @@ def build_parser(converters_map: dict[str, ConverterRow]):
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        prog="rename_file", description="Rename files with different case styles."
+        prog="rename_file",
+        description="Rename files with different case styles.\n"
+        "\nNOTE: The order in which the converters are called may not be the same order\n"
+        "in which they are executed.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
     group = parser.add_argument_group(title="converters")
