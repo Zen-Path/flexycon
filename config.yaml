@@ -505,9 +505,9 @@
             "dst": "{{@@ d_statusbar_dst @@}}/sb-todos",
             "chmod": "755"
         },
-        "f_sb_volume": {
-            "src": "{{@@ d_statusbar_src @@}}/volume.py",
-            "dst": "{{@@ d_statusbar_dst @@}}/sb-volume",
+        "f_sb_sound": {
+            "src": "{{@@ d_statusbar_src @@}}/sound.py",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-sound",
             "chmod": "755"
         },
         "f_sb_recording": {
@@ -658,7 +658,7 @@
                 "f_sb_rss",
                 "f_sb_recording",
                 "f_sb_todos",
-                "f_sb_volume",
+                "f_sb_sound",
 
                 # Config
                 "d_alacritty",

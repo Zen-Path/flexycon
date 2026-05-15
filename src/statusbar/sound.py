@@ -43,7 +43,7 @@ def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        prog="sb_volume",
+        prog="sb_sound",
         description="Statusbar script to manage sound and get volume.",
     )
 
