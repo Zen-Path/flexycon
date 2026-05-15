@@ -590,12 +590,14 @@
                 "f_noisereduce",
                 "f_pkgsize",
                 "f_rclone_wrapper",
+                "f_screenshot_utility",
                 "f_system_actions",
                 "f_file_renamer",
                 "f_sdir",
                 "f_user_shortcuts",
                 "f_tag",
                 "f_unicode_selector",
+
                 # Config
                 "f_shell_profile",
                 "f_shell_inputrc",
@@ -717,7 +719,6 @@
                 "f_nsxiv_rifle",
                 "f_remapd",
                 "f_remaps",
-                "f_screenshot_utility",
                 "f_setbg",
 
                 # Statusbar
