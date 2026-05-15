@@ -4,7 +4,8 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from scripts.journal_entry.main import get_journal_entry_path, open_journal_entry
+
+from scripts.journal_entry.src.core import get_journal_entry_path, open_journal_entry
 
 
 @pytest.fixture
@@ -53,7 +54,7 @@ def test_open_journal_entry_success(
         return True
 
     monkeypatch.setattr(
-        "scripts.journal_entry.main.ensure_directory_interactive",
+        "scripts.journal_entry.src.core.ensure_directory_interactive",
         fake_ensure_directory_interactive,
     )
 
@@ -64,7 +65,7 @@ def test_open_journal_entry_success(
         nonlocal called_cmd
         called_cmd = cmd
 
-    monkeypatch.setattr("scripts.journal_entry.main.subprocess.run", fake_run)
+    monkeypatch.setattr("scripts.journal_entry.src.core.subprocess.run", fake_run)
 
     open_journal_entry(sample_date)
 
