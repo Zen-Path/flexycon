@@ -16,7 +16,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         prog="package_installer",
-        description="Generate bookmarks for various tools.",
+        description="Install system packages.",
     )
 
     parser.add_argument(
