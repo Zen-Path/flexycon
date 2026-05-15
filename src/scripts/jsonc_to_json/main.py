@@ -5,6 +5,7 @@
 import argparse
 import json
 import logging
+from pathlib import Path
 
 import commentjson
 
@@ -20,9 +21,9 @@ def build_parser() -> argparse.ArgumentParser:
         description="Convert a jsonc file to json.",
     )
 
-    parser.add_argument("input_file", help="the jsonc file")
+    parser.add_argument("input_file", type=Path, help="the jsonc file")
 
-    parser.add_argument("output_file", help="the resulting json file")
+    parser.add_argument("output_file", type=Path, help="the resulting json file")
 
     parser.add_argument(
         "-i",
