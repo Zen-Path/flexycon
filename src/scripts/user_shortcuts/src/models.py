@@ -10,7 +10,7 @@ from common.logger import logger
 
 
 @dataclass
-class Bookmark:
+class Shortcut:
     type: Literal["d", "f"]
     path_parts: list[str]
     aliases: dict[str, list[str]]
@@ -21,14 +21,13 @@ class Bookmark:
     name: str = field(init=False)
 
     def __post_init__(self):
-        """Compute the bookmark's display name after initialization."""
-        if self.description:
-            self.name = self.description
-        else:
-            self.name = f"[{''.join(self.path_parts)}]"
+        """Compute the shortcuts's display name after initialization."""
+        self.name = (
+            self.description if self.description else f"[{''.join(self.path_parts)}]"
+        )
 
 
-class BookmarkRenderer(ABC):
+class ShortcutRenderer(ABC):
     def __init__(
         self,
         name: str,
@@ -41,37 +40,37 @@ class BookmarkRenderer(ABC):
         self.expand_vars = expand_vars
         self.escape_path = escape_path
 
-    def process(self, bookmarks: list[Bookmark]) -> None:
-        logger.info(f"[{self.name}] Processing bookmarks...")
+    def process(self, shortcuts: list[Shortcut]) -> None:
+        logger.info(f"[{self.name}] Processing shortcuts...")
 
-        processed_bookmarks: list[Bookmark] = []
-        for bookmark in bookmarks:
-            alias = self.resolve_alias(bookmark)
+        processed_shortcuts: list[Shortcut] = []
+        for shortcut in shortcuts:
+            alias = self.resolve_alias(shortcut)
 
             # The alias check stays because it depends on self.name
             if not alias:
                 logger.warning(
-                    f"- Skipped bookmark {bookmark.name!r} due to missing alias"
+                    f"- Skipped shortcut {shortcut.name!r} due to missing alias"
                 )
                 continue
 
-            bookmark.resolved_alias = alias
-            processed_bookmarks.append(bookmark)
+            shortcut.resolved_alias = alias
+            processed_shortcuts.append(shortcut)
 
             logger.debug(
-                f"- Added alias {''.join(alias)!r:<6} for bookmark {bookmark.name!r}"
+                f"- Added alias {''.join(alias)!r:<6} for shortcut {shortcut.name!r}"
             )
 
-        content = self.compose_output_file(processed_bookmarks)
+        content = self.compose_output_file(processed_shortcuts)
         write_to_file(content, self.output_path)
 
-        logger.info(f"[{self.name}] Processed {len(processed_bookmarks)} bookmarks")
+        logger.info(f"[{self.name}] Processed {len(processed_shortcuts)} shortcuts")
 
-    def resolve_alias(self, bookmark: Bookmark) -> list[str] | None:
-        return bookmark.aliases.get(self.name, bookmark.aliases.get("default"))
+    def resolve_alias(self, shortcut: Shortcut) -> list[str] | None:
+        return shortcut.aliases.get(self.name, shortcut.aliases.get("default"))
 
-    def get_path(self, bookmark: Bookmark) -> str:
-        path_str = os.path.join(*bookmark.path_parts)
+    def get_path(self, shortcut: Shortcut) -> str:
+        path_str = os.path.join(*shortcut.path_parts)
 
         if self.expand_vars:
             # TODO: expanded vars may not be valid on Windows
@@ -83,21 +82,21 @@ class BookmarkRenderer(ABC):
         return path_str
 
     @abstractmethod
-    def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
+    def compose_shortcut(self, alias_segments: list[str], shortcut: Shortcut) -> str:
         pass
 
-    # NOTE: we pass in resolved_alias with the bookmark itself, but we split it when we
+    # NOTE: we pass in resolved_alias with the shortcut itself, but we split it when we
     # compose. Maybe there's a better way to do it, but since each Renderer may resolve
     # to a different alias, we use this for now.
-    def compose_bookmarks(self, bookmarks: list[Bookmark]) -> str:
+    def compose_shortcuts(self, shortcuts: list[Shortcut]) -> str:
         return "\n".join(
             [
-                self.compose_bookmark(
-                    alias_segments=bookmark.resolved_alias or [], bookmark=bookmark
+                self.compose_shortcut(
+                    alias_segments=shortcut.resolved_alias or [], shortcut=shortcut
                 )
-                for bookmark in bookmarks
+                for shortcut in shortcuts
             ]
         )
 
-    def compose_output_file(self, bookmarks: list[Bookmark]) -> str:
-        return self.compose_bookmarks(bookmarks)
+    def compose_output_file(self, shortcuts: list[Shortcut]) -> str:
+        return self.compose_shortcuts(shortcuts)

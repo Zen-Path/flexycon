@@ -8,36 +8,36 @@ import logging
 from common.helpers import get_version, resolve_path
 from common.logger import logger, setup_logging
 from scripts.user_shortcuts.data.shortcuts import shortcuts
-from scripts.user_shortcuts.src.formatting import format_bookmarks
-from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
+from scripts.user_shortcuts.src.formatting import format_shortcuts
+from scripts.user_shortcuts.src.models import Shortcut, ShortcutRenderer
 from scripts.user_shortcuts.src.renderers import NVIM, YAZI, ZSH
 
-AVAILABLE_RENDERERS: list[BookmarkRenderer] = [ZSH, NVIM, YAZI]
+AVAILABLE_RENDERERS: list[ShortcutRenderer] = [ZSH, NVIM, YAZI]
 
 
 # TODO: find a better way to render the shortcuts from another script, this is flimsy
-def get_active_shortcuts(shortcuts: list[Bookmark] = shortcuts) -> list[Bookmark]:
-    result: list[Bookmark] = []
+def get_active_shortcuts(shortcuts: list[Shortcut] = shortcuts) -> list[Shortcut]:
+    result: list[Shortcut] = []
     for shortcut in shortcuts:
         if not shortcut.condition:
             logger.warning(
-                f"- Skipped bookmark {shortcut.name!r} due to condition not being met"
+                f"- Skipped shortcut {shortcut.name!r} due to condition not being met"
             )
             continue
 
         if not resolve_path(shortcut.path_parts).exists():
-            logger.debug(f"- Bookmark {shortcut.name!r} doesn't point to a real file")
+            logger.debug(f"- Shortcut {shortcut.name!r} doesn't point to a real file")
 
         result.append(shortcut)
     return result
 
 
-def build_parser(renderers: list[BookmarkRenderer]) -> argparse.ArgumentParser:
+def build_parser(renderers: list[ShortcutRenderer]) -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
         prog="user_shortcuts",
-        description="Generate bookmarks for various tools.",
+        description="Generate shortcuts for various tools.",
     )
 
     parser.add_argument(
@@ -46,7 +46,7 @@ def build_parser(renderers: list[BookmarkRenderer]) -> argparse.ArgumentParser:
         choices=sorted(
             [renderer.name.lower() for renderer in renderers], key=str.lower
         ),
-        help="generate bookmarks only for a renderer",
+        help="generate shortcuts only for a renderer",
     )
     parser.add_argument(
         "-l",
@@ -72,7 +72,7 @@ def main() -> None:
     logger.debug(args)
 
     if args.list_shortcuts:
-        print(format_bookmarks(shortcuts))
+        print(format_shortcuts(shortcuts))
         return
 
     active_renderers = AVAILABLE_RENDERERS

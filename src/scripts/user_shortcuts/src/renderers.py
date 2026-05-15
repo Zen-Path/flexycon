@@ -2,7 +2,7 @@ import sys
 
 from common.logger import logger
 from common.variables import flex_home_parts
-from scripts.user_shortcuts.src.models import Bookmark, BookmarkRenderer
+from scripts.user_shortcuts.src.models import Shortcut, ShortcutRenderer
 
 OPEN_COMMANDS = {
     "darwin": "open",
@@ -10,8 +10,8 @@ OPEN_COMMANDS = {
 }
 
 
-class ZshBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
+class ZshShortcutRenderer(ShortcutRenderer):
+    def compose_shortcut(self, alias_segments: list[str], shortcut: Shortcut) -> str:
         """
         Target:
         # downloads
@@ -19,49 +19,49 @@ class ZshBookmarkRenderer(BookmarkRenderer):
         hash -d dwn=/Users/user/Downloads
         """
         result: list[str] = []
-        if bookmark.description:
-            result.append(f"# {bookmark.description}")
+        if shortcut.description:
+            result.append(f"# {shortcut.description}")
 
-        path = self.get_path(bookmark)
+        path = self.get_path(shortcut)
         command = OPEN_COMMANDS.get(sys.platform, "$EDITOR")
 
         alias_name = "".join(alias_segments)
         alias_value = (
-            f"cd {path} && ls" if bookmark.type == "d" else f"{command} {path}"
+            f"cd {path} && ls" if shortcut.type == "d" else f"{command} {path}"
         )
 
-        if bookmark.activate_python_env:
-            if bookmark.type != "d":
+        if shortcut.activate_python_env:
+            if shortcut.type != "d":
                 logger.warning(
-                    f"Python env can only be activated for directory bookmarks: {bookmark}"
+                    f"Python env can only be activated for directory shortcuts: {shortcut}"
                 )
             else:
                 alias_value += " && penva"
 
         result.append(f'alias {alias_name}="{alias_value}"')
 
-        if bookmark.type == "d":
+        if shortcut.type == "d":
             result.append(f"hash -d {alias_name}={path}")
 
         return "\n".join(result) + "\n"
 
 
-ZSH = ZshBookmarkRenderer(
+ZSH = ZshShortcutRenderer(
     "Zsh", [*flex_home_parts, "dotfiles", "config", "zsh", "shortcuts.sh"]
 )
 
 
-class NVimBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
+class NVimShortcutRenderer(ShortcutRenderer):
+    def compose_shortcut(self, alias_segments: list[str], shortcut: Shortcut) -> str:
         result: list[str] = []
-        if bookmark.description:
-            result.append(f"-- {bookmark.description}")
+        if shortcut.description:
+            result.append(f"-- {shortcut.description}")
 
         result.append(
             f"""vim.api.nvim_set_keymap(
     "c",
     ";{"".join(alias_segments)}",
-    "{self.get_path(bookmark)}",
+    "{self.get_path(shortcut)}",
     {{ noremap = true }}
 )"""
         )
@@ -69,33 +69,33 @@ class NVimBookmarkRenderer(BookmarkRenderer):
         return "\n".join(result) + "\n"
 
 
-NVIM = NVimBookmarkRenderer(
+NVIM = NVimShortcutRenderer(
     "NeoVim",
     [*flex_home_parts, "dotfiles", "config", "nvim", "shortcuts.lua"],
     escape_path=False,
 )
 
 
-class YaziBookmarkRenderer(BookmarkRenderer):
-    def compose_bookmark(self, alias_segments: list[str], bookmark: Bookmark) -> str:
-        verb = "Open" if bookmark.type == "d" else "Reveal"
-        type_readable = "dir" if bookmark.type == "d" else "file"
+class YaziShortcutRenderer(ShortcutRenderer):
+    def compose_shortcut(self, alias_segments: list[str], shortcut: Shortcut) -> str:
+        verb = "Open" if shortcut.type == "d" else "Reveal"
+        type_readable = "dir" if shortcut.type == "d" else "file"
         description_fmt = (
-            f"{verb} {bookmark.description} {type_readable}"
-            if bookmark.description
+            f"{verb} {shortcut.description} {type_readable}"
+            if shortcut.description
             else ""
         )
 
-        # All yazi bookmarks should start with 'b'.
+        # All yazi shortcuts should start with 'b'.
         alias_segments = ["b"] + alias_segments
-        path = self.get_path(bookmark)
+        path = self.get_path(shortcut)
         command = (
-            f'"cd {path}"' if bookmark.type == "d" else f'["reveal {path}", "open"]'
+            f'"cd {path}"' if shortcut.type == "d" else f'["reveal {path}", "open"]'
         )
 
         return f'    {{ on = {alias_segments}, run = {command}, desc = "{description_fmt}" }},'
 
 
-YAZI = YaziBookmarkRenderer(
+YAZI = YaziShortcutRenderer(
     "Yazi", [*flex_home_parts, "dotfiles", "config", "yazi", "shortcuts.toml"]
 )

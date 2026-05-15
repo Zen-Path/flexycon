@@ -1,7 +1,7 @@
 import os
 
 from common.string_utilities import truncate
-from scripts.user_shortcuts.src.models import Bookmark
+from scripts.user_shortcuts.src.models import Shortcut
 
 # Column widths
 ALIASES_WIDTH = 20
@@ -21,23 +21,23 @@ def format_aliases(aliases: dict[str, list[str]]) -> str:
     return "; ".join(parts)
 
 
-def get_default_alias(bookmark: Bookmark) -> str:
+def get_default_alias(shortcut: Shortcut) -> str:
     """Return the first default alias (for sorting)."""
-    return bookmark.aliases.get("default", [""])[0]
+    return shortcut.aliases.get("default", [""])[0]
 
 
-def format_bookmarks(bookmarks: list[Bookmark]) -> str:
+def format_shortcuts(shortcuts: list[Shortcut]) -> str:
     groups = {"d": "Directories", "f": "Files"}
-    by_type: dict[str, list[Bookmark]] = {t: [] for t in groups}
-    for bm in bookmarks:
-        by_type.get(bm.type, []).append(bm)
+    by_type: dict[str, list[Shortcut]] = {t: [] for t in groups}
+    for shortcut in shortcuts:
+        by_type.get(shortcut.type, []).append(shortcut)
 
     lines: list[str] = []
     for t, heading in groups.items():
         if not by_type[t]:
             continue
 
-        sorted_bms = sorted(by_type[t], key=get_default_alias)
+        sorted_shortcuts = sorted(by_type[t], key=get_default_alias)
 
         lines.append(f"{heading}:")
         lines.append(
@@ -45,12 +45,12 @@ def format_bookmarks(bookmarks: list[Bookmark]) -> str:
         )
         lines.append("-" * (ALIASES_WIDTH + TARGET_WIDTH + DESCRIPTION_WIDTH))
 
-        for bm in sorted_bms:
-            aliases = format_aliases(bm.aliases)
-            target = os.path.expandvars(os.path.join(*bm.path_parts))
+        for shortcut in sorted_shortcuts:
+            aliases = format_aliases(shortcut.aliases)
+            target = os.path.expandvars(os.path.join(*shortcut.path_parts))
             target_display = truncate(target, TARGET_WIDTH)
             lines.append(
-                f"{aliases:{ALIASES_WIDTH}} {target_display:{TARGET_WIDTH}} {bm.description}"
+                f"{aliases:{ALIASES_WIDTH}} {target_display:{TARGET_WIDTH}} {shortcut.description}"
             )
 
         lines.append("")

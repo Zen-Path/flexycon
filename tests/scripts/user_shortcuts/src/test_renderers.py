@@ -5,13 +5,13 @@ from typing import Literal
 
 import pytest
 
-from scripts.user_shortcuts.src.models import Bookmark
+from scripts.user_shortcuts.src.models import Shortcut
 from scripts.user_shortcuts.src.renderers import (
     NVIM,
     YAZI,
     ZSH,
-    BookmarkRenderer,
-    ZshBookmarkRenderer,
+    ShortcutRenderer,
+    ZshShortcutRenderer,
 )
 
 
@@ -54,16 +54,16 @@ def mock_env(monkeypatch: pytest.MonkeyPatch):
     ],
 )
 def test_resolve_alias(
-    renderer: BookmarkRenderer,
+    renderer: ShortcutRenderer,
     aliases: dict[str, list[str]],
     expected: list[str] | None,
 ):
-    bm = Bookmark(
+    shortcut = Shortcut(
         type="d",
         path_parts=[""],
         aliases=aliases,
     )
-    assert renderer.resolve_alias(bm) == expected
+    assert renderer.resolve_alias(shortcut) == expected
 
 
 @pytest.mark.usefixtures("mock_env")
@@ -94,17 +94,17 @@ def test_resolve_alias(
 def test_get_path(
     path_parts: list[str], expand_vars: bool, escape_path: bool, expected: str
 ):
-    bm = Bookmark(
+    shortcut = Shortcut(
         type="d",
         path_parts=path_parts,
         aliases={"default": [""]},
     )
 
-    renderer = ZshBookmarkRenderer(
+    renderer = ZshShortcutRenderer(
         "", [""], expand_vars=expand_vars, escape_path=escape_path
     )
 
-    assert renderer.get_path(bm) == expected
+    assert renderer.get_path(shortcut) == expected
 
 
 @pytest.mark.usefixtures("mock_env")
@@ -211,7 +211,7 @@ def test_get_path(
         ),
     ],
 )
-def test_compose_bookmark(
+def test_compose_shortcut(
     type: Literal["d"] | Literal["f"],
     path_parts: list[str],
     alias: list[str],
@@ -223,16 +223,16 @@ def test_compose_bookmark(
 ):
     monkeypatch.setattr(sys, "platform", "darwin")
 
-    bm = Bookmark(
+    shortcut = Shortcut(
         type=type,
         path_parts=path_parts,
         aliases={"default": [""]},
         description=description,
     )
 
-    assert ZSH.compose_bookmark(alias, bm) == zsh_expected
-    assert NVIM.compose_bookmark(alias, bm) == nvim_expected
-    assert YAZI.compose_bookmark(alias, bm) == yazi_expected
+    assert ZSH.compose_shortcut(alias, shortcut) == zsh_expected
+    assert NVIM.compose_shortcut(alias, shortcut) == nvim_expected
+    assert YAZI.compose_shortcut(alias, shortcut) == yazi_expected
 
 
 @pytest.mark.usefixtures("mock_env")
@@ -251,12 +251,12 @@ def test_compose_platforms(
     monkeypatch: pytest.MonkeyPatch,
 ):
     monkeypatch.setattr(sys, "platform", platform_name)
-    bm = Bookmark(
+    shortcut = Shortcut(
         type="f",
         aliases={"default": [""]},
         path_parts=["$HOME", "University", "Timetable.pdf"],
     )
-    assert ZSH.compose_bookmark(["u", "n", "i", "t"], bm) == expected
+    assert ZSH.compose_shortcut(["u", "n", "i", "t"], shortcut) == expected
 
 
 @pytest.mark.usefixtures("mock_env")
@@ -271,12 +271,12 @@ def test_compose_platforms(
         ),
     ],
 )
-def test_compose_activate_penv(renderer: BookmarkRenderer, expected: str):
-    bm = Bookmark(
+def test_compose_activate_penv(renderer: ShortcutRenderer, expected: str):
+    shortcut = Shortcut(
         type="d",
         path_parts=["$HOME", "Documents"],
         aliases={"default": [""]},
         activate_python_env=True,
         description="documents",
     )
-    assert renderer.compose_bookmark(["d", "o", "c"], bm) == expected
+    assert renderer.compose_shortcut(["d", "o", "c"], shortcut) == expected

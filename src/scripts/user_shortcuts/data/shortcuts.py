@@ -1,7 +1,7 @@
 import sys
 
 from common.variables import flex_home_parts
-from scripts.user_shortcuts.src.models import Bookmark
+from scripts.user_shortcuts.src.models import Shortcut
 from scripts.user_shortcuts.src.renderers import YAZI
 
 system = sys.platform
@@ -10,51 +10,51 @@ flex_dotfiles = flex_home_parts + ["dotfiles"]
 flex_config = flex_dotfiles + ["config"]
 flex_scripts = flex_dotfiles + ["src", "scripts"]
 
-shortcuts: list[Bookmark] = [
+shortcuts: list[Shortcut] = [
     # Home
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$HOME"],
         aliases={"default": ["h"]},
         description="home",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CACHE_HOME"],
         aliases={"default": ["c", "a", "c"]},
         description="user cache",
     ),
-    Bookmark(
+    Shortcut(
         type="f",
         path_parts=["$HOME", ".zprofile"],
         aliases={"default": ["c", "s", "p"]},
         description="shell profile",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$HOME", "Desktop"],
         aliases={"default": ["d", "e", "s"], YAZI.name: ["D", "t"]},
         description="desktop",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_DOCUMENTS_DIR"],
         aliases={"default": ["d", "o", "c"], YAZI.name: ["d"]},
         description="documents",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_DOWNLOAD_DIR"],
         aliases={"default": ["d", "w", "n"], YAZI.name: ["D", "l"]},
         description="downloads",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_MUSIC_DIR"],
         aliases={"default": ["m", "u", "s"], YAZI.name: ["m"]},
         description="music",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_PICTURES_DIR"],
         aliases={"default": ["i", "m", "g"], YAZI.name: ["i"]},
@@ -63,39 +63,39 @@ shortcuts: list[Bookmark] = [
     # TODO: For macOS - make sure
     # `defaults read com.apple.screencapture location`
     # returns '~/Pictures/Screenshots', otherwise set it.
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_PICTURES_DIR", "Screenshots"],
         aliases={"default": ["i", "m", "g", "s"], YAZI.name: ["I", "s"]},
         description="screenshots",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_PICTURES_DIR", "Wallpapers"],
         aliases={"default": ["i", "m", "g", "w"], YAZI.name: ["I", "w"]},
         description="wallpapers",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_VIDEOS_DIR"],
         aliases={"default": ["v", "i", "d"], YAZI.name: ["v"]},
         description="videos",
     ),
     # University
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$HOME", "University"],
         aliases={"default": ["u", "n", "i"], YAZI.name: ["U"]},
         activate_python_env=True,
         description="university",
     ),
-    Bookmark(
+    Shortcut(
         type="f",
         path_parts=["$HOME", "University", "Timetable"],
         aliases={"default": ["u", "n", "i", "t"], YAZI.name: ["u", "t"]},
         description="university timetable",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$HOME", "University", "Semester"],
         aliases={"default": ["u", "n", "i", "s"], YAZI.name: ["u", "s"]},
@@ -103,28 +103,28 @@ shortcuts: list[Bookmark] = [
         description="university current semester",
     ),
     # Library
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$HOME", "Library"],
         aliases={"default": ["l", "i", "b"], YAZI.name: ["L"]},
         description="library",
         condition=system == "darwin",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$HOME", "Library", "Application Support"],
         aliases={"default": ["l", "i", "b", "s"], YAZI.name: ["l", "s"]},
         description="library application support",
         condition=system == "darwin",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$HOME", "Library", "Application Support", "Code"],
         aliases={"default": ["l", "i", "b", "v"], YAZI.name: ["l", "v"]},
         description="library vscode",
         condition=system == "darwin",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$HOME", "Library", "Application Support", "Firefox"],
         aliases={"default": ["l", "i", "b", "f"], YAZI.name: ["l", "f"]},
@@ -132,108 +132,108 @@ shortcuts: list[Bookmark] = [
         condition=system == "darwin",
     ),
     # User Config
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME"],
         aliases={"default": ["u", "c"], YAZI.name: ["C"]},
         description="user configs",
     ),
     ## Flexycon
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "flexycon"],
         aliases={"default": ["u", "c", "f"]},
         description="user config flexycon",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "flexycon", "userscripts"],
         aliases={"default": ["u", "c", "f", "u"]},
         description="user config flexycon processed userscripts",
     ),
     ## Firefox
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "firefox"],
         aliases={"default": ["u", "c", "F"]},
         description="user config firefox",
     ),
     ## Git
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "git"],
         aliases={"default": ["u", "c", "g"]},
         description="user config git",
     ),
     ## NeoVim
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "nvim"],
         aliases={"default": ["u", "c", "n"]},
         description="user config nvim",
     ),
     ## Newsraft
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "newsraft"],
         aliases={"default": ["u", "c", "N"]},
         description="user config newsraft",
     ),
-    Bookmark(
+    Shortcut(
         type="f",
         path_parts=["$XDG_CONFIG_HOME", "newsraft", "feeds"],
         aliases={"default": ["u", "c", "N", "f"]},
         description="user config newsraft feeds",
     ),
     ## Shell
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "shell"],
         aliases={"default": ["u", "c", "s"]},
         description="user config shell",
     ),
     ## Yazi
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_CONFIG_HOME", "yazi"],
         aliases={"default": ["u", "c", "y"]},
         description="user config yazi",
     ),
     # Local
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_BIN_HOME"],
         aliases={"default": ["b", "i", "n"], YAZI.name: ["b"]},
         description="local bins",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_DATA_HOME"],
         aliases={"default": ["d", "a", "t"], YAZI.name: ["l", "d"]},
         description="local data",
     ),
     # Sources
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_SRC_HOME"],
         aliases={"default": ["s", "r", "c"], YAZI.name: ["S"]},
         description="user sources",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_SRC_HOME", "docs"],
         aliases={"default": ["s", "r", "c", "d"]},
         activate_python_env=True,
         description="documents source",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_SRC_HOME", "flexycon-private"],
         aliases={"default": ["p", "r", "v"], YAZI.name: ["P"]},
         activate_python_env=True,
         description="private config source",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$XDG_SRC_HOME", "media-server"],
         aliases={"default": ["m", "s", "r", "v"]},
@@ -241,7 +241,7 @@ shortcuts: list[Bookmark] = [
         description="flexycon dotfile scripts",
     ),
     # Flexycon
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_home_parts],
         aliases={"default": ["f", "l", "x"], YAZI.name: ["F"]},
@@ -249,7 +249,7 @@ shortcuts: list[Bookmark] = [
         description="flexycon home",
     ),
     ## Config
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_config],
         aliases={"default": ["f", "l", "x", "c"], YAZI.name: ["f", "c"]},
@@ -257,7 +257,7 @@ shortcuts: list[Bookmark] = [
         description="flexycon dotfile configs",
     ),
     ### Firefox
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_config, "firefox"],
         aliases={"default": ["f", "c", "f"]},
@@ -265,7 +265,7 @@ shortcuts: list[Bookmark] = [
         description="flexycon firefox",
     ),
     ### Git
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_config, "git"],
         aliases={"default": ["f", "c", "g"]},
@@ -273,21 +273,21 @@ shortcuts: list[Bookmark] = [
         description="flexycon git",
     ),
     ### NeoVim
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_config, "nvim"],
         aliases={"default": ["f", "c", "n"]},
         activate_python_env=True,
         description="flexycon nvim",
     ),
-    Bookmark(
+    Shortcut(
         type="f",
         path_parts=[*flex_config, "nvim", "init.lua"],
         aliases={"default": ["f", "c", "n", "i"]},
         description="flexycon nvim init.lua",
     ),
     ### Newsraft
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_config, "newsraft"],
         aliases={"default": ["f", "c", "N"]},
@@ -295,7 +295,7 @@ shortcuts: list[Bookmark] = [
         description="flexycon newsraft",
     ),
     ### Shell
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_config, "shell"],
         aliases={"default": ["f", "c", "s"]},
@@ -303,62 +303,62 @@ shortcuts: list[Bookmark] = [
         description="flexycon shell config",
     ),
     ### Yazi
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_config, "yazi"],
         aliases={"default": ["f", "c", "y"]},
         activate_python_env=True,
         description="flexycon yazi",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_config, "yazi", "plugins"],
         aliases={"default": ["f", "c", "y", "p"]},
         activate_python_env=True,
         description="flexycon yazi plugins",
     ),
-    Bookmark(
+    Shortcut(
         type="f",
         path_parts=[*flex_config, "yazi", "keymap.toml"],
         aliases={"default": ["f", "c", "y", "k"]},
         description="flexycon yazi keymap.toml",
     ),
     ## Scripts
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=[*flex_scripts],
         aliases={"default": ["f", "l", "x", "s"], YAZI.name: ["f", "s"]},
         activate_python_env=True,
         description="flexycon dotfile scripts",
     ),
-    Bookmark(
+    Shortcut(
         type="f",
         path_parts=[*flex_scripts, "user_shortcuts", "data", "shortcuts.py"],
         aliases={"default": ["s", "h", "r", "t"], YAZI.name: ["s", "c"]},
         description="user shortcuts data",
     ),
     # Misc
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$JOURNAL_HOME"],
         aliases={"default": ["j", "r", "d"], YAZI.name: ["J"]},
         description="journal",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["/", "mnt"],
         aliases={"default": ["m", "n"], YAZI.name: ["M"]},
         description="mount",
         condition=system == "linux",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["/", "Volumes"],
         aliases={"default": ["v", "o", "l"], YAZI.name: ["V"]},
         description="volumes",
         condition=system == "darwin",
     ),
-    Bookmark(
+    Shortcut(
         type="d",
         path_parts=["$APPDATA"],
         aliases={"default": ["a", "p", "p", "d"], YAZI.name: ["A"]},
