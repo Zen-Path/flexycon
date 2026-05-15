@@ -530,19 +530,19 @@
                 "d_yazi_plugin_custom_rename",
                 "d_yazi_plugin_custom_search",
                 "d_yazi_plugin_parent_arrow"
-            ]
+            ],
         },
         "meta_vscode": {
+            "dotfiles": [
+                "f_vscode_settings",
+                "f_vscode_keybindings"
+            ],
             "variables": {
                 "d_vscode_src": "config/vscode"
             },
             "dynvariables": {
                 "f_vscode_extensions": "echo $FLEXYCON_HOME/dotfiles/{{@@ d_vscode_src @@}}/extensions.txt"
             },
-            "dotfiles": [
-                "f_vscode_settings",
-                "f_vscode_keybindings"
-            ]
         },
         "meta_firefox": {
             "variables": {
@@ -550,7 +550,7 @@
                 "d_firefox_chrome_dst": "~/.config/firefox/chrome",
                 "f_firefox_user_src": "config/firefox/user.js",
                 "d_firefox_profiles": "~/.config/firefox"
-            }
+            },
         },
         "meta_mpv": {
             "dotfiles": [
@@ -561,7 +561,7 @@
                 "f_mpv_plugin_gallery_view_scripts_gallery_thumbgen",
                 "f_mpv_plugin_gallery_view_scripts_playlist_view",
                 "f_mpv_plugin_cursor_blur",
-            ]
+            ],
         },
 
         # Meta Profiles
@@ -581,6 +581,7 @@
                 # Scripts
                 "f_compiler",
                 "f_continuous_diff",
+                "f_file_renamer",
                 "f_getkeys",
                 "f_git_logs",
                 "f_if_installed",
@@ -591,27 +592,26 @@
                 "f_pkgsize",
                 "f_rclone_wrapper",
                 "f_screenshot_utility",
-                "f_system_actions",
-                "f_file_renamer",
                 "f_sdir",
-                "f_user_shortcuts",
+                "f_system_actions",
                 "f_tag",
                 "f_unicode_selector",
+                "f_user_shortcuts",
 
                 # Config
-                "f_shell_profile",
-                "f_shell_inputrc",
-                "f_zsh_config",
-                "f_shell_aliases",
-                "d_starship",
-                "d_git",
-                "f_nvim_init",
-                "d_python",
-                "d_yt_dlp",
-                "f_gallery_config",
-                "d_newsraft",
                 "d_bottom",
                 "f_flex_sync",
+                "f_gallery_config",
+                "d_git",
+                "d_newsraft",
+                "f_nvim_init",
+                "d_python",
+                "f_shell_aliases",
+                "f_shell_inputrc",
+                "f_shell_profile",
+                "d_starship",
+                "d_yt_dlp",
+                "f_zsh_config",
             ],
             "variables": {
                 "d_src": "../src",
@@ -622,7 +622,7 @@
                 "d_statusbar_dst": "~/.local/bin/statusbar",
                 "d_userscripts_src": "src/userscripts",
                 "d_userscripts_dst": "~/.config/flexycon/userscripts"
-            }
+            },
         },
 
         ## OS
@@ -630,30 +630,70 @@
         "meta_unix": {
             "variables": {
                 "d_venv_bin": ".venv/bin"
-            }
+            },
         },
         "meta_linux": {
             "include": [
                 "meta_common",
                 "meta_unix"
             ],
+            "dotfiles": [
+                # Scripts
+                "f_displayselect",
+                "f_dmenuhandler",
+                "f_dmenupass",
+                "f_dmenurecord",
+                "f_env_cmd_runner",
+                "f_mounter",
+                "f_unmounter",
+                "f_nsxiv_exec_key_handler",
+                "f_nsxiv_rifle",
+                "f_remapd",
+                "f_remaps",
+                "f_setbg",
+
+                # Statusbar
+                "f_sb_date",
+                "f_sb_internet",
+                "f_sb_news",
+                "f_sb_recording",
+                "f_sb_tasks",
+                "f_sb_volume",
+
+                # Config
+                "d_alacritty",
+                "d_blugon",
+                "d_dunst",
+                "d_fontconfig",
+                "d_gtk_3",
+                "f_mimeapps.list",
+                "d_pipewire",
+                "f_pulse_daemon",
+                "f_x11_profile",
+                "d_x11",
+                "d_yay",
+                "d_zathura",
+
+                # Share
+                "d_applications",
+            ],
             "variables": {
                 "d_vscode_dst": "~/.config/Code - OSS/User"
-            }
+            },
         },
         "meta_mac": {
             "include": [
                 "meta_common",
                 "meta_unix"
             ],
-            "variables": {
-                "d_vscode_dst": "~/Library/Application Support/Code/User"
-            },
             "dotfiles": [
                 "d_kitty",
                 "f_skhd",
                 "f_yabai"
-            ]
+            ],
+            "variables": {
+                "d_vscode_dst": "~/Library/Application Support/Code/User"
+            },
         },
         "meta_windows": {
             "variables": {
@@ -688,46 +728,6 @@
             "include": [
                 "meta_linux",
                 "meta_personal"
-            ],
-            "dotfiles": [
-                # Config
-                "d_x11",
-                "f_x11_profile",
-                "d_yay",
-                "d_alacritty",
-                "f_pulse_daemon",
-                "d_pipewire",
-                "d_gtk_3",
-                "d_fontconfig",
-                "f_mimeapps.list",
-                "d_zathura",
-                "d_dunst",
-                "d_blugon",
-
-                # Share
-                "d_applications",
-
-                # Scripts
-                "f_displayselect",
-                "f_dmenuhandler",
-                "f_dmenupass",
-                "f_dmenurecord",
-                "f_env_cmd_runner",
-                "f_mounter",
-                "f_unmounter",
-                "f_nsxiv_exec_key_handler",
-                "f_nsxiv_rifle",
-                "f_remapd",
-                "f_remaps",
-                "f_setbg",
-
-                # Statusbar
-                "f_sb_date",
-                "f_sb_internet",
-                "f_sb_news",
-                "f_sb_tasks",
-                "f_sb_volume",
-                "f_sb_recording"
             ]
         },
         "mac_work": {
