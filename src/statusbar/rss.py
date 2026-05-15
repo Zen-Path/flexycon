@@ -113,7 +113,7 @@ def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        prog="sb_news",
+        prog="sb_rss",
         description="Statusbar script to manage news and get unread count.",
     )
 
