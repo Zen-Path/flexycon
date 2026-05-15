@@ -6,7 +6,7 @@ from typing import Callable
 
 from common.cmd_utilities import run_cmd
 from common.helpers import NotificationSystem
-from common.logger import logger
+from common.logger import log
 from common.prompt_utilities import PromptOption, prompt_options
 from common.system_utilities import System
 
@@ -53,7 +53,7 @@ def execute_special_action(action_func: Callable[[], None] | None = None):
         if "Caps Lock:   on" in xset_out:
             run_cmd(["xdotool", "key", "Caps_Lock"])
     except FileNotFoundError:
-        logger.debug("'xset' or 'xdotool' not found, skipping Caps Lock check.")
+        log.debug("'xset' or 'xdotool' not found, skipping Caps Lock check.")
 
     # Lock the screen asynchronously
     # We must thread this, otherwise the script blocks and never calls sleep()
@@ -73,7 +73,7 @@ def execute_special_action(action_func: Callable[[], None] | None = None):
         # Wait 45 seconds. If the system was asleep, this pauses and resumes upon wake.
         watcher_stop_event.wait(45.0)
         if not watcher_stop_event.is_set() and lock_thread.is_alive():
-            logger.warning("Ghost wake detected. Re-suspending...")
+            log.warning("Ghost wake detected. Re-suspending...")
             if action_func:
                 action_func()
                 ghost_wake_watcher()  # Watch again after the next wake
@@ -97,7 +97,7 @@ def execute_special_action(action_func: Callable[[], None] | None = None):
         NotificationSystem.set_paused(False)
 
     elapsed_str = str(timedelta(seconds=elapsed_time.total_seconds())).split(".")[0]
-    logger.debug(f"Elapsed time: {elapsed_str}")
+    log.debug(f"Elapsed time: {elapsed_str}")
 
     NotificationSystem.run(
         title="Welcome back!",

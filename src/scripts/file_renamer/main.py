@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.string_utilities import (
     to_camel_case,
     to_camel_snake_case,
@@ -141,8 +141,8 @@ def main() -> None:
 
     args = build_parser(converters_map).parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.INFO)
+    log.debug(args)
 
     for dest, converter in converters_map.items():
         # Get list of paths for a specific converter (e.g. args.kebab_case)
@@ -151,11 +151,11 @@ def main() -> None:
         if not paths:
             continue
 
-        logger.debug(f"Using converter {dest!r}.")
+        log.debug(f"Using converter {dest!r}.")
 
         for target in paths:
             if not target.exists():
-                logger.warning(f"Skipping non-existent path {str(target)!r}.")
+                log.warning(f"Skipping non-existent path {str(target)!r}.")
                 continue
 
             rename_path(target, converter.transform_func)

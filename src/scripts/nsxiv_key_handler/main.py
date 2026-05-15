@@ -12,7 +12,7 @@ from typing import Callable, TypedDict
 
 from common.cmd_utilities import run_cmd, run_cmd_background
 from common.helpers import NotificationSystem, get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.media import flip_image
 from common.packages.clipboard_utilities import copy_file, copy_text
 from common.prompt_utilities import prompt_options
@@ -72,7 +72,7 @@ def action_group(paths: list[Path]):
     )
 
     if prompt_result is None:
-        logger.error("Could not group files due to empty selection.")
+        log.error("Could not group files due to empty selection.")
         return
 
     _idx, choice = prompt_result
@@ -208,17 +208,17 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.WARNING)
+    log.debug(args)
 
     # Read filenames from stdin
     files = [Path(line.strip()) for line in sys.stdin if line.strip()]
     if not files:
-        logger.error("No files given on stdin.")
+        log.error("No files given on stdin.")
         sys.exit(1)
 
     action = ACTIONS[args.action]
-    logger.info(f"Action: {action}")
+    log.info(f"Action: {action}")
     action["func"](files)
 
 

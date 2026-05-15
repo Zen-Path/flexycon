@@ -2,7 +2,7 @@ import secrets
 import subprocess
 from dataclasses import dataclass
 
-from common.logger import logger
+from common.logger import log
 
 
 @dataclass
@@ -26,7 +26,7 @@ def run_cmd(command: list[str]) -> CommandResult:
     """Run a shell command and return its result."""
     cmd_identifier = secrets.token_hex(5)  # 8 hex chars
 
-    logger.debug(f"Running {command} with id {cmd_identifier!r}")
+    log.debug(f"Running {command} with id {cmd_identifier!r}")
 
     output: list[str] = []
     with subprocess.Popen(
@@ -39,11 +39,11 @@ def run_cmd(command: list[str]) -> CommandResult:
         if process.stdout is not None:
             for line in process.stdout:
                 output.append(line)
-                logger.debug(line.strip())
+                log.debug(line.strip())
 
         return_code = process.wait()
 
-    logger.debug(
+    log.debug(
         f"Command with id {cmd_identifier!r} finished with return code {return_code}"
     )
 
@@ -52,7 +52,7 @@ def run_cmd(command: list[str]) -> CommandResult:
 
 def run_cmd_background(command: list[str]):
     """Run a command in the background."""
-    logger.debug(f"Running {command} in background.")
+    log.debug(f"Running {command} in background.")
 
     subprocess.Popen(
         command,

@@ -6,7 +6,7 @@ from typing import Literal
 
 from common.helpers import resolve_path
 from common.io_utilities import write_to_file
-from common.logger import logger
+from common.logger import log
 
 
 @dataclass
@@ -41,7 +41,7 @@ class ShortcutRenderer(ABC):
         self.escape_path = escape_path
 
     def process(self, shortcuts: list[Shortcut]) -> None:
-        logger.info(f"[{self.name}] Processing shortcuts...")
+        log.info(f"[{self.name}] Processing shortcuts...")
 
         processed_shortcuts: list[Shortcut] = []
         for shortcut in shortcuts:
@@ -49,7 +49,7 @@ class ShortcutRenderer(ABC):
 
             # The alias check stays because it depends on self.name
             if not alias:
-                logger.warning(
+                log.warning(
                     f"- Skipped shortcut {shortcut.name!r} due to missing alias"
                 )
                 continue
@@ -57,14 +57,14 @@ class ShortcutRenderer(ABC):
             shortcut.resolved_alias = alias
             processed_shortcuts.append(shortcut)
 
-            logger.debug(
+            log.debug(
                 f"- Added alias {''.join(alias)!r:<6} for shortcut {shortcut.name!r}"
             )
 
         content = self.compose_output_file(processed_shortcuts)
         write_to_file(content, self.output_path)
 
-        logger.info(f"[{self.name}] Processed {len(processed_shortcuts)} shortcuts")
+        log.info(f"[{self.name}] Processed {len(processed_shortcuts)} shortcuts")
 
     def resolve_alias(self, shortcut: Shortcut) -> list[str] | None:
         return shortcut.aliases.get(self.name, shortcut.aliases.get("default"))

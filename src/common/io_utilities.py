@@ -3,7 +3,7 @@ import os
 import shutil
 from pathlib import Path
 
-from common.logger import logger
+from common.logger import log
 from common.prompt_utilities import prompt_bool
 
 
@@ -11,7 +11,7 @@ def write_to_file(content: str, path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
 
-    logger.debug(
+    log.debug(
         f"Wrote contents {content[:20].replace('\n', ' ')!r} to file {str(path)!r}"
     )
 
@@ -25,7 +25,7 @@ def load_json(path: Path) -> str | None:
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        logger.error(e)
+        log.error(e)
         return None
 
 
@@ -39,16 +39,16 @@ def ensure_directory_interactive(path: Path) -> bool:
     if directory.exists():
         return True
 
-    logger.info(f"Directory {str(directory)!r} does not exist.")
+    log.info(f"Directory {str(directory)!r} does not exist.")
 
     user_resp = prompt_bool("Create the directory?", default=True)
 
     if user_resp is True:
         directory.mkdir(parents=True, exist_ok=True)
-        logger.info(f"Created directory: {directory!r}")
+        log.info(f"Created directory: {directory!r}")
         return True
     else:
-        logger.debug("Operation cancelled by user.")
+        log.debug("Operation cancelled by user.")
         return False
 
 
@@ -90,9 +90,9 @@ def remove_files_by_pattern(
                     # missing_ok=True handles race conditions
                     path.unlink(missing_ok=True)
 
-                logger.debug(f"Removed {str(path)!r}")
+                log.debug(f"Removed {str(path)!r}")
             except Exception as e:
-                logger.warning(f"Failed to remove {str(path)!r}: {e}")
+                log.warning(f"Failed to remove {str(path)!r}: {e}")
 
 
 def remove_empty_dirs(
@@ -144,6 +144,6 @@ def remove_empty_dirs(
                 # iterdir() yields all contents (including hidden files and broken symlinks)
                 if not any(dir_path.iterdir()):
                     dir_path.rmdir()
-                    logger.debug(f"Removed empty directory {str(dir_path)!r}")
+                    log.debug(f"Removed empty directory {str(dir_path)!r}")
             except OSError as e:
-                logger.warning(f"Could not remove {str(dir_path)!r}: {e}")
+                log.warning(f"Could not remove {str(dir_path)!r}: {e}")

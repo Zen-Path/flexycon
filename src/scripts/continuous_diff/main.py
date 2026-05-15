@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from scripts.continuous_diff.src.core import monitor_file
 
 
@@ -36,8 +36,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
 
     try:
         monitor_file(Path(args.target_path))

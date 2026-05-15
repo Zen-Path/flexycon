@@ -11,7 +11,7 @@ from typing import NoReturn
 
 from common.cmd_utilities import run_cmd
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from scripts.rclone_wrapper.src.config import load_config
 from scripts.rclone_wrapper.src.formatting import (
     format_stats,
@@ -63,14 +63,14 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> NoReturn:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.WARNING)
+    log.debug(args)
 
     try:
         config = load_config()
-        logger.debug(f"Config:\n{json.dumps(config.model_dump(), indent=2)}")
+        log.debug(f"Config:\n{json.dumps(config.model_dump(), indent=2)}")
     except Exception as e:
-        logger.error(e)
+        log.error(e)
         sys.exit(1)
 
     command = build_rclone_command(args, config)

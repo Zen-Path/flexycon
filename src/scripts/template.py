@@ -6,7 +6,7 @@ import argparse
 import logging
 
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -107,8 +107,8 @@ def subparser_parser(options: list[str]) -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
 
 
 if __name__ == "__main__":

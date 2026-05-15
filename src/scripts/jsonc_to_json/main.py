@@ -10,7 +10,7 @@ from pathlib import Path
 import commentjson
 
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -46,8 +46,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.WARNING)
+    log.debug(args)
 
     with open(args.input_file, "r") as f:
         data = commentjson.load(f)  # type: ignore

@@ -8,7 +8,7 @@ import logging
 from common.apps.window_manager import get_active_window_manager
 from common.cmd_utilities import run_cmd
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.prompt_utilities import PromptOption
 from common.system_utilities import System
 from scripts.system_actions.src.core import execute_special_action, prompt_user
@@ -114,22 +114,22 @@ def main() -> None:
 
     args = build_parser(options).parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
 
     action_id = args.action_id or prompt_user(options)
 
     if not action_id:
-        logger.debug("No action was chosen.")
+        log.debug("No action was chosen.")
         return
 
     selected = next((opt for opt in options if opt.id == action_id), None)
 
     if selected and selected.action:
-        logger.debug(f"Executing action {selected.id!r}.")
+        log.debug(f"Executing action {selected.id!r}.")
         selected.action()
     else:
-        logger.error(f"Unknown action {action_id!r}.")
+        log.error(f"Unknown action {action_id!r}.")
 
 
 if __name__ == "__main__":

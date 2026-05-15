@@ -3,7 +3,7 @@ import subprocess
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from common.logger import logger
+from common.logger import log
 
 
 class Dmenu:
@@ -41,11 +41,11 @@ class Dmenu:
             return result.stdout.strip() if result.returncode == 0 else None
 
         except FileNotFoundError:
-            logger.error("Binary 'dmenu' not found.")
+            log.error("Binary 'dmenu' not found.")
             return None
 
         except Exception as e:
-            logger.error(f"Command failed: {e}")
+            log.error(f"Command failed: {e}")
             return None
 
 
@@ -121,7 +121,7 @@ def prompt_options(
                     text=True,
                 ).stdout
             except Exception as e:
-                logger.error(e)
+                log.error(e)
                 pass
 
         if selection:

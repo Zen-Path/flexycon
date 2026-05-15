@@ -4,7 +4,7 @@ import sys
 
 from common.cmd_utilities import run_cmd
 from common.io_utilities import remove_empty_dirs, remove_files_by_pattern
-from common.logger import logger
+from common.logger import log
 from scripts.flexy.src.helpers import (
     PIP_BIN,
     PYTHON_BIN,
@@ -24,29 +24,29 @@ from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcut
 
 
 def setup_virtual_env():
-    logger.info("⚙️ Create virtual environment if it doesn't exist...")
+    log.info("⚙️ Create virtual environment if it doesn't exist...")
 
     if not VENV_DIR.exists():
-        logger.info(f"🐍 Creating Python venv in {str(VENV_DIR)!r}...")
+        log.info(f"🐍 Creating Python venv in {str(VENV_DIR)!r}...")
         run_cmd([PYTHON_BIN, "-m", "venv", str(VENV_DIR)])
 
-    logger.info("♻️ Updating pip...")
+    log.info("♻️ Updating pip...")
     run_cmd([PIP_BIN, "install", "--upgrade", "pip"])
 
-    logger.info("📦 Installing current project and dependencies...")
+    log.info("📦 Installing current project and dependencies...")
     run_cmd([PIP_BIN, "install", "-e", "."])
 
 
 def install_system_packages():
-    logger.info("📦 Installing system packages...")
+    log.info("📦 Installing system packages...")
 
     system = sys.platform
     if system == "darwin" and shutil.which("brew") is None:
-        logger.warning(
+        log.warning(
             "Homebrew is not installed. Please install it from https://brew.sh/"
         )
     elif system == "win32" and shutil.which("choco") is None:
-        logger.warning(
+        log.warning(
             "Chocolatey is not installed. Please install it from https://chocolatey.org/install"
         )
     else:
@@ -56,7 +56,7 @@ def install_system_packages():
 def setup():
     install_system_packages()
 
-    logger.info("⑂ Initializing git submodules...")
+    log.info("⑂ Initializing git submodules...")
     init_submodules()
 
     setup_virtual_env()
@@ -67,17 +67,17 @@ def setup():
         # run_command(["playwright", "install"])
         pass
     else:
-        logger.error("'playwright' not found. Skipping installation.")
+        log.error("'playwright' not found. Skipping installation.")
 
     # npm
-    logger.info("📦 Installing npm packages...")
+    log.info("📦 Installing npm packages...")
     if shutil.which("npm"):
         run_cmd(["npm", "install"])
     else:
-        logger.error("'npm' not found. Skipping installation.")
+        log.error("'npm' not found. Skipping installation.")
 
     # pre-commit
-    logger.info("📦 Installing pre-commit hooks...")
+    log.info("📦 Installing pre-commit hooks...")
     precommit_bin = VENV_BIN / "pre-commit"
     if precommit_bin.exists():
         # Install the standard commit hook
@@ -89,24 +89,22 @@ def setup():
         # Pre-install the environments so the first commit isn't slow
         run_cmd([str(precommit_bin), "install-hooks"])
     else:
-        logger.error("'pre-commit' not found. Skipping installation.")
+        log.error("'pre-commit' not found. Skipping installation.")
 
     upgrade_yazi_packages()
 
 
 def install():
     if not VENV_DIR.exists():
-        logger.error(
-            f"Missing venv at {str(VENV_DIR)!r}. Run the 'setup' target first."
-        )
+        log.error(f"Missing venv at {str(VENV_DIR)!r}. Run the 'setup' target first.")
         return
 
-    logger.info("⚙️ Generating shortcuts...")
+    log.info("⚙️ Generating shortcuts...")
     active_shortcuts = get_active_shortcuts()
     for renderer in AVAILABLE_RENDERERS:
         renderer.process(active_shortcuts)
 
-    logger.info("⚙️ Installing configuration...")
+    log.info("⚙️ Installing configuration...")
 
     profile = get_dotdrop_profile()
     if not profile:
@@ -134,7 +132,7 @@ def install():
 
 
 def clean():
-    logger.info("🧹 Removing clean targets...")
+    log.info("🧹 Removing clean targets...")
     remove_files_by_pattern(
         patterns={
             ".mypy_cache",
@@ -150,7 +148,7 @@ def clean():
         global_excludes={".git", "node_modules", ".venv"},
     )
 
-    logger.info("🧹 Removing empty directories...")
+    log.info("🧹 Removing empty directories...")
     remove_empty_dirs(
         global_excludes={".git", "__pycache__", "node_modules", ".venv"},
         protected_roots=None,
@@ -162,7 +160,7 @@ def uninstall():
 
     clean_precommit()
 
-    logger.info("🔪 Removing uninstall targets...")
+    log.info("🔪 Removing uninstall targets...")
     remove_files_by_pattern(
         patterns={".venv", "node_modules"}, global_excludes={".git"}
     )

@@ -8,7 +8,7 @@ import sys
 
 from common.args import add_date_args, resolve_date
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from scripts.journal_entry.src.core import get_journal_entry_path, open_journal_entry
 
 
@@ -42,16 +42,16 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.WARNING)
+    log.debug(args)
 
     target_date = resolve_date(args)
-    logger.info(f"Target date: {target_date.strftime('%Y-%m-%d')}")
+    log.info(f"Target date: {target_date.strftime('%Y-%m-%d')}")
 
     if args.get_journal_entry_path:
         path = get_journal_entry_path(target_date)
         if not path:
-            logger.error(
+            log.error(
                 f"Could not find journal entry for {target_date.strftime('%Y-%m-%d')}"
             )
             sys.exit(1)

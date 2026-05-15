@@ -4,7 +4,7 @@ from dataclasses import fields
 from pathlib import Path
 
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from scripts.image_generator.data import references  # Only needed for demo
 from scripts.image_generator.src.core import (
     ImageConfig,
@@ -80,8 +80,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
 
     config_cls, generator_fn = GENERATORS[args.image_type]
 
@@ -100,11 +100,11 @@ def main() -> None:
     if args.input_path:
         grid = load_grid_from_json(args.input_path)
         if grid is None:
-            logger.error(f"Unable to load input data from {str(args.input_path)!r}")
+            log.error(f"Unable to load input data from {str(args.input_path)!r}")
             return
 
     if grid is None:
-        logger.warning("No input path provided. Defaulting to demo data.")
+        log.warning("No input path provided. Defaulting to demo data.")
         grid = references.EMOJI_SMILE
 
     # Execution
@@ -117,7 +117,7 @@ def main() -> None:
         coordinate_start=0,
     )
 
-    logger.info(f"Saved image to {str(output_path)!r}")
+    log.info(f"Saved image to {str(output_path)!r}")
 
 
 if __name__ == "__main__":

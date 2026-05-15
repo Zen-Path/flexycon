@@ -1,7 +1,7 @@
 import difflib
 from pathlib import Path
 
-from common.logger import logger
+from common.logger import log
 
 
 def read_file_lines(path: Path) -> list[str]:
@@ -21,10 +21,10 @@ def display_diff(old: list[str], new: list[str]) -> None:
 def monitor_file(path: Path) -> None:
     """Monitor the file for changes and display diffs."""
     if not path.is_file():
-        logger.error(f"Path {str(path)!r} is not a valid file.")
+        log.error(f"Path {str(path)!r} is not a valid file.")
         return
 
-    logger.info(f"Monitoring file {str(path)!r}")
+    log.info(f"Monitoring file {str(path)!r}")
     old_content = read_file_lines(path)
 
     while True:
@@ -34,6 +34,6 @@ def monitor_file(path: Path) -> None:
             display_diff(old_content, new_content)
             old_content = new_content
         except FileNotFoundError:
-            logger.error("File not found!")
+            log.error("File not found!")
         except Exception as e:
-            logger.error(f"An error occurred: {e}")
+            log.error(f"An error occurred: {e}")

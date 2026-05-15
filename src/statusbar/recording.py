@@ -10,7 +10,7 @@ from pathlib import Path
 
 from common.cmd_utilities import run_cmd_background
 from common.helpers import NotificationSystem, get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.statusbar import (
     EDITOR,
     TERMINAL,
@@ -34,11 +34,11 @@ def stop_recording():
     except FileNotFoundError:
         return
     except ValueError:
-        logger.error(f"Invalid PID in file: {RECORDING_PID_PATH!r}")
+        log.error(f"Invalid PID in file: {RECORDING_PID_PATH!r}")
     except ProcessLookupError:
-        logger.error(f"No such process: {recording_pid!r}")
+        log.error(f"No such process: {recording_pid!r}")
     except PermissionError:
-        logger.error(f"Permissions denied for PID {recording_pid!r}.")
+        log.error(f"Permissions denied for PID {recording_pid!r}.")
     finally:
         RECORDING_PID_PATH.unlink(missing_ok=True)
 
@@ -81,8 +81,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.WARNING)
+    log.debug(args)
 
     handle_block_button(ACTIONS)
 

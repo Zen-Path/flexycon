@@ -10,7 +10,7 @@ from datetime import datetime
 
 from common.cmd_utilities import run_cmd, run_cmd_background
 from common.helpers import NotificationSystem, get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.statusbar import (
     EDITOR,
     TERMINAL,
@@ -35,7 +35,7 @@ def get_calendar() -> str | None:
         return highlighted
 
     except Exception as e:
-        logger.error(f"Could not retrieve calendar: {e}")
+        log.error(f"Could not retrieve calendar: {e}")
 
     return None
 
@@ -43,7 +43,7 @@ def get_calendar() -> str | None:
 def get_appointments() -> str | None:
     """Returns upcoming appointments from calcurse."""
     if not shutil.which("calcurse"):
-        logger.error(msg="Binary 'calcurse' not found.")
+        log.error(msg="Binary 'calcurse' not found.")
         return None
 
     try:
@@ -54,7 +54,7 @@ def get_appointments() -> str | None:
         return result.output if result.output else "No upcoming appointments."
 
     except Exception as e:
-        logger.error(f"Could not retrieve appointments: {e}")
+        log.error(f"Could not retrieve appointments: {e}")
 
     return None
 
@@ -71,7 +71,7 @@ def show_info() -> None:
 def open_calcurse() -> None:
     """Opens calcurse in the terminal if installed."""
     if not shutil.which("calcurse"):
-        logger.error(msg="Binary 'calcurse' not found.")
+        log.error(msg="Binary 'calcurse' not found.")
         return None
 
     run_cmd_background([TERMINAL, "-e", "calcurse"])
@@ -114,8 +114,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
 
     handle_block_button(ACTIONS)
 

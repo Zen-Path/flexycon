@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 from common.io_utilities import ensure_directory_interactive
-from common.logger import logger
+from common.logger import log
 
 
 def open_journal_entry(target_date: datetime) -> bool:
@@ -18,13 +18,13 @@ def open_journal_entry(target_date: datetime) -> bool:
 
     file_name = f"{month_num_fmt}.{day_fmt}.md"
     file_path = Path(journal_home_path) / year_fmt / month_num_fmt / file_name
-    logger.info(f"File path: {str(file_path)!r}")
+    log.info(f"File path: {str(file_path)!r}")
 
     if not ensure_directory_interactive(file_path.parent):
         return False
 
     editor = os.getenv("EDITOR", "vim")
-    logger.debug(f"Editor: {editor!r}")
+    log.debug(f"Editor: {editor!r}")
 
     subprocess.run([editor, file_path])
     return True

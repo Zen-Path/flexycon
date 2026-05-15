@@ -5,7 +5,7 @@ from typing import Literal
 
 from common.cmd_utilities import run_cmd
 from common.helpers import Color, NotificationSystem, Window
-from common.logger import logger
+from common.logger import log
 
 
 class Maim:
@@ -54,11 +54,11 @@ class Maim:
             return run_cmd(cmd).success
 
         except FileNotFoundError:
-            logger.error("Binary 'maim' not found.")
+            log.error("Binary 'maim' not found.")
             return False
 
         except Exception as e:
-            logger.error(f"Command failed: {e}")
+            log.error(f"Command failed: {e}")
             return False
 
 

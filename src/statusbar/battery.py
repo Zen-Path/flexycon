@@ -8,7 +8,7 @@ from pathlib import Path
 
 from common.cmd_utilities import run_cmd, run_cmd_background
 from common.helpers import NotificationSystem, get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.statusbar import (
     EDITOR,
     TERMINAL,
@@ -23,7 +23,7 @@ def adjust_backlight(amount: int) -> None:
     try:
         run_cmd(["xbacklight", flag, str(abs(amount))])
     except Exception as e:
-        logger.error(f"Failed to adjust backlight: {e}")
+        log.error(f"Failed to adjust backlight: {e}")
 
 
 def get_battery_info() -> str:
@@ -50,7 +50,7 @@ def get_battery_info() -> str:
 
             output_parts.append(f"{icon}{warn}{capacity}%")
         except (FileNotFoundError, ValueError) as e:
-            logger.debug(f"Could not read battery {battery.name}: {e}")
+            log.debug(f"Could not read battery {battery.name}: {e}")
             continue
 
     return " ".join(output_parts)
@@ -97,8 +97,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
 
     handle_block_button(ACTIONS)
 

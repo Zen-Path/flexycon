@@ -1,7 +1,7 @@
 import shutil
 
 from common.cmd_utilities import run_cmd
-from common.logger import logger
+from common.logger import log
 from common.packages.models import Package, PackageManager
 
 
@@ -77,7 +77,7 @@ class Git(PackageManager):
     @classmethod
     def install(cls, package: Package) -> None:
         if not package.resolved_path:
-            logger.error(
+            log.error(
                 f"Package {package.identifier} requires a 'destination' for Git "
                 "operations."
             )

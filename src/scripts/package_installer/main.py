@@ -6,7 +6,7 @@ import argparse
 import logging
 
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.packages.models import Package
 from scripts.package_installer.data.packages import packages
 
@@ -38,7 +38,7 @@ def process_packages(packages: list[Package], dry_run: bool = False):
 
     for package in packages:
         if not package.condition:
-            logger.warning(f"Skipping {package.name!r}: unmet condition.")
+            log.warning(f"Skipping {package.name!r}: unmet condition.")
             continue
 
         # Find the first available manager
@@ -55,10 +55,10 @@ def process_packages(packages: list[Package], dry_run: bool = False):
                 break
 
         if not available_manager:
-            logger.warning(f"Skipping {package.name!r}: no available manager found.")
+            log.warning(f"Skipping {package.name!r}: no available manager found.")
             continue
 
-        logger.info(f"Installing {package.name!r} using {available_manager.__name__}.")
+        log.info(f"Installing {package.name!r} using {available_manager.__name__}.")
         if not dry_run:
             available_manager.install(package)
 
@@ -66,8 +66,8 @@ def process_packages(packages: list[Package], dry_run: bool = False):
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.INFO)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.INFO)
+    log.debug(args)
 
     process_packages(packages, args.dry_run)
 

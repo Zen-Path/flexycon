@@ -3,7 +3,7 @@ import subprocess
 
 from common.cmd_utilities import run_cmd
 from common.helpers import NotificationSystem
-from common.logger import logger
+from common.logger import log
 from common.prompt_utilities import prompt_options
 
 
@@ -16,7 +16,7 @@ def get_current_layout() -> str | None:
                 return line.split()[1]
 
     except subprocess.CalledProcessError:
-        logger.error("Unable to get current layout.")
+        log.error("Unable to get current layout.")
 
     return None
 
@@ -28,7 +28,7 @@ def get_available_layouts() -> list[str] | None:
         return result.output.splitlines()
 
     except subprocess.CalledProcessError:
-        logger.error("Unable to list x11 keymap layouts.")
+        log.error("Unable to list x11 keymap layouts.")
 
     return None
 
@@ -62,19 +62,19 @@ def prompt_layout(
 def restart_remapd() -> bool:
     """Restart the remapd service if it's available."""
     if not shutil.which("remapd"):
-        logger.error("Binary 'remapd' not found.")
+        log.error("Binary 'remapd' not found.")
         return False
 
     try:
         run_cmd(["killall", "remapd"])
-        logger.debug("Killed 'remapd'.")
+        log.debug("Killed 'remapd'.")
 
         subprocess.Popen(["remapd"])
-        logger.debug("Restarted 'remapd'.")
+        log.debug("Restarted 'remapd'.")
         return True
 
     except Exception as e:
-        logger.error(f"Failed to restart 'remapd': {e}")
+        log.error(f"Failed to restart 'remapd': {e}")
 
     return False
 
@@ -88,6 +88,6 @@ def set_keyboard_layout(layout: str) -> bool:
         return result
 
     except subprocess.CalledProcessError:
-        logger.error(f"Unable to set layout to {layout!r}.")
+        log.error(f"Unable to set layout to {layout!r}.")
 
     return False

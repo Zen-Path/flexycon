@@ -5,7 +5,7 @@ import psutil
 
 from common.cmd_utilities import run_cmd
 from common.helpers import get_parent_process_chain
-from common.logger import logger
+from common.logger import log
 
 
 class WindowManager:
@@ -39,7 +39,7 @@ class WindowManager:
                 if proc.info["name"] == name:
                     return proc.pid
         except (psutil.NoSuchProcess, psutil.AccessDenied):
-            logger.debug(f"Could not find PID of process {name!r}.")
+            log.debug(f"Could not find PID of process {name!r}.")
 
         return None
 

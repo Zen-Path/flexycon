@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Callable, NamedTuple
 
 from common.cmd_utilities import run_cmd
-from common.logger import logger
+from common.logger import log
 from common.variables import flex_data_path
 
 VENV_DIR = Path(".venv")
@@ -25,39 +25,39 @@ class Action(NamedTuple):
 
 
 def remove_flexycon_data():
-    logger.info("💀 Removing flexycon data...")
+    log.info("💀 Removing flexycon data...")
 
     if flex_data_path.exists():
         try:
             shutil.rmtree(flex_data_path, ignore_errors=True)
-            logger.info("Removed flexycon local data directory")
+            log.info("Removed flexycon local data directory")
         except Exception as e:
-            logger.warning(e)
+            log.warning(e)
 
 
 def clean_precommit():
-    logger.info("💀 Cleaning up pre-commit hooks...")
+    log.info("💀 Cleaning up pre-commit hooks...")
 
     precommit_bin = VENV_BIN / "pre-commit"
     if not precommit_bin.exists():
-        logger.error("pre-commit not found")
+        log.error("pre-commit not found")
         return
 
     try:
         run_cmd([str(precommit_bin), "clean"])
     except subprocess.CalledProcessError as e:
-        logger.error(e)
+        log.error(e)
 
 
 def init_submodules():
     if not Path(".gitmodules").exists():
-        logger.error("No git submodules found. Skipping.")
+        log.error("No git submodules found. Skipping.")
         return
 
-    logger.info("Initializing submodules...")
+    log.info("Initializing submodules...")
     run_cmd(["git", "submodule", "init"])
 
-    logger.info("Updating submodules...")
+    log.info("Updating submodules...")
     run_cmd(["git", "submodule", "update", "--recursive", "--remote"])
 
 
@@ -71,7 +71,7 @@ def get_dotdrop_profile() -> str | None:
         return profile
 
     if not USER_VARIABLES_PATH.exists():
-        logger.info("Installing bootstrap profile to generate user variables file.")
+        log.info("Installing bootstrap profile to generate user variables file.")
         try:
             run_cmd([str(VENV_BIN / "dotdrop"), "install", "--profile", "bootstrap"])
         except KeyboardInterrupt:
@@ -85,10 +85,10 @@ def get_dotdrop_profile() -> str | None:
             profile = data.get("variables", {}).get("active_dotdrop_profile")
 
     if not profile:
-        logger.error("Could not resolve dotdrop profile.")
+        log.error("Could not resolve dotdrop profile.")
         return None
 
-    logger.debug(f"Active dotdrop profile: {profile}")
+    log.debug(f"Active dotdrop profile: {profile}")
     return profile
 
 
@@ -97,11 +97,11 @@ def install_temp_profile() -> Path:
     output = run_cmd([f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"]).output
     match = re.search(r'installed to tmp "([^"]+)"', output)
     if not match:
-        logger.debug(f"Dotdrop output:\n{output}")
+        log.debug(f"Dotdrop output:\n{output}")
         raise RuntimeError("Could not find temporary install path in output.")
 
     temp_path = Path(match.group(1))
-    logger.debug(f"Temp path {str(temp_path)!r}")
+    log.debug(f"Temp path {str(temp_path)!r}")
     return temp_path
 
 
@@ -111,20 +111,20 @@ def copy_shell_profile_from_temp(temp_path: Path):
     src = temp_path / home.relative_to(home.anchor) / ".zprofile"
     dst = home / ".zprofile"
     shutil.copy2(src, dst)
-    logger.debug(f"Copied {str(src)!r} -> {str(dst)!r}")
+    log.debug(f"Copied {str(src)!r} -> {str(dst)!r}")
 
 
 def upgrade_yazi_packages() -> bool:
-    logger.debug("📦 Upgrading yazi packages...")
+    log.debug("📦 Upgrading yazi packages...")
 
     try:
         result = run_cmd(["ya", "pkg", "upgrade"]).success
-        logger.debug(f"Upgrade {'successful' if result else 'failed'}.")
+        log.debug(f"Upgrade {'successful' if result else 'failed'}.")
         return result
 
     except KeyboardInterrupt:
         sys.exit(1)
 
     except Exception as e:
-        logger.error(f"Unable to upgrade yazi packages: {e}")
+        log.error(f"Unable to upgrade yazi packages: {e}")
         return False

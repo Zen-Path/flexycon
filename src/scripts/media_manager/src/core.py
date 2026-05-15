@@ -1,6 +1,6 @@
 import argparse
 
-from common.logger import logger
+from common.logger import log
 from common.media import (
     compress_image,
     compress_pdf,
@@ -21,9 +21,7 @@ def handle_image(args: argparse.Namespace):
             compress_image(input_path, output_path)
 
         if args.rotate:
-            logger.debug(
-                f"Rotating image {str(input_path)!r} by {args.rotate!r} degrees."
-            )
+            log.debug(f"Rotating image {str(input_path)!r} by {args.rotate!r} degrees.")
             rotate_image(input_path, args.rotate, output_path)
 
 
@@ -61,9 +59,7 @@ def handle_pdf(args: argparse.Namespace):
         output_path = args.output[i] if args.output else None
 
         if args.convert:
-            logger.debug(
-                f"Converting PDF {str(args.input)!r} to a {args.convert!r} file."
-            )
+            log.debug(f"Converting PDF {str(args.input)!r} to a {args.convert!r} file.")
 
             if args.convert == "png":
                 convert_pdf_to_png(input_path, output_path)

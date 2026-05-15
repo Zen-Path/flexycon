@@ -6,7 +6,7 @@ import argparse
 import logging
 
 from common.helpers import get_version, resolve_path
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from scripts.user_shortcuts.data.shortcuts import shortcuts
 from scripts.user_shortcuts.src.formatting import format_shortcuts
 from scripts.user_shortcuts.src.models import Shortcut, ShortcutRenderer
@@ -20,13 +20,13 @@ def get_active_shortcuts(shortcuts: list[Shortcut] = shortcuts) -> list[Shortcut
     result: list[Shortcut] = []
     for shortcut in shortcuts:
         if not shortcut.condition:
-            logger.warning(
+            log.warning(
                 f"- Skipped shortcut {shortcut.name!r} due to condition not being met"
             )
             continue
 
         if not resolve_path(shortcut.path_parts).exists():
-            logger.debug(f"- Shortcut {shortcut.name!r} doesn't point to a real file")
+            log.debug(f"- Shortcut {shortcut.name!r} doesn't point to a real file")
 
         result.append(shortcut)
     return result
@@ -68,8 +68,8 @@ def build_parser(renderers: list[ShortcutRenderer]) -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser(AVAILABLE_RENDERERS).parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
 
     if args.list_shortcuts:
         print(format_shortcuts(shortcuts))

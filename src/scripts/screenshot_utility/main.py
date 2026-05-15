@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import TypedDict
 
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.prompt_utilities import PromptOption, prompt_options
 from common.screenshot_utilities import ScreenshotUtility
 
@@ -99,8 +99,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.WARNING)
+    log.debug(args)
 
     raw_output_dir = getattr(args, "output_directory", None)
     common: ScreenshotOptions = {
@@ -146,16 +146,16 @@ def main() -> None:
     action_id = args.action_id or prompt_user(options)
 
     if not action_id:
-        logger.debug("No action was chosen.")
+        log.debug("No action was chosen.")
         return
 
     selected = next((opt for opt in options if opt.id == action_id), None)
 
     if selected and selected.action:
-        logger.debug(f"Executing action {selected.id!r}.")
+        log.debug(f"Executing action {selected.id!r}.")
         selected.action()
     else:
-        logger.error(f"Unknown action {action_id!r}.")
+        log.error(f"Unknown action {action_id!r}.")
 
 
 if __name__ == "__main__":

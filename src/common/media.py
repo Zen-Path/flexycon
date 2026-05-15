@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 from common.cmd_utilities import run_cmd
-from common.logger import logger
+from common.logger import log
 
 # IMAGES
 
@@ -36,7 +36,7 @@ def compress_image(input_path: Path, output_path: Path | None = None) -> Path | 
             ])
             # fmt: on
         case _:
-            logger.error(f"Unsupported image format: {extension}")
+            log.error(f"Unsupported image format: {extension}")
             return None
 
     return output_path

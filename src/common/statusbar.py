@@ -2,7 +2,7 @@ import os
 from enum import Enum
 from typing import Any, Callable
 
-from common.logger import logger
+from common.logger import log
 
 TERMINAL = os.getenv("TERMINAL", "alacritty")
 EDITOR = os.getenv("EDITOR", "nvim")
@@ -25,21 +25,21 @@ def handle_block_button(actions: dict[MouseButton, Callable[[], Any]]) -> bool:
     """Handle block button events."""
     block_button = os.getenv("BLOCK_BUTTON")
     if block_button is None:
-        logger.debug("Variable 'BLOCK_BUTTON' is not set.")
+        log.debug("Variable 'BLOCK_BUTTON' is not set.")
         return False
 
     try:
         button = MouseButton(int(block_button))
-        logger.debug(f"Handling button {button}.")
+        log.debug(f"Handling button {button}.")
     except ValueError:
-        logger.warning(
+        log.warning(
             f"Invalid MouseButton value from 'BLOCK_BUTTON': {int(block_button)}."
         )
         return False
 
     action = actions.get(button)
     if not action:
-        logger.warning(f"Button {button} has no action defined.")
+        log.warning(f"Button {button} has no action defined.")
         return False
 
     action()

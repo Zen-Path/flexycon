@@ -8,7 +8,7 @@ import sys
 
 from common.cmd_utilities import run_cmd
 from common.helpers import NotificationSystem, get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.packages.clipboard_utilities import ClipboardManager
 from common.prompt_utilities import prompt_options
 from scripts.unicode_selector.data.characters import CHARACTERS
@@ -48,10 +48,10 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
 
     char_categories = list(CHARACTERS.keys())
-    logger.debug(f"char_categories: {char_categories}")
+    log.debug(f"char_categories: {char_categories}")
 
     # Prompt user for a category or common emojis
     prompt_result = prompt_options(
@@ -61,7 +61,7 @@ def main() -> None:
     )
 
     if prompt_result is None:
-        logger.error("Selection is empty.")
+        log.error("Selection is empty.")
         sys.exit(1)
 
     _idx, selection = prompt_result
@@ -74,28 +74,28 @@ def main() -> None:
         )
 
         if prompt_result is None:
-            logger.error("Selection is empty.")
+            log.error("Selection is empty.")
             sys.exit(1)
 
         _idx, selection = prompt_result
 
     selection_parts = selection.split(" - ", maxsplit=1)
-    logger.info(f"Selection parts: {selection_parts}")
+    log.info(f"Selection parts: {selection_parts}")
 
     # skip empty or malformed lines
     if len(selection_parts) < 2:
         return
 
     char, name = selection_parts
-    logger.info(f"char: {str(char)!r}, name: {str(name)!r}")
+    log.info(f"char: {str(char)!r}, name: {str(name)!r}")
 
     if args.insert_char:
         run_cmd(["xdotool", "type", char])
-        logger.info("Character inserted.")
+        log.info("Character inserted.")
 
     if not args.no_copy:
         ClipboardManager.copy_text(char)
-        logger.info("Character copied.")
+        log.info("Character copied.")
 
         if not args.no_notify:
             NotificationSystem.run("Character copied", f"Copied {str(char)!r}.")

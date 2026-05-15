@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import Callable, NamedTuple
 
-from common.logger import logger
+from common.logger import log
 from common.string_utilities import split_into_words
 
 type TransformFunc = Callable[[list[str], str], str]
@@ -23,7 +23,7 @@ def rename_path(path: Path, transform_func: TransformFunc) -> None:
         words = split_into_words(root)
 
         new_name = transform_func(words, ext)
-        logger.debug(f"Words={words}, ext={ext!r}")
+        log.debug(f"Words={words}, ext={ext!r}")
 
         # Skip if name didn't change
         if path.name == new_name:
@@ -31,10 +31,10 @@ def rename_path(path: Path, transform_func: TransformFunc) -> None:
 
         new_path = path.with_name(new_name)
         path.rename(new_path)
-        logger.info(f"Renamed {str(path.absolute())!r} -> {str(new_path)!r}")
+        log.info(f"Renamed {str(path.absolute())!r} -> {str(new_path)!r}")
 
     except Exception as e:
-        logger.error(f"Error renaming {str(path)!r}: {e}")
+        log.error(f"Error renaming {str(path)!r}: {e}")
 
 
 def map_converters(converters: list[ConverterRow]) -> dict[str, ConverterRow]:

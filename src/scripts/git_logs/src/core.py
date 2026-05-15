@@ -4,7 +4,7 @@ from datetime import datetime
 from git import InvalidGitRepositoryError, Repo
 
 from common.helpers import resolve_path
-from common.logger import logger
+from common.logger import log
 
 
 class GitRepo:
@@ -92,10 +92,10 @@ def compose_output(target_date: datetime, git_repos: list[GitRepo]) -> str:
                 all_repo_outputs.append(repo_block)
 
         except InvalidGitRepositoryError as e:
-            logger.warning(f"{type(e).__name__}: {e}")
+            log.warning(f"{type(e).__name__}: {e}")
 
         except Exception as e:
-            logger.error(e)
-            logger.debug(traceback.format_exc())
+            log.error(e)
+            log.debug(traceback.format_exc())
 
     return "\n\n".join(all_repo_outputs)

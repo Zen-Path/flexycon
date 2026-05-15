@@ -7,7 +7,7 @@ import logging
 
 from common.args import add_date_args, resolve_date
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from scripts.git_logs.data.repos import GIT_REPOS
 from scripts.git_logs.src.core import compose_output
 
@@ -35,14 +35,14 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.WARNING)
+    log.debug(args)
 
     target_date = resolve_date(args)
-    logger.info(f"Target date: {target_date.strftime('%Y-%m-%d')}")
+    log.info(f"Target date: {target_date.strftime('%Y-%m-%d')}")
 
     git_repos_str = "\n".join([str(r) for r in GIT_REPOS])
-    logger.debug(f"Git Repos (count: {len(GIT_REPOS)}):\n{git_repos_str}")
+    log.debug(f"Git Repos (count: {len(GIT_REPOS)}):\n{git_repos_str}")
 
     print(compose_output(target_date, GIT_REPOS))
 

@@ -10,7 +10,7 @@ from pathlib import Path
 
 from common.cmd_utilities import run_cmd, run_cmd_background
 from common.helpers import NotificationSystem, get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from common.statusbar import EDITOR, TERMINAL, MouseButton, handle_block_button
 
 NEWS_DIR = (
@@ -49,7 +49,7 @@ def _get_unread_db(db_path: Path) -> int | None:
             return int(result.output)
         return None
     except Exception as e:
-        logger.error(f"Could not read from db {str(db_path)!r}: {e}")
+        log.error(f"Could not read from db {str(db_path)!r}: {e}")
         return None
 
 
@@ -63,7 +63,7 @@ def get_unread_count() -> int | None:
         shutil.copy2(NEWS_DB, NEWS_DB_BACKUP)
         return _get_unread_db(NEWS_DB_BACKUP)
     except Exception as e:
-        logger.error(
+        log.error(
             f"Failed to backup db {str(NEWS_DB)!r} to {str(NEWS_DB_BACKUP)!r}: {e}"
         )
         return None
@@ -130,8 +130,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
 
     handle_block_button(ACTIONS)
 

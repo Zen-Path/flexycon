@@ -9,7 +9,7 @@ from typing import Callable, Generator, Literal
 import psutil
 
 from common.cmd_utilities import run_cmd
-from common.logger import logger
+from common.logger import log
 
 
 def get_version() -> str:
@@ -112,7 +112,7 @@ class NotificationSystem:
             action_token = "custom_callback"
             cmd.append(f"--action={action_token}=Click Me")
 
-        logger.debug(f"Sending notification:\ntitle={title!r}\nmessage='{message}'")
+        log.debug(f"Sending notification:\ntitle={title!r}\nmessage='{message}'")
 
         try:
             # If no action was defined, fire and forget (non-blocking)
@@ -130,7 +130,7 @@ class NotificationSystem:
                 callback()
 
         except Exception as e:
-            logger.error(f"Notification failed: {e}")
+            log.error(f"Notification failed: {e}")
 
     @classmethod
     def get_paused(cls) -> bool | None:

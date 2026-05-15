@@ -3,7 +3,7 @@ import logging
 import sys
 
 from common.helpers import get_version
-from common.logger import logger, setup_logging
+from common.logger import log, setup_logging
 from scripts.media_manager.src.core import (
     handle_audio,
     handle_image,
@@ -69,12 +69,12 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
 
-    setup_logging(logger, logging.DEBUG if args.verbose else logging.WARNING)
-    logger.debug(args)
+    setup_logging(log, logging.DEBUG if args.verbose else logging.WARNING)
+    log.debug(args)
 
     if args.output:
         if len(args.input) != len(args.output):
-            logger.error(
+            log.error(
                 f"Number of output paths ({len(args.output)}) does not match "
                 f"number of input paths ({len(args.input)})."
             )

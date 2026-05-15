@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, TypeIs
 
-from common.logger import logger
+from common.logger import log
 
 
 @dataclass
@@ -43,7 +43,7 @@ def load_grid_from_json(path: Path | str) -> list[list[int]] | None:
     path = Path(path)
 
     if not path.exists():
-        logger.error(f"Input file not found: {str(path)!r}")
+        log.error(f"Input file not found: {str(path)!r}")
         return None
 
     try:
@@ -53,11 +53,11 @@ def load_grid_from_json(path: Path | str) -> list[list[int]] | None:
         if is_grid(data):
             return data
 
-        logger.error(f"Invalid grid structure or data types in {str(path)!r}")
+        log.error(f"Invalid grid structure or data types in {str(path)!r}")
         return None
 
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse JSON in {str(path)!r}: {e}")
+        log.error(f"Failed to parse JSON in {str(path)!r}: {e}")
         return None
 
 
@@ -91,7 +91,7 @@ def generate_svg(
     config = config or ImageConfig()
     output_path = output_path or Path("image.svg")
 
-    logger.debug(config)
+    log.debug(config)
 
     rows = len(grid)
     cols = len(grid[0])

@@ -1,6 +1,6 @@
 import sys
 
-from common.logger import logger
+from common.logger import log
 from common.variables import flex_home_parts
 from scripts.user_shortcuts.src.models import Shortcut, ShortcutRenderer
 
@@ -32,7 +32,7 @@ class ZshShortcutRenderer(ShortcutRenderer):
 
         if shortcut.activate_python_env:
             if shortcut.type != "d":
-                logger.warning(
+                log.warning(
                     f"Python env can only be activated for directory shortcuts: {shortcut}"
                 )
             else:

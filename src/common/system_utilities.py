@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from common.cmd_utilities import run_cmd
-from common.logger import logger
+from common.logger import log
 
 
 def get_display_server() -> Literal["X11", "Wayland", "macOS", "Windows"] | None:
@@ -62,7 +62,7 @@ class System:
         Returns 'systemctl' if systemd is detected, otherwise 'loginctl'.
         """
         if sys.platform != "linux":
-            logger.warning(f"Method isn't supported for {sys.platform!r}")
+            log.warning(f"Method isn't supported for {sys.platform!r}")
             return None
 
         init_path = os.path.realpath("/sbin/init")
@@ -102,7 +102,7 @@ class System:
         if cmd:
             run_cmd(cmd)
         else:
-            logger.error("No screen locker found.")
+            log.error("No screen locker found.")
 
     @classmethod
     def sleep(cls):
@@ -113,7 +113,7 @@ class System:
             if cmd := cls._get_linux_controller():
                 run_cmd([cmd, "suspend", "-i"])
         else:
-            logger.warning(f"Method isn't supported for {sys.platform!r}")
+            log.warning(f"Method isn't supported for {sys.platform!r}")
 
     @classmethod
     def power_off(cls):
@@ -124,7 +124,7 @@ class System:
             if cmd := cls._get_linux_controller():
                 run_cmd([cmd, "poweroff", "-i"])
         else:
-            logger.warning(f"Method isn't supported for {sys.platform!r}")
+            log.warning(f"Method isn't supported for {sys.platform!r}")
 
     @classmethod
     def reboot(cls):
@@ -135,7 +135,7 @@ class System:
             if cmd := cls._get_linux_controller():
                 run_cmd([cmd, "reboot", "-i"])
         else:
-            logger.warning(f"Method isn't supported for {sys.platform!r}")
+            log.warning(f"Method isn't supported for {sys.platform!r}")
 
     @classmethod
     def hibernate(cls):
@@ -148,4 +148,4 @@ class System:
             if cmd := cls._get_linux_controller():
                 run_cmd([cmd, "hibernate", "-i"])
         else:
-            logger.warning(f"Method isn't supported for {sys.platform!r}")
+            log.warning(f"Method isn't supported for {sys.platform!r}")

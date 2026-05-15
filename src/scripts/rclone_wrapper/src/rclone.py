@@ -4,7 +4,7 @@ import sys
 
 from pydantic import ValidationError
 
-from common.logger import logger
+from common.logger import log
 from scripts.rclone_wrapper.src.config import Config
 from scripts.rclone_wrapper.src.models import RcloneOperation, RcloneStats
 
@@ -49,16 +49,16 @@ def parse_rclone_output(
 
         if "stats" in log_obj:
             try:
-                logger.debug(f"Rclone stats:\n{log_obj['stats']}")
+                log.debug(f"Rclone stats:\n{log_obj['stats']}")
                 stats = RcloneStats.model_validate(log_obj["stats"])
             except ValidationError as e:
-                logger.error(f"Problem validating stats: {e}.")
+                log.error(f"Problem validating stats: {e}.")
 
         if log_obj.get("skipped"):
             try:
                 operations.append(RcloneOperation.model_validate(log_obj))
             except ValidationError as e:
-                logger.error(f"Problem validating operation: {e}.")
+                log.error(f"Problem validating operation: {e}.")
                 sys.exit(1)
 
     return operations, stats

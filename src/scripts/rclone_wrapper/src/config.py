@@ -4,7 +4,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from common.io_utilities import load_json
-from common.logger import logger
+from common.logger import log
 
 
 class GlobalConfig(BaseModel):
@@ -45,7 +45,7 @@ def load_global_config() -> GlobalConfig | None:
     try:
         return GlobalConfig.model_validate(data)
     except ValidationError as e:
-        logger.error(f"Problem validating global config at {str(global_path)!r}: {e}")
+        log.error(f"Problem validating global config at {str(global_path)!r}: {e}")
         return None
 
 
@@ -59,7 +59,7 @@ def load_local_config() -> LocalConfig | None:
     try:
         return LocalConfig.model_validate(data)
     except ValidationError as e:
-        logger.error(f"Problem validating local config at {str(local_path)!r}: {e}")
+        log.error(f"Problem validating local config at {str(local_path)!r}: {e}")
         return None
 
 
