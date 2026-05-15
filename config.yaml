@@ -490,7 +490,7 @@
             "dst": "{{@@ d_statusbar_dst @@}}/sb-date",
             "chmod": "755"
         },
-        "f_sb_internet": {
+        "f_sb_network": {
             "src": "{{@@ d_statusbar_src @@}}/network.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-network",
             "chmod": "755"
@@ -654,7 +654,7 @@
 
                 # Statusbar
                 "f_sb_date",
-                "f_sb_internet",
+                "f_sb_network",
                 "f_sb_rss",
                 "f_sb_recording",
                 "f_sb_tasks",
