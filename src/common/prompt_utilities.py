@@ -136,6 +136,9 @@ def prompt_options(
         if resolved_default is not None:
             return (resolved_default, options[resolved_default])
 
+        if selection is None:
+            return None
+
     print(f":: {prompt_fmt}:")
     for i, option in enumerate(options, 1):
         suffix = " (default)" if (i - 1) == resolved_default else ""
