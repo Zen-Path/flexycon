@@ -481,37 +481,37 @@
 
         # Statusbar
         "f_sb_battery": {
-            "src": "{{@@ d_statusbar_src @@}}/battery.py",
+            "src": "{{@@ d_statusbar_src @@}}/battery/main.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-battery",
             "chmod": "755"
         },
         "f_sb_date": {
-            "src": "{{@@ d_statusbar_src @@}}/date.py",
+            "src": "{{@@ d_statusbar_src @@}}/date/main.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-date",
             "chmod": "755"
         },
         "f_sb_network": {
-            "src": "{{@@ d_statusbar_src @@}}/network.py",
+            "src": "{{@@ d_statusbar_src @@}}/network/main.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-network",
             "chmod": "755"
         },
         "f_sb_rss": {
-            "src": "{{@@ d_statusbar_src @@}}/rss.py",
+            "src": "{{@@ d_statusbar_src @@}}/rss/main.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-rss",
             "chmod": "755"
         },
         "f_sb_todos": {
-            "src": "{{@@ d_statusbar_src @@}}/todos.py",
+            "src": "{{@@ d_statusbar_src @@}}/todos/main.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-todos",
             "chmod": "755"
         },
         "f_sb_sound": {
-            "src": "{{@@ d_statusbar_src @@}}/sound.py",
+            "src": "{{@@ d_statusbar_src @@}}/sound/main.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-sound",
             "chmod": "755"
         },
         "f_sb_recording": {
-            "src": "{{@@ d_statusbar_src @@}}/recording.py",
+            "src": "{{@@ d_statusbar_src @@}}/recording/main.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-recording",
             "chmod": "755"
         },
