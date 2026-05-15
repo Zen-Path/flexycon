@@ -4,6 +4,7 @@ import sys
 from typing import Literal
 
 import pytest
+
 from scripts.user_shortcuts.src.models import Bookmark
 from scripts.user_shortcuts.src.renderers import (
     NVIM,
