@@ -1,6 +1,6 @@
 # ruff: noqa: E501
 
-CHARS = {
+CHARACTERS = {
     "emoji": {
         "😀": "grinning face",
         "😃": "grinning face with big eyes",

@@ -11,14 +11,8 @@ from common.helpers import NotificationSystem, get_version
 from common.logger import logger, setup_logging
 from common.packages.clipboard_utilities import ClipboardManager
 from common.prompt_utilities import prompt_options
-from scripts.unicode_selector.data import CHARS
-
-
-def format_char_entries(chars: dict[str, str]) -> list[str]:
-    result: list[str] = []
-    for char in chars:
-        result.append(f"{char} - {chars[char]}")
-    return result
+from scripts.unicode_selector.data.characters import CHARACTERS
+from scripts.unicode_selector.src.core import format_char_entries
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -56,13 +50,13 @@ def main() -> None:
 
     setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
 
-    char_categories = list(CHARS.keys())
+    char_categories = list(CHARACTERS.keys())
     logger.debug(f"char_categories: {char_categories}")
 
     # Prompt user for a category or common emojis
     prompt_result = prompt_options(
         prompt="Emoji",
-        options=char_categories + format_char_entries(CHARS["emoji"]),
+        options=char_categories + format_char_entries(CHARACTERS["emoji"]),
         list_view_item_count=30,
     )
 
@@ -75,7 +69,7 @@ def main() -> None:
     if selection in char_categories:
         prompt_result = prompt_options(
             prompt="Emoji",
-            options=format_char_entries(CHARS[selection]),
+            options=format_char_entries(CHARACTERS[selection]),
             list_view_item_count=30,
         )
 
