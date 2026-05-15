@@ -86,8 +86,8 @@ def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        prog="sb_tasks",
-        description="Statusbar script for managing tasks.",
+        prog="sb_todos",
+        description="Statusbar script for managing ToDos.",
     )
 
     parser.add_argument(

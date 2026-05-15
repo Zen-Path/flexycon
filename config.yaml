@@ -500,9 +500,9 @@
             "dst": "{{@@ d_statusbar_dst @@}}/sb-rss",
             "chmod": "755"
         },
-        "f_sb_tasks": {
-            "src": "{{@@ d_statusbar_src @@}}/tasks.py",
-            "dst": "{{@@ d_statusbar_dst @@}}/sb-tasks",
+        "f_sb_todos": {
+            "src": "{{@@ d_statusbar_src @@}}/todos.py",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-todos",
             "chmod": "755"
         },
         "f_sb_volume": {
@@ -657,7 +657,7 @@
                 "f_sb_network",
                 "f_sb_rss",
                 "f_sb_recording",
-                "f_sb_tasks",
+                "f_sb_todos",
                 "f_sb_volume",
 
                 # Config
