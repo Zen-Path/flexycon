@@ -491,8 +491,8 @@
             "chmod": "755"
         },
         "f_sb_internet": {
-            "src": "{{@@ d_statusbar_src @@}}/internet.py",
-            "dst": "{{@@ d_statusbar_dst @@}}/sb-internet",
+            "src": "{{@@ d_statusbar_src @@}}/network.py",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-network",
             "chmod": "755"
         },
         "f_sb_news": {

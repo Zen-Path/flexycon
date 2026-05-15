@@ -112,7 +112,7 @@ def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
     parser = argparse.ArgumentParser(
-        prog="sb_internet",
+        prog="sb_network",
         description="Statusbar script for network connectivity.",
     )
     parser.add_argument(
