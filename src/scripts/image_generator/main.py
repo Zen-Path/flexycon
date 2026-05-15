@@ -1,93 +1,20 @@
 import argparse
 import logging
+from dataclasses import fields
 from pathlib import Path
-from typing import Any
 
 from common.helpers import get_version
 from common.logger import logger, setup_logging
+from scripts.image_generator.data import references  # Only needed for demo
+from scripts.image_generator.src.core import (
+    ImageConfig,
+    generate_svg,
+    load_grid_from_json,
+)
 
-# Only needed for demo
-from scripts.image_generator.data import references
-
-
-def generate_svg(
-    grid: list[list[int]],
-    colors: list[str],
-    config: dict[str, Any] | None = None,
-    output_file: Path | str = "blueprint.svg",
-    coordinate_start: int = 1,
-):
-    rows = len(grid)
-    cols = len(grid[0])
-
-    # Extract config values
-    config = config or {}
-    b_size = config.get("block_size", 25)
-    f_size = config.get("font_size", 11)
-    f_color = config.get("font_color", "#928374")
-
-    out_color = config.get("outline_color", "#dddddd")
-    out_thick = config.get("outline_thickness", 0.5)
-
-    show_labels = config.get("show_labels", True)
-
-    # Calculate margins based on whether labels are enabled
-    offset_x = b_size if show_labels else 0
-    offset_y = b_size if show_labels else 0
-
-    grid_w = cols * b_size
-    grid_h = rows * b_size
-
-    total_w = grid_w + offset_x
-    total_h = grid_h + offset_y
-
-    svg = [
-        f'<svg width="{total_w}" height="{total_h}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">'
-    ]
-
-    # Draw the coordinate labels only if enabled
-    if show_labels:
-        for c in range(cols):
-            x = offset_x + (c * b_size) + (b_size / 2)
-            y = offset_y - 10
-            svg.append(
-                f'  <text x="{x}" y="{y}" font-family="monospace" font-size="{f_size}" fill="{f_color}" text-anchor="middle">{c + coordinate_start}</text>'
-            )
-
-        for r in range(rows):
-            x = offset_x - 10
-            y = offset_y + (r * b_size) + (b_size / 2)
-            svg.append(
-                f'  <text x="{x}" y="{y}" font-family="monospace" font-size="{f_size}" fill="{f_color}" text-anchor="end" dominant-baseline="middle">{r + coordinate_start}</text>'
-            )
-
-    # Draw the grid
-    for r, row in enumerate(grid):
-        for c, val in enumerate(row):
-            if val == 0:
-                fill_color = "none"  # make the cell transparent
-            else:
-                # fallback to white
-                fill_color = colors[val] if val < len(colors) else "#FFFFFF"
-
-            x = offset_x + (c * b_size)
-            y = offset_y + (r * b_size)
-
-            svg.append(
-                f'  <rect x="{x}" y="{y}" width="{b_size}" height="{b_size}" '
-                f'fill="{fill_color}" stroke="{out_color}" stroke-width="{out_thick}" />'
-            )
-
-    svg.append("</svg>")
-
-    output_file = Path(output_file)
-    with open(output_file, "w") as f:
-        f.write("\n".join(svg))
-
-    logger.info(f"Blueprint saved to {output_file!r}")
-
-
-COLORS = ["transparent", "#458588", "#cc241d", "#458588"]
+GENERATORS = {
+    "svg": (ImageConfig, generate_svg),
+}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -95,19 +22,57 @@ def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         prog="image_generator",
-        description="Generate an svg image from a pixel map.",
+        description="Generate an image representation of a 2D integer grid.",
     )
 
-    parser.add_argument(
-        "--no-frame", action="store_true", help="hide labels and margins"
-    )
-
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable debug output"
-    )
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {get_version()}"
     )
+
+    # SUBCOMMANDS
+    cmd_parent = argparse.ArgumentParser(add_help=False)
+    cmd_parent.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="enable debug output",
+    )
+
+    subparsers = parser.add_subparsers(dest="image_type", metavar="IMAGE_TYPE")
+    # TODO: allow for more image types. use base config and factory pattern to
+    # automatically call an image type with its specific configuration options.
+
+    ## SVG
+    svg_sp = subparsers.add_parser(name="svg", parents=[cmd_parent])
+
+    svg_cfg_group = svg_sp.add_argument_group(title="config")
+    svg_cfg_group.add_argument(
+        "--no-labels",
+        dest="show_labels",
+        action="store_false",
+        default=True,
+        help="hide labels like block number",
+    )
+
+    svg_cfg_group.add_argument(
+        "--block-size",
+        type=int,
+        help="define the width and height of a block",
+    )
+
+    svg_cfg_group.add_argument("--font-size", type=int)
+    svg_cfg_group.add_argument("--font-color", type=str)
+
+    svg_cfg_group.add_argument(
+        "--outline-thickness",
+        type=float,
+        help="define the thickness of a block's outline",
+    )
+    svg_cfg_group.add_argument("--outline-color", type=str)
+
+    svg_path_group = svg_sp.add_argument_group(title="path")
+    svg_path_group.add_argument("-i", "--input-path", type=Path)
+    svg_path_group.add_argument("-o", "--output-path", type=Path)
 
     return parser
 
@@ -118,11 +83,41 @@ def main() -> None:
     setup_logging(logger, logging.DEBUG if args.verbose else logging.ERROR)
     logger.debug(args)
 
-    config = {"show_labels": not args.no_frame}
+    config_cls, generator_fn = GENERATORS[args.image_type]
 
-    generate_svg(
-        grid=references.EMOJI_SMILE, colors=COLORS, config=config, coordinate_start=0
+    # Build config from CLI
+    args_dict = vars(args)
+    config_fields: set[str] = {f.name for f in fields(ImageConfig)}
+
+    provided_config = {
+        k: v for k, v in args_dict.items() if k in config_fields and v is not None
+    }
+
+    config = config_cls(**provided_config)
+
+    # Data loading
+    grid = None
+    if args.input_path:
+        grid = load_grid_from_json(args.input_path)
+        if grid is None:
+            logger.error(f"Unable to load input data from {str(args.input_path)!r}")
+            return
+
+    if grid is None:
+        logger.warning("No input path provided. Defaulting to demo data.")
+        grid = references.EMOJI_SMILE
+
+    # Execution
+    COLORS = ["#cc241d", "#458588", "#458588"]
+    output_path = generator_fn(
+        grid=grid,
+        colors=COLORS,
+        config=config,
+        output_path=args.output_path,
+        coordinate_start=0,
     )
+
+    logger.info(f"Saved image to {str(output_path)!r}")
 
 
 if __name__ == "__main__":
