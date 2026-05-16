@@ -16,6 +16,7 @@ from common.statusbar import (
     MouseButton,
     handle_block_button,
 )
+from statusbar.sound.src.core import resolve_icon
 
 ACTIONS = {
     MouseButton.LEFT: lambda: (
@@ -24,7 +25,7 @@ ACTIONS = {
     ),
     MouseButton.MIDDLE: SoundUtility.toggle_mute,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
-        "📢 Volume",
+        "📢 Sound",
         "Show sound volume, 🔇 if muted.\n"
         "\n<b>Actions</b>\n"
         "- Left   : Open 'pulsemixer'\n"
@@ -71,16 +72,7 @@ def main() -> None:
         return
 
     volume, is_muted = volume_result
-
-    if is_muted:
-        icon = "🔇"
-    else:
-        if volume >= 70:
-            icon = "🔊"
-        elif volume >= 30:
-            icon = "🔉"
-        else:
-            icon = "🔈"
+    icon = resolve_icon(volume, is_muted)
 
     print(f"{icon}{volume}%")
 
