@@ -130,6 +130,11 @@ packages = [
         description="Autoformat shell script source code",
     ),
     Package(
+        identifier="asmvik/formulae/skhd",
+        managers=[Brew],
+        description="Simple hotkey-daemon for macOS",
+    ),
+    Package(
         identifier="sqlite",
         managers=[Brew, Yay],
         description="Command-line interface for SQLite",
@@ -291,6 +296,11 @@ packages = [
         identifier="zathura-pdf-poppler",
         managers=[Yay],
         description="PDF support for zathura (poppler backend)",
+    ),
+    Package(
+        identifier="asmvik/formulae/yabai",
+        managers=[Brew],
+        description="A tiling window manager for macOS based on binary space partitioning",
     ),
     Package(
         identifier="https://github.com/Zen-Path/flexycon-private",
