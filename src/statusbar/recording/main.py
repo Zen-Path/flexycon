@@ -22,7 +22,7 @@ ACTIONS = {
     MouseButton.MIDDLE: lambda: NotificationSystem.set_paused("toggle"),
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         "⏺️ Recording",
-        "Shows recording status and info.\n"
+        "Show recording status and info.\n"
         "\n<b>Actions</b>\n"
         "- Left   : Stop recording\n"
         "- Middle : Toggle notifications\n"

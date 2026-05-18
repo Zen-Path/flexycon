@@ -22,12 +22,12 @@ ACTIONS = {
     MouseButton.MIDDLE: open_calcurse,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         "📅 Date",
-        "Show the current date and time.\n"
+        "Show current date and time.\n"
         "\n<b>Actions</b>\n"
-        "- Left click to show calendar and appointments\n"
-        "- Middle click to open 'calcurse'\n"
-        "- Right click to show this message\n"
-        "- Extra button to edit script",
+        "- Left   : Show calendar and appointments\n"
+        "- Middle : Open 'calcurse'\n"
+        "- Right  : Show this message\n"
+        "- Extra  : Edit this script",
     ),
     MouseButton.EXTRA_3: lambda: run_cmd_background(
         [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]

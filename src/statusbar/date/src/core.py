@@ -50,11 +50,11 @@ def get_appointments() -> str | None:
 
 def show_info() -> None:
     """Triggers notifications for both calendar and appointments."""
-    NotificationSystem.run("Calendar", get_calendar())
+    NotificationSystem.run("📅 Calendar", get_calendar())
 
     appointments = get_appointments()
     if appointments:
-        NotificationSystem.run("Appointments", appointments)
+        NotificationSystem.run("📌 Appointments", appointments)
 
 
 def open_calcurse() -> None:

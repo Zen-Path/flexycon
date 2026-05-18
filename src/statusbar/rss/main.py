@@ -16,12 +16,12 @@ ACTIONS = {
     MouseButton.MIDDLE: handle_reload,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         " RSS Feed",
-        "Shows unread news items.\n"
+        "Show unread rss items.\n"
         "\n<b>Actions:</b>\n"
         "- Left   : Open 'newsraft'\n"
         "- Middle : Sync RSS feeds\n"
         "- Right  : Show this message\n"
-        "- Extra  : Edit this script"
+        "- Extra  : Edit this script\n"
         "\n<b>Note:</b> Only one instance of 'newsraft' may be running at a time.",
     ),
     MouseButton.EXTRA_3: lambda: run_cmd_background(
