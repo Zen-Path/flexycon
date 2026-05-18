@@ -97,7 +97,7 @@ class NotificationSystem:
         cmd = ["notify-send", title.strip(), "--urgency", urgency]
 
         if message is not None:
-            cmd.append(message.strip())
+            cmd.append(message.rstrip())
 
         if icon_path:
             icon_path = str(icon_path)
