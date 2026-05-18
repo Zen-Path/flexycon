@@ -25,16 +25,11 @@
     },
 
     "actions": {
-        "pre": {
-            "generate_user_shortcuts": "user_shortcuts"
-        },
-        "post": {
-            "yazi_plugins_upgrade": "ya pack --upgrade",
-            "vscode_extensions_save": "code --list-extensions | sort > \"{{@@ f_vscode_extensions @@}}\"",
-            "vscode_extensions_install": "cat \"{{@@ f_vscode_extensions @@}}\" | xargs -n 1 code --install-extension",
-            "yabai_restart": "yabai --restart-server",
-            "skhd_restart": "skhd --restart-server"
-        }
+        "yazi_plugins_upgrade": "ya pack --upgrade",
+        "vscode_extensions_save": "code --list-extensions | sort > \"{{@@ f_vscode_extensions @@}}\"",
+        "vscode_extensions_install": "cat \"{{@@ f_vscode_extensions @@}}\" | xargs -n 1 code --install-extension",
+        "yabai_restart": "yabai --restart-server",
+        "skhd_restart": "skhd --restart-server",
     },
 
     "dotfiles": {
