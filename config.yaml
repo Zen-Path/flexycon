@@ -287,9 +287,9 @@
             "src": "{{@@ d_config_src @@}}/bottom",
             "dst": "{{@@ d_config_dst @@}}/bottom"
         },
-        "d_dunst": {
-            "src": "{{@@ d_config_src @@}}/dunst",
-            "dst": "{{@@ d_config_dst @@}}/dunst"
+        "f_dunst_config": {
+            "src": "{{@@ d_config_src @@}}/dunst/dunst.conf",
+            "dst": "{{@@ d_config_dst @@}}/dunst/dunstrc"
         },
         "d_gtk_3": {
             "src": "{{@@ d_config_src @@}}/gtk-3.0",
@@ -663,7 +663,7 @@
                 # Config
                 "d_alacritty",
                 "d_blugon",
-                "d_dunst",
+                "f_dunst_config",
                 "d_fontconfig",
                 "d_gtk_3",
                 "f_mimeapps.list",
