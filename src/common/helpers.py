@@ -13,9 +13,7 @@ from common.logger import log
 
 
 def get_version() -> str:
-    pyproject_path = (
-        Path(__file__).resolve().parent.parent.parent.parent / "pyproject.toml"
-    )
+    pyproject_path = Path(__file__).resolve().parent.parent.parent / "pyproject.toml"
 
     try:
         with open(pyproject_path, "rb") as f:
