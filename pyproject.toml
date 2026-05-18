@@ -9,7 +9,7 @@ authors = [
 dependencies = [
     "pip>=26.0",
 
-    "dotdrop==1.15.0",      # for dotfile management
+    "dotdrop==1.16.2",      # for dotfile management
     "python-magic==0.4.27", # for dotdrop on windows
 
     # util
@@ -48,7 +48,7 @@ description = " Flexible programmatic configuration."
 name = "flexycon"
 readme = "README.md"
 requires-python = ">=3.12"
-version = "1.27.11"
+version = "1.27.12"
 
     [project.scripts]
     flexy = "scripts.flexy.main:main"
