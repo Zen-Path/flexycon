@@ -8,7 +8,7 @@ from typing import Any, Callable, NamedTuple
 
 from common.cmd_utilities import run_cmd
 from common.logger import log
-from common.variables import flex_data_path
+from common.variables import flex_data_path, flex_home
 
 VENV_DIR = Path(".venv")
 VENV_BIN = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin")
@@ -114,12 +114,30 @@ def copy_shell_profile_from_temp(temp_path: Path):
     log.debug(f"Copied {str(src)!r} -> {str(dst)!r}")
 
 
+def format_yazi_packages_file():
+    log.info("🧼 Formatting yazi packages file...")
+    try:
+        run_cmd(
+            [
+                "taplo",
+                "fmt",
+                "--config",
+                str(flex_home / ".taplo.toml"),
+                str(flex_home / "dotfiles" / "config" / "yazi" / "package.toml"),
+            ]
+        )
+    except Exception as e:
+        log.error(f"Unable to format yazi packages: {e}")
+        return False
+
+
 def upgrade_yazi_packages() -> bool:
-    log.debug("📦 Upgrading yazi packages...")
+    log.info("📦 Upgrading yazi packages...")
 
     try:
         result = run_cmd(["ya", "pkg", "upgrade"]).success
-        log.debug(f"Upgrade {'successful' if result else 'failed'}.")
+        log.info(f"Yazi upgrade {'successful' if result else 'failed'}.")
+        format_yazi_packages_file()
         return result
 
     except KeyboardInterrupt:
