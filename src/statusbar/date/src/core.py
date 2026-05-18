@@ -19,7 +19,7 @@ def get_calendar() -> str | None:
         highlighted = re.sub(
             rf"\b({current_day})\b",
             r"<span color='#1D2021'><b>\1</b></span>",
-            result.output,
+            result.raw_output.replace("\n\n", "\n"),
         )
         return highlighted
 
