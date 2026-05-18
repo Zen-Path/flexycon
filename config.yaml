@@ -29,6 +29,7 @@
         "vscode_extensions_install": "cat \"{{@@ f_vscode_extensions @@}}\" | xargs -n 1 code --install-extension",
         "yabai_restart": "yabai --restart-server",
         "skhd_restart": "skhd --restart-server",
+        "dunst_restart": "killall dunst 2>/dev/null; dunst >/dev/null 2>&1 &!"
     },
 
     "dotfiles": {
@@ -283,7 +284,11 @@
         },
         "f_dunst_config": {
             "src": "{{@@ d_config_src @@}}/dunst/dunst.conf",
-            "dst": "{{@@ d_config_dst @@}}/dunst/dunstrc"
+            "dst": "{{@@ d_config_dst @@}}/dunst/dunstrc",
+            "link": "nolink",
+            "actions": [
+                "dunst_restart"
+            ]
         },
         "d_gtk_3": {
             "src": "{{@@ d_config_src @@}}/gtk-3.0",
