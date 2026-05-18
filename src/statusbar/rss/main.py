@@ -24,7 +24,9 @@ ACTIONS = {
         "- Extra  : Edit this script"
         "\n<b>Note:</b> Only one instance of 'newsraft' may be running at a time.",
     ),
-    MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
+    MouseButton.EXTRA_3: lambda: run_cmd_background(
+        [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
+    ),
 }
 
 

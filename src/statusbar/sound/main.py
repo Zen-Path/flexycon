@@ -36,7 +36,9 @@ ACTIONS = {
     ),
     MouseButton.SCROLL_UP: lambda: SoundUtility.update_volume(2),
     MouseButton.SCROLL_DOWN: lambda: SoundUtility.update_volume(-2),
-    MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
+    MouseButton.EXTRA_3: lambda: run_cmd_background(
+        [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
+    ),
 }
 
 

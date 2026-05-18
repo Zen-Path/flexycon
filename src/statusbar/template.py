@@ -28,7 +28,9 @@ ACTIONS = {
         "- Scroll : ACTION\n"
         "- Extra  : Edit this script",
     ),
-    MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
+    MouseButton.EXTRA_3: lambda: run_cmd_background(
+        [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
+    ),
 }
 
 

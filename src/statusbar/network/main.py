@@ -40,7 +40,9 @@ ACTIONS = {
         "- ❌: wifi disabled\n"
         "- 🔒: vpn is active",
     ),
-    MouseButton.EXTRA_3: lambda: run_cmd_background([TERMINAL, "-e", EDITOR, __file__]),
+    MouseButton.EXTRA_3: lambda: run_cmd_background(
+        [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
+    ),
 }
 
 
