@@ -38,7 +38,7 @@ def run_cmd(command: list[str]) -> CommandResult:
     ) as process:
         if process.stdout is not None:
             for line in process.stdout:
-                output.append(line)
+                output.append(line)  # newline is included
                 log.debug(line.strip())
 
         return_code = process.wait()
@@ -47,7 +47,7 @@ def run_cmd(command: list[str]) -> CommandResult:
         f"Command with id {cmd_identifier!r} finished with return code {return_code}"
     )
 
-    return CommandResult(return_code=return_code, raw_output="\n".join(output))
+    return CommandResult(return_code=return_code, raw_output="".join(output))
 
 
 def run_cmd_background(command: list[str]):
