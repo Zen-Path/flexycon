@@ -94,10 +94,13 @@ def get_dotdrop_profile() -> str | None:
 
 def install_temp_profile() -> Path:
     """Install dotdrop profile to a temporary directory and return the temp path."""
-    output = run_cmd([f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"]).output
-    match = re.search(r'installed to tmp "([^"]+)"', output)
+    result = run_cmd([f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"])
+    if not result.success:
+        log.error(f"Dotdrop output:\n{result.output}")
+        raise RuntimeError("Installing temporary dotdrop profile failed.")
+
+    match = re.search(r'installed to tmp "([^"]+)"', result.output)
     if not match:
-        log.debug(f"Dotdrop output:\n{output}")
         raise RuntimeError("Could not find temporary install path in output.")
 
     temp_path = Path(match.group(1))
