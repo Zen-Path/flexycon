@@ -142,6 +142,7 @@
         "f_skhd": {
             "src": "{{@@ d_config_src @@}}/skhd/config.conf",
             "dst": "{{@@ d_config_dst @@}}/skhd/skhdrc",
+            "link": "nolink",
             "actions": [
                 "skhd_restart"
             ]
@@ -149,6 +150,7 @@
         "f_yabai": {
             "src": "{{@@ d_config_src @@}}/yabai/config.conf",
             "dst": "{{@@ d_config_dst @@}}/yabai/yabairc",
+            "link": "nolink",
             "actions": [
                 "yabai_restart"
             ]
