@@ -441,7 +441,7 @@
         },
         "f_flexy": {
             "src": "{{@@ d_src @@}}/scripts/flexy/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/flexyconsssss",
+            "dst": "{{@@ d_bin_dst @@}}/flexy",
             "chmod": "755"
         },
         "f_git_logs": {
