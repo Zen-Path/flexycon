@@ -62,12 +62,12 @@
         # then we install everything else, which guarantees that the latest env
         # is used.
         "f_shell_profile": {
-            "src": "{{@@ d_config_src @@}}/shell/profile.sh",
+            "src": "config/shell/profile.sh",
             "dst": "~/.zprofile",
             "link": "nolink"
         },
         "f_shell_inputrc": {
-            "src": "{{@@ d_config_src @@}}/shell/inputrc",
+            "src": "config/shell/inputrc",
             "dst": "{{@@ d_config_dst @@}}/shell/inputrc",
             "link": "nolink"
         },
@@ -75,56 +75,56 @@
         # Whilst important, we're not going to include this in mandatory, since
         # we're using some env vars in its templates.
         "d_git": {
-            "src": "{{@@ d_config_src @@}}/git",
+            "src": "config/git",
             "dst": "{{@@ d_config_dst @@}}/git",
             "link": "nolink"
         },
 
         # Shell
         "f_zsh_config": {
-            "src": "{{@@ d_config_src @@}}/zsh/config.sh",
+            "src": "config/zsh/config.sh",
             "dst": "{{@@ d_config_dst @@}}/zsh/.zshrc",
             "link": "nolink"
         },
         "f_shell_aliases": {
-            "src": "{{@@ d_config_src @@}}/shell/aliases.sh",
+            "src": "config/shell/aliases.sh",
             "dst": "{{@@ d_config_dst @@}}/shell/aliases.sh",
             "link": "nolink"
         },
         "d_starship": {
-            "src": "{{@@ d_config_src @@}}/starship",
+            "src": "config/starship",
             "dst": "{{@@ d_config_dst @@}}/starship"
         },
 
         # Package Managers
         "d_yay": {
-            "src": "{{@@ d_config_src @@}}/yay",
+            "src": "config/yay",
             "dst": "{{@@ d_config_dst @@}}/yay"
         },
 
         # WM / Desktop Environment
         "d_x11": {
-            "src": "{{@@ d_config_src @@}}/x11",
+            "src": "config/x11",
             "dst": "{{@@ d_config_dst @@}}/x11"
         },
         "f_x11_profile": {
-            "src": "{{@@ d_config_src @@}}/x11/xprofile",
+            "src": "config/x11/xprofile",
             "dst": "~/.xprofile"
         },
 
         # Terminal
         "d_alacritty": {
-            "src": "{{@@ d_config_src @@}}/alacritty",
+            "src": "config/alacritty",
             "dst": "{{@@ d_config_dst @@}}/alacritty"
         },
         "d_kitty": {
-            "src": "{{@@ d_config_src @@}}/kitty",
+            "src": "config/kitty",
             "dst": "{{@@ d_config_dst @@}}/kitty"
         },
 
         # Text Editor
         "f_nvim_init": {
-            "src": "{{@@ d_config_src @@}}/nvim/init.lua",
+            "src": "config/nvim/init.lua",
             "dst": "{{@@ d_config_dst @@}}/nvim/init.lua"
         },
 
@@ -140,7 +140,7 @@
 
         # Window management
         "f_skhd": {
-            "src": "{{@@ d_config_src @@}}/skhd/config.conf",
+            "src": "config/skhd/config.conf",
             "dst": "{{@@ d_config_dst @@}}/skhd/skhdrc",
             "link": "nolink",
             "actions": [
@@ -148,7 +148,7 @@
             ]
         },
         "f_yabai": {
-            "src": "{{@@ d_config_src @@}}/yabai/config.conf",
+            "src": "config/yabai/config.conf",
             "dst": "{{@@ d_config_dst @@}}/yabai/yabairc",
             "link": "nolink",
             "actions": [
@@ -158,41 +158,41 @@
 
         # Programming
         "d_python": {
-            "src": "{{@@ d_config_src @@}}/python",
+            "src": "config/python",
             "dst": "{{@@ d_config_dst @@}}/python"
         },
 
         # File Manager
         "f_yazi_config": {
-            "src": "{{@@ d_config_src @@}}/yazi/yazi.toml",
+            "src": "config/yazi/yazi.toml",
             "dst": "{{@@ d_config_dst @@}}/yazi/yazi.toml"
         },
         "f_yazi_keymap": {
-            "src": "{{@@ d_config_src @@}}/yazi/keymap.toml",
+            "src": "config/yazi/keymap.toml",
             "dst": "{{@@ d_config_dst @@}}/yazi/keymap.toml"
         },
         "f_yazi_theme": {
-            "src": "{{@@ d_config_src @@}}/yazi/theme.toml",
+            "src": "config/yazi/theme.toml",
             "dst": "{{@@ d_config_dst @@}}/yazi/theme.toml"
         },
         "f_yazi_package": {
-            "src": "{{@@ d_config_src @@}}/yazi/package.toml",
+            "src": "config/yazi/package.toml",
             "dst": "{{@@ d_config_dst @@}}/yazi/package.toml"
         },
         "f_yazi_init": {
-            "src": "{{@@ d_config_src @@}}/yazi/init.lua",
+            "src": "config/yazi/init.lua",
             "dst": "{{@@ d_config_dst @@}}/yazi/init.lua"
         },
         "d_yazi_plugin_custom_rename": {
-            "src": "{{@@ d_config_src @@}}/yazi/plugins/custom-rename.yazi",
+            "src": "config/yazi/plugins/custom-rename.yazi",
             "dst": "{{@@ d_config_dst @@}}/yazi/plugins/custom-rename.yazi"
         },
         "d_yazi_plugin_custom_search": {
-            "src": "{{@@ d_config_src @@}}/yazi/plugins/custom-search.yazi",
+            "src": "config/yazi/plugins/custom-search.yazi",
             "dst": "{{@@ d_config_dst @@}}/yazi/plugins/custom-search.yazi"
         },
         "d_yazi_plugin_parent_arrow": {
-            "src": "{{@@ d_config_src @@}}/yazi/plugins/parent-arrow.yazi",
+            "src": "config/yazi/plugins/parent-arrow.yazi",
             "dst": "{{@@ d_config_dst @@}}/yazi/plugins/parent-arrow.yazi"
         },
 
@@ -222,31 +222,31 @@
 
         ## mpv
         "f_mpv_config": {
-            "src": "{{@@ d_config_src @@}}/mpv/mpv.conf",
+            "src": "config/mpv/mpv.conf",
             "dst": "{{@@ d_config_dst @@}}/mpv/mpv.conf"
         },
         "f_mpv_input": {
-            "src": "{{@@ d_config_src @@}}/mpv/input.conf",
+            "src": "config/mpv/input.conf",
             "dst": "{{@@ d_config_dst @@}}/mpv/input.conf"
         },
         "f_mpv_plugin_gallery_view_gallery_lua": {
-            "src": "{{@@ d_config_src @@}}/mpv/plugins/mpv-gallery-view/script-modules/gallery.lua",
+            "src": "config/mpv/plugins/mpv-gallery-view/script-modules/gallery.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/script-modules/gallery.lua"
         },
         "f_mpv_plugin_gallery_view_scripts_contact_sheet": {
-            "src": "{{@@ d_config_src @@}}/mpv/plugins/mpv-gallery-view/scripts/contact-sheet.lua",
+            "src": "config/mpv/plugins/mpv-gallery-view/scripts/contact-sheet.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/contact-sheet.lua",
         },
         "f_mpv_plugin_gallery_view_scripts_gallery_thumbgen": {
-            "src": "{{@@ d_config_src @@}}/mpv/plugins/mpv-gallery-view/scripts/gallery-thumbgen.lua",
+            "src": "config/mpv/plugins/mpv-gallery-view/scripts/gallery-thumbgen.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/gallery-thumbgen.lua",
         },
         "f_mpv_plugin_gallery_view_scripts_playlist_view": {
-            "src": "{{@@ d_config_src @@}}/mpv/plugins/mpv-gallery-view/scripts/playlist-view.lua",
+            "src": "config/mpv/plugins/mpv-gallery-view/scripts/playlist-view.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/playlist-view.lua",
         },
         "f_mpv_plugin_cursor_blur": {
-            "src": "{{@@ d_config_src @@}}/mpv/plugins/cursor_blur.lua",
+            "src": "config/mpv/plugins/cursor_blur.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/cursor_blur.lua"
         },
 
@@ -263,11 +263,11 @@
         },
 
         "d_yt_dlp": {
-            "src": "{{@@ d_config_src @@}}/yt-dlp",
+            "src": "config/yt-dlp",
             "dst": "{{@@ d_config_dst @@}}/yt-dlp"
         },
         "f_gallery_config": {
-            "src": "{{@@ d_config_src @@}}/gallery-dl/config.jsonc",
+            "src": "config/gallery-dl/config.jsonc",
             "dst": "{{@@ d_config_dst @@}}/gallery-dl/config.json",
             "link": "nolink",
             "trans_install": "jsonc_to_json"
@@ -275,29 +275,29 @@
 
         # Audio
         "f_pulse_daemon": {
-            "src": "{{@@ d_config_src @@}}/pulse/daemon.conf",
+            "src": "config/pulse/daemon.conf",
             "dst": "{{@@ d_config_dst @@}}/pulse/daemon.conf"
         },
         "d_pipewire": {
-            "src": "{{@@ d_config_src @@}}/pipewire",
+            "src": "config/pipewire",
             "dst": "{{@@ d_config_dst @@}}/pipewire"
         },
 
         # Programs
         "d_zathura": {
-            "src": "{{@@ d_config_src @@}}/zathura",
+            "src": "config/zathura",
             "dst": "{{@@ d_config_dst @@}}/zathura"
         },
         "d_newsraft": {
-            "src": "{{@@ d_config_src @@}}/newsraft",
+            "src": "config/newsraft",
             "dst": "{{@@ d_config_dst @@}}/newsraft"
         },
         "d_bottom": {
-            "src": "{{@@ d_config_src @@}}/bottom",
+            "src": "config/bottom",
             "dst": "{{@@ d_config_dst @@}}/bottom"
         },
         "f_dunst_config": {
-            "src": "{{@@ d_config_src @@}}/dunst/dunst.conf",
+            "src": "config/dunst/dunst.conf",
             "dst": "{{@@ d_config_dst @@}}/dunst/dunstrc",
             "link": "nolink",
             "actions": [
@@ -305,27 +305,27 @@
             ]
         },
         "d_gtk_3": {
-            "src": "{{@@ d_config_src @@}}/gtk-3.0",
+            "src": "config/gtk-3.0",
             "dst": "{{@@ d_config_dst @@}}/gtk-3.0"
         },
         "d_blugon": {
-            "src": "{{@@ d_config_src @@}}/blugon",
+            "src": "config/blugon",
             "dst": "{{@@ d_config_dst @@}}/blugon"
         },
 
         # Flexycon
         "f_flex_sync": {
-            "src": "{{@@ d_config_src @@}}/flexycon/sync/config.json",
+            "src": "config/flexycon/sync/config.json",
             "dst": "{{@@ d_config_dst @@}}/flexycon/sync/config.json"
         },
 
         # Linux
         "f_font_config": {
-            "src": "{{@@ d_config_src @@}}/fontconfig/fonts.xml",
+            "src": "config/fontconfig/fonts.xml",
             "dst": "{{@@ d_config_dst @@}}/fontconfig/fonts.conf"
         },
         "f_mimeapps.list": {
-            "src": "{{@@ d_config_src @@}}/mimeapps.list",
+            "src": "config/mimeapps.list",
             "dst": "{{@@ d_config_dst @@}}/mimeapps.list"
         },
 
@@ -633,7 +633,6 @@
             ],
             "variables": {
                 "d_src": "../src",
-                "d_config_src": "config",
                 "d_config_dst": "~/.config",
                 "d_bin_dst": "~/.local/bin",
                 "d_statusbar_src": "../src/statusbar",
