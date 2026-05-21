@@ -284,9 +284,9 @@
         },
 
         # Programs
-        "d_zathura": {
-            "src": "config/zathura",
-            "dst": "{{@@ d_config_dst @@}}/zathura"
+        "d_zathura_config": {
+            "src": "config/zathura/zathura.conf",
+            "dst": "{{@@ d_config_dst @@}}/zathura/zathurarc"
         },
         "d_newsraft": {
             "src": "config/newsraft",
@@ -688,7 +688,7 @@
                 "f_x11_profile",
                 "d_x11",
                 "d_yay",
-                "d_zathura",
+                "d_zathura_config",
 
                 # Share
                 "d_applications",
