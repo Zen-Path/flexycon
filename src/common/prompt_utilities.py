@@ -1,52 +1,202 @@
 import shutil
 import subprocess
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Callable
 
 from common.logger import log
 
 
-class Dmenu:
-    @classmethod
-    def run(
-        cls,
+class BasePrompt(ABC):
+    """Abstract base class defining the prompt interface structure."""
+
+    @staticmethod
+    def format_prompt(prompt: str) -> str:
+        return prompt.strip(" :")
+
+    @staticmethod
+    def format_option(option: str) -> str:
+        return option.strip()
+
+    def _prepare_options(
+        self, options: list[str], default: str | None, is_gui: bool
+    ) -> tuple[list[str], dict[str, str]]:
+        """
+        Internal helper to filter out duplicates, format items, and position the default.
+        Returns a tuple of (list_of_display_options, map_of_display_to_original).
+        """
+
+        if len(options) == 0:
+            return ([], {})
+
+        if default is not None and default not in options:
+            raise ValueError("Default value should be a valid option.")
+
+        mapping: dict[str, str] = {}
+        cleaned_options: list[str] = []
+
+        for option in options:
+            opt_fmt = self.format_option(option)
+            # Filter blank strings and prevent duplicate entries in the display list
+            if opt_fmt and opt_fmt not in mapping:
+                mapping[opt_fmt] = option
+                cleaned_options.append(opt_fmt)
+
+        if default is not None:
+            fmt_default = self.format_option(default)
+
+            # Remove existing default to prevent duplicates during positioning
+            if fmt_default in cleaned_options:
+                cleaned_options.remove(fmt_default)
+
+            # GUI places default first, terminal places default last
+            if is_gui:
+                cleaned_options.insert(0, fmt_default)
+            else:
+                cleaned_options.append(fmt_default)
+
+        return cleaned_options, mapping
+
+    @abstractmethod
+    def prompt(
+        self,
         prompt: str,
-        choices: list[str],
-        case_insensitive: bool = True,
-        list_view_item_count: int = 0,
+        options: list[str],
+        default: str | None = None,
     ) -> str | None:
         """
-        Prompt dmenu with a list of choices.
-
-        NOTE: setting 'list_view_item_count' to '0' disables the vertical list view.
+        Prompts the user with a list of options.
+        Returns the original unformatted string chosen by the user, or the default.
         """
-        prompt_fmt = prompt.strip(" :")
-        cmd = ["dmenu", "-p", prompt_fmt]
+        pass
+
+
+class DmenuPrompt(BasePrompt):
+    """Dmenu implementation of the prompt interface."""
+
+    def prompt(
+        self,
+        prompt: str,
+        options: list[str],
+        default: str | None = None,
+        case_insensitive: bool = True,
+        row_count: int = 0,
+    ) -> str | None:
+        if not options and not default:
+            return None
+
+        display_options, option_map = self._prepare_options(
+            options, default, is_gui=True
+        )
+
+        cmd = ["dmenu", "-p", self.format_prompt(prompt)]
 
         if case_insensitive:
             cmd.append("-i")
 
-        if list_view_item_count != 0:
-            cmd.extend(["-l", str(list_view_item_count)])
-
-        choices_fmt = list(filter(bool, map(str.strip, choices)))
+        if row_count != 0:
+            cmd.extend(["-l", str(row_count)])
 
         try:
             result = subprocess.run(
                 cmd,
-                input="\n".join(choices_fmt),
+                input="\n".join(display_options),
                 capture_output=True,
                 text=True,
             )
-            return result.stdout.strip() if result.returncode == 0 else None
+            if result.returncode == 0:
+                selection = result.stdout.strip()
+                return option_map.get(selection, default)
+            return default
 
         except FileNotFoundError:
             log.error("Binary 'dmenu' not found.")
+            return default
+        except Exception as e:
+            log.error(f"Dmenu command failed: {e}")
+            return default
+
+
+class ChoosePrompt(BasePrompt):
+    """Choose implementation of the prompt interface."""
+
+    def prompt(
+        self,
+        prompt: str,
+        options: list[str],
+        default: str | None = None,
+        row_count: int = 10,
+    ) -> str | None:
+        if not options and not default:
             return None
 
+        display_options, option_map = self._prepare_options(
+            options, default, is_gui=True
+        )
+
+        cmd = ["choose", "-p", self.format_prompt(prompt)]
+
+        if row_count != 0:
+            cmd.extend(["-n", str(row_count)])
+
+        try:
+            result = subprocess.run(
+                cmd,
+                input="\n".join(display_options),
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode == 0:
+                selection = result.stdout.strip()
+                return option_map.get(selection, default)
+            return default
+
+        except FileNotFoundError:
+            log.error("Binary 'choose' not found.")
+            return default
         except Exception as e:
-            log.error(f"Command failed: {e}")
+            log.error(f"Choose command failed: {e}")
+            return default
+
+
+class TerminalPrompt(BasePrompt):
+    """Fallback standard terminal fallback implementation."""
+
+    def prompt(
+        self,
+        prompt: str,
+        options: list[str],
+        default: str | None = None,
+    ) -> str | None:
+        if not options and not default:
             return None
+
+        display_options, option_map = self._prepare_options(
+            options, default, is_gui=False
+        )
+
+        options_str = "\n".join(
+            [f"{i}. {option}" for i, option in enumerate(display_options)]
+        )
+
+        print(f":: {self.format_prompt(prompt)}:\n{options_str}")
+
+        hint = f" [default: {default}]" if default else ""
+        try:
+            user_input = input(f"\n> Select an option{hint}: ").strip()
+        except (KeyboardInterrupt, EOFError):
+            return default
+
+        if not user_input:
+            return default
+
+        if user_input.isdigit():
+            idx = int(user_input) - 1
+            if 0 <= idx < len(display_options):
+                return option_map.get(display_options[idx], default)
+
+        # Allow fallback matching via typed string text
+        return option_map.get(user_input, default)
 
 
 @dataclass
@@ -67,127 +217,81 @@ class PromptOption:
 def prompt_options(
     prompt: str,
     options: list[str],
-    default: int | None = None,
+    default: str | None = None,
     prefer_gui: bool = True,
-    list_view_item_count: int = 0,
-) -> tuple[int, str] | None:
+    row_count: int = 0,
+) -> str | None:
     """
-    Prompts the user to select an option from a list with an optional default.
-
-    Args:
-        prompt: The question to display.
-        options: List of strings to choose from.
-        default: The index of the default option (0-based). Negative indexes are allowed.
-        prefer_gui: Display the options with a GUI or in the terminal
-        list_view_item_count: For Dmenu, how many list items will be displayed at once
-
-    Returns:
-        A tuple of (index, choice_str). If input is empty or invalid,
-        returns the default tuple. Returns None if no default exists.
+    Orchestrates user prompting selection across GUI engines and standard terminal.
     """
-    if not options:
+
+    if not options and not default:
         return None
 
-    # Normalize default index
-    resolved_default = None
-    if default is not None:
-        if 0 <= default < len(options):
-            resolved_default = default
-        elif -len(options) <= default < 0:
-            resolved_default = len(options) + default
-
-    # Display hint as 1-based for the user (-1 on a list of 3 becomes [3])
-    hint = f" [{resolved_default + 1}]" if resolved_default is not None else ""
-
-    prompt_fmt = prompt.strip(" :")
-
     if prefer_gui:
-        selection = None
-
         if shutil.which("dmenu"):
-            selection = Dmenu.run(
-                prompt=prompt_fmt,
-                choices=options,
-                list_view_item_count=list_view_item_count,
+            return DmenuPrompt().prompt(
+                prompt=prompt,
+                options=options,
+                default=default,
+                row_count=row_count,
+            )
+        if shutil.which("choose"):
+            return ChoosePrompt().prompt(
+                prompt=prompt,
+                options=options,
+                default=default,
+                row_count=row_count,
             )
 
-        # TODO: implement an interface
-        if shutil.which("choose"):
-            try:
-                selection = subprocess.run(
-                    "choose",
-                    input="\n".join(options),
-                    capture_output=True,
-                    text=True,
-                ).stdout
-            except Exception as e:
-                log.error(e)
-                pass
-
-        if selection:
-            try:
-                # Find the index of the selected string
-                idx = options.index(selection)
-                return (idx, options[idx])
-            except ValueError:
-                pass
-
-        # If user hit Esc or selection failed, try default
-        if resolved_default is not None:
-            return (resolved_default, options[resolved_default])
-
-        if selection is None:
-            return None
-
-    print(f":: {prompt_fmt}:")
-    for i, option in enumerate(options, 1):
-        suffix = " (default)" if (i - 1) == resolved_default else ""
-        print(f"{i}. {option}{suffix}")
-
-    try:
-        user_input = input(f"\n> Select an option{hint}: ").strip()
-    except (KeyboardInterrupt, EOFError):
-        user_input = ""
-
-    # Handle empty input
-    if not user_input and resolved_default is not None:
-        return (resolved_default, options[resolved_default])
-
-    # Handle numeric input
-    if user_input.isdigit():
-        idx = int(user_input) - 1
-        if 0 <= idx < len(options):
-            return (idx, options[idx])
-
-    # Handle invalid input
-    if resolved_default is not None:
-        return (resolved_default, options[resolved_default])
-
-    return None
+    return TerminalPrompt().prompt(
+        prompt=prompt,
+        options=options,
+        default=default,
+    )
 
 
-def prompt_bool(prompt: str, default: bool | None = None) -> bool | None:
+def prompt_bool(
+    prompt: str,
+    default: bool | None = None,
+    prefer_gui: bool = False,
+) -> bool | None:
     """
     Prompts the user for a yes/no response.
-
-    Args:
-        prompt: The question to display.
-        default: The value to return if input is invalid or interrupted.
 
     Returns:
         True if 'y', 'yes', '1', False if 'n', 'no', '0', otherwise the default value.
     """
-    if default is True:
-        hint = "Y/n"
-    elif default is False:
-        hint = "y/N"
-    else:
-        hint = "y/n"
 
-    try:
-        user_input = input(f"{prompt} ({hint}): ").strip().lower()
-    except (KeyboardInterrupt, EOFError):
-        return default
+    if prefer_gui:
+        gui_default = None
+        if default is True:
+            gui_default = "Yes"
+        elif default is False:
+            gui_default = "No"
+
+        user_input = prompt_options(
+            prompt=prompt,
+            options=["Yes", "No"],
+            default=gui_default,
+        )
+
+        if user_input is None:
+            return default
+
+        user_input = user_input.lower()
+    else:
+        if default is True:
+            hint = "Y/n"
+        elif default is False:
+            hint = "y/N"
+        else:
+            hint = "y/n"
+
+        try:
+            user_input = input(f"{prompt} ({hint}): ").strip().lower()
+        except (KeyboardInterrupt, EOFError):
+            return default
 
     if user_input in ("y", "yes", "1"):
         return True

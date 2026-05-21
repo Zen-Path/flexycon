@@ -50,12 +50,10 @@ def main() -> None:
     current_layout = get_current_layout()
     formatted_layouts = format_layouts(available_layouts, KB_LAYOUTS_FULL_NAME)
 
-    prompt_result = prompt_layout(formatted_layouts, current_layout)
-    if not prompt_result:
+    layout = prompt_layout(formatted_layouts, current_layout)
+    if not layout:
         log.warning("No layout chosen.")
         sys.exit(1)
-
-    _idx, layout = prompt_result
 
     layout_code = layout.split(" - ")[0]
     if layout_code not in available_layouts:

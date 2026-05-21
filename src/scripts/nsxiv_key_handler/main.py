@@ -34,14 +34,14 @@ def get_help_text():
 
 def action_interactive_trash(paths: list[Path]):
     for path in paths:
-        prompt_result = prompt_options(
+        choice = prompt_options(
             prompt=f"Confirm trash {str(path)!r}?", options=["Yes", "No", "Cancel"]
         )
 
-        if prompt_result is None:
+        if choice is None:
             continue
 
-        _idx, choice = prompt_result
+        choice = choice.lower()
 
         if choice == "cancel":
             break
@@ -67,15 +67,11 @@ def action_flip(paths: list[Path]):
 
 def action_group(paths: list[Path]):
     default_name = datetime.now().strftime("%F_%T")
-    prompt_result = prompt_options(
-        prompt="Group file(s) where?", options=[default_name]
-    )
+    choice = prompt_options(prompt="Group file(s) where?", options=[default_name])
 
-    if prompt_result is None:
+    if choice is None:
         log.error("Could not group files due to empty selection.")
         return
-
-    _idx, choice = prompt_result
 
     if not choice:
         NotificationSystem.run("No directory entered, cancelled.")

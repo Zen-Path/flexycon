@@ -18,15 +18,13 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
     result = prompt_options(
         prompt="System Action",
         options=list(lookup.keys()),
-        list_view_item_count=-1,
+        row_count=-1,
     )
 
     if result is None:
         return None
 
-    _idx, choice = result
-
-    return lookup.get(choice)
+    return lookup.get(result)
 
 
 def execute_special_action(action_func: Callable[[], None] | None = None):

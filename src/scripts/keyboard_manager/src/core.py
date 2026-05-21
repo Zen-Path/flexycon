@@ -49,13 +49,13 @@ def format_layouts(
 
 def prompt_layout(
     formatted_layouts: list[str], current_layout: str | None
-) -> tuple[int, str] | None:
+) -> str | None:
     """Prompt the user to select a layout, displaying the current layout."""
     current_layout_fmt = f" (current: {current_layout})" if current_layout else ""
     return prompt_options(
         prompt=f"Select Keyboard Layout{current_layout_fmt}",
         options=formatted_layouts,
-        list_view_item_count=15,
+        row_count=15,
     )
 
 

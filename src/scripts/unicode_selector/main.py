@@ -54,30 +54,26 @@ def main() -> None:
     log.debug(f"char_categories: {char_categories}")
 
     # Prompt user for a category or common emojis
-    prompt_result = prompt_options(
+    selection = prompt_options(
         prompt="Emoji",
         options=char_categories + format_char_entries(CHARACTERS["emoji"]),
-        list_view_item_count=30,
+        row_count=30,
     )
 
-    if prompt_result is None:
+    if selection is None:
         log.error("Selection is empty.")
         sys.exit(1)
 
-    _idx, selection = prompt_result
-
     if selection in char_categories:
-        prompt_result = prompt_options(
+        selection = prompt_options(
             prompt="Emoji",
             options=format_char_entries(CHARACTERS[selection]),
-            list_view_item_count=30,
+            row_count=30,
         )
 
-        if prompt_result is None:
+        if selection is None:
             log.error("Selection is empty.")
             sys.exit(1)
-
-        _idx, selection = prompt_result
 
     selection_parts = selection.split(" - ", maxsplit=1)
     log.info(f"Selection parts: {selection_parts}")

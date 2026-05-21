@@ -26,15 +26,13 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
     result = prompt_options(
         prompt="Screenshot",
         options=display_list,
-        list_view_item_count=-1,
+        row_count=-1,
     )
 
     if result is None:
         return None
 
-    _idx, choice = result
-
-    return lookup.get(choice)
+    return lookup.get(result)
 
 
 def build_parser() -> argparse.ArgumentParser:

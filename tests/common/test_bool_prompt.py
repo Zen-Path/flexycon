@@ -1,4 +1,5 @@
 import pytest
+
 from common.prompt_utilities import prompt_bool
 
 
