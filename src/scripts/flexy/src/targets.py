@@ -14,7 +14,7 @@ from scripts.flexy.src.helpers import (
     copy_dotfiles_from_temp,
     get_dotdrop_profile,
     init_submodules,
-    install_temp_profile,
+    install_dotfiles_to_temp,
     remove_flexycon_data,
     upgrade_yazi_packages,
 )
@@ -114,7 +114,7 @@ def install():
     # shell profile, or we install the full profile to a temporary directory
     # and manually copy the shell config to the right place. The latter
     # has the advantage that we can set per-profile config in the shell config.
-    temp_path = install_temp_profile()
+    temp_path = install_dotfiles_to_temp(profile)
     copy_dotfiles_from_temp(temp_path)
 
     # TODO: add windows and other shells support

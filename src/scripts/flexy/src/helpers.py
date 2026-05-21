@@ -92,9 +92,13 @@ def get_dotdrop_profile() -> str | None:
     return profile
 
 
-def install_temp_profile() -> Path:
-    """Install dotdrop profile to a temporary directory and return the temp path."""
-    result = run_cmd([f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"])
+def install_dotfiles_to_temp(profile: str | None) -> Path:
+    """Install dotdrop profile's dotfiles to a temp directory and return the its path."""
+    cmd = [f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"]
+    if profile:
+        cmd.extend(["--profile", profile])
+
+    result = run_cmd(cmd)
     if not result.success:
         log.error(f"Dotdrop output:\n{result.output}")
         raise RuntimeError("Installing temporary dotdrop profile failed.")
