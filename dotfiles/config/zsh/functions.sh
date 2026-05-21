@@ -107,3 +107,41 @@ function penva() {
     source "$activate_script"
     printf "Virtual environment activated; found at '%s'.\n" "$activate_script"
 }
+
+# Pip Freeze to Requirements
+function pfr() {
+    if ! command -v pip &> /dev/null; then
+        echo "Error: 'pip' command not found." >&2
+        return 1
+    fi
+
+    # Allow a custom filename
+    local outfile="${1:-requirements.txt}"
+
+    # Guard against accidentally overwriting an existing file
+    if [[ -f "$outfile" ]]; then
+        printf "'%s' already exists. Overwrite? (y/N): " "$outfile"
+        read -r answer
+        if [[ "$answer" != [yY] && "$answer" != [yY][eE][sS] ]]; then
+            echo "Operation cancelled."
+            return 0
+        fi
+    fi
+
+    if pip freeze | grep -v "^-e" > "$outfile"; then
+        printf "Successfully saved requirements to '%s'\n" "$outfile"
+    else
+        echo "Error: Failed to generate requirements." >&2
+        return 1
+    fi
+}
+
+# Python ENVironment Deactivate
+function penvd() {
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        deactivate
+        echo "Deactivated Python virtual environment."
+    else
+        return 0
+    fi
+}

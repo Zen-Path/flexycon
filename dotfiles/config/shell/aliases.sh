@@ -82,12 +82,6 @@ alias penvc='pyb -m venv .venv'
 alias penvc='py -m venv .venv'
 # {%@@- endif +@@%}
 
-# Python ENVironment Deactivate
-alias penvd='deactivate && echo "Deactivated python environment."'
-
-# Pip Freeze to Requirements
-alias pfr='pip freeze | grep -v "^-e" > requirements.txt'
-
 # Pip Install from Requirements
 alias pir='pip install -r requirements.txt'
 
