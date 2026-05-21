@@ -2,6 +2,7 @@ from argparse import ArgumentTypeError
 from datetime import datetime
 
 import pytest
+
 from common.args import parse_abs_date
 
 

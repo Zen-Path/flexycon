@@ -2,6 +2,7 @@ from argparse import ArgumentTypeError, Namespace
 from datetime import datetime, timedelta
 
 import pytest
+
 from common.args import resolve_date
 
 

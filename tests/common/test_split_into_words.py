@@ -1,4 +1,5 @@
 import pytest
+
 from common.string_utilities import split_into_words
 
 
