@@ -250,6 +250,18 @@
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/cursor_blur.lua"
         },
 
+        ## nsxiv
+        "f_nsxiv_exec_key_handler": {
+            "src": "{{@@ d_src @@}}/scripts/nsxiv_key_handler/main.py",
+            "dst": "{{@@ d_config_dst @@}}/nsxiv/exec/key-handler",
+            "chmod": "755"
+        },
+        "f_nsxiv_rifle": {
+            "src": "deps/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle.sh",
+            "dst": "{{@@ d_bin_dst @@}}/nsxiv-rifle",
+            "chmod": "755"
+        },
+
         "d_yt_dlp": {
             "src": "{{@@ d_config_src @@}}/yt-dlp",
             "dst": "{{@@ d_config_dst @@}}/yt-dlp"
@@ -323,85 +335,10 @@
             "dst": "~/.local/share/applications"
         },
 
-        # Scripts
-        # Note: the dotfile key NEEDS to match the script name (without the prefix, of course)
+        # Bins
         "f_compiler": {
             "src": "bin/compiler.sh",
             "dst": "{{@@ d_bin_dst @@}}/compiler",
-            "chmod": "755"
-        },
-        "f_continuous_diff": {
-            "src": "{{@@ d_src @@}}/scripts/continuous_diff/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/continuous_diff",
-            "chmod": "755"
-        },
-        "f_getkeys": {
-            "src": "bin/getkeys.sh",
-            "dst": "{{@@ d_bin_dst @@}}/getkeys",
-            "chmod": "755"
-        },
-        "f_git_logs": {
-            "src": "{{@@ d_src @@}}/scripts/git_logs/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/git_logs",
-            "chmod": "755"
-        },
-        "f_if_installed": {
-            "src": "bin/if_installed.sh",
-            "dst": "{{@@ d_bin_dst @@}}/if_installed",
-            "chmod": "755"
-        },
-        "f_imgconv": {
-            "src": "bin/imgconv.sh",
-            "dst": "{{@@ d_bin_dst @@}}/imgconv",
-            "chmod": "755"
-        },
-        "f_journal_entry": {
-            "src": "{{@@ d_src @@}}/scripts/journal_entry/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/journal_entry",
-            "chmod": "755"
-        },
-        "f_jsonc_to_json": {
-            "src": "{{@@ d_src @@}}/scripts/jsonc_to_json/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/jsonc_to_json",
-            "chmod": "755"
-        },
-        "f_noisereduce": {
-            "src": "bin/noisereduce.sh",
-            "dst": "{{@@ d_bin_dst @@}}/noisereduce",
-            "chmod": "755"
-        },
-        "f_nsxiv_exec_key_handler": {
-            "src": "{{@@ d_src @@}}/scripts/nsxiv_key_handler/main.py",
-            "dst": "{{@@ d_config_dst @@}}/nsxiv/exec/key-handler"
-        },
-        "f_rclone_wrapper": {
-            "src": "{{@@ d_src @@}}/scripts/rclone_wrapper/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/rclone_wrapper",
-            "chmod": "755"
-        },
-        "f_file_renamer": {
-            "src": "{{@@ d_src @@}}/scripts/file_renamer/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/file_renamer",
-            "chmod": "755"
-        },
-        "f_flexy": {
-            "src": "{{@@ d_src @@}}/scripts/flexy/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/flexy",
-            "chmod": "755"
-        },
-        "f_sdir": {
-            "src": "bin/sdir.sh",
-            "dst": "{{@@ d_bin_dst @@}}/sdir",
-            "chmod": "755"
-        },
-        "f_user_shortcuts": {
-            "src": "{{@@ d_src @@}}/scripts/user_shortcuts/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/user_shortcuts",
-            "chmod": "755"
-        },
-        "f_tag": {
-            "src": "bin/tag.sh",
-            "dst": "{{@@ d_bin_dst @@}}/tag",
             "chmod": "755"
         },
         "f_displayselect": {
@@ -429,9 +366,19 @@
             "dst": "{{@@ d_bin_dst @@}}/env_cmd_runner",
             "chmod": "755"
         },
-        "f_keyboard_manager": {
-            "src": "{{@@ d_src @@}}/scripts/keyboard_manager/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/keyboard_manager",
+        "f_getkeys": {
+            "src": "bin/getkeys.sh",
+            "dst": "{{@@ d_bin_dst @@}}/getkeys",
+            "chmod": "755"
+        },
+        "f_if_installed": {
+            "src": "bin/if_installed.sh",
+            "dst": "{{@@ d_bin_dst @@}}/if_installed",
+            "chmod": "755"
+        },
+        "f_imgconv": {
+            "src": "bin/imgconv.sh",
+            "dst": "{{@@ d_bin_dst @@}}/imgconv",
             "chmod": "755"
         },
         "f_mounter": {
@@ -439,14 +386,9 @@
             "dst": "{{@@ d_bin_dst @@}}/mounter",
             "chmod": "755"
         },
-        "f_unmounter": {
-            "src": "bin/unmounter.sh",
-            "dst": "{{@@ d_bin_dst @@}}/unmounter",
-            "chmod": "755"
-        },
-        "f_nsxiv_rifle": {
-            "src": "deps/nsxiv-extra/scripts/nsxiv-rifle/nsxiv-rifle.sh",
-            "dst": "{{@@ d_bin_dst @@}}/nsxiv-rifle",
+        "f_noisereduce": {
+            "src": "bin/noisereduce.sh",
+            "dst": "{{@@ d_bin_dst @@}}/noisereduce",
             "chmod": "755"
         },
         "f_pkgsize": {
@@ -464,14 +406,9 @@
             "dst": "{{@@ d_bin_dst @@}}/remaps",
             "chmod": "755"
         },
-        "f_screenshot_utility": {
-            "src": "{{@@ d_src @@}}/scripts/screenshot_utility/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/screenshot_utility",
-            "chmod": "755"
-        },
-        "f_unicode_selector": {
-            "src": "{{@@ d_src @@}}/scripts/unicode_selector/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/unicode_selector",
+        "f_sdir": {
+            "src": "bin/sdir.sh",
+            "dst": "{{@@ d_bin_dst @@}}/sdir",
             "chmod": "755"
         },
         "f_setbg": {
@@ -479,9 +416,77 @@
             "dst": "{{@@ d_bin_dst @@}}/setbg",
             "chmod": "755"
         },
+        "f_tag": {
+            "src": "bin/tag.sh",
+            "dst": "{{@@ d_bin_dst @@}}/tag",
+            "chmod": "755"
+        },
+        "f_unmounter": {
+            "src": "bin/unmounter.sh",
+            "dst": "{{@@ d_bin_dst @@}}/unmounter",
+            "chmod": "755"
+        },
+
+        # Scripts
+        # Note: the dotfile key NEEDS to match the script name (without the prefix, of course)
+        "f_continuous_diff": {
+            "src": "{{@@ d_src @@}}/scripts/continuous_diff/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/continuous_diff",
+            "chmod": "755"
+        },
+        "f_file_renamer": {
+            "src": "{{@@ d_src @@}}/scripts/file_renamer/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/file_renamer",
+            "chmod": "755"
+        },
+        "f_flexy": {
+            "src": "{{@@ d_src @@}}/scripts/flexy/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/flexyconsssss",
+            "chmod": "755"
+        },
+        "f_git_logs": {
+            "src": "{{@@ d_src @@}}/scripts/git_logs/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/git_logs",
+            "chmod": "755"
+        },
+        "f_journal_entry": {
+            "src": "{{@@ d_src @@}}/scripts/journal_entry/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/journal_entry",
+            "chmod": "755"
+        },
+        "f_jsonc_to_json": {
+            "src": "{{@@ d_src @@}}/scripts/jsonc_to_json/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/jsonc_to_json",
+            "chmod": "755"
+        },
+        "f_keyboard_manager": {
+            "src": "{{@@ d_src @@}}/scripts/keyboard_manager/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/keyboard_manager",
+            "chmod": "755"
+        },
+        "f_rclone_wrapper": {
+            "src": "{{@@ d_src @@}}/scripts/rclone_wrapper/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/rclone_wrapper",
+            "chmod": "755"
+        },
+        "f_screenshot_utility": {
+            "src": "{{@@ d_src @@}}/scripts/screenshot_utility/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/screenshot_utility",
+            "chmod": "755"
+        },
         "f_system_actions": {
             "src": "{{@@ d_src @@}}/scripts/system_actions/main.py",
             "dst": "{{@@ d_bin_dst @@}}/system_actions",
+            "chmod": "755"
+        },
+        "f_unicode_selector": {
+            "src": "{{@@ d_src @@}}/scripts/unicode_selector/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/unicode_selector",
+            "chmod": "755"
+        },
+        "f_user_shortcuts": {
+            "src": "{{@@ d_src @@}}/scripts/user_shortcuts/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/user_shortcuts",
             "chmod": "755"
         },
 
@@ -501,14 +506,14 @@
             "dst": "{{@@ d_statusbar_dst @@}}/sb-network",
             "chmod": "755"
         },
+        "f_sb_recording": {
+            "src": "{{@@ d_statusbar_src @@}}/recording/main.py",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-recording",
+            "chmod": "755"
+        },
         "f_sb_rss": {
             "src": "{{@@ d_statusbar_src @@}}/rss/main.py",
             "dst": "{{@@ d_statusbar_dst @@}}/sb-rss",
-            "chmod": "755"
-        },
-        "f_sb_todos": {
-            "src": "{{@@ d_statusbar_src @@}}/todos/main.py",
-            "dst": "{{@@ d_statusbar_dst @@}}/sb-todos",
             "chmod": "755"
         },
         "f_sb_sound": {
@@ -516,9 +521,9 @@
             "dst": "{{@@ d_statusbar_dst @@}}/sb-sound",
             "chmod": "755"
         },
-        "f_sb_recording": {
-            "src": "{{@@ d_statusbar_src @@}}/recording/main.py",
-            "dst": "{{@@ d_statusbar_dst @@}}/sb-recording",
+        "f_sb_todos": {
+            "src": "{{@@ d_statusbar_src @@}}/todos/main.py",
+            "dst": "{{@@ d_statusbar_dst @@}}/sb-todos",
             "chmod": "755"
         },
     },
@@ -567,6 +572,12 @@
                 "f_mpv_plugin_gallery_view_scripts_gallery_thumbgen",
                 "f_mpv_plugin_gallery_view_scripts_playlist_view",
                 "f_mpv_plugin_cursor_blur",
+            ],
+        },
+        "meta_nsxiv": {
+            "dotfiles": [
+                "f_nsxiv_exec_key_handler",
+                "f_nsxiv_rifle",
             ],
         },
 
@@ -642,7 +653,8 @@
         "meta_linux": {
             "include": [
                 "meta_common",
-                "meta_unix"
+                "meta_unix",
+                "meta_nsxiv",
             ],
             "dotfiles": [
                 # Scripts
@@ -653,8 +665,6 @@
                 "f_env_cmd_runner",
                 "f_mounter",
                 "f_unmounter",
-                "f_nsxiv_exec_key_handler",
-                "f_nsxiv_rifle",
                 "f_remapd",
                 "f_remaps",
                 "f_setbg",
