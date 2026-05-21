@@ -308,9 +308,9 @@
         },
 
         # Linux
-        "d_fontconfig": {
-            "src": "{{@@ d_config_src @@}}/fontconfig",
-            "dst": "{{@@ d_config_dst @@}}/fontconfig"
+        "f_font_config": {
+            "src": "{{@@ d_config_src @@}}/fontconfig/fonts.xml",
+            "dst": "{{@@ d_config_dst @@}}/fontconfig/fonts.conf"
         },
         "f_mimeapps.list": {
             "src": "{{@@ d_config_src @@}}/mimeapps.list",
@@ -665,7 +665,7 @@
                 "d_alacritty",
                 "d_blugon",
                 "f_dunst_config",
-                "d_fontconfig",
+                "f_font_config",
                 "d_gtk_3",
                 "f_mimeapps.list",
                 "d_pipewire",
