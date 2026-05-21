@@ -108,8 +108,8 @@ def install_temp_profile() -> Path:
     return temp_path
 
 
-def copy_shell_profile_from_temp(temp_path: Path):
-    """Copy .zprofile from the temporary dotdrop install to the user's home."""
+def copy_dotfiles_from_temp(temp_path: Path):
+    """Copy .zprofile from a temp directory with dotfiles to the user's home."""
     home = Path.home()
     src = temp_path / home.relative_to(home.anchor) / ".zprofile"
     dst = home / ".zprofile"

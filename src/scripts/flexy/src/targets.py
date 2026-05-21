@@ -11,7 +11,7 @@ from scripts.flexy.src.helpers import (
     VENV_BIN,
     VENV_DIR,
     clean_precommit,
-    copy_shell_profile_from_temp,
+    copy_dotfiles_from_temp,
     get_dotdrop_profile,
     init_submodules,
     install_temp_profile,
@@ -115,7 +115,7 @@ def install():
     # and manually copy the shell config to the right place. The latter
     # has the advantage that we can set per-profile config in the shell config.
     temp_path = install_temp_profile()
-    copy_shell_profile_from_temp(temp_path)
+    copy_dotfiles_from_temp(temp_path)
 
     # TODO: add windows and other shells support
     cmd = (
