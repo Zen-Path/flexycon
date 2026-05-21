@@ -27,6 +27,18 @@ packages = [
         description="Dmenu-like utility for macOS",
     ),
     Package(
+        identifier="https://github.com/Zen-Path/dmenu-flexipatch",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "dmenu-flexipatch"],
+        description="A dmenu build with preprocessor directives to decide which patches to include during build time.",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="dunst",
+        managers=[Yay],
+        description="A highly configurable and lightweight notification daemon",
+    ),
+    Package(
         identifier="dust",
         managers=[Brew, Yay],
         description="More intuitive version of du in rust",
@@ -53,6 +65,12 @@ packages = [
         description="Free and open source web browser",
     ),
     Package(
+        identifier="https://github.com/Zen-Path/flexycon-private",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "flexycon-private"],
+        description="Private config",
+    ),
+    Package(
         identifier="fzf",
         managers=[Brew, Yay],
         description="Fuzzy finder in the terminal",
@@ -66,6 +84,11 @@ packages = [
         identifier="git",
         managers=[Brew, Yay],
         description="Distributed revision control system",
+    ),
+    Package(
+        identifier="gruvbox-dark-gtk",
+        managers=[Yay],
+        description="A gruvbox dark theme. Supports GTK 2.0 and 3.0",
     ),
     Package(
         identifier="imagemagick",
@@ -82,6 +105,17 @@ packages = [
         managers=[Brew],
         is_gui=True,
         description="GPU-based terminal emulator",
+    ),
+    Package(
+        identifier="maim",
+        managers=[Yay],
+        description="maim (make image) makes an image out of the given area on the given X screen. Defaults to the whole screen",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/media-server",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "media-server"],
+        description="Local media server to download and manage files",
     ),
     Package(
         identifier="mpv",
@@ -105,9 +139,33 @@ packages = [
         description="JS platform built on V8 to build network applications",
     ),
     Package(
+        identifier="https://github.com/Zen-Path/nsxiv",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "nsxiv"],
+        description="Neo Simple X Image Viewer https://nsxiv.codeberg.page.",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="https://github.com/Zen-Path/nsxiv-extra",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "nsxiv-extra"],
+        description="Community patches, scripts, tips and tricks for nsxiv.",
+        condition=display_server == "X11",
+    ),
+    Package(
+        identifier="pamixer",
+        managers=[Yay],
+        description="Pulseaudio command-line mixer like amixer",
+    ),
+    Package(
         identifier="prettier",
         managers=[Brew, Yay],
         description="Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML",
+    ),
+    Package(
+        identifier="pulsemixer",
+        managers=[Yay],
+        description="cli and curses mixer for pulseaudio",
     ),
     Package(
         identifier="rclone",
@@ -135,6 +193,13 @@ packages = [
         description="Simple hotkey-daemon for macOS",
     ),
     Package(
+        identifier="https://github.com/Zen-Path/slock-flexipatch",
+        managers=[Git],
+        destination=["$XDG_SRC_HOME", "slock-flexipatch"],
+        description="An slock build with preprocessor directives to decide which patches to include during build time.",
+        condition=display_server == "X11",
+    ),
+    Package(
         identifier="sqlite",
         managers=[Brew, Yay],
         description="Command-line interface for SQLite",
@@ -155,6 +220,11 @@ packages = [
         description="TOML toolkit written in Rust",
     ),
     Package(
+        identifier="taskwarrior-tui",
+        managers=[Yay],
+        description="a terminal user interface for taskwarrior",
+    ),
+    Package(
         identifier="telegram",
         # TODO: Installing telegram through the website results in Telegram Desktop,
         # which has more features than Telegram for Mac
@@ -163,9 +233,24 @@ packages = [
         description="Messaging app with a focus on speed and security",
     ),
     Package(
+        identifier="trash-cli",
+        managers=[Yay],
+        description="a cli system trash manager, alternative to rm and trash-cli",
+    ),
+    Package(
         identifier="tree",
         managers=[Brew, Yay],
         description="Display directories as trees (with optional color/HTML output)",
+    ),
+    Package(
+        identifier="ueberzugpp",
+        managers=[Yay],
+        description="Display images in the terminal (drop-in replacement for ueberzug written in C++)",
+    ),
+    Package(
+        identifier="unzip",
+        managers=[Yay],
+        description="Extraction utility for .zip compressed archives",
     ),
     # TODO: implement per-manager identifiers
     Package(
@@ -181,80 +266,6 @@ packages = [
         managers=[Yay],
         is_gui=True,
         description="GUI code editor developed by Microsoft",
-    ),
-    Package(
-        identifier="yazi",
-        managers=[Brew, Yay],
-        description="Blazing fast terminal file manager written in Rust, based on async I/O",
-    ),
-    Package(
-        identifier="yt-dlp",
-        managers=[Brew, Yay],
-        description="Feature-rich command-line audio/video downloader",
-    ),
-    Package(
-        identifier="zip",
-        managers=[Brew, Yay],
-        description="Compression and file packaging/archive utility",
-    ),
-    Package(
-        name="Zsh Fast Syntax Highlighting",
-        identifier="zsh-syntax-highlighting",
-        managers=[Brew],
-        description="Feature-rich syntax highlighting for Zsh",
-        condition=os.environ["SHELL"] == "/bin/zsh",
-    ),
-    Package(
-        name="Zsh Fast Syntax Highlighting Linux",
-        identifier="zsh-fast-syntax-highlighting-git",
-        managers=[Yay],
-        description="Feature-rich syntax highlighting for Zsh",
-        condition=os.environ["SHELL"] == "/usr/bin/zsh",
-    ),
-    Package(
-        identifier="dunst",
-        managers=[Yay],
-        description="A highly configurable and lightweight notification daemon",
-    ),
-    Package(
-        identifier="gruvbox-dark-gtk",
-        managers=[Yay],
-        description="A gruvbox dark theme. Supports GTK 2.0 and 3.0",
-    ),
-    Package(
-        identifier="maim",
-        managers=[Yay],
-        description="maim (make image) makes an image out of the given area on the given X screen. Defaults to the whole screen",
-    ),
-    Package(
-        identifier="pamixer",
-        managers=[Yay],
-        description="Pulseaudio command-line mixer like amixer",
-    ),
-    Package(
-        identifier="pulsemixer",
-        managers=[Yay],
-        description="cli and curses mixer for pulseaudio",
-    ),
-    Package(
-        identifier="taskwarrior-tui",
-        managers=[Yay],
-        description="a terminal user interface for taskwarrior",
-    ),
-    Package(
-        identifier="trash-cli",
-        managers=[Yay],
-        description="a cli system trash manager, alternative to rm and trash-cli",
-    ),
-    Package(
-        identifier="ueberzugpp",
-        managers=[Yay],
-        description="Display images in the terminal (drop-in replacement for ueberzug written in C++)",
-    ),
-    Package(
-        identifier="unzip",
-        managers=[Yay],
-        description="Extraction utility for .zip compressed archives",
     ),
     Package(
         identifier="xcompmgr",
@@ -293,53 +304,42 @@ packages = [
         condition=display_server == "X11",
     ),
     Package(
-        identifier="zathura-pdf-poppler",
-        managers=[Yay],
-        description="PDF support for zathura (poppler backend)",
-    ),
-    Package(
         identifier="asmvik/formulae/yabai",
         managers=[Brew],
         description="A tiling window manager for macOS based on binary space partitioning",
     ),
     Package(
-        identifier="https://github.com/Zen-Path/flexycon-private",
-        managers=[Git],
-        destination=["$XDG_SRC_HOME", "flexycon-private"],
-        description="Private config",
+        identifier="yazi",
+        managers=[Brew, Yay],
+        description="Blazing fast terminal file manager written in Rust, based on async I/O",
     ),
     Package(
-        identifier="https://github.com/Zen-Path/media-server",
-        managers=[Git],
-        destination=["$XDG_SRC_HOME", "media-server"],
-        description="Local media server to download and manage files",
+        identifier="yt-dlp",
+        managers=[Brew, Yay],
+        description="Feature-rich command-line audio/video downloader",
     ),
     Package(
-        identifier="https://github.com/Zen-Path/dmenu-flexipatch",
-        managers=[Git],
-        destination=["$XDG_SRC_HOME", "dmenu-flexipatch"],
-        description="A dmenu build with preprocessor directives to decide which patches to include during build time.",
-        condition=display_server == "X11",
+        identifier="zathura-pdf-poppler",
+        managers=[Yay],
+        description="PDF support for zathura (poppler backend)",
     ),
     Package(
-        identifier="https://github.com/Zen-Path/slock-flexipatch",
-        managers=[Git],
-        destination=["$XDG_SRC_HOME", "slock-flexipatch"],
-        description="An slock build with preprocessor directives to decide which patches to include during build time.",
-        condition=display_server == "X11",
+        identifier="zip",
+        managers=[Brew, Yay],
+        description="Compression and file packaging/archive utility",
     ),
     Package(
-        identifier="https://github.com/Zen-Path/nsxiv",
-        managers=[Git],
-        destination=["$XDG_SRC_HOME", "nsxiv"],
-        description="Neo Simple X Image Viewer https://nsxiv.codeberg.page.",
-        condition=display_server == "X11",
+        name="Zsh Fast Syntax Highlighting",
+        identifier="zsh-syntax-highlighting",
+        managers=[Brew],
+        description="Feature-rich syntax highlighting for Zsh",
+        condition=os.environ["SHELL"] == "/bin/zsh",
     ),
     Package(
-        identifier="https://github.com/Zen-Path/nsxiv-extra",
-        managers=[Git],
-        destination=["$XDG_SRC_HOME", "nsxiv-extra"],
-        description="Community patches, scripts, tips and tricks for nsxiv.",
-        condition=display_server == "X11",
+        name="Zsh Fast Syntax Highlighting Linux",
+        identifier="zsh-fast-syntax-highlighting-git",
+        managers=[Yay],
+        description="Feature-rich syntax highlighting for Zsh",
+        condition=os.environ["SHELL"] == "/usr/bin/zsh",
     ),
 ]
