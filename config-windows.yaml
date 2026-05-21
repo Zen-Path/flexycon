@@ -66,7 +66,6 @@ dotfiles:
         src: config/bottom/bottom.toml
         dst: "{{@@ d_app_data @@}}/bottom/bottom.toml"
 
-
     # File Manager
     f_yazi_config:
         src: config/yazi/yazi.toml
@@ -145,7 +144,6 @@ profiles:
             - d_yazi_plugin_custom_rename
             - d_yazi_plugin_custom_search
             - d_yazi_plugin_parent_arrow
-
 
     # Actual Profiles
 
