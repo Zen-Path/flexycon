@@ -50,6 +50,8 @@ def main() -> None:
 
     setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
 
+    row_count = 20
+
     char_categories = list(CHARACTERS.keys())
     log.debug(f"char_categories: {char_categories}")
 
@@ -57,7 +59,7 @@ def main() -> None:
     selection = prompt_options(
         prompt="Emoji",
         options=char_categories + format_char_entries(CHARACTERS["emoji"]),
-        row_count=30,
+        row_count=row_count,
     )
 
     if selection is None:
@@ -68,7 +70,7 @@ def main() -> None:
         selection = prompt_options(
             prompt="Emoji",
             options=format_char_entries(CHARACTERS[selection]),
-            row_count=30,
+            row_count=row_count,
         )
 
         if selection is None:
