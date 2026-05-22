@@ -145,12 +145,23 @@ def clean():
             "htmlcov",
             ".DS_Store",
         },
-        global_excludes={".git", "node_modules", ".venv"},
+        global_excludes={
+            ".git",
+            ".venv",
+            "node_modules",
+            "deps",
+        },
     )
 
     log.info("🧹 Removing empty directories...")
     remove_empty_dirs(
-        global_excludes={".git", "__pycache__", "node_modules", ".venv"},
+        global_excludes={
+            ".git",
+            ".venv",
+            "__pycache__",
+            "node_modules",
+            "deps",
+        },
         protected_roots=None,
     )
 
@@ -162,7 +173,13 @@ def uninstall():
 
     log.info("🔪 Removing uninstall targets...")
     remove_files_by_pattern(
-        patterns={".venv", "node_modules"}, global_excludes={".git"}
+        patterns={
+            ".venv",
+            "node_modules",
+        },
+        global_excludes={
+            ".git",
+        },
     )
 
     remove_flexycon_data()
