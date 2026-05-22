@@ -1,9 +1,10 @@
+from common.variables import (
+    FLEXYCON_HOME,
+    UNIVERSITY_HOME,
+)
 from scripts.git_logs.src.core import GitRepo
 
-src_dir = "$XDG_SRC_HOME"
-
 GIT_REPOS = [
-    GitRepo("University", ["$HOME", "University"]),
-    # Source Repos
-    GitRepo("flexycon", [src_dir, "flexycon"]),
+    GitRepo("University", UNIVERSITY_HOME),
+    GitRepo("flexycon", FLEXYCON_HOME),
 ]

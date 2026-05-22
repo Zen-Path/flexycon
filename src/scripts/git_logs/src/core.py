@@ -1,17 +1,17 @@
 import traceback
+from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 
 from git import InvalidGitRepositoryError, Repo
 
-from common.helpers import resolve_path
 from common.logger import log
 
 
+@dataclass
 class GitRepo:
-    def __init__(self, name: str, path_parts: list[str]):
-        self.name = name
-        self.path_parts = path_parts
-        self.path = resolve_path(self.path_parts)
+    name: str
+    path: Path
 
     def __str__(self):
         return f"GitRepo(name={self.name!r}, path={str(self.path)!r})"
