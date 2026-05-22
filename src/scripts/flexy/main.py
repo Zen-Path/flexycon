@@ -4,9 +4,11 @@
 
 import argparse
 import logging
+import os
 
 from common.helpers import get_version
 from common.logger import log, setup_logging
+from common.variables import flex_home
 from scripts.flexy.src.helpers import Action
 from scripts.flexy.src.targets import (
     clean,
@@ -82,6 +84,9 @@ def build_parser(actions: list[Action]) -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    # Changing dirs so the script has access to the venv and relative paths.
+    os.chdir(flex_home)
+
     args = build_parser(ACTIONS).parse_args()
 
     setup_logging(log, logging.DEBUG if args.verbose else logging.INFO)
