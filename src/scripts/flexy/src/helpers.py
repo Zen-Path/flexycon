@@ -8,7 +8,7 @@ from typing import Any, Callable, NamedTuple
 
 from common.cmd_utilities import run_cmd
 from common.logger import log
-from common.variables import flex_data_path, flex_home
+from common.variables import FLEXYCON_DATA, FLEXYCON_HOME
 
 VENV_DIR = Path(".venv")
 VENV_BIN = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin")
@@ -27,9 +27,9 @@ class Action(NamedTuple):
 def remove_flexycon_data():
     log.info("💀 Removing flexycon data...")
 
-    if flex_data_path.exists():
+    if FLEXYCON_DATA.exists():
         try:
-            shutil.rmtree(flex_data_path, ignore_errors=True)
+            shutil.rmtree(FLEXYCON_DATA, ignore_errors=True)
             log.info("Removed flexycon local data directory")
         except Exception as e:
             log.warning(e)
@@ -129,8 +129,8 @@ def format_yazi_packages_file():
                 "taplo",
                 "fmt",
                 "--config",
-                str(flex_home / ".taplo.toml"),
-                str(flex_home / "dotfiles" / "config" / "yazi" / "package.toml"),
+                str(FLEXYCON_HOME / ".taplo.toml"),
+                str(FLEXYCON_HOME / "dotfiles" / "config" / "yazi" / "package.toml"),
             ]
         )
     except Exception as e:
