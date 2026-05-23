@@ -8,7 +8,7 @@ def adjust_backlight(amount: int) -> None:
     """Adjusts backlight using xbacklight."""
     flag = "-inc" if amount > 0 else "-dec"
     try:
-        run_cmd(["xbacklight", flag, str(abs(amount))])
+        run_cmd(["xbacklight", flag, abs(amount)])
     except Exception as e:
         log.error(f"Failed to adjust backlight: {e}")
 

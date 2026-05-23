@@ -28,7 +28,7 @@ def setup_virtual_env():
 
     if not VENV_DIR.exists():
         log.info(f"🐍 Creating Python venv in {str(VENV_DIR)!r}...")
-        run_cmd([PYTHON_BIN, "-m", "venv", str(VENV_DIR)])
+        run_cmd([PYTHON_BIN, "-m", "venv", VENV_DIR])
 
     log.info("♻️ Updating pip...")
     run_cmd([PIP_BIN, "install", "--upgrade", "pip"])
@@ -81,13 +81,13 @@ def setup():
     precommit_bin = VENV_BIN / "pre-commit"
     if precommit_bin.exists():
         # Install the standard commit hook
-        run_cmd([str(precommit_bin), "install"])
+        run_cmd([precommit_bin, "install"])
 
         # Install the push hook (required for the UI tests)
-        run_cmd([str(precommit_bin), "install", "--hook-type", "pre-push"])
+        run_cmd([precommit_bin, "install", "--hook-type", "pre-push"])
 
         # Pre-install the environments so the first commit isn't slow
-        run_cmd([str(precommit_bin), "install-hooks"])
+        run_cmd([precommit_bin, "install-hooks"])
     else:
         log.error("'pre-commit' not found. Skipping installation.")
 

@@ -85,7 +85,7 @@ class Git(PackageManager):
 
         if package.resolved_path.exists() and (package.resolved_path / ".git").exists():
             # Pull changes for "update" logic
-            run_cmd([cls.COMMAND, "-C", str(package.resolved_path), "pull"])
+            run_cmd([cls.COMMAND, "-C", package.resolved_path, "pull"])
         else:
             # Fresh clone
             run_cmd(
@@ -94,7 +94,7 @@ class Git(PackageManager):
                     "clone",
                     "--recurse-submodules",
                     package.identifier,
-                    str(package.resolved_path),
+                    package.resolved_path,
                 ]
             )
 

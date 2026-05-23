@@ -12,7 +12,7 @@ from common.variables import FLEXYCON_CONFIG, FLEXYCON_DATA, FLEXYCON_HOME
 
 VENV_DIR = Path(".venv")
 VENV_BIN = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin")
-PIP_BIN = str(VENV_BIN / "pip")
+PIP_BIN = VENV_BIN / "pip"
 PYTHON_BIN = shutil.which("python3") or "python"
 
 USER_VARIABLES_PATH = Path("uservariables.yaml")
@@ -44,7 +44,7 @@ def clean_precommit():
         return
 
     try:
-        run_cmd([str(precommit_bin), "clean"])
+        run_cmd([precommit_bin, "clean"])
     except subprocess.CalledProcessError as e:
         log.error(e)
 
@@ -73,7 +73,7 @@ def get_dotdrop_profile() -> str | None:
     if not USER_VARIABLES_PATH.exists():
         log.info("Installing bootstrap profile to generate user variables file.")
         try:
-            run_cmd([str(VENV_BIN / "dotdrop"), "install", "--profile", "bootstrap"])
+            run_cmd([VENV_BIN / "dotdrop", "install", "--profile", "bootstrap"])
         except KeyboardInterrupt:
             sys.exit(0)
 
@@ -129,8 +129,8 @@ def format_yazi_packages_file():
                 "taplo",
                 "fmt",
                 "--config",
-                str(FLEXYCON_HOME / ".taplo.toml"),
-                str(FLEXYCON_CONFIG / "yazi" / "package.toml"),
+                FLEXYCON_HOME / ".taplo.toml",
+                FLEXYCON_CONFIG / "yazi" / "package.toml",
             ]
         )
     except Exception as e:

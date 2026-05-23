@@ -98,7 +98,7 @@ class DmenuPrompt(BasePrompt):
             cmd.extend(["-l", str(row_count)])
 
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # TODO
                 cmd,
                 input="\n".join(display_options),
                 capture_output=True,
@@ -140,7 +140,7 @@ class ChoosePrompt(BasePrompt):
             cmd.extend(["-n", str(row_count)])
 
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # TODO
                 cmd,
                 input="\n".join(display_options),
                 capture_output=True,

@@ -27,7 +27,7 @@ class Maim:
         """
         Take screenshot of desktop and save to an image.
         """
-        cmd = [
+        cmd: list[str | int | Path] = [
             "maim",
             f"--bordersize={border_size}",
             f"--padding={padding}",
@@ -40,13 +40,13 @@ class Maim:
         if quiet:
             cmd.append("--quiet")
         if window:
-            cmd.extend(["--window", str(window.id), "--capturebackground"])
+            cmd.extend(["--window", window.id, "--capturebackground"])
 
         if select:
             cmd.extend(["--select", "--nodrag", "--highlight"])
 
         cmd.extend(["--delay", str(delay)])
-        cmd.append(str(output_path))
+        cmd.append(output_path)
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
 

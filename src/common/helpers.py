@@ -92,13 +92,12 @@ class NotificationSystem:
                 "You cannot provide both a 'callback' and 'open_image_onclick'."
             )
 
-        cmd = ["notify-send", title.strip(), "--urgency", urgency]
+        cmd: list[str | Path] = ["notify-send", title.strip(), "--urgency", urgency]
 
         if message is not None:
             cmd.append(message.rstrip())
 
         if icon_path:
-            icon_path = str(icon_path)
             cmd.extend(["-i", icon_path])
 
         # Determine which action to use, if any
@@ -213,7 +212,7 @@ class Window:
     @classmethod
     def get_window_name(cls, window_id: int) -> str | None:
         # TODO: check on Linux
-        result = run_cmd(["xdotool", "getwindowname", str(window_id)])
+        result = run_cmd(["xdotool", "getwindowname", window_id])
         if not result.success:
             return None
 

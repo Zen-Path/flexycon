@@ -21,18 +21,18 @@ def compress_image(input_path: Path, output_path: Path | None = None) -> Path | 
             # fmt: off
             run_cmd([
                 "ffmpeg",
-                "-i", str(input_path),
+                "-i", input_path,
                 "-q:v", "10",
-                str(output_path)
+                output_path
             ])
             # fmt: on
         case "png":
             # fmt: off
             run_cmd([
                 "ffmpeg",
-                "-i", str(input_path),
+                "-i", input_path,
                 "-compression_level", "9",
-                str(output_path),
+                output_path,
             ])
             # fmt: on
         case _:
@@ -51,7 +51,7 @@ def rotate_image(
     if not output_path:
         output_path = input_path
 
-    run_cmd(["magick", str(input_path), "-rotate", str(degrees), str(output_path)])
+    run_cmd(["magick", input_path, "-rotate", degrees, output_path])
 
     return output_path
 
@@ -63,7 +63,7 @@ def flip_image(input_path: Path, output_path: Path | None = None) -> Path:
     if not output_path:
         output_path = input_path
 
-    run_cmd(["magick", str(object=input_path), "-flop", str(output_path)])
+    run_cmd(["magick", input_path, "-flop", output_path])
 
     return output_path
 
@@ -84,9 +84,9 @@ def convert_video_to_mp4(input_path: Path, output_path: Path | None = None) -> P
     run_cmd([
         "ffmpeg",
         "-fflags", "+genpts",
-        "-i", str(input_path),
+        "-i", input_path,
         "-r", "24",
-        str(output_path)
+        output_path
     ])
     # fmt: on
 
@@ -105,10 +105,10 @@ def compress_video(input_path: Path, output_path: Path | None = None) -> Path:
     # fmt: off
     run_cmd([
         "ffmpeg",
-        "-i", str(input_path),
+        "-i", input_path,
         "-vcodec", "libx264",
         "-crf", "28",
-        str(output_path),
+        output_path,
     ])
     # fmt: on
 
@@ -142,9 +142,9 @@ def rotate_video(
         # fmt: off
         run_cmd([
             "ffmpeg",
-            "-i", str(input_path),
+            "-i", input_path,
             "-c", "copy",
-            str(output_path)
+            output_path
         ])
         # fmt: on
         return output_path
@@ -154,11 +154,11 @@ def rotate_video(
     # fmt: off
     run_cmd([
         "ffmpeg",
-        "-i", str(input_path),
+        "-i", input_path,
         "-vf", vf,
         "-preset", "fast",
         "-y",
-        str(output_path)
+        output_path
     ])
     # fmt: on
 
@@ -177,10 +177,10 @@ def extract_audio_from_video(input_path: Path, output_path: Path | None = None) 
     # fmt: off
     run_cmd([
         "ffmpeg",
-        "-i", str(input_path),
+        "-i", input_path,
         "-q:a", "0",
         "-map", "a",
-        str(output_path)
+        output_path
     ])
     # fmt: on
 
@@ -209,7 +209,7 @@ def compress_pdf(input_path: Path, output_path: Path | None = None) -> Path:
             "-dNOPAUSE",
             "-dBATCH",
             f'-sOutputFile="{output_path}"',
-            str(input_path),
+            input_path,
         ]
     )
 
@@ -230,10 +230,10 @@ def convert_pdf_to_png(input_path: Path, output_path: Path | None = None) -> Pat
         [
             "magick",
             "-density", "300",
-            str(input_path),
+            input_path,
             "-quality", "100",
             "-alpha", "remove",
-            str(output_path)
+            output_path
         ]
     )
     # fmt: on
@@ -261,11 +261,11 @@ def trim_media(
     # fmt: off
     run_cmd([
         "ffmpeg",
-        "-i", str(input_path),
+        "-i", input_path,
         "-ss", start_time,
-        "-t", str(duration_s),
+        "-t", duration_s,
         "-c", "copy",
-        str(output_path),
+        output_path,
     ])
     # fmt: on
 
