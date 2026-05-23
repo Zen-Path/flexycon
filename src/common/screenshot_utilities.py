@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 from pathlib import Path
 from typing import Literal
@@ -6,6 +5,7 @@ from typing import Literal
 from common.cmd_utilities import run_cmd
 from common.helpers import Color, NotificationSystem, Window
 from common.logger import log
+from common.variables import XDG_PICTURES_DIR
 
 
 class Maim:
@@ -63,9 +63,7 @@ class Maim:
 
 
 class ScreenshotUtility:
-    OUTPUT_DIR = (
-        Path(os.getenv("XDG_PICTURES_DIR") or Path.home() / "Pictures") / "Screenshots"
-    )
+    OUTPUT_DIR = XDG_PICTURES_DIR / "Screenshots"
 
     @classmethod
     def _capture(

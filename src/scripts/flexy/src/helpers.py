@@ -8,7 +8,7 @@ from typing import Any, Callable, NamedTuple
 
 from common.cmd_utilities import run_cmd
 from common.logger import log
-from common.variables import FLEXYCON_DATA, FLEXYCON_HOME
+from common.variables import FLEXYCON_CONFIG, FLEXYCON_DATA, FLEXYCON_HOME
 
 VENV_DIR = Path(".venv")
 VENV_BIN = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin")
@@ -130,7 +130,7 @@ def format_yazi_packages_file():
                 "fmt",
                 "--config",
                 str(FLEXYCON_HOME / ".taplo.toml"),
-                str(FLEXYCON_HOME / "dotfiles" / "config" / "yazi" / "package.toml"),
+                str(FLEXYCON_CONFIG / "yazi" / "package.toml"),
             ]
         )
     except Exception as e:

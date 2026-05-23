@@ -1,15 +1,9 @@
-import os
-from pathlib import Path
-
 from common.cmd_utilities import run_cmd
 from common.helpers import NotificationSystem
 from common.logger import log
+from common.variables import XDG_DATA_HOME
 
-STATE_FILE = (
-    Path(os.getenv("XDG_DATA_HOME") or Path.home() / ".local" / "state")
-    / "taskwarrior"
-    / "overdue_tasks"
-)
+STATE_FILE = XDG_DATA_HOME / "taskwarrior" / "overdue_tasks"
 
 
 def get_task_count(filter_str: str) -> int | None:

@@ -1,4 +1,3 @@
-import os
 import shutil
 import sqlite3
 from contextlib import closing
@@ -7,10 +6,9 @@ from pathlib import Path
 from common.cmd_utilities import run_cmd
 from common.helpers import NotificationSystem
 from common.logger import log
+from common.variables import XDG_DATA_HOME
 
-NEWSRAFT_DATA_DIR = (
-    Path(os.getenv("XDG_DATA_HOME") or Path.home() / ".local" / "share") / "newsraft"
-)
+NEWSRAFT_DATA_DIR = XDG_DATA_HOME / "newsraft"
 NEWSRAFT_DB = NEWSRAFT_DATA_DIR / "newsraft.sqlite3"
 
 

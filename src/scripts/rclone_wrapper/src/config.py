@@ -1,10 +1,10 @@
-import os
 from pathlib import Path
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from common.io_utilities import load_json
 from common.logger import log
+from common.variables import XDG_CONFIG_HOME
 
 
 class GlobalConfig(BaseModel):
@@ -35,8 +35,7 @@ class Config(BaseModel):
 
 def load_global_config() -> GlobalConfig | None:
     """Load and validate the global configuration."""
-    config_home = Path(os.getenv("XDG_CONFIG_HOME") or Path.home() / ".config")
-    global_path = config_home / "flexycon" / "sync" / "config.json"
+    global_path = XDG_CONFIG_HOME / "flexycon" / "sync" / "config.json"
 
     data = load_json(global_path)
     if not data:
