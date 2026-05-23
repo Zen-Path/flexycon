@@ -5,7 +5,7 @@
 import argparse
 import logging
 
-from common.helpers import get_version, resolve_path
+from common.helpers import get_version
 from common.logger import log, setup_logging
 from scripts.user_shortcuts.data.shortcuts import shortcuts
 from scripts.user_shortcuts.src.formatting import format_shortcuts
@@ -25,7 +25,7 @@ def get_active_shortcuts(shortcuts: list[Shortcut] = shortcuts) -> list[Shortcut
             )
             continue
 
-        if not resolve_path(shortcut.path_parts).exists():
+        if not shortcut.path.exists():
             log.debug(f"- Shortcut {shortcut.name!r} doesn't point to a real file")
 
         result.append(shortcut)

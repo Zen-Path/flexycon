@@ -1,7 +1,9 @@
-import os
+from colorama import Fore, Style, init
 
 from common.string_utilities import truncate
 from scripts.user_shortcuts.src.models import Shortcut
+
+init(autoreset=True)
 
 # Column widths
 ALIASES_WIDTH = 20
@@ -23,7 +25,7 @@ def format_aliases(aliases: dict[str, list[str]]) -> str:
 
 def get_default_alias(shortcut: Shortcut) -> str:
     """Return the first default alias (for sorting)."""
-    return shortcut.aliases.get("default", [""])[0]
+    return shortcut.alias_map.get("default", [""])[0]
 
 
 def format_shortcuts(shortcuts: list[Shortcut]) -> str:
@@ -39,15 +41,15 @@ def format_shortcuts(shortcuts: list[Shortcut]) -> str:
 
         sorted_shortcuts = sorted(by_type[t], key=get_default_alias)
 
-        lines.append(f"{heading}:")
+        lines.append(f"{Fore.BLUE}{heading}{Style.RESET_ALL}")
         lines.append(
             f"{'Aliases':{ALIASES_WIDTH}} {'Target':{TARGET_WIDTH}} Description"
         )
         lines.append("-" * (ALIASES_WIDTH + TARGET_WIDTH + DESCRIPTION_WIDTH))
 
         for shortcut in sorted_shortcuts:
-            aliases = format_aliases(shortcut.aliases)
-            target = os.path.expandvars(os.path.join(*shortcut.path_parts))
+            aliases = format_aliases(shortcut.alias_map)
+            target = str(shortcut.path)
             target_display = truncate(target, TARGET_WIDTH)
             lines.append(
                 f"{aliases:{ALIASES_WIDTH}} {target_display:{TARGET_WIDTH}} {shortcut.description}"

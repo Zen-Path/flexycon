@@ -1,6 +1,7 @@
 # ruff: noqa: E501
 
 import sys
+from pathlib import Path
 from typing import Literal
 
 import pytest
@@ -11,35 +12,52 @@ from scripts.user_shortcuts.src.renderers import (
     YAZI,
     ZSH,
     ShortcutRenderer,
-    ZshShortcutRenderer,
 )
 
-
-@pytest.fixture
-def mock_env(monkeypatch: pytest.MonkeyPatch):
-    """Provide fake environment variables."""
-    monkeypatch.setenv("HOME", "/Users/mock")
-    monkeypatch.setenv("COUNTRY", "United States of America")
+HOME = Path("/") / "Users" / "mock"
+COUNTRY = "United States of America"
 
 
 @pytest.mark.parametrize(
-    "renderer, aliases, expected",
+    "renderer, alias_map, expected",
     [
-        (ZSH, {"default": ["h"]}, ["h"]),
-        (ZSH, {"default": ["d", "o", "c"]}, ["d", "o", "c"]),
-        # uppercase
-        (ZSH, {"default": ["D", "o", "c"]}, ["D", "o", "c"]),
-        # multi-char alias parts
-        (ZSH, {"default": ["Ctrl-D", "o", "c"]}, ["Ctrl-D", "o", "c"]),
-        # one specific renderer
-        (ZSH, {"default": ["d", "o", "c"], ZSH.name: ["a", "b", "c"]}, ["a", "b", "c"]),
-        (
+        pytest.param(
+            ZSH,
+            {"default": ["h"]},
+            ["h"],
+            id="single_char",
+        ),
+        pytest.param(
+            ZSH,
+            {"default": ["d", "o", "c"]},
+            ["d", "o", "c"],
+            id="multi_char",
+        ),
+        pytest.param(
+            ZSH,
+            {"default": ["D", "o", "c"]},
+            ["D", "o", "c"],
+            id="mixed_case",
+        ),
+        pytest.param(
+            ZSH,
+            {"default": ["Ctrl-D", "o", "c"]},
+            ["Ctrl-D", "o", "c"],
+            id="multi_char_parts",
+        ),
+        pytest.param(
+            ZSH,
+            {"default": ["d", "o", "c"], ZSH.name: ["a", "b", "c"]},
+            ["a", "b", "c"],
+            id="target_renderer",
+        ),
+        pytest.param(
             YAZI,
             {"default": ["d", "o", "c"], ZSH.name: ["a", "b", "c"]},
             ["d", "o", "c"],
+            id="not_target_renderer",
         ),
-        #  multiple specific renderers
-        (
+        pytest.param(
             ZSH,
             {
                 "default": ["d", "o", "c"],
@@ -47,236 +65,289 @@ def mock_env(monkeypatch: pytest.MonkeyPatch):
                 YAZI.name: ["y", "a", "z", "i"],
             },
             ["a", "b", "c"],
+            id="multiple_target_renderers",
         ),
-        # no default + one specific renderer
-        (ZSH, {ZSH.name: ["a", "b", "c"]}, ["a", "b", "c"]),
-        (YAZI, {ZSH.name: ["a", "b", "c"]}, None),
+        pytest.param(
+            ZSH,
+            {ZSH.name: ["a", "b", "c"]},
+            ["a", "b", "c"],
+            id="no_default_target_renderer",
+        ),
+        pytest.param(
+            YAZI,
+            {ZSH.name: ["a", "b", "c"]},
+            None,
+            id="no_default_not_target_renderer",
+        ),
     ],
 )
 def test_resolve_alias(
     renderer: ShortcutRenderer,
-    aliases: dict[str, list[str]],
+    alias_map: dict[str, list[str]],
     expected: list[str] | None,
-):
+) -> None:
     shortcut = Shortcut(
         type="d",
-        path_parts=[""],
-        aliases=aliases,
+        path=Path.home(),  # path isn't important
+        alias_map=alias_map,
     )
     assert renderer.resolve_alias(shortcut) == expected
 
 
-@pytest.mark.usefixtures("mock_env")
 @pytest.mark.parametrize(
-    "path_parts, expand_vars, escape_path, expected",
+    "renderer, expected_dir, expected_file",
     [
-        (["$HOME", "Documents"], True, True, "/Users/mock/Documents"),
-        (["$HOME", "Documents"], True, False, "/Users/mock/Documents"),
-        (["$HOME", "Documents"], False, True, "'$HOME/Documents'"),
-        (["$HOME", "Documents"], False, False, "$HOME/Documents"),
-        # spaces need escaping
-        (["$HOME", "Student marks"], True, True, "'/Users/mock/Student marks'"),
-        # funky escaping, but actually 3 separate shell strings that get concatenated
-        (["$HOME", "Student's"], True, True, "'/Users/mock/Student'\"'\"'s'"),
-        # variable that when expanded contains a space
-        (
-            ["$HOME", "$COUNTRY", "Students"],
-            True,
-            True,
-            "'/Users/mock/United States of America/Students'",
+        pytest.param(
+            ZSH,
+            """# user documents
+function doc() {
+    cd /Users/mock/Documents && ls
+}
+hash -d doc=/Users/mock/Documents
+""",
+            """# user documents
+function doc() {
+    cd /Users/mock && ls && open /Users/mock/Documents
+}
+""",
+            id="zsh",
         ),
-        # a path part is just a space
-        (["$HOME", " "], True, True, "'/Users/mock/ '"),
-        # a path part is empty
-        (["$HOME", "", "Students"], True, True, "/Users/mock/Students"),
+        pytest.param(
+            NVIM,
+            """-- user documents
+vim.api.nvim_set_keymap(
+    "c",
+    ";doc",
+    "/Users/mock/Documents",
+    { noremap = true }
+)
+""",
+            """-- user documents
+vim.api.nvim_set_keymap(
+    "c",
+    ";doc",
+    "/Users/mock/Documents",
+    { noremap = true }
+)
+""",
+            id="nvim",
+        ),
+        pytest.param(
+            YAZI,
+            "    { on = ['b', 'd', 'o', 'c'], "
+            'run = "cd \\"/Users/mock/Documents\\"", '
+            'desc = "Open user documents dir" },',
+            "    { on = ['b', 'd', 'o', 'c'], "
+            'run = ["reveal \\"/Users/mock/Documents\\"", "open"], '
+            'desc = "Reveal user documents file" },',
+            id="yazi",
+        ),
     ],
 )
-def test_get_path(
-    path_parts: list[str], expand_vars: bool, escape_path: bool, expected: str
-):
-    shortcut = Shortcut(
-        type="d",
-        path_parts=path_parts,
-        aliases={"default": [""]},
-    )
+def test_renderer_basic(
+    renderer: ShortcutRenderer,
+    expected_dir: str,
+    expected_file: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(sys, "platform", "darwin")
 
-    renderer = ZshShortcutRenderer(
-        "", [""], expand_vars=expand_vars, escape_path=escape_path
-    )
+    cases: list[tuple[Literal["d", "f"], str]] = [
+        ("d", expected_dir),
+        ("f", expected_file),
+    ]
+    for shortcut_type, expected in cases:
+        shortcut = Shortcut(
+            type=shortcut_type,
+            path=HOME / "Documents",
+            alias_map={"default": [""]},
+            description="user documents",
+        )
+        assert renderer.compose_shortcut(["d", "o", "c"], shortcut) == expected
 
-    assert renderer.get_path(shortcut) == expected
 
-
-@pytest.mark.usefixtures("mock_env")
 @pytest.mark.parametrize(
-    "type, path_parts, alias, description, zsh_expected, nvim_expected, yazi_expected",
+    "renderer, expected_dir, expected_file",
     [
         pytest.param(
-            "d",
-            ["$HOME"],
-            ["h"],
-            "user home",
-            # zsh
-            '# user home\nalias h="cd /Users/mock && ls"\nhash -d h=/Users/mock\n',
-            # nvim
-            "-- user home\n"
-            "vim.api.nvim_set_keymap(\n"
-            '    "c",\n'
-            '    ";h",\n'
-            '    "/Users/mock",\n'
-            "    { noremap = true }\n"
-            ")\n",
-            # yazi
-            "    { on = ['b', 'h'], run = \"cd /Users/mock\", desc = \"Open user home dir\" },",
-            id="single_char_alias",
+            ZSH,
+            """\
+function d() {
+    cd /Users/mock/Documents && ls
+}
+hash -d d=""",
+            "function d() {",
+            id="zsh",
+        ),
+        pytest.param(NVIM, ";d", ";d", id="nvim"),
+        pytest.param(YAZI, "on = ['b', 'd'], ", "on = ['b', 'd'], ", id="yazi"),
+    ],
+)
+def test_renderer_single_char_alias(
+    renderer: ShortcutRenderer, expected_dir: str, expected_file: str
+) -> None:
+    cases: list[tuple[Literal["d", "f"], str]] = [
+        ("d", expected_dir),
+        ("f", expected_file),
+    ]
+    for shortcut_type, expected in cases:
+        shortcut = Shortcut(
+            type=shortcut_type,
+            path=HOME / "Documents",
+            alias_map={"default": [""]},
+        )
+        assert expected in renderer.compose_shortcut(["d"], shortcut)
+
+
+@pytest.mark.parametrize(
+    "renderer, expected",
+    [
+        pytest.param(ZSH, "function doc() {", id="zsh"),
+        pytest.param(NVIM, "vim.api.nvim_set_keymap(", id="nvim"),
+        pytest.param(
+            YAZI,
+            "    { on = ['b', 'd', 'o', 'c'], "
+            'run = "cd \\"/Users/mock/Documents\\"", '
+            'desc = "" },',
+            id="yazi",
+        ),
+    ],
+)
+def test_renderer_no_description(renderer: ShortcutRenderer, expected: str) -> None:
+    shortcut = Shortcut(
+        type="d",
+        path=HOME / "Documents",
+        alias_map={"default": [""]},
+    )
+    assert renderer.compose_shortcut(["d", "o", "c"], shortcut).startswith(expected)
+
+
+@pytest.mark.parametrize(
+    "renderer, path, expected",
+    [
+        pytest.param(
+            ZSH,
+            HOME / "Student marks",
+            """\
+function stum() {
+    cd '/Users/mock/Student marks' && ls
+}
+hash -d stum='/Users/mock/Student marks'
+""",
+            id="zsh_space",
         ),
         pytest.param(
-            "d",
-            ["$HOME", "Documents"],
-            ["d", "o", "c"],
-            "Documents",
-            # zsh
-            "# Documents\n"
-            'alias doc="cd /Users/mock/Documents && ls"\n'
-            "hash -d doc=/Users/mock/Documents\n",
-            # nvim
-            "-- Documents\n"
-            "vim.api.nvim_set_keymap(\n"
-            '    "c",\n'
-            '    ";doc",\n'
-            '    "/Users/mock/Documents",\n'
-            "    { noremap = true }\n"
-            ")\n",
-            # yazi
-            "    { on = ['b', 'd', 'o', 'c'], run = \"cd /Users/mock/Documents\", desc = \"Open Documents dir\" },",
-            id="multi_char_alias",
+            ZSH,
+            HOME / 'Student\'s "marks"',
+            # TODO: use proper quoting
+            """\
+function stum() {
+    cd '/Users/mock/Student'"'"'s "marks"' && ls
+}
+hash -d stum='/Users/mock/Student'"'"'s "marks"'
+""",
+            id="zsh_quote",
         ),
         pytest.param(
-            "d",
-            ["$HOME", "Documents"],
-            ["d", "o", "c"],
-            None,
-            # zsh
-            'alias doc="cd /Users/mock/Documents && ls"\n'
-            "hash -d doc=/Users/mock/Documents\n",
-            # nvim
-            "vim.api.nvim_set_keymap(\n"
-            '    "c",\n'
-            '    ";doc",\n'
-            '    "/Users/mock/Documents",\n'
-            "    { noremap = true }\n"
-            ")\n",
-            # yazi
-            "    { on = ['b', 'd', 'o', 'c'], run = \"cd /Users/mock/Documents\", desc = \"\" },",
-            id="no_description",
-        ),
-        pytest.param(
-            "d",
-            ["$HOME", "Student marks"],
-            ["s", "t", "u", "m"],
-            None,
-            # zsh
-            "alias stum=\"cd '/Users/mock/Student marks' && ls\"\n"
-            "hash -d stum='/Users/mock/Student marks'\n",
-            # nvim
+            NVIM,
+            HOME / "Student marks",
             "vim.api.nvim_set_keymap(\n"
             '    "c",\n'
             '    ";stum",\n'
             '    "/Users/mock/Student marks",\n'
             "    { noremap = true }\n"
             ")\n",
-            # yazi
-            "    { on = ['b', 's', 't', 'u', 'm'], run = \"cd '/Users/mock/Student marks'\", desc = \"\" },",
-            id="requires_shell_quoting",
+            id="nvim_space",
         ),
         pytest.param(
-            "f",
-            ["$HOME", "University", "Timetable.pdf"],
-            ["u", "n", "i", "t"],
-            "university timetable",
-            # zsh
-            "# university timetable\n"
-            'alias unit="open /Users/mock/University/Timetable.pdf"\n',
-            # nvim
-            "-- university timetable\n"
+            NVIM,
+            HOME / 'Student\'s "marks"',
             "vim.api.nvim_set_keymap(\n"
             '    "c",\n'
-            '    ";unit",\n'
-            '    "/Users/mock/University/Timetable.pdf",\n'
+            '    ";stum",\n'
+            '    "/Users/mock/Student\'s \\\\\\"marks\\\\\\"",\n'
             "    { noremap = true }\n"
             ")\n",
-            # yazi
-            "    { on = ['b', 'u', 'n', 'i', 't'], run = [\"reveal /Users/mock/University/Timetable.pdf\", \"open\"], desc = \"Reveal university timetable file\" },",
-            id="file",
+            id="nvim_quote",
+        ),
+        pytest.param(
+            YAZI,
+            HOME / "Student marks",
+            """    { on = ['b', 's', 't', 'u', 'm'], run = "cd \\"/Users/mock/Student marks\\"", desc = "" },""",
+            id="yazi_space",
+        ),
+        pytest.param(
+            YAZI,
+            # TODO: use proper quoting
+            HOME / 'Student\'s "marks"',
+            """    { on = ['b', 's', 't', 'u', 'm'], run = "cd \\"/Users/mock/Student's \\\\\\"marks\\\\\\"\\"", desc = "" },""",
+            id="yazi_quote",
         ),
     ],
 )
-def test_compose_shortcut(
-    type: Literal["d"] | Literal["f"],
-    path_parts: list[str],
-    alias: list[str],
-    description: str | None,
-    zsh_expected: str,
-    nvim_expected: str,
-    yazi_expected: str,
-    monkeypatch: pytest.MonkeyPatch,
-):
-    monkeypatch.setattr(sys, "platform", "darwin")
-
+def test_render_require_quoting(
+    renderer: ShortcutRenderer,
+    path: Path,
+    expected: str,
+) -> None:
     shortcut = Shortcut(
-        type=type,
-        path_parts=path_parts,
-        aliases={"default": [""]},
-        description=description,
+        type="d",
+        path=path,
+        alias_map={"default": [""]},
     )
 
-    assert ZSH.compose_shortcut(alias, shortcut) == zsh_expected
-    assert NVIM.compose_shortcut(alias, shortcut) == nvim_expected
-    assert YAZI.compose_shortcut(alias, shortcut) == yazi_expected
+    assert renderer.compose_shortcut(["s", "t", "u", "m"], shortcut) == expected
 
 
-@pytest.mark.usefixtures("mock_env")
 @pytest.mark.parametrize(
-    "platform_name, expected",
+    "platform_name, command",
     [
-        ("darwin", 'alias unit="open /Users/mock/University/Timetable.pdf"\n'),
-        ("linux", 'alias unit="xdg-open /Users/mock/University/Timetable.pdf"\n'),
-        ("win32", 'alias unit="$EDITOR /Users/mock/University/Timetable.pdf"\n'),
-        ("unknown", 'alias unit="$EDITOR /Users/mock/University/Timetable.pdf"\n'),
+        ("darwin", "open"),
+        ("linux", "xdg-open"),
+        ("win32", "$EDITOR"),
+        ("unknown", "$EDITOR"),
     ],
 )
 def test_compose_platforms(
     platform_name: Literal["darwin", "linux", "win32", "unknown"],
-    expected: str,
+    command: str,
     monkeypatch: pytest.MonkeyPatch,
-):
+) -> None:
     monkeypatch.setattr(sys, "platform", platform_name)
+    path = HOME / "University" / "Timetable.pdf"
     shortcut = Shortcut(
         type="f",
-        aliases={"default": [""]},
-        path_parts=["$HOME", "University", "Timetable.pdf"],
+        alias_map={"default": [""]},
+        path=path,
     )
-    assert ZSH.compose_shortcut(["u", "n", "i", "t"], shortcut) == expected
+
+    assert f"&& {command} {str(path)}" in ZSH.compose_shortcut(
+        ["u", "n", "i", "t"], shortcut
+    )
 
 
-@pytest.mark.usefixtures("mock_env")
 @pytest.mark.parametrize(
-    "renderer, expected",
+    "type, expected",
     [
-        (
-            ZSH,
-            "# documents\n"
-            'alias doc="cd /Users/mock/Documents && ls && penva"\n'
-            "hash -d doc=/Users/mock/Documents\n",
+        pytest.param(
+            "d",
+            "cd /Users/mock/Documents && ls && penva",
+            id="directory",
+        ),
+        pytest.param(
+            "f",
+            "cd /Users/mock && ls && penva && open /Users/mock/Documents",
+            id="file",
         ),
     ],
 )
-def test_compose_activate_penv(renderer: ShortcutRenderer, expected: str):
+def test_compose_activate_penv(
+    type: Literal["d"] | Literal["f"], expected: str
+) -> None:
     shortcut = Shortcut(
-        type="d",
-        path_parts=["$HOME", "Documents"],
-        aliases={"default": [""]},
+        type=type,
+        path=HOME / "Documents",
+        alias_map={"default": [""]},
         activate_python_env=True,
-        description="documents",
     )
-    assert renderer.compose_shortcut(["d", "o", "c"], shortcut) == expected
+    assert expected in ZSH.compose_shortcut(["d", "o", "c"], shortcut)

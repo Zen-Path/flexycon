@@ -1,10 +1,8 @@
-import os
-import shlex
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Literal
 
-from common.helpers import resolve_path
 from common.io_utilities import write_to_file
 from common.logger import log
 
@@ -12,8 +10,8 @@ from common.logger import log
 @dataclass
 class Shortcut:
     type: Literal["d", "f"]
-    path_parts: list[str]
-    aliases: dict[str, list[str]]
+    path: Path
+    alias_map: dict[str, list[str]]
     resolved_alias: list[str] | None = None
     description: str | None = None
     activate_python_env: bool = False
@@ -22,23 +20,17 @@ class Shortcut:
 
     def __post_init__(self):
         """Compute the shortcuts's display name after initialization."""
-        self.name = (
-            self.description if self.description else f"[{''.join(self.path_parts)}]"
-        )
+        self.name = self.description if self.description else f"{str(self.path)!r}"
 
 
 class ShortcutRenderer(ABC):
     def __init__(
         self,
         name: str,
-        output_path_parts: list[str],
-        expand_vars: bool = True,
-        escape_path: bool = True,
+        output_path: Path,
     ):
         self.name = name
-        self.output_path = resolve_path(output_path_parts)
-        self.expand_vars = expand_vars
-        self.escape_path = escape_path
+        self.output_path = output_path
 
     def process(self, shortcuts: list[Shortcut]) -> None:
         log.info(f"[{self.name}] Processing shortcuts...")
@@ -67,19 +59,7 @@ class ShortcutRenderer(ABC):
         log.info(f"[{self.name}] Processed {len(processed_shortcuts)} shortcuts")
 
     def resolve_alias(self, shortcut: Shortcut) -> list[str] | None:
-        return shortcut.aliases.get(self.name, shortcut.aliases.get("default"))
-
-    def get_path(self, shortcut: Shortcut) -> str:
-        path_str = os.path.join(*shortcut.path_parts)
-
-        if self.expand_vars:
-            # TODO: expanded vars may not be valid on Windows
-            path_str = os.path.expandvars(path_str)
-
-        if self.escape_path:
-            path_str = shlex.quote(path_str)
-
-        return path_str
+        return shortcut.alias_map.get(self.name, shortcut.alias_map.get("default"))
 
     @abstractmethod
     def compose_shortcut(self, alias_segments: list[str], shortcut: Shortcut) -> str:

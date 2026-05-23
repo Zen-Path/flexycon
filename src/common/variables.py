@@ -1,7 +1,9 @@
 import os
+import sys
 from pathlib import Path
 
 # fmt: off
+ROOT = Path("/")
 HOME = Path.home()
 
 # Home
@@ -11,6 +13,12 @@ XDG_DOWNLOAD_DIR    = HOME / "Downloads"
 XDG_MUSIC_DIR       = HOME / "Music"
 XDG_PICTURES_DIR    = HOME / "Pictures"
 XDG_PUBLICSHARE_DIR = HOME / "Public"
+
+if sys.platform == "darwin":
+    XDG_VIDEOS_DIR = HOME / "Movies"
+else:
+    # TODO: handle Windows case
+    XDG_VIDEOS_DIR = HOME / "Videos" # pyright: ignore[reportConstantRedefinition]
 
 # Hidden
 XDG_CACHE_HOME  = HOME / ".cache"
@@ -22,6 +30,7 @@ XDG_SRC_HOME    = HOME / ".local" / "src"
 # Flexycon
 FLEXYCON_HOME    = XDG_SRC_HOME  / "flexycon"
 FLEXYCON_SCRIPTS = FLEXYCON_HOME / "src" / "scripts"
+FLEXYCON_CONFIG  = FLEXYCON_HOME / "dotfiles" / "config"
 FLEXYCON_DEPS    = FLEXYCON_HOME / "dotfiles" / "deps"
 FLEXYCON_PRIVATE = XDG_SRC_HOME  / "flexycon-private"
 FLEXYCON_DATA    = XDG_DATA_HOME / "flexycon"
