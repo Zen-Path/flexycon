@@ -9,14 +9,19 @@ from common.cmd_utilities import run_cmd_background
 from common.helpers import NotificationSystem, get_version
 from common.logger import log, setup_logging
 from common.statusbar import EDITOR, TERMINAL, MouseButton, handle_block_button
-from statusbar.rss.src.core import get_unread_count, handle_reload
+from statusbar.rss.src.core import (
+    NEWS_DB_BACKUP,
+    get_item_count_db,
+    get_unread_count,
+    handle_reload,
+)
 
 ACTIONS = {
     MouseButton.LEFT: lambda: run_cmd_background([TERMINAL, "-e", "newsraft"]),
     MouseButton.MIDDLE: handle_reload,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         " RSS Feed",
-        "Show unread rss items.\n"
+        "Show total and unread rss items.\n"
         "\n<b>Actions:</b>\n"
         "- Left   : Open 'newsraft'\n"
         "- Middle : Sync RSS feeds\n"
@@ -57,10 +62,12 @@ def main() -> None:
     handle_block_button(ACTIONS)
 
     unread_count = get_unread_count()
+    total_count = get_item_count_db(NEWS_DB_BACKUP)
+
     if not unread_count:
         print(" ❗err")
     else:
-        print(f"{unread_count}")
+        print(f"{unread_count} / {total_count}")
 
 
 if __name__ == "__main__":

@@ -29,7 +29,7 @@ def _get_unread_newsraft() -> int | None:
     return None
 
 
-def _get_unread_db(db_path: Path) -> int | None:
+def get_item_count_db(db_path: Path, unread: bool = False) -> int | None:
     """Get unread items count directly from the database."""
     # .resolve() ensures the path is absolute, which file URIs prefer
     db_uri = f"file:{db_path.resolve()}?mode=ro"
@@ -39,7 +39,12 @@ def _get_unread_db(db_path: Path) -> int | None:
         # so contextlib.closing handles the clean-up.
         with closing(sqlite3.connect(db_uri, uri=True)) as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT COUNT(*) FROM items WHERE unread = 1")
+
+            query = "SELECT COUNT(*) FROM items"
+            if unread:
+                query += " WHERE unread = 1"
+
+            cursor.execute(query)
             row = cursor.fetchone()
 
             # SELECT COUNT(*) always returns exactly one row, even if 0
@@ -61,7 +66,7 @@ def get_unread_count() -> int | None:
     # Fallback to reading from the database
     try:
         shutil.copy2(NEWS_DB, NEWS_DB_BACKUP)
-        return _get_unread_db(NEWS_DB_BACKUP)
+        return get_item_count_db(db_path=NEWS_DB_BACKUP, unread=True)
     except Exception as e:
         log.error(
             f"Failed to backup db {str(NEWS_DB)!r} to {str(NEWS_DB_BACKUP)!r}: {e}"
@@ -78,11 +83,9 @@ def handle_reload() -> bool:
         NotificationSystem.run(notification_title, "Unable to fetch news.")
         return False
 
-    unread_count = get_unread_count()
-    if unread_count:
-        NotificationSystem.run(
-            notification_title, f"Newsraft has {unread_count} items."
-        )
+    total_count = get_item_count_db(db_path=NEWS_DB_BACKUP)
+    if total_count:
+        NotificationSystem.run(notification_title, f"Newsraft has {total_count} items.")
     else:
         NotificationSystem.run(
             notification_title,
