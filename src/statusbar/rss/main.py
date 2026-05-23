@@ -13,18 +13,18 @@ from statusbar.rss.src.core import (
     NEWS_DB_BACKUP,
     get_item_count_db,
     get_unread_count,
-    handle_reload,
+    refresh_feeds,
 )
 
 ACTIONS = {
     MouseButton.LEFT: lambda: run_cmd_background([TERMINAL, "-e", "newsraft"]),
-    MouseButton.MIDDLE: handle_reload,
+    MouseButton.MIDDLE: refresh_feeds,
     MouseButton.RIGHT: lambda: NotificationSystem.run(
         " RSS Feed",
         "Show total and unread rss items.\n"
         "\n<b>Actions:</b>\n"
         "- Left   : Open 'newsraft'\n"
-        "- Middle : Sync RSS feeds\n"
+        "- Middle : Refresh RSS feeds\n"
         "- Right  : Show this message\n"
         "- Extra  : Edit this script\n"
         "\n<b>Note:</b> Only one instance of 'newsraft' may be running at a time.",

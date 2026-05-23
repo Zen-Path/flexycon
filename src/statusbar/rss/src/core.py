@@ -74,13 +74,14 @@ def get_unread_count() -> int | None:
         return None
 
 
-def handle_reload() -> bool:
-    """Reload all items and notify user."""
-    notification_title = "News Fetch"
-    NotificationSystem.run(notification_title, "Fetching news. Please wait...")
+def refresh_feeds() -> bool:
+    """Refresh all feeds and notify user."""
+
+    notification_title = "RSS Refresh"
+    NotificationSystem.run(notification_title, "Refreshing feeds...")
 
     if not reload_newsraft():
-        NotificationSystem.run(notification_title, "Unable to fetch news.")
+        NotificationSystem.run(notification_title, "Unable to refresh feeds.")
         return False
 
     total_count = get_item_count_db(db_path=NEWS_DB_BACKUP)
@@ -89,7 +90,7 @@ def handle_reload() -> bool:
     else:
         NotificationSystem.run(
             notification_title,
-            "Fetch successful, but unknown item count.",
+            "Refresh successful, but unknown item count.",
         )
 
     return True
