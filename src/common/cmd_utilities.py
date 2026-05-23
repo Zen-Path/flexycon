@@ -24,9 +24,9 @@ class CommandResult:
         return self.output
 
 
-def run_cmd(command: Sequence[str | int | Path]) -> CommandResult:
+def run_cmd(command: Sequence[str | int | Path], tokens: int = 4) -> CommandResult:
     """Run a shell command and return its result."""
-    cmd_identifier = secrets.token_hex(5)  # 8 hex chars
+    cmd_identifier = secrets.token_hex(tokens)
 
     normalized_cmd = [str(p) if not isinstance(p, str) else p for p in command]
     log.debug(f"Running {normalized_cmd} with id {cmd_identifier!r}")
