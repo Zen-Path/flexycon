@@ -77,7 +77,7 @@ class NotificationSystem:
         title: str,
         message: str | None = None,
         urgency: Literal["low", "normal", "critical"] = "normal",
-        icon_path: str | Path | None = None,
+        icon_path: Path | None = None,
         callback: Callable[[], None] | None = None,
         open_image_onclick: bool = False,
     ):
