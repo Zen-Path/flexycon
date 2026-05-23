@@ -10,7 +10,7 @@ from common.helpers import NotificationSystem, get_version
 from common.logger import log, setup_logging
 from common.statusbar import EDITOR, TERMINAL, MouseButton, handle_block_button
 from statusbar.rss.src.core import (
-    NEWS_DB_BACKUP,
+    NEWSRAFT_DB,
     get_item_count_db,
     get_unread_count,
     refresh_feeds,
@@ -62,7 +62,7 @@ def main() -> None:
     handle_block_button(ACTIONS)
 
     unread_count = get_unread_count()
-    total_count = get_item_count_db(NEWS_DB_BACKUP)
+    total_count = get_item_count_db(NEWSRAFT_DB)
 
     if not unread_count:
         print(" ❗err")
