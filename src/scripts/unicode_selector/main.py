@@ -12,32 +12,61 @@ from common.logger import log, setup_logging
 from common.packages.clipboard_utilities import ClipboardManager
 from common.prompt_utilities import prompt_options
 from scripts.unicode_selector.data.characters import CHARACTERS
-from scripts.unicode_selector.src.core import format_char_entries
+from scripts.unicode_selector.src.core import braille_bin_to_symbol, format_char_entries
 
 
 def build_parser() -> argparse.ArgumentParser:
     """Parse command-line arguments."""
 
-    parser = argparse.ArgumentParser(
-        prog="unicode_selector",
-        description="Prompt the user for a unicode character and copies or inserts it.",
+    global_parent = argparse.ArgumentParser(add_help=False)
+    global_parent.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
     )
 
-    parser.add_argument(
+    global_parent.add_argument(
         "-i", "--insert-char", action="store_true", help="insert the selected char"
     )
-    parser.add_argument(
+    global_parent.add_argument(
         "--no-copy", action="store_true", help="do not copy the selected char"
     )
-    parser.add_argument(
+    global_parent.add_argument(
         "--no-notify",
         action="store_true",
         help="do not notify user of the selected char",
     )
 
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable debug output"
+    parser = argparse.ArgumentParser(
+        prog="unicode_selector",
+        description="Prompt the user for a unicode character and copies or inserts it.",
+        parents=[global_parent],
     )
+
+    subparsers = parser.add_subparsers(dest="mode", metavar="MODE", help="HELP_MSG")
+
+    braille_sp = subparsers.add_parser(
+        name="braille",
+        parents=[global_parent],
+        help="braille pattern operations",
+    )
+    braille_sp.add_argument(
+        "patterns",
+        nargs="+",
+        metavar="PATTERN",
+        help="binary representation of a Braille symbol",
+    )
+    braille_sp.add_argument(
+        "-r",
+        "--by-row",
+        action="store_true",
+        help="treat PATTERN as the rows of a Braille symbol",
+    )
+    braille_sp.add_argument(
+        "-f",
+        "--format",
+        action="store_true",
+        help="make the output more readable",
+    )
+
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {get_version()}"
     )
@@ -49,6 +78,26 @@ def main() -> None:
     args = build_parser().parse_args()
 
     setup_logging(log, logging.DEBUG if args.verbose else logging.ERROR)
+    log.debug(args)
+
+    if args.mode == "braille":
+        results = braille_bin_to_symbol(
+            args.patterns, CHARACTERS["braille"], args.by_row
+        )
+        if not results:
+            log.debug("No braille results.")
+            return
+
+        if args.format:
+            print(
+                "\n".join(
+                    [f"{symbol} - {pattern}" for symbol, pattern in results.items()]
+                )
+            )
+        else:
+            print(list(results.keys()))
+
+        return
 
     row_count = 20
 
