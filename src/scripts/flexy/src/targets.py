@@ -100,6 +100,13 @@ def setup():
 
     yazi_upgrade_packages()
 
+    log.info("📋 Running tests and getting the coverage...")
+    try:
+        run_cmd(["coverage", "run", "-m", "pytest"])
+        run_cmd(["coverage", "report"])
+    except Exception as e:
+        log.error(f"Unable to run tests or get coverage: {e}.")
+
 
 def install():
     if not VENV_DIR.exists():
