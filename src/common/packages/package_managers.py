@@ -76,16 +76,16 @@ class Git(PackageManager):
 
     @classmethod
     def install(cls, package: Package) -> None:
-        if not package.resolved_path:
+        if not package.destination:
             log.error(
                 f"Package {package.identifier} requires a 'destination' for Git "
                 "operations."
             )
             return
 
-        if package.resolved_path.exists() and (package.resolved_path / ".git").exists():
+        if package.destination.exists() and (package.destination / ".git").exists():
             # Pull changes for "update" logic
-            run_cmd([cls.COMMAND, "-C", package.resolved_path, "pull"])
+            run_cmd([cls.COMMAND, "-C", package.destination, "pull"])
         else:
             # Fresh clone
             run_cmd(
@@ -94,14 +94,14 @@ class Git(PackageManager):
                     "clone",
                     "--recurse-submodules",
                     package.identifier,
-                    package.resolved_path,
+                    package.destination,
                 ]
             )
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
-        if package.resolved_path and package.resolved_path.exists():
-            shutil.rmtree(package.resolved_path)
+        if package.destination and package.destination.exists():
+            shutil.rmtree(package.destination)
 
     @classmethod
     def update_all(cls) -> None:

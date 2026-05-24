@@ -4,8 +4,6 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
-from common.helpers import resolve_path
-
 
 @dataclass
 class Package:
@@ -16,16 +14,12 @@ class Package:
     name: str | None = None
     description: str | None = None
     is_gui: bool | None = False
-    destination: list[str] | None = None
+    destination: Path | None = None  # Can be None since only Git is using it
     condition: bool = True
 
     def __post_init__(self):
         if self.name is None:
             self.name = self.identifier
-
-    @property
-    def resolved_path(self) -> Path | None:
-        return resolve_path(self.destination) if self.destination else None
 
 
 class PackageManager(ABC):

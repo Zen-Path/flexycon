@@ -2,6 +2,7 @@ import os
 
 from common.packages.package_managers import Brew, Git, Package, Yay
 from common.system_utilities import get_display_server
+from common.variables import FLEXYCON_PRIVATE, XDG_SRC_HOME
 
 display_server = get_display_server()
 
@@ -29,7 +30,7 @@ packages = [
     Package(
         identifier="https://github.com/Zen-Path/dmenu-flexipatch",
         managers=[Git],
-        destination=["$XDG_SRC_HOME", "dmenu-flexipatch"],
+        destination=XDG_SRC_HOME / "dmenu-flexipatch",
         description="A dmenu build with preprocessor directives to decide which patches to include during build time.",
         condition=display_server == "X11",
     ),
@@ -67,7 +68,7 @@ packages = [
     Package(
         identifier="https://github.com/Zen-Path/flexycon-private",
         managers=[Git],
-        destination=["$XDG_SRC_HOME", "flexycon-private"],
+        destination=FLEXYCON_PRIVATE,
         description="Private config",
     ),
     Package(
@@ -114,7 +115,7 @@ packages = [
     Package(
         identifier="https://github.com/Zen-Path/media-server",
         managers=[Git],
-        destination=["$XDG_SRC_HOME", "media-server"],
+        destination=XDG_SRC_HOME / "media-server",
         description="Local media server to download and manage files",
     ),
     Package(
@@ -141,14 +142,14 @@ packages = [
     Package(
         identifier="https://github.com/Zen-Path/nsxiv",
         managers=[Git],
-        destination=["$XDG_SRC_HOME", "nsxiv"],
+        destination=XDG_SRC_HOME / "nsxiv",
         description="Neo Simple X Image Viewer https://nsxiv.codeberg.page.",
         condition=display_server == "X11",
     ),
     Package(
         identifier="https://github.com/Zen-Path/nsxiv-extra",
         managers=[Git],
-        destination=["$XDG_SRC_HOME", "nsxiv-extra"],
+        destination=XDG_SRC_HOME / "nsxiv-extra",
         description="Community patches, scripts, tips and tricks for nsxiv.",
         condition=display_server == "X11",
     ),
@@ -195,7 +196,7 @@ packages = [
     Package(
         identifier="https://github.com/Zen-Path/slock-flexipatch",
         managers=[Git],
-        destination=["$XDG_SRC_HOME", "slock-flexipatch"],
+        destination=XDG_SRC_HOME / "slock-flexipatch",
         description="An slock build with preprocessor directives to decide which patches to include during build time.",
         condition=display_server == "X11",
     ),
