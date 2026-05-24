@@ -1,13 +1,13 @@
 #!/usr/bin/env sh
 
-# Argument Parsing & Help
+# CLI ARGS & HELP
 
 show_help() {
-    echo "Usage: ./bootsrap.sh [OPTIONS]"
+    echo "usage: ./bootstrap.sh [OPTIONS]"
     echo ""
-    echo "Options:"
-    echo "  -v, --verbose   Show detailed output during installation."
-    echo "  -h, --help      Show this help message and exit."
+    echo "options:"
+    echo "  -h, --help      show this help message and exit"
+    echo "  -v, --verbose   enable debug output"
     echo ""
 }
 
@@ -34,39 +34,60 @@ else
     APP_FLAGS=""
 fi
 
+# HELPERS
+
 log() {
     if [ "$VERBOSE" = true ]; then
         echo "$@"
     fi
 }
 
-# Platform Selection
+bail_on_error() {
+    # $1 : exit status of command
+    # $2 : error message
+
+    if [ "$1" -ne 0 ]; then
+        log "❌ Error: $2 (exit code: $1)"
+        exit "$1"
+    fi
+}
+
+# PLATFORM SPECIFICS
 
 VENV_DIR=".venv"
 
-# Check if the Windows 'Scripts' folder exists, otherwise assume Unix
-if [ -d "$VENV_DIR/Scripts" ]; then
-    VENV_BIN="$VENV_DIR/Scripts"
-else
-    VENV_BIN="$VENV_DIR/bin"
-fi
+case "$(uname -s)" in
+    *MINGW* | *MSYS* | *CYGWIN*)
+        VENV_BIN="$VENV_DIR/Scripts"
+        ;;
+    *)
+        VENV_BIN="$VENV_DIR/bin"
+        ;;
+esac
 
 VENV_PIP="$VENV_BIN/pip"
-VENV_PYTHON="$VENV_BIN/python"
 PYTHON="python3"
 
-# Main
+# MAIN
 
 if [ ! -d "$VENV_DIR" ]; then
     log "🐍 Creating Python venv in '$VENV_DIR'..."
     $PYTHON -m venv $VENV_DIR
 fi
 
-log "🔧 Installing current project and dependencies..."
+log "🔧 [pip] Installing project and dependencies..."
 
-$VENV_PIP install $PIP_FLAGS -e .
+"$VENV_PIP" install $PIP_FLAGS -e .
+bail_on_error $? "[pip] Failed to install project and dependencies."
 
-$VENV_PYTHON 'flexy' setup $APP_FLAGS
-$VENV_PYTHON 'flexy' install $APP_FLAGS
+FLEXY_PATH="$VENV_BIN/flexy"
 
-log "✅ Bootsrap complete."
+log "🔧 [flexy] Running setup..."
+"$FLEXY_PATH" setup $APP_FLAGS
+bail_on_error $? "[flexy] Setup failed."
+
+log "🔧 [flexy] Running install..."
+"$FLEXY_PATH" install $APP_FLAGS
+bail_on_error $? "[flexy] Install failed."
+
+log "✅ Bootstrap complete."
