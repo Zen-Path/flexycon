@@ -6,9 +6,11 @@ import sys
 from pathlib import Path
 from typing import Any, Callable, NamedTuple
 
+import yaml
+
 from common.cmd_utilities import run_cmd
 from common.logger import log
-from common.variables import FLEXYCON_CONFIG, FLEXYCON_DATA, FLEXYCON_HOME
+from common.variables import FLEXYCON_CONFIG, FLEXYCON_DATA, FLEXYCON_HOME, HOME
 
 VENV_DIR = Path(".venv")
 VENV_BIN = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin")
@@ -75,54 +77,66 @@ def get_dotdrop_profile() -> str | None:
         return profile
 
     if not USER_VARIABLES_PATH.exists():
-        log.info("Installing bootstrap profile to generate user variables file.")
+        log.info(
+            "[dotdrop] Installing bootstrap profile to generate user variables file."
+        )
+
         try:
             run_cmd([VENV_BIN / "dotdrop", "install", "--profile", "bootstrap"])
-        except KeyboardInterrupt:
-            sys.exit(0)
+        except Exception as e:
+            log.error(f"[dotdrop] Unable to install bootstrap profile: {e}")
+            return None
 
-    if USER_VARIABLES_PATH.exists():
+    try:
+        log.debug(f"[dotdrop] User variables file: {str(USER_VARIABLES_PATH)!r}")
+
         with USER_VARIABLES_PATH.open() as f:
-            import yaml
-
             data = yaml.safe_load(f)
             profile = data.get("variables", {}).get("active_dotdrop_profile")
 
-    if not profile:
-        log.error("Could not resolve dotdrop profile.")
+    except Exception as e:
+        log.error(f"[dotdrop] Unable to read user variables file: {e}")
         return None
 
-    log.debug(f"Active dotdrop profile: {profile}")
+    if not profile:
+        log.error("[dotdrop] Unable to resolve active dotdrop profile")
+        return None
+
+    log.debug(f"[dotdrop] Active profile: {profile!r}")
     return profile
 
 
 def install_dotfiles_to_temp(profile: str | None) -> Path:
     """Install dotdrop profile's dotfiles to a temp directory and return the its path."""
-    cmd = [f"{VENV_BIN}/dotdrop", "install", "--temp", "--force"]
+
+    cmd: list[str | Path] = [VENV_BIN / "dotdrop", "install", "--temp", "--force"]
     if profile:
         cmd.extend(["--profile", profile])
 
     result = run_cmd(cmd)
+    log.debug(f"[dotdrop] Output:\n{result.output}")
+
     if not result.success:
-        log.error(f"Dotdrop output:\n{result.output}")
-        raise RuntimeError("Installing temporary dotdrop profile failed.")
+        raise RuntimeError("[dotdrop] Installing temporary profile failed.")
 
     match = re.search(r'installed to tmp "([^"]+)"', result.output)
     if not match:
-        raise RuntimeError("Could not find temporary install path in output.")
+        raise RuntimeError("[dotdrop] Could not find temporary install path in output.")
 
     temp_path = Path(match.group(1))
-    log.debug(f"Temp path {str(temp_path)!r}")
+    log.debug(f"[dotdrop] Temp path {str(temp_path)!r}")
+
     return temp_path
 
 
 def copy_dotfiles_from_temp(temp_path: Path):
     """Copy .zprofile from a temp directory with dotfiles to the user's home."""
-    home = Path.home()
-    src = temp_path / home.relative_to(home.anchor) / ".zprofile"
-    dst = home / ".zprofile"
+
+    src = temp_path / HOME.relative_to(HOME.anchor) / ".zprofile"
+    dst = HOME / ".zprofile"
     shutil.copy2(src, dst)
-    log.debug(f"Copied {str(src)!r} -> {str(dst)!r}")
+
+    log.debug(f"[dotdrop] Copied {str(src)!r} -> {str(dst)!r}")
 
 
 def yazi_format_packages_file() -> bool:
