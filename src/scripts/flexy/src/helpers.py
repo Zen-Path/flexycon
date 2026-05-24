@@ -39,25 +39,22 @@ def clean_precommit():
     log.info("💀 Cleaning up pre-commit hooks...")
 
     precommit_bin = VENV_BIN / "pre-commit"
-    if not precommit_bin.exists():
-        log.error("pre-commit not found")
-        return
-
     try:
         run_cmd([precommit_bin, "clean"])
     except subprocess.CalledProcessError as e:
         log.error(e)
 
 
-def init_submodules():
+def git_init_submodules():
+    log.info("⑂ [git] Initializing submodules...")
+
     if not Path(".gitmodules").exists():
-        log.error("No git submodules found. Skipping.")
+        log.error("[git] No submodules found.")
         return
 
-    log.info("Initializing submodules...")
     run_cmd(["git", "submodule", "init"])
 
-    log.info("Updating submodules...")
+    log.info("[git] Updating submodules...")
     run_cmd(["git", "submodule", "update", "--recursive", "--remote"])
 
 
@@ -121,10 +118,10 @@ def copy_dotfiles_from_temp(temp_path: Path):
     log.debug(f"Copied {str(src)!r} -> {str(dst)!r}")
 
 
-def format_yazi_packages_file():
+def yazi_format_packages_file() -> bool:
     log.info("🧼 Formatting yazi packages file...")
     try:
-        run_cmd(
+        result = run_cmd(
             [
                 "taplo",
                 "fmt",
@@ -132,20 +129,36 @@ def format_yazi_packages_file():
                 FLEXYCON_HOME / ".taplo.toml",
                 FLEXYCON_CONFIG / "yazi" / "package.toml",
             ]
-        )
+        ).success
+
+        log.info(f"Yazi packages formatting {'successful' if result else 'failed'}.")
+
+        return result
+
     except Exception as e:
         log.error(f"Unable to format yazi packages: {e}")
-        return False
+
+    return False
 
 
-def upgrade_yazi_packages() -> bool:
+def yazi_upgrade_packages() -> bool:
     log.info("📦 Upgrading yazi packages...")
 
     try:
-        result = run_cmd(["ya", "pkg", "upgrade"]).success
-        log.info(f"Yazi upgrade {'successful' if result else 'failed'}.")
-        format_yazi_packages_file()
-        return result
+        # Add '--discard' to prevent errors if there's been any changes to the packages
+        result = run_cmd(["ya", "pkg", "upgrade", "--discard"])
+
+        packages = re.findall(r"Upgrading package `([^`]+)`", result.output)
+        for pkg in packages:
+            log.info(f"- Upgrading package {pkg}")
+
+        log.info(f"Yazi upgrade {'successful' if result.success else 'failed'}.")
+
+        # Formatting regardless of success status in case the upgrade was partially
+        # successful and made changes to the file.
+        yazi_format_packages_file()
+
+        return result.success
 
     except KeyboardInterrupt:
         sys.exit(1)

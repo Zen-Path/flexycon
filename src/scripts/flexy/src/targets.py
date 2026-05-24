@@ -1,3 +1,4 @@
+import re
 import shutil
 import subprocess
 import sys
@@ -13,10 +14,10 @@ from scripts.flexy.src.helpers import (
     clean_precommit,
     copy_dotfiles_from_temp,
     get_dotdrop_profile,
-    init_submodules,
+    git_init_submodules,
     install_dotfiles_to_temp,
     remove_flexycon_data,
-    upgrade_yazi_packages,
+    yazi_upgrade_packages,
 )
 from scripts.package_installer.data.packages import packages
 from scripts.package_installer.main import process_packages
@@ -53,30 +54,7 @@ def install_system_packages():
         process_packages(packages)
 
 
-def setup():
-    install_system_packages()
-
-    log.info("⑂ Initializing git submodules...")
-    init_submodules()
-
-    setup_virtual_env()
-
-    # playwright
-    if shutil.which("playwright"):
-        # We don't have any tests that require it at the moment
-        # run_command(["playwright", "install"])
-        pass
-    else:
-        log.error("'playwright' not found. Skipping installation.")
-
-    # npm
-    log.info("📦 Installing npm packages...")
-    if shutil.which("npm"):
-        run_cmd(["npm", "install"])
-    else:
-        log.error("'npm' not found. Skipping installation.")
-
-    # pre-commit
+def install_pre_commit_hooks():
     log.info("📦 Installing pre-commit hooks...")
     precommit_bin = VENV_BIN / "pre-commit"
     if precommit_bin.exists():
@@ -87,11 +65,40 @@ def setup():
         run_cmd([precommit_bin, "install", "--hook-type", "pre-push"])
 
         # Pre-install the environments so the first commit isn't slow
-        run_cmd([precommit_bin, "install-hooks"])
+        result = run_cmd([precommit_bin, "install-hooks"])
+
+        hooks = re.findall(r"Initializing environment for (.*)\.", result.output)
+        for hook in hooks:
+            log.info(f"- Installing hook {hook!r}")
+
     else:
         log.error("'pre-commit' not found. Skipping installation.")
 
-    upgrade_yazi_packages()
+
+def setup():
+    install_system_packages()
+
+    git_init_submodules()
+
+    setup_virtual_env()
+
+    try:
+        # We don't have any tests that require it at the moment
+        # log.info("📦 Installing playwright...")
+        # run_cmd(["playwright", "install"])
+        pass
+    except Exception as e:
+        log.error(f"Unable to install playwright: {e}")
+
+    log.info("📦 Installing npm packages...")
+    try:
+        run_cmd(["npm", "install"])
+    except Exception as e:
+        log.error(f"Unable to install npm packages: {e}.")
+
+    install_pre_commit_hooks()
+
+    yazi_upgrade_packages()
 
 
 def install():

@@ -9,6 +9,7 @@ from scripts.flexy.src.helpers import Action
 from scripts.flexy.src.targets import (
     clean,
     install,
+    install_pre_commit_hooks,
     install_system_packages,
     setup,
     setup_virtual_env,
@@ -40,6 +41,11 @@ ACTIONS: list[Action] = [
         name="install_packages",
         description="setup project and install dependencies",
         fn=install_system_packages,
+    ),
+    Action(
+        name="install_pre_commit_hooks",
+        description="install pre-commit hooks",
+        fn=install_pre_commit_hooks,
     ),
     Action(
         name="setup_venv",
