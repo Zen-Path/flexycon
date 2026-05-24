@@ -45,17 +45,24 @@ def clean_precommit():
         log.error(e)
 
 
-def git_init_submodules():
-    log.info("⑂ [git] Initializing submodules...")
+def git_update_submodules():
+    log.info("[git] Initializing submodules...")
 
     if not Path(".gitmodules").exists():
-        log.error("[git] No submodules found.")
-        return
+        log.error("[git] File '.gitmodules' not found.")
+        return False
 
-    run_cmd(["git", "submodule", "init"])
+    result = run_cmd(["git", "submodule", "init"])
+    if not result.success:
+        log.error("[git] Initializing submodules failed.")
+        return False
 
     log.info("[git] Updating submodules...")
-    run_cmd(["git", "submodule", "update", "--recursive", "--remote"])
+    result = run_cmd(["git", "submodule", "update", "--recursive", "--remote"])
+    if not result.success:
+        log.error("[git] Updating submodules failed.")
+
+    return result.success
 
 
 def get_dotdrop_profile() -> str | None:

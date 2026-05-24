@@ -14,7 +14,7 @@ from scripts.flexy.src.helpers import (
     clean_precommit,
     copy_dotfiles_from_temp,
     get_dotdrop_profile,
-    git_init_submodules,
+    git_update_submodules,
     install_dotfiles_to_temp,
     remove_flexycon_data,
     yazi_upgrade_packages,
@@ -78,7 +78,7 @@ def install_pre_commit_hooks():
 def setup():
     install_system_packages()
 
-    git_init_submodules()
+    git_update_submodules()
 
     setup_virtual_env()
 
