@@ -121,6 +121,8 @@ def install():
         log.error(f"Missing venv at {str(VENV_DIR)!r}. Run the 'setup' target first.")
         return
 
+    # Generating shortcuts should come before installing configuration because we are
+    # creating files with shortcuts that will be included into other configuration files.
     log.info("⚙️ Generating shortcuts...")
     active_shortcuts = get_active_shortcuts()
     for renderer in AVAILABLE_RENDERERS:
