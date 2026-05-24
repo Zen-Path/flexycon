@@ -4,10 +4,11 @@
 
 import argparse
 import logging
+from collections import defaultdict
 
 from common.helpers import get_version
 from common.logger import log, setup_logging
-from common.packages.models import Package
+from common.packages.models import Package, PackageManager
 from scripts.package_installer.data.packages import packages
 
 
@@ -35,6 +36,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def process_packages(packages: list[Package], dry_run: bool = False):
     managers_cache: dict[str, bool] = {}
+    batch_queue: dict[type[PackageManager], list[Package]] = defaultdict(list)
 
     for package in packages:
         if not package.condition:
@@ -58,10 +60,13 @@ def process_packages(packages: list[Package], dry_run: bool = False):
             log.warning(f"Skipping {package.name!r}: no available manager found.")
             continue
 
-        log.info(f"[{available_manager.__name__}] Installing {package.name!r}...")
+        batch_queue[available_manager].append(package)
+
+    for manager_cls, pkgs in batch_queue.items():
+        log.info(f"[{manager_cls.__name__}] Installing {len(pkgs)} packages...")
 
         if not dry_run:
-            available_manager.install(package)
+            manager_cls.install(pkgs)
 
 
 def main() -> None:

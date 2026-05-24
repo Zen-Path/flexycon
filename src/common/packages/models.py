@@ -35,8 +35,8 @@ class PackageManager(ABC):
 
     @classmethod
     @abstractmethod
-    def install(cls, package: Package) -> None:
-        """Install package using manager."""
+    def install(cls, packages: list[Package]) -> None:
+        """Install packages using manager."""
         pass
 
     @classmethod

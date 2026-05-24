@@ -10,14 +10,13 @@ class Brew(PackageManager):
     PLATFORM = "darwin"
     COMMAND = "brew"
 
-    check_pattern = re.compile(
-        r"^Warning: ([^ ]+) .* is already installed and up-to-date\.$"
-    )
     update_outdated_pattern = re.compile(
         r"([^ ]+) .* is already installed but outdated"
     )
     update_action_pattern = re.compile(r"^==> Upgrading ([^ ]+)$")
-    install_pattern = re.compile(r"^==> Installing ([^ ]+)$")
+    install_success_pattern = re.compile(
+        r"^🍺\s+/opt/homebrew/(?:Cellar|Caskroom)/([^/]+)"
+    )
 
     @classmethod
     def process_output(cls, output: str):
@@ -34,20 +33,35 @@ class Brew(PackageManager):
                 continue
 
             # Installs
-            match = cls.install_pattern.match(line)
+            match = cls.install_success_pattern.match(line)
             if match:
                 log.info(f"- {match.group(1)} was installed.")
                 continue
 
     @classmethod
-    def install(cls, package: Package) -> None:
-        command = [cls.COMMAND, "install"]
-        if package.is_gui:
-            command.append("--cask")
-        command.append(package.identifier)
-        result = run_cmd(command)
+    def install(cls, packages: list[Package]) -> None:
+        if not packages:
+            return
 
-        cls.process_output(result.output)
+        formulas: list[str] = []
+        casks: list[str] = []
+        for package in packages:
+            if package.is_gui:
+                casks.append(package.identifier)
+            else:
+                formulas.append(package.identifier)
+
+        # Batch all regular formulas together
+        if formulas:
+            cmd = [cls.COMMAND, "install"] + formulas
+            result = run_cmd(cmd)
+            cls.process_output(result.output)
+
+        # Batch all GUI casks together
+        if casks:
+            cmd = [cls.COMMAND, "install", "--cask"] + casks
+            result = run_cmd(cmd)
+            cls.process_output(result.output)
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
@@ -64,8 +78,9 @@ class Yay(PackageManager):
     COMMAND = "yay"
 
     @classmethod
-    def install(cls, package: Package) -> None:
-        run_cmd([cls.COMMAND, "--sync", "--needed", "--noconfirm", package.identifier])
+    def install(cls, packages: list[Package]) -> None:
+        identifiers = [package.identifier for package in packages]
+        run_cmd([cls.COMMAND, "--sync", "--needed", "--noconfirm", *identifiers])
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
@@ -90,8 +105,10 @@ class Chocolatey(PackageManager):
     COMMAND = "choco"
 
     @classmethod
-    def install(cls, package: Package) -> None:
-        run_cmd([cls.COMMAND, "upgrade", package.identifier])
+    def install(cls, packages: list[Package]) -> None:
+        # TODO: investigate if choco has bulk install
+        for package in packages:
+            run_cmd([cls.COMMAND, "upgrade", package.identifier])
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
@@ -107,28 +124,31 @@ class Git(PackageManager):
     COMMAND = "git"
 
     @classmethod
-    def install(cls, package: Package) -> None:
-        if not package.destination:
-            log.error(
-                f"Package {package.identifier!r} requires a 'destination' for Git "
-                "operations."
-            )
-            return
+    def install(cls, packages: list[Package]) -> None:
+        for package in packages:
+            if not package.destination:
+                log.error(
+                    f"Package {package.identifier!r} requires a 'destination' for Git "
+                    "operations."
+                )
+                return
 
-        if package.destination.exists() and (package.destination / ".git").exists():
-            # Pull changes for "update" logic
-            run_cmd([cls.COMMAND, "-C", package.destination, "pull"])
-        else:
-            # Fresh clone
-            run_cmd(
-                [
-                    cls.COMMAND,
-                    "clone",
-                    "--recurse-submodules",
-                    package.identifier,
-                    package.destination,
-                ]
-            )
+            if package.destination.exists() and (package.destination / ".git").exists():
+                # Pull changes for "update" logic
+                run_cmd([cls.COMMAND, "-C", package.destination, "pull"])
+                log.info(f"- {package.name!r} was updated.")
+            else:
+                # Fresh clone
+                run_cmd(
+                    [
+                        cls.COMMAND,
+                        "clone",
+                        "--recurse-submodules",
+                        package.identifier,
+                        package.destination,
+                    ]
+                )
+                log.info(f"- {package.name!r} was installed.")
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
