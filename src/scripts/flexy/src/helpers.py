@@ -142,27 +142,24 @@ def yazi_format_packages_file() -> bool:
 
 
 def yazi_upgrade_packages() -> bool:
-    log.info("📦 Upgrading yazi packages...")
+    log.info("[yazi] Upgrading packages...")
 
     try:
         # Add '--discard' to prevent errors if there's been any changes to the packages
         result = run_cmd(["ya", "pkg", "upgrade", "--discard"])
-
-        packages = re.findall(r"Upgrading package `([^`]+)`", result.output)
-        for pkg in packages:
-            log.info(f"- Upgrading package {pkg}")
-
-        log.info(f"Yazi upgrade {'successful' if result.success else 'failed'}.")
-
-        # Formatting regardless of success status in case the upgrade was partially
-        # successful and made changes to the file.
-        yazi_format_packages_file()
-
-        return result.success
-
-    except KeyboardInterrupt:
-        sys.exit(1)
-
     except Exception as e:
-        log.error(f"Unable to upgrade yazi packages: {e}")
+        log.error(f"[yazi] Unable to upgrade packages: {e}")
         return False
+
+    packages = re.findall(r"Upgrading package `([^`]+)`", result.output)
+    for pkg in packages:
+        log.info(f"- Upgrading package {pkg}")
+
+    if not result.success:
+        log.error("[yazi] Upgrading packages failed.")
+
+    # Formatting regardless of success status in case the upgrade was partially
+    # successful and made changes to the file.
+    yazi_format_packages_file()
+
+    return result.success
