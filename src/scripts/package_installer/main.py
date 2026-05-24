@@ -58,7 +58,8 @@ def process_packages(packages: list[Package], dry_run: bool = False):
             log.warning(f"Skipping {package.name!r}: no available manager found.")
             continue
 
-        log.info(f"Installing {package.name!r} using {available_manager.__name__}.")
+        log.info(f"[{available_manager.__name__}] Installing {package.name!r}...")
+
         if not dry_run:
             available_manager.install(package)
 
