@@ -24,18 +24,26 @@ from scripts.package_installer.main import process_packages
 from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcuts
 
 
-def setup_virtual_env():
-    log.info("⚙️ Create virtual environment if it doesn't exist...")
-
+def setup_virtual_env() -> bool:
     if not VENV_DIR.exists():
         log.info(f"🐍 Creating Python venv in {str(VENV_DIR)!r}...")
-        run_cmd([PYTHON_BIN, "-m", "venv", VENV_DIR])
+        result = run_cmd([PYTHON_BIN, "-m", "venv", VENV_DIR])
 
-    log.info("♻️ Updating pip...")
-    run_cmd([PIP_BIN, "install", "--upgrade", "pip"])
+        if not result.success:
+            log.error("Unable to create venv.")
+            return False
 
-    log.info("📦 Installing current project and dependencies...")
-    run_cmd([PIP_BIN, "install", "-e", "."])
+    log.info("[pip] Upgrading...")
+    result = run_cmd([PIP_BIN, "install", "--upgrade", "pip"])
+    if not result.success:
+        log.warning("[pip] Upgrading failed")
+
+    log.info("[pip] Installing current project and dependencies...")
+    result = run_cmd([PIP_BIN, "install", "-e", "."])
+    if not result.success:
+        log.error("[pip] Installing current project and dependencies failed")
+
+    return result.success
 
 
 def install_system_packages():
