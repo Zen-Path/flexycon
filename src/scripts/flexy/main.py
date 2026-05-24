@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import sys
 
 from common.helpers import get_version
 from common.logger import log, setup_logging
@@ -93,7 +94,10 @@ def main() -> None:
 
     for action in ACTIONS:
         if action.name == args.action:
-            action.fn()
+            result = action.fn()
+
+            if isinstance(result, bool):
+                sys.exit(0 if result else 1)
 
 
 if __name__ == "__main__":
