@@ -439,11 +439,6 @@
             "dst": "{{@@ d_bin_dst @@}}/file_renamer",
             "chmod": "755"
         },
-        "f_flexy": {
-            "src": "{{@@ d_src @@}}/scripts/flexy/main.py",
-            "dst": "{{@@ d_bin_dst @@}}/flexy",
-            "chmod": "755"
-        },
         "f_git_logs": {
             "src": "{{@@ d_src @@}}/scripts/git_logs/main.py",
             "dst": "{{@@ d_bin_dst @@}}/git_logs",
@@ -599,7 +594,6 @@
                 "f_compiler",
                 "f_continuous_diff",
                 "f_file_renamer",
-                "f_flexy",
                 "f_getkeys",
                 "f_git_logs",
                 "f_if_installed",

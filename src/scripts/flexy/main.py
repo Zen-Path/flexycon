@@ -1,14 +1,10 @@
-#!{{@@ env['FLEXYCON_HOME'] @@}}/{{@@ d_venv_bin @@}}/python
-
-# {{@@ header() @@}}
+#!/usr/bin/env python3
 
 import argparse
 import logging
-import os
 
 from common.helpers import get_version
 from common.logger import log, setup_logging
-from common.variables import FLEXYCON_HOME
 from scripts.flexy.src.helpers import Action
 from scripts.flexy.src.targets import (
     clean,
@@ -84,9 +80,6 @@ def build_parser(actions: list[Action]) -> argparse.ArgumentParser:
 
 
 def main() -> None:
-    # Changing dirs so the script has access to the venv and relative paths.
-    os.chdir(FLEXYCON_HOME)
-
     args = build_parser(ACTIONS).parse_args()
 
     setup_logging(log, logging.DEBUG if args.verbose else logging.INFO)

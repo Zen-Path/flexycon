@@ -66,8 +66,7 @@ log "🔧 Installing current project and dependencies..."
 
 $VENV_PIP install $PIP_FLAGS -e .
 
-FLEXY_PATH="src/scripts/flexy/main.py"
-$VENV_PYTHON "$FLEXY_PATH" setup $APP_FLAGS
-$VENV_PYTHON "$FLEXY_PATH" install $APP_FLAGS
+$VENV_PYTHON 'flexy' setup $APP_FLAGS
+$VENV_PYTHON 'flexy' install $APP_FLAGS
 
 log "✅ Bootsrap complete."
