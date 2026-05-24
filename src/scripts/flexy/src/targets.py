@@ -190,6 +190,7 @@ def uninstall():
         patterns={
             ".venv",
             "node_modules",
+            ".coverage",
         },
         global_excludes={
             ".git",
