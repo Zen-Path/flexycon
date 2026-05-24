@@ -1,3 +1,4 @@
+import re
 import shutil
 
 from common.cmd_utilities import run_cmd
@@ -9,13 +10,44 @@ class Brew(PackageManager):
     PLATFORM = "darwin"
     COMMAND = "brew"
 
+    check_pattern = re.compile(
+        r"^Warning: ([^ ]+) .* is already installed and up-to-date\.$"
+    )
+    update_outdated_pattern = re.compile(
+        r"([^ ]+) .* is already installed but outdated"
+    )
+    update_action_pattern = re.compile(r"^==> Upgrading ([^ ]+)$")
+    install_pattern = re.compile(r"^==> Installing ([^ ]+)$")
+
+    @classmethod
+    def process_output(cls, output: str):
+        for line in output.splitlines():
+            if not line:
+                continue
+
+            # Updates
+            match = cls.update_outdated_pattern.match(
+                line
+            ) or cls.update_action_pattern.match(line)
+            if match:
+                log.info(f"- {match.group(1)} was updated.")
+                continue
+
+            # Installs
+            match = cls.install_pattern.match(line)
+            if match:
+                log.info(f"- {match.group(1)} was installed.")
+                continue
+
     @classmethod
     def install(cls, package: Package) -> None:
         command = [cls.COMMAND, "install"]
         if package.is_gui:
             command.append("--cask")
         command.append(package.identifier)
-        run_cmd(command)
+        result = run_cmd(command)
+
+        cls.process_output(result.output)
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
@@ -78,7 +110,7 @@ class Git(PackageManager):
     def install(cls, package: Package) -> None:
         if not package.destination:
             log.error(
-                f"Package {package.identifier} requires a 'destination' for Git "
+                f"Package {package.identifier!r} requires a 'destination' for Git "
                 "operations."
             )
             return
