@@ -23,7 +23,7 @@ from scripts.flexy.src.helpers import (
     yazi_upgrade_packages,
 )
 from scripts.package_installer.data.packages import packages
-from scripts.package_installer.main import process_packages
+from scripts.package_installer.src.core import process_packages
 from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcuts
 
 
