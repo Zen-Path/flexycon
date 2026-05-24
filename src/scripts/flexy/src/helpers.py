@@ -177,7 +177,7 @@ def yazi_upgrade_packages() -> bool:
 
     packages = re.findall(r"Upgrading package `([^`]+)`", result.output)
     for pkg in packages:
-        log.info(f"- Upgrading package {pkg}")
+        log.info(f"- Upgrading package {pkg!r}")
 
     if not result.success:
         log.error("[yazi] Upgrading packages failed.")
