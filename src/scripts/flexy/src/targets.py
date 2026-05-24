@@ -14,6 +14,7 @@ from scripts.flexy.src.helpers import (
     clean_precommit,
     copy_dotfiles_from_temp,
     get_dotdrop_profile,
+    get_sip_status,
     git_update_submodules,
     install_dotfiles_to_temp,
     remove_flexycon_data,
@@ -84,6 +85,13 @@ def install_pre_commit_hooks():
 
 
 def setup():
+    sip_status = get_sip_status()
+    if sip_status:
+        log.warning(
+            "For 'yabai' to work, SIP needs to be partially disabled. "
+            "Docs: https://github.com/asmvik/yabai/wiki/Disabling-System-Integrity-Protection"
+        )
+
     install_system_packages()
 
     git_update_submodules()

@@ -187,3 +187,22 @@ def yazi_upgrade_packages() -> bool:
     yazi_format_packages_file()
 
     return result.success
+
+
+def get_sip_status() -> bool | None:
+    log.info("👀 Checking System Integrity Protection status.")
+
+    if sys.platform != "Darwin":
+        return None
+
+    try:
+        result = run_cmd(["csrutil", "status"])
+    except Exception:
+        return None
+
+    match = re.search(r"status:\s*(\w+)", result.output)
+    if match:
+        status = match.group(1)
+        return status != "disabled"
+
+    return None
