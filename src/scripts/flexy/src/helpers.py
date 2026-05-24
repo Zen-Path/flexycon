@@ -119,7 +119,11 @@ def copy_dotfiles_from_temp(temp_path: Path):
 
 
 def yazi_format_packages_file() -> bool:
-    log.info("🧼 Formatting yazi packages file...")
+    log.info("[yazi] Formatting packages file...")
+
+    package_file = FLEXYCON_CONFIG / "yazi" / "package.toml"
+    log.debug(f"[yazi] Packages file path: {str(package_file)!r}")
+
     try:
         result = run_cmd(
             [
@@ -127,18 +131,17 @@ def yazi_format_packages_file() -> bool:
                 "fmt",
                 "--config",
                 FLEXYCON_HOME / ".taplo.toml",
-                FLEXYCON_CONFIG / "yazi" / "package.toml",
+                package_file,
             ]
-        ).success
-
-        log.info(f"Yazi packages formatting {'successful' if result else 'failed'}.")
-
-        return result
-
+        )
     except Exception as e:
-        log.error(f"Unable to format yazi packages: {e}")
+        log.error(f"[yazi] Unable to format packages file: {e}")
+        return False
 
-    return False
+    if not result.success:
+        log.info("[yazi] Formatting packages file failed.")
+
+    return result.success
 
 
 def yazi_upgrade_packages() -> bool:
