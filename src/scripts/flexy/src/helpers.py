@@ -221,3 +221,19 @@ def npm_install_packages() -> bool:
         log.error("[npm] Installing packages failed.")
 
     return result.success
+
+
+def playwright_install() -> bool:
+    # log.info(msg="📦 Installing playwright...")
+
+    try:
+        # We don't have any tests that require playwright at the moment
+        result = True or run_cmd(["playwright", "install"])
+    except Exception as e:
+        log.error(f"Unable to install playwright: {e}")
+        return False
+
+    if not result:
+        log.error("Installing playwright failed.")
+
+    return result

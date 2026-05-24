@@ -18,6 +18,7 @@ from scripts.flexy.src.helpers import (
     git_update_submodules,
     install_dotfiles_to_temp,
     npm_install_packages,
+    playwright_install,
     remove_flexycon_data,
     yazi_upgrade_packages,
 )
@@ -99,13 +100,7 @@ def setup():
 
     setup_virtual_env()
 
-    try:
-        # We don't have any tests that require it at the moment
-        # log.info("📦 Installing playwright...")
-        # run_cmd(["playwright", "install"])
-        pass
-    except Exception as e:
-        log.error(f"Unable to install playwright: {e}")
+    playwright_install()
 
     npm_install_packages()
 
