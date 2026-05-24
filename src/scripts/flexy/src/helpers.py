@@ -206,3 +206,18 @@ def get_sip_status() -> bool | None:
         return status != "disabled"
 
     return None
+
+
+def npm_install_packages() -> bool:
+    log.info("[npm] Installing packages...")
+
+    try:
+        result = run_cmd(["npm", "install"])
+    except Exception as e:
+        log.error(f"[npm] Unable to install packages: {e}.")
+        return False
+
+    if not result.success:
+        log.error("[npm] Installing packages failed.")
+
+    return result.success

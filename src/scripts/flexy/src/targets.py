@@ -17,6 +17,7 @@ from scripts.flexy.src.helpers import (
     get_sip_status,
     git_update_submodules,
     install_dotfiles_to_temp,
+    npm_install_packages,
     remove_flexycon_data,
     yazi_upgrade_packages,
 )
@@ -106,11 +107,7 @@ def setup():
     except Exception as e:
         log.error(f"Unable to install playwright: {e}")
 
-    log.info("📦 Installing npm packages...")
-    try:
-        run_cmd(["npm", "install"])
-    except Exception as e:
-        log.error(f"Unable to install npm packages: {e}.")
+    npm_install_packages()
 
     install_pre_commit_hooks()
 
