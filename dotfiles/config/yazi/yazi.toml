@@ -16,7 +16,6 @@ sort_sensitive = false
 sort_translit  = true
 # Discourage the use of the mouse.
 mouse_events = ["click"]
-title_format = "Yazi: {cwd}"
 
 [preview]
 cache_dir       = ""
