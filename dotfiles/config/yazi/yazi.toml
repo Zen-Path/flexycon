@@ -43,10 +43,10 @@ reveal = [
 ]
 
 # Edit
-edit = [
-    { run = '${EDITOR:-vi} %s', block = true, desc = "Edit", for = "unix" },
-    { run = 'code %s', orphan = true, desc = "Edit", for = "windows" },
-    { run = 'code -w %s', block = true, desc = "Edit (block)", for = "windows" },
+edit_text = [
+    { run = '${EDITOR:-vi} %s', block = true, desc = "Edit text", for = "unix" },
+    { run = 'code %s', orphan = true, desc = "Edit text", for = "windows" },
+    { run = 'code -w %s', block = true, desc = "Edit text (block)", for = "windows" },
 ]
 
 edit_image = [
@@ -121,25 +121,25 @@ rules = [
 
     # Text
     { mime = "text/*", use = [
-        "edit",
+        "edit_text",
         "edit_new_win",
     ] },
     { mime = "application/octet-stream", use = [
-        "edit",
+        "edit_text",
         "edit_new_win",
     ] },
     # JSON
     { mime = "application/{json,ndjson}", use = [
-        "edit",
+        "edit_text",
         "edit_new_win",
     ] },
     { mime = "*/javascript", use = [
-        "edit",
+        "edit_text",
         "edit_new_win",
     ] },
     # Empty file
     { mime = "inode/empty", use = [
-        "edit",
+        "edit_text",
         "edit_new_win",
     ] },
 
