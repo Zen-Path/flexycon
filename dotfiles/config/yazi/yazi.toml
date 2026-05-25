@@ -144,6 +144,12 @@ rules = [
     ] },
 
     # Image
+    { mime = "image/svg+xml", use = [
+        "open",
+        "open_new_win",
+        "edit_text",
+        "edit_image",
+    ] },
     { mime = "image/*", use = [
         "open",
         "open_new_win",
