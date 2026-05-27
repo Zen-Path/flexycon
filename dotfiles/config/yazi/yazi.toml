@@ -120,6 +120,11 @@ rules = [
     ] },
 
     # Text
+    { mime = "text/html", use = [
+        "edit_text",
+        "edit_new_win",
+        "open_in_browser",
+    ] },
     { mime = "text/*", use = [
         "edit_text",
         "edit_new_win",
