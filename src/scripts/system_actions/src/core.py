@@ -27,7 +27,9 @@ def prompt_user(options: list[PromptOption]) -> str | int | None:
     return lookup.get(result)
 
 
-def execute_special_action(action_func: Callable[[], None] | None = None):
+def execute_special_action(
+    action_func: Callable[[], None] | None = None, timeout: float = 45.0
+):
     """
     Handle locking, pausing notifications, tracking time, and ghost-wake prevention.
     If action_func is None, it simply locks the screen.
@@ -69,7 +71,7 @@ def execute_special_action(action_func: Callable[[], None] | None = None):
 
     def ghost_wake_watcher():
         # Wait 45 seconds. If the system was asleep, this pauses and resumes upon wake.
-        watcher_stop_event.wait(45.0)
+        watcher_stop_event.wait(timeout)
         if not watcher_stop_event.is_set() and lock_thread.is_alive():
             log.warning("Ghost wake detected. Re-suspending...")
             if action_func:
