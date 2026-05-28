@@ -459,6 +459,11 @@
             "dst": "{{@@ d_bin_dst @@}}/keyboard_manager",
             "chmod": "755"
         },
+        "f_documents_syncer": {
+            "src": "{{@@ d_src @@}}/scripts/documents_syncer/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/documents_syncer",
+            "chmod": "755"
+        },
         "f_rclone_wrapper": {
             "src": "{{@@ d_src @@}}/scripts/rclone_wrapper/main.py",
             "dst": "{{@@ d_bin_dst @@}}/rclone_wrapper",
@@ -600,6 +605,7 @@
                 "f_imgconv",
                 "f_jsonc_to_json",
                 "f_keyboard_manager",
+                "f_documents_syncer",
                 "f_noisereduce",
                 "f_pkgsize",
                 "f_rclone_wrapper",
