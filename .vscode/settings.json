@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "blugon",
+        "colorama",
         "darkgray",
         "dmenu",
         "dotdrop",
@@ -25,8 +26,12 @@
         "newsraft",
         "nsxiv",
         "nvim",
+        "openpyxl",
+        "pandoc",
+        "pdftotext",
         "pipewire",
         "pycache",
+        "pydantic",
         "pytest",
         "rclone",
         "skhd",
