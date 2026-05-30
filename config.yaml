@@ -230,19 +230,19 @@
             "dst": "{{@@ d_config_dst @@}}/mpv/input.conf"
         },
         "f_mpv_plugin_gallery_view_gallery_lua": {
-            "src": "config/mpv/plugins/mpv-gallery-view/script-modules/gallery.lua",
+            "src": "deps/mpv-gallery-view/script-modules/gallery.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/script-modules/gallery.lua"
         },
         "f_mpv_plugin_gallery_view_scripts_contact_sheet": {
-            "src": "config/mpv/plugins/mpv-gallery-view/scripts/contact-sheet.lua",
+            "src": "deps/mpv-gallery-view/scripts/contact-sheet.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/contact-sheet.lua",
         },
         "f_mpv_plugin_gallery_view_scripts_gallery_thumbgen": {
-            "src": "config/mpv/plugins/mpv-gallery-view/scripts/gallery-thumbgen.lua",
+            "src": "deps/mpv-gallery-view/scripts/gallery-thumbgen.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/gallery-thumbgen.lua",
         },
         "f_mpv_plugin_gallery_view_scripts_playlist_view": {
-            "src": "config/mpv/plugins/mpv-gallery-view/scripts/playlist-view.lua",
+            "src": "deps/mpv-gallery-view/scripts/playlist-view.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/playlist-view.lua",
         },
         "f_mpv_plugin_cursor_blur": {

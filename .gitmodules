@@ -1,5 +1,5 @@
 [submodule "dotfiles/config/mpv/plugins/mpv-gallery-view"]
-	path = dotfiles/config/mpv/plugins/mpv-gallery-view
+	path = dotfiles/deps/mpv-gallery-view
 	url = https://github.com/occivink/mpv-gallery-view
 [submodule "src/nsxiv-extra"]
 	path = dotfiles/deps/nsxiv-extra
