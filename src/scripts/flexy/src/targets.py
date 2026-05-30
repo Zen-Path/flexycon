@@ -89,12 +89,12 @@ def install_pre_commit_hooks():
 
 
 def setup():
-    sip_status = get_sip_status()
-    if sip_status:
-        log.warning(
-            "For 'yabai' to work, SIP needs to be partially disabled. "
-            "Docs: https://github.com/asmvik/yabai/wiki/Disabling-System-Integrity-Protection"
-        )
+    if sys.platform == "darwin":
+        if get_sip_status():
+            log.warning(
+                "For 'yabai' to work, SIP needs to be partially disabled. "
+                "Docs: https://github.com/asmvik/yabai/wiki/Disabling-System-Integrity-Protection"
+            )
 
     install_system_packages()
 
