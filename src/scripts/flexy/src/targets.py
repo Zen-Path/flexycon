@@ -7,6 +7,7 @@ from common.cmd_utilities import run_cmd
 from common.io_utilities import remove_empty_dirs, remove_files_by_pattern
 from common.logger import log
 from scripts.flexy.src.helpers import (
+    DOTDROP_CONFIG,
     PIP_BIN,
     PYTHON_BIN,
     VENV_BIN,
@@ -144,8 +145,8 @@ def install():
     # TODO: add windows and other shells support
     cmd = (
         f'zsh -c "source ~/.zprofile && '
-        f"{VENV_BIN}/dotdrop compare --profile {profile!r} ; "
-        f'{VENV_BIN}/dotdrop install --profile {profile!r}"'
+        f"{VENV_BIN}/dotdrop compare --profile {profile!r} --cfg {str(DOTDROP_CONFIG)!r} ; "
+        f'{VENV_BIN}/dotdrop install --profile {profile!r} --cfg {str(DOTDROP_CONFIG)!r}"'
     )
     try:
         subprocess.run(cmd, shell=True, check=True)

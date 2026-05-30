@@ -12,12 +12,13 @@ from common.cmd_utilities import run_cmd
 from common.logger import log
 from common.variables import FLEXYCON_CONFIG, FLEXYCON_DATA, FLEXYCON_HOME, HOME
 
-VENV_DIR = Path(".venv")
+VENV_DIR = FLEXYCON_HOME / ".venv"
 VENV_BIN = VENV_DIR / ("Scripts" if sys.platform == "win32" else "bin")
 PIP_BIN = VENV_BIN / "pip"
 PYTHON_BIN = shutil.which("python3") or "python"
 
-USER_VARIABLES_PATH = Path("uservariables.yaml")
+USER_VARIABLES_PATH = FLEXYCON_HOME / "uservariables.yaml"
+DOTDROP_CONFIG = FLEXYCON_HOME / "config.yaml"
 
 
 class Action(NamedTuple):
@@ -82,7 +83,16 @@ def get_dotdrop_profile() -> str | None:
         )
 
         try:
-            run_cmd([VENV_BIN / "dotdrop", "install", "--profile", "bootstrap"])
+            run_cmd(
+                [
+                    VENV_BIN / "dotdrop",
+                    "install",
+                    "--profile",
+                    "bootstrap",
+                    "--cfg",
+                    DOTDROP_CONFIG,
+                ]
+            )
         except Exception as e:
             log.error(f"[dotdrop] Unable to install bootstrap profile: {e}")
             return None
@@ -109,7 +119,14 @@ def get_dotdrop_profile() -> str | None:
 def install_dotfiles_to_temp(profile: str | None) -> Path:
     """Install dotdrop profile's dotfiles to a temp directory and return the its path."""
 
-    cmd: list[str | Path] = [VENV_BIN / "dotdrop", "install", "--temp", "--force"]
+    cmd: list[str | Path] = [
+        VENV_BIN / "dotdrop",
+        "install",
+        "--temp",
+        "--force",
+        "--cfg",
+        DOTDROP_CONFIG,
+    ]
     if profile:
         cmd.extend(["--profile", profile])
 
