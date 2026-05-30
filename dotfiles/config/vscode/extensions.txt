@@ -6,6 +6,7 @@ eamodio.gitlens
 esbenp.prettier-vscode
 hoovercj.vscode-settings-cycler
 jdinhlife.gruvbox
+mechatroner.rainbow-csv
 ms-python.debugpy
 ms-python.python
 ms-python.vscode-pylance
