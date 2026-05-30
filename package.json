@@ -1,5 +1,23 @@
 {
+    "author": "Zen-Path",
+    "bugs": {
+        "url": "https://github.com/Zen-Path/flexycon/issues"
+    },
+    "dependencies": {},
+    "description": "Unified system for managing configs, scripts, snippets, and shared utilities",
     "devDependencies": {
+        "prettier": "^3.8.1",
         "prettier-plugin-sort-json": "^4.2.0"
+    },
+    "homepage": "https://github.com/Zen-Path/flexycon#readme",
+    "keywords": [],
+    "license": "GPL-3.0-only",
+    "name": "flexycon",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Zen-Path/flexycon.git"
+    },
+    "scripts": {
+        "test": "pytest . -vv"
     }
 }
