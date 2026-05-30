@@ -12,7 +12,9 @@ xrandr \
 xrdb "${XDG_CONFIG_HOME:-$HOME/.config}"/x11/xresources &
 xrdbpid=$!
 
-autostart='xcompmgr dunst pipewire remapd'
+# 'dunst' is run by systemd
+
+autostart='xcompmgr pipewire remapd'
 
 for program in $autostart; do
     pidof -sx "$program" || "$program" &
