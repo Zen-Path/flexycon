@@ -314,6 +314,7 @@ def test_compose_platforms(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(sys, "platform", platform_name)
+
     path = HOME / "University" / "Timetable.pdf"
     shortcut = Shortcut(
         type="f",
@@ -342,8 +343,12 @@ def test_compose_platforms(
     ],
 )
 def test_compose_activate_penv(
-    type: Literal["d"] | Literal["f"], expected: str
+    type: Literal["d"] | Literal["f"],
+    expected: str,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    monkeypatch.setattr(sys, "platform", "darwin")
+
     shortcut = Shortcut(
         type=type,
         path=HOME / "Documents",
