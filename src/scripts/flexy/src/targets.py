@@ -14,6 +14,7 @@ from scripts.flexy.src.helpers import (
     VENV_DIR,
     clean_precommit,
     copy_dotfiles_from_temp,
+    get_actual_dotdrop_profiles,
     get_dotdrop_profile,
     get_sip_status,
     git_update_submodules,
@@ -133,6 +134,11 @@ def install():
 
     profile = get_dotdrop_profile()
     if not profile:
+        log.error("Dotdrop profile not found.")
+        return
+
+    if profile not in get_actual_dotdrop_profiles():
+        log.error(f"Dotdrop profile {profile!r} is invalid.")
         return
 
     # We have 2 choices: either we first install profile that only contains the

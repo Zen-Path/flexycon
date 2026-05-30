@@ -68,6 +68,17 @@ def git_update_submodules():
     return result.success
 
 
+def get_actual_dotdrop_profiles() -> list[str]:
+    with DOTDROP_CONFIG.open() as f:
+        data = yaml.safe_load(f)
+
+    return [
+        profile
+        for profile in data.get("profiles", {}).keys()
+        if not profile.startswith("meta") and profile != "bootstrap"
+    ]
+
+
 def get_dotdrop_profile() -> str | None:
     """
     Resolve the active dotdrop profile from the environment or user variables
