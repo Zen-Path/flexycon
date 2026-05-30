@@ -49,19 +49,15 @@ def clean_precommit():
 
 
 def git_update_submodules():
-    log.info("[git] Initializing submodules...")
+    log.info("[git] Initializing and updating submodules...")
 
     if not Path(".gitmodules").exists():
-        log.error("[git] File '.gitmodules' not found.")
+        log.warning("[git] Submodules not found.")
         return False
 
-    result = run_cmd(["git", "submodule", "init"])
-    if not result.success:
-        log.error("[git] Initializing submodules failed.")
-        return False
-
-    log.info("[git] Updating submodules...")
-    result = run_cmd(["git", "submodule", "update", "--recursive", "--remote"])
+    run_cmd(["git", "submodule", "init"])
+    run_cmd(["git", "submodule", "sync"])
+    result = run_cmd(["git", "submodule", "update", "--init", "--recursive"])
     if not result.success:
         log.error("[git] Updating submodules failed.")
 
