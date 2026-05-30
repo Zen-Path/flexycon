@@ -135,11 +135,17 @@ class Git(PackageManager):
 
             if package.destination.exists() and (package.destination / ".git").exists():
                 # Pull changes for "update" logic
-                run_cmd([cls.COMMAND, "-C", package.destination, "pull"])
-                log.info(f"- {package.name!r} was updated.")
+                result = run_cmd([cls.COMMAND, "-C", package.destination, "pull"])
+
+                if not result.success:
+                    log.error(f"Updating failed for repo {str(package.destination)!r}")
+                    continue
+
+                if "Already up to date." not in result.output:
+                    log.info(f"- {package.name!r} was updated.")
             else:
                 # Fresh clone
-                run_cmd(
+                result = run_cmd(
                     [
                         cls.COMMAND,
                         "clone",
@@ -148,6 +154,12 @@ class Git(PackageManager):
                         package.destination,
                     ]
                 )
+                if not result.success:
+                    log.error(
+                        f"Installation failed for repo {str(package.destination)!r}"
+                    )
+                    continue
+
                 log.info(f"- {package.name!r} was installed.")
 
     @classmethod
