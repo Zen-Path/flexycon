@@ -176,7 +176,7 @@ class TerminalPrompt(BasePrompt):
         )
 
         options_str = "\n".join(
-            [f"{i}. {option}" for i, option in enumerate(display_options)]
+            [f"{i}. {option}" for i, option in enumerate(display_options, 1)]
         )
 
         print(f":: {self.format_prompt(prompt)}:\n{options_str}")
