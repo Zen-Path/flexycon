@@ -1,31 +1,31 @@
 [[plugin.deps]]
 hash = "2678c84a0b3a0b22504e918ccaf99011"
-rev  = "be524fb"
+rev  = "c2c16c8"
 use  = "yazi-rs/plugins:mime-ext"
 
 [[plugin.deps]]
 hash = "88e56a64b7ce7c4314427452343fef17"
-rev  = "be524fb"
+rev  = "c2c16c8"
 use  = "yazi-rs/plugins:git"
 
 [[plugin.deps]]
 hash = "7b625412411be411153886894d9acaf"
-rev  = "be524fb"
+rev  = "c2c16c8"
 use  = "yazi-rs/plugins:full-border"
 
 [[plugin.deps]]
 hash = "e3260d0b1feded8c8e3ae3afa1169e30"
-rev  = "be524fb"
+rev  = "c2c16c8"
 use  = "yazi-rs/plugins:mount"
 
 [[plugin.deps]]
 hash = "9c7987da2d2a2120dac33abb64132004"
-rev  = "be524fb"
+rev  = "c2c16c8"
 use  = "yazi-rs/plugins:toggle-pane"
 
 [[plugin.deps]]
 hash = "6b141fbed3c74b45558fbc7088c805ee"
-rev  = "be524fb"
+rev  = "c2c16c8"
 use  = "yazi-rs/plugins:vcs-files"
 
 [[plugin.deps]]
