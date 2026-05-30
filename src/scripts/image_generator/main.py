@@ -43,7 +43,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="enable debug output",
     )
 
-    subparsers = parser.add_subparsers(dest="image_type", metavar="IMAGE_TYPE")
+    subparsers = parser.add_subparsers(
+        dest="image_type", metavar="IMAGE_TYPE", required=True
+    )
+
     # TODO: allow for more image types. use base config and factory pattern to
     # automatically call an image type with its specific configuration options.
 
