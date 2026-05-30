@@ -132,27 +132,27 @@ def install():
 
     log.info("⚙️ Installing configuration...")
 
-    profile = get_dotdrop_profile()
-    if not profile:
+    dotdrop_profile = get_dotdrop_profile()
+    if not dotdrop_profile:
         log.error("Dotdrop profile not found.")
         return
 
-    if profile not in get_actual_dotdrop_profiles():
-        log.error(f"Dotdrop profile {profile!r} is invalid.")
+    if dotdrop_profile not in get_actual_dotdrop_profiles():
+        log.error(f"Dotdrop profile {dotdrop_profile!r} is invalid.")
         return
 
     # We have 2 choices: either we first install profile that only contains the
     # shell profile, or we install the full profile to a temporary directory
     # and manually copy the shell config to the right place. The latter
     # has the advantage that we can set per-profile config in the shell config.
-    temp_path = install_dotfiles_to_temp(profile)
+    temp_path = install_dotfiles_to_temp(dotdrop_profile)
     copy_dotfiles_from_temp(temp_path)
 
     # TODO: add windows and other shells support
     cmd = (
         f'zsh -c "source ~/.zprofile && '
-        f"{VENV_BIN}/dotdrop compare --profile {profile!r} --cfg {str(DOTDROP_CONFIG)!r} ; "
-        f'{VENV_BIN}/dotdrop install --profile {profile!r} --cfg {str(DOTDROP_CONFIG)!r}"'
+        f"{VENV_BIN}/dotdrop compare --profile {dotdrop_profile!r} --cfg {str(DOTDROP_CONFIG)!r} ; "
+        f'{VENV_BIN}/dotdrop install --profile {dotdrop_profile!r} --cfg {str(DOTDROP_CONFIG)!r}"'
     )
     try:
         subprocess.run(cmd, shell=True, check=True)
