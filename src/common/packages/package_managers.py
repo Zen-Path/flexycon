@@ -1,6 +1,8 @@
 import re
 import shutil
 
+from git import Repo
+
 from common.cmd_utilities import run_cmd
 from common.logger import log
 from common.packages.models import Package, PackageManager
@@ -127,40 +129,34 @@ class Git(PackageManager):
     def install(cls, packages: list[Package]) -> None:
         for package in packages:
             if not package.destination:
-                log.error(
-                    f"Package {package.identifier!r} requires a 'destination' for Git "
-                    "operations."
-                )
-                return
+                log.error(f"Package {package.identifier!r} requires a 'destination'.")
+                continue
 
-            if package.destination.exists() and (package.destination / ".git").exists():
-                # Pull changes for "update" logic
-                result = run_cmd([cls.COMMAND, "-C", package.destination, "pull"])
+            try:
+                if (package.destination / ".git").exists():
+                    # Update logic
+                    repo = Repo(package.destination)
+                    origin = repo.remotes.origin
 
-                if not result.success:
-                    log.error(f"Updating failed for repo {str(package.destination)!r}")
-                    continue
+                    commit_before = repo.head.commit.hexsha
+                    origin.pull()
+                    commit_after = repo.head.commit.hexsha
 
-                if "Already up to date." not in result.output:
-                    log.info(f"- {package.name!r} was updated.")
-            else:
-                # Fresh clone
-                result = run_cmd(
-                    [
-                        cls.COMMAND,
-                        "clone",
-                        "--recurse-submodules",
-                        package.identifier,
-                        package.destination,
-                    ]
-                )
-                if not result.success:
-                    log.error(
-                        f"Installation failed for repo {str(package.destination)!r}"
+                    # Check if changes were actually pulled
+                    if commit_before != commit_after:
+                        log.info(
+                            f"- {package.name!r} was updated from "
+                            f"{commit_before[:7]} to {commit_after[:7]}"
+                        )
+                else:
+                    # Fresh clone logic
+                    Repo.clone_from(
+                        package.identifier, package.destination, recurse_submodules=True
                     )
-                    continue
+                    log.info(f"- {package.name!r} was installed.")
 
-                log.info(f"- {package.name!r} was installed.")
+            except Exception as e:
+                log.error(f"Unable to install {package.name!r}: {e}")
 
     @classmethod
     def uninstall(cls, package: Package) -> None:
