@@ -1,9 +1,10 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, TypeIs
+from typing import Any, Sequence, TypeIs
 
 from common.logger import log
+from common.variables import COLOR_BLACK, COLOR_WHITE, GB
 
 
 @dataclass
@@ -11,7 +12,7 @@ class ImageConfig:
     block_size: int = 25
 
     font_size: int = 11
-    font_color: str = "#928374"
+    font_color: str = GB.GRAY
 
     outline_thickness: float = 0.5
     outline_color: str = "#dddddd"
@@ -63,7 +64,7 @@ def load_grid_from_json(path: Path | str) -> list[list[int]] | None:
 
 def generate_svg(
     grid: list[list[int]],
-    colors: list[str] | None = None,  # TODO: allow for Color objects
+    colors: Sequence[str | GB] | None = None,  # TODO: allow for Color objects
     config: ImageConfig | None = None,
     output_path: Path | None = None,
     coordinate_start: int = 1,
@@ -87,7 +88,7 @@ def generate_svg(
         Path: The path where the SVG was saved.
     """
 
-    colors = colors or ["#000000", "#FFFFFF"]
+    colors = colors or [COLOR_BLACK, COLOR_WHITE]
     config = config or ImageConfig()
     output_path = output_path or Path("image.svg")
 
@@ -133,7 +134,7 @@ def generate_svg(
                 fill_color = "none"  # make the cell transparent
             else:
                 # fallback to white
-                fill_color = colors[val - 1] if val < len(colors) else "#FFFFFF"
+                fill_color = colors[val - 1] if val < len(colors) else COLOR_WHITE
 
             x = offset_x + (c * config.block_size)
             y = offset_y + (r * config.block_size)

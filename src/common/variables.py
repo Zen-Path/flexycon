@@ -1,6 +1,9 @@
 import os
 import sys
+from enum import StrEnum
 from pathlib import Path
+
+# PATHS
 
 # fmt: off
 ROOT = Path("/")
@@ -42,3 +45,58 @@ flex_home_parts = (
     if os.getenv("FLEXYCON_HOME")
     else ["$HOME", ".local", "src", "flexycon"]
 )
+
+# COLORS
+
+DARK_MODE = True
+CONTRAST = "normal"
+
+
+# fmt: off
+class GB(StrEnum):
+    DARK_0       = "#282828"
+    DARK_0_HARD  = "#1d2021"
+    DARK_0_SOFT  = "#32302f"
+    DARK_1       = "#3c3836"
+    DARK_2       = "#504945"
+    DARK_3       = "#665c54"
+    DARK_4       = "#7c6f64"
+    #
+    GRAY         = "#928374"
+    #
+    LIGHT_0      = "#fbf1c7"
+    LIGHT_0_HARD = "#f9f5d7"
+    LIGHT_0_SOFT = "#f2e5bc"
+    LIGHT_1      = "#ebdbb2"
+    LIGHT_2      = "#d5c4a1"
+    LIGHT_3      = "#bdae93"
+    LIGHT_4      = "#a89984"
+    #
+    BRIGHT_RED     = "#fb4934"
+    BRIGHT_GREEN   = "#b8bb26"
+    BRIGHT_YELLOW  = "#fabd2f"
+    BRIGHT_BLUE    = "#83a598"
+    BRIGHT_PURPLE  = "#d3869b"
+    BRIGHT_AQUA    = "#8ec07c"
+    BRIGHT_ORANGE  = "#fe8019"
+    #
+    NEUTRAL_RED    = "#cc241d"
+    NEUTRAL_GREEN  = "#98971a"
+    NEUTRAL_YELLOW = "#d79921"
+    NEUTRAL_BLUE   = "#458588"
+    NEUTRAL_PURPLE = "#b16286"
+    NEUTRAL_AQUA   = "#689d6a"
+    NEUTRAL_ORANGE = "#d65d0e"
+    #
+    FADED_RED      = "#9d0006"
+    FADED_GREEN    = "#79740e"
+    FADED_YELLOW   = "#b57614"
+    FADED_BLUE     = "#076678"
+    FADED_PURPLE   = "#8f3f71"
+    FADED_AQUA     = "#427b58"
+    FADED_ORANGE   = "#af3a03"
+
+# fmt: on
+
+COLOR_WHITE = "#FFFFFF"
+COLOR_BLACK = "#000000"

@@ -9,6 +9,7 @@ from pathlib import Path
 
 from common.helpers import get_version
 from common.logger import log, setup_logging
+from common.variables import GB
 from scripts.image_generator.data import references  # Only needed for demo
 from scripts.image_generator.src.core import (
     ImageConfig,
@@ -112,7 +113,7 @@ def main() -> None:
         grid = references.EMOJI_SMILE
 
     # Execution
-    COLORS = ["#cc241d", "#458588", "#458588"]
+    COLORS = [GB.NEUTRAL_BLUE, GB.NEUTRAL_RED]
     output_path = generator_fn(
         grid=grid,
         colors=COLORS,
