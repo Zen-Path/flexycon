@@ -12,13 +12,8 @@ XDG_DOCUMENTS_DIR   = HOME / "Documents"
 XDG_DOWNLOAD_DIR    = HOME / "Downloads"
 XDG_MUSIC_DIR       = HOME / "Music"
 XDG_PICTURES_DIR    = HOME / "Pictures"
+XDG_VIDEOS_DIR      = HOME / "Movies" if sys.platform == "darwin" else HOME / "Videos"
 XDG_PUBLICSHARE_DIR = HOME / "Public"
-
-if sys.platform == "darwin":
-    XDG_VIDEOS_DIR = HOME / "Movies"
-else:
-    # TODO: handle Windows case
-    XDG_VIDEOS_DIR = HOME / "Videos" # pyright: ignore[reportConstantRedefinition]
 
 # Hidden
 XDG_CACHE_HOME  = HOME / ".cache"
