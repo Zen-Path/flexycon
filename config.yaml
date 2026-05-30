@@ -444,6 +444,11 @@
             "dst": "{{@@ d_bin_dst @@}}/git_logs",
             "chmod": "755"
         },
+        "f_image_generator": {
+            "src": "{{@@ d_src @@}}/scripts/image_generator/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/image_generator",
+            "chmod": "755"
+        },
         "f_journal_entry": {
             "src": "{{@@ d_src @@}}/scripts/journal_entry/main.py",
             "dst": "{{@@ d_bin_dst @@}}/journal_entry",
@@ -601,6 +606,7 @@
                 "f_file_renamer",
                 "f_getkeys",
                 "f_git_logs",
+                "f_image_generator",
                 "f_if_installed",
                 "f_imgconv",
                 "f_jsonc_to_json",
