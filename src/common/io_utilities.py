@@ -6,6 +6,8 @@ from pathlib import Path
 from common.logger import log
 from common.prompt_utilities import prompt_bool
 
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"}
+
 
 def write_to_file(content: str, path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -147,3 +149,17 @@ def remove_empty_dirs(
                     log.debug(f"Removed empty directory {str(dir_path)!r}")
             except OSError as e:
                 log.warning(f"Could not remove {str(dir_path)!r}: {e}")
+
+
+def get_images_from_path(path: Path) -> list[Path]:
+    """Recursively find images in directories or return file if it's an image."""
+    if not path.exists():
+        return []
+
+    if path.is_file():
+        return [path] if path.suffix.lower() in IMAGE_EXTENSIONS else []
+
+    if path.is_dir():
+        return [p for p in path.rglob("*") if p.suffix.lower() in IMAGE_EXTENSIONS]
+
+    return []
