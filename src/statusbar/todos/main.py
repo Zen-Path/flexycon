@@ -6,8 +6,9 @@ import argparse
 import logging
 
 from common.cmd_utilities import run_cmd_background
-from common.helpers import NotificationSystem, get_version
+from common.helpers import get_version
 from common.logger import log, setup_logging
+from common.notification_utilities import Notification
 from common.statusbar import (
     EDITOR,
     TERMINAL,
@@ -18,14 +19,14 @@ from statusbar.todos.src.core import process_tasks
 
 ACTIONS = {
     MouseButton.LEFT: lambda: run_cmd_background([TERMINAL, "-e", "taskwarrior-tui"]),
-    MouseButton.RIGHT: lambda: NotificationSystem.run(
+    MouseButton.RIGHT: lambda: Notification(
         " ToDos",
         "Show due and overdue tasks.\n"
         "\n<b>Actions</b>\n"
         "- Left  : Open 'taskwarrior-tui'\n"
         "- Right : Show this message\n"
         "- Extra : Edit this script",
-    ),
+    ).send(),
     MouseButton.EXTRA_3: lambda: run_cmd_background(
         [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
     ),

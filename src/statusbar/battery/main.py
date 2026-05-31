@@ -6,8 +6,9 @@ import argparse
 import logging
 
 from common.cmd_utilities import run_cmd_background
-from common.helpers import NotificationSystem, get_version
+from common.helpers import get_version
 from common.logger import log, setup_logging
+from common.notification_utilities import Notification
 from common.statusbar import (
     EDITOR,
     TERMINAL,
@@ -19,7 +20,7 @@ from statusbar.battery.src.core import adjust_backlight, get_battery_info
 ACTIONS = {
     MouseButton.SCROLL_UP: lambda: adjust_backlight(10),
     MouseButton.SCROLL_DOWN: lambda: adjust_backlight(-10),
-    MouseButton.RIGHT: lambda: NotificationSystem.run(
+    MouseButton.RIGHT: lambda: Notification(
         " Battery",
         "Show battery(ies) status.\n"
         "\n<b>Actions</b>\n"
@@ -32,7 +33,7 @@ ACTIONS = {
         ": charging\n"
         ": charged\n"
         ": low battery\n",
-    ),
+    ).send(),
     MouseButton.EXTRA_3: lambda: run_cmd_background(
         [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
     ),

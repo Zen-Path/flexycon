@@ -6,8 +6,9 @@ import argparse
 import logging
 
 from common.cmd_utilities import run_cmd_background
-from common.helpers import NotificationSystem, get_version
+from common.helpers import get_version
 from common.logger import log, setup_logging
+from common.notification_utilities import Notification
 from common.statusbar import EDITOR, TERMINAL, MouseButton, handle_block_button
 from statusbar.rss.src.core import (
     NEWSRAFT_DB,
@@ -19,7 +20,7 @@ from statusbar.rss.src.core import (
 ACTIONS = {
     MouseButton.LEFT: lambda: run_cmd_background([TERMINAL, "-e", "newsraft"]),
     MouseButton.MIDDLE: refresh_feeds,
-    MouseButton.RIGHT: lambda: NotificationSystem.run(
+    MouseButton.RIGHT: lambda: Notification(
         " RSS Feed",
         "Show total and unread rss items.\n"
         "\n<b>Actions:</b>\n"
@@ -28,7 +29,7 @@ ACTIONS = {
         "- Right  : Show this message\n"
         "- Extra  : Edit this script\n"
         "\n<b>Note:</b> Only one instance of 'newsraft' may be running at a time.",
-    ),
+    ).send(),
     MouseButton.EXTRA_3: lambda: run_cmd_background(
         [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
     ),

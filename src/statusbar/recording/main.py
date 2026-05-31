@@ -6,8 +6,9 @@ import argparse
 import logging
 
 from common.cmd_utilities import run_cmd_background
-from common.helpers import NotificationSystem, get_version
+from common.helpers import get_version
 from common.logger import log, setup_logging
+from common.notification_utilities import Notification, NotificationSystem
 from common.statusbar import (
     EDITOR,
     TERMINAL,
@@ -20,7 +21,7 @@ from statusbar.recording.src.core import RECORDING_ICON_PATH, stop_recording
 ACTIONS = {
     MouseButton.LEFT: stop_recording,
     MouseButton.MIDDLE: lambda: NotificationSystem.set_paused("toggle"),
-    MouseButton.RIGHT: lambda: NotificationSystem.run(
+    MouseButton.RIGHT: lambda: Notification(
         "⏺️ Recording",
         "Show recording status and info.\n"
         "\n<b>Actions</b>\n"
@@ -28,7 +29,7 @@ ACTIONS = {
         "- Middle : Toggle notifications\n"
         "- Right  : Show this message\n"
         "- Extra  : Edit this script",
-    ),
+    ).send(),
     MouseButton.EXTRA_3: lambda: run_cmd_background(
         [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
     ),

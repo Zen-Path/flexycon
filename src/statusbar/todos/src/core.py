@@ -1,6 +1,6 @@
 from common.cmd_utilities import run_cmd
-from common.helpers import NotificationSystem
 from common.logger import log
+from common.notification_utilities import Notification
 from common.variables import XDG_DATA_HOME
 
 STATE_FILE = XDG_DATA_HOME / "taskwarrior" / "overdue_tasks"
@@ -44,10 +44,10 @@ def process_tasks() -> str:
     # Notify if more tasks became overdue
     difference = overdue_tasks - old_overdue
     if difference > 0:
-        NotificationSystem.run(
+        Notification(
             "⚠️ Taskwarrior Alert",
             f"{difference} task{'s' if difference > 1 else ''} become overdue.",
-        )
+        ).send()
 
     # Format output
     if overdue_tasks != 0:

@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from typing import Callable
 
 from common.cmd_utilities import run_cmd
-from common.helpers import NotificationSystem
 from common.logger import log
+from common.notification_utilities import Notification, NotificationSystem
 from common.prompt_utilities import PromptOption, prompt_options
 from common.system_utilities import System
 
@@ -99,8 +99,4 @@ def execute_special_action(
     elapsed_str = str(timedelta(seconds=elapsed_time.total_seconds())).split(".")[0]
     log.debug(f"Elapsed time: {elapsed_str}")
 
-    NotificationSystem.run(
-        title="Welcome back!",
-        message=f"You've been gone for {elapsed_str}.",
-        urgency="low",
-    )
+    Notification("Welcome back!", f"You've been gone for {elapsed_str}.", "low").send()

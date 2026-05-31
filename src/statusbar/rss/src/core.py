@@ -4,8 +4,8 @@ from contextlib import closing
 from pathlib import Path
 
 from common.cmd_utilities import run_cmd
-from common.helpers import NotificationSystem
 from common.logger import log
+from common.notification_utilities import Notification
 from common.variables import XDG_DATA_HOME
 
 NEWSRAFT_DATA_DIR = XDG_DATA_HOME / "newsraft"
@@ -78,19 +78,18 @@ def refresh_feeds() -> bool:
     """Refresh all feeds and notify user."""
 
     notification_title = "RSS Refresh"
-    NotificationSystem.run(notification_title, "Refreshing feeds...")
+    Notification(notification_title, "Refreshing feeds...").send()
 
     if not reload_newsraft():
-        NotificationSystem.run(notification_title, "Unable to refresh feeds.")
+        Notification(notification_title, "Unable to refresh feeds.").send()
         return False
 
     total_count = get_item_count_db(db_path=NEWSRAFT_DB)
     if total_count:
-        NotificationSystem.run(notification_title, f"Newsraft has {total_count} items.")
+        Notification(notification_title, f"Newsraft has {total_count} items.").send()
     else:
-        NotificationSystem.run(
-            notification_title,
-            "Refresh successful, but unknown item count.",
-        )
+        Notification(
+            notification_title, "Refresh successful, but unknown item count."
+        ).send()
 
     return True

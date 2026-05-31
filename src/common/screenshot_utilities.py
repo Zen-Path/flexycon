@@ -3,8 +3,9 @@ from pathlib import Path
 from typing import Literal
 
 from common.cmd_utilities import run_cmd
-from common.helpers import Color, NotificationSystem, Window
+from common.helpers import Color, Window
 from common.logger import log
+from common.notification_utilities import Notification
 from common.variables import XDG_PICTURES_DIR
 
 
@@ -81,11 +82,8 @@ class ScreenshotUtility:
             from common.packages.clipboard_utilities import copy_file
 
             copy_file(output_path)
-            NotificationSystem.run(
-                "Screenshot captured",
-                f"Saved at {str(output_path)!r}",
-                icon_path=output_path,
-                open_image_onclick=True,
+            Notification("Screenshot captured", f"Saved at {str(output_path)!r}").send(
+                icon_path=output_path, open_image_onclick=True
             )
 
         return success

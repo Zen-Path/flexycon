@@ -11,9 +11,10 @@ from pathlib import Path
 from typing import Callable, TypedDict
 
 from common.cmd_utilities import run_cmd, run_cmd_background
-from common.helpers import NotificationSystem, get_version
+from common.helpers import get_version
 from common.logger import log, setup_logging
 from common.media import flip_image
+from common.notification_utilities import Notification
 from common.packages.clipboard_utilities import copy_file, copy_text
 from common.prompt_utilities import prompt_options
 
@@ -48,7 +49,7 @@ def action_interactive_trash(paths: list[Path]):
 
         if choice == "yes":
             run_cmd(["trash-put", path])
-            NotificationSystem.run("File trashed", f"Trashed {str(path)!r}.")
+            Notification("File trashed", f"Trashed {str(path)!r}.").send()
 
 
 def action_trash(paths: list[Path]):
@@ -74,27 +75,24 @@ def action_group(paths: list[Path]):
         return
 
     if not choice:
-        NotificationSystem.run("No directory entered, cancelled.")  # TODO
+        Notification("No directory entered, cancelled.").send()  # TODO
         return
 
     destdir = Path.cwd() / choice
     destdir.mkdir(parents=True, exist_ok=True)
-    NotificationSystem.run("Directory created", f"Located at {str(destdir)}")
+    Notification("Directory created", f"Located at {str(destdir)}").send()
 
     for path in paths:
         shutil.move(path, destdir)
 
     if len(paths) == 1:
-        NotificationSystem.run(
-            "Move complete",
-            f"{paths[0].name} moved to {destdir.parent}.",
-            icon_path=destdir / paths[0].name,
-            open_image_onclick=True,
-        )
+        Notification(
+            "Move complete", f"{paths[0].name} moved to {destdir.parent}."
+        ).send(icon_path=destdir / paths[0].name, open_image_onclick=True)
 
 
 def action_show_help(paths: list[Path]):
-    NotificationSystem.run("nsxiv actions", get_help_text())
+    Notification("nsxiv actions", get_help_text()).send()
 
 
 def action_get_info(paths: list[Path]):
@@ -103,7 +101,7 @@ def action_get_info(paths: list[Path]):
     for line in mediainfo.splitlines():
         line = line.replace(":", ": <b>", 1) + "</b>"
         formatted.append(line)
-    NotificationSystem.run("File information", "\n".join(formatted))
+    Notification("File information", "\n".join(formatted)).send()
 
 
 def action_rotate(paths: list[Path], degrees: int = 90):
@@ -117,12 +115,12 @@ def action_update_wallpaper(paths: list[Path]):
 
 def action_copy_image(paths: list[Path]):
     copy_file(paths[0])
-    NotificationSystem.run("Image copied", f"Image {paths[0]} copied to clipboard")
+    Notification("Image copied", f"Image {paths[0]} copied to clipboard").send()
 
 
 def action_copy_path(paths: list[Path]):
     copy_text(str(paths[0]))
-    NotificationSystem.run("Path copied", f"Path {paths[0]} copied to clipboard")
+    Notification("Path copied", f"Path {paths[0]} copied to clipboard").send()
 
 
 ACTIONS: dict[str, Action] = {

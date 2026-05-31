@@ -6,8 +6,9 @@ import argparse
 import logging
 
 from common.cmd_utilities import run_cmd_background
-from common.helpers import NotificationSystem, get_version
+from common.helpers import get_version
 from common.logger import log, setup_logging
+from common.notification_utilities import Notification
 from common.statusbar import (
     EDITOR,
     TERMINAL,
@@ -18,7 +19,7 @@ from common.statusbar import (
 ACTIONS = {
     MouseButton.LEFT: lambda: 0,
     MouseButton.MIDDLE: lambda: 0,
-    MouseButton.RIGHT: lambda: NotificationSystem.run(
+    MouseButton.RIGHT: lambda: Notification(
         "⏺️ SCRIPT_NAME",
         "SCRIPT_DESCRIPTION.\n"
         "\n<b>Actions</b>\n"
@@ -27,7 +28,7 @@ ACTIONS = {
         "- Right  : Show this message\n"
         "- Scroll : ACTION\n"
         "- Extra  : Edit this script",
-    ),
+    ).send(),
     MouseButton.EXTRA_3: lambda: run_cmd_background(
         [TERMINAL, "-e", EDITOR, "{{@@ _dotfile_abs_src @@}}"]
     ),

@@ -7,8 +7,9 @@ import argparse
 import logging
 
 from common.cmd_utilities import run_cmd, run_cmd_background
-from common.helpers import NotificationSystem, SoundUtility, get_version
+from common.helpers import SoundUtility, get_version
 from common.logger import log, setup_logging
+from common.notification_utilities import Notification
 from common.statusbar import (
     EDITOR,
     STATUSBAR,
@@ -24,7 +25,7 @@ ACTIONS = {
         run_cmd(["pkill", "-RTMIN+10", STATUSBAR]),
     ),
     MouseButton.MIDDLE: SoundUtility.toggle_mute,
-    MouseButton.RIGHT: lambda: NotificationSystem.run(
+    MouseButton.RIGHT: lambda: Notification(
         "📢 Sound",
         "Show sound volume, 🔇 if muted.\n"
         "\n<b>Actions</b>\n"
@@ -33,7 +34,7 @@ ACTIONS = {
         "- Right  : Show this message\n"
         "- Scroll : Update sound volume\n"
         "- Extra  : Edit this script",
-    ),
+    ).send(),
     MouseButton.SCROLL_UP: lambda: SoundUtility.update_volume(2),
     MouseButton.SCROLL_DOWN: lambda: SoundUtility.update_volume(-2),
     MouseButton.EXTRA_3: lambda: run_cmd_background(

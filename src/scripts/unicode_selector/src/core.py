@@ -2,8 +2,8 @@ import argparse
 import sys
 
 from common.cmd_utilities import run_cmd
-from common.helpers import NotificationSystem
 from common.logger import log
+from common.notification_utilities import Notification
 from common.packages.clipboard_utilities import ClipboardManager
 from common.prompt_utilities import prompt_options
 from scripts.unicode_selector.data.characters import ASCII_BRAILLE, CHARACTERS
@@ -166,4 +166,4 @@ def handle_default_mode(args: argparse.Namespace):
         log.info("Selection copied.")
 
         if args.notify:
-            NotificationSystem.run("Selection copied", f"Copied {chars}.")
+            Notification("Selection copied", f"Copied {chars}.").send()

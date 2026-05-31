@@ -3,8 +3,8 @@ import shutil
 from datetime import datetime
 
 from common.cmd_utilities import run_cmd, run_cmd_background
-from common.helpers import NotificationSystem
 from common.logger import log
+from common.notification_utilities import Notification
 from common.statusbar import TERMINAL
 
 
@@ -50,11 +50,11 @@ def get_appointments() -> str | None:
 
 def show_info() -> None:
     """Triggers notifications for both calendar and appointments."""
-    NotificationSystem.run("📅 Calendar", get_calendar())
+    Notification("📅 Calendar", get_calendar()).send()
 
     appointments = get_appointments()
     if appointments:
-        NotificationSystem.run("📌 Appointments", appointments)
+        Notification("📌 Appointments", appointments).send()
 
 
 def open_calcurse() -> None:

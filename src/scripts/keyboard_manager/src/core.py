@@ -2,8 +2,8 @@ import shutil
 import subprocess
 
 from common.cmd_utilities import run_cmd
-from common.helpers import NotificationSystem
 from common.logger import log
+from common.notification_utilities import Notification
 from common.prompt_utilities import prompt_options
 
 
@@ -122,7 +122,7 @@ def set_keymap_layout(layout: str) -> bool:
     try:
         result = run_cmd(["setxkbmap", layout]).success
         if result:
-            NotificationSystem.run(f"Keymap layout changed to {layout!r}")
+            Notification(f"Keymap layout changed to {layout!r}").send()
         return result
 
     except subprocess.CalledProcessError:

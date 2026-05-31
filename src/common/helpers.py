@@ -1,10 +1,9 @@
 import os
 import shutil
-import subprocess
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Generator, Literal
+from typing import Generator
 
 import psutil
 
@@ -69,96 +68,6 @@ def get_parent_process_chain(start_pid: int | None = None) -> list[tuple[str, in
         current_process = current_process.parent()
 
     return process_chain
-
-
-class NotificationSystem:
-    @classmethod
-    def run(
-        cls,
-        title: str,
-        message: str | None = None,
-        urgency: Literal["low", "normal", "critical"] = "normal",
-        icon_path: Path | None = None,
-        callback: Callable[[], None] | None = None,
-        open_image_onclick: bool = False,
-    ):
-        """
-        Send a desktop notification. Accepts either a custom callback OR
-        an action to open the image (icon), but not both.
-        """
-
-        # Enforce mutual exclusivity
-        if callback and open_image_onclick:
-            raise ValueError(
-                "You cannot provide both a 'callback' and 'open_image_onclick'."
-            )
-
-        title_fmt = title.strip().replace("\n", " ")
-
-        cmd: list[str | Path] = ["notify-send", title_fmt, "--urgency", urgency]
-
-        if message is not None:
-            cmd.append(message.rstrip())
-
-        if icon_path:
-            cmd.extend(["-i", icon_path])
-
-        # Determine which action to use, if any
-        action_token = None
-        if open_image_onclick and icon_path:
-            action_token = "open_image"
-            cmd.append(f"--action={action_token}=Open Image")
-        elif callback:
-            action_token = "custom_callback"
-            cmd.append(f"--action={action_token}=Click Me")
-
-        log.debug(f"Sending notification:\ntitle={title!r}\nmessage='{message}'")
-
-        try:
-            # If no action was defined, fire and forget (non-blocking)
-            if not action_token:
-                subprocess.Popen(cmd)
-                return
-
-            # If an action exists, block and wait for user input
-            cmd_output = run_cmd(cmd).output
-
-            if cmd_output == "open_image" and icon_path:
-                subprocess.Popen(["xdg-open", icon_path])
-
-            elif cmd_output == "custom_callback" and callback:
-                callback()
-
-        except Exception as e:
-            log.error(f"Notification failed: {e}")
-
-    @classmethod
-    def get_paused(cls) -> bool | None:
-        if not shutil.which("dunstctl"):
-            return None
-
-        result = run_cmd(["dunstctl", "is-paused"])
-        if not result.success:
-            return None
-
-        return result.output.strip().lower() == "true"
-
-    @classmethod
-    def set_paused(cls, status: bool | Literal["toggle"]) -> bool | None:
-        if not shutil.which("dunstctl"):
-            return None
-
-        status_str = ""
-        if status == "toggle":
-            status_str = "toggle"
-        else:
-            status_str = str(status).lower()
-
-        result = run_cmd(["dunstctl", "set-paused", status_str])
-        if not result.success:
-            return None
-
-        return result.success
 
 
 @dataclass

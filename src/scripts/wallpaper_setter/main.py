@@ -8,9 +8,10 @@ import random
 import sys
 from pathlib import Path
 
-from common.helpers import NotificationSystem, get_version, set_wallpaper
+from common.helpers import get_version, set_wallpaper
 from common.io_utilities import get_images_from_path
 from common.logger import log, setup_logging
+from common.notification_utilities import Notification
 from common.variables import XDG_DATA_HOME
 
 WALL_LINK = XDG_DATA_HOME / "bg"
@@ -70,7 +71,7 @@ def main():
         log.error(log_msg)
 
         if args.notify:
-            NotificationSystem.run("❌ Wallpaper Error", log_msg)
+            Notification("❌ Wallpaper Error", log_msg).send()
 
         sys.exit(1)
 
@@ -96,18 +97,15 @@ def main():
         log.info(log_msg)
 
         if args.notify:
-            NotificationSystem.run(
-                title="🏞️ Wallpaper Updated",
-                message=log_msg,
-                icon_path=chosen,
-                open_image_onclick=True,
+            Notification("🏞️ Wallpaper Updated", log_msg).send(
+                icon_path=chosen, open_image_onclick=True
             )
     else:
         log_msg = f"Failed to set wallpaper to {str(chosen)!r}"
         log.error(log_msg)
 
         if args.notify:
-            NotificationSystem.run("❌ Wallpaper Error", log_msg)
+            Notification("❌ Wallpaper Error", log_msg).send()
 
 
 if __name__ == "__main__":
