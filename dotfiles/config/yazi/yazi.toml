@@ -103,7 +103,7 @@ extract = [
 ]
 
 set_wallpaper = [
-    { run = 'wallpaper_setter %s', desc = "Set image as wallpaper", for = "linux" },
+    { run = 'wallpaper_setter %s', desc = "Set image as wallpaper", for = "unix" },
 ]
 
 [open]
