@@ -6,6 +6,7 @@ from common.cmd_utilities import run_cmd
 from common.helpers import Color, Window
 from common.logger import log
 from common.notification_utilities import Notification
+from common.packages.clipboard_utilities import ClipboardManager
 from common.variables import XDG_PICTURES_DIR
 
 
@@ -79,9 +80,8 @@ class ScreenshotUtility:
         if success and copy_output:
             # TODO: temporary, until sorting common logic structure to avoid circular
             # dependencies
-            from common.packages.clipboard_utilities import copy_file
 
-            copy_file(output_path)
+            ClipboardManager.copy_file(output_path)
             Notification("Screenshot captured", f"Saved at {str(output_path)!r}").send(
                 icon_path=output_path, open_image_onclick=True
             )

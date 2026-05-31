@@ -188,24 +188,3 @@ class ClipboardManager:
     @classmethod
     def clear(cls):
         cls._resolve().clear()
-
-
-# Public API
-
-
-def copy_text(text: str):
-    """Copies plain text to the system clipboard."""
-    ClipboardManager.copy_text(text)
-
-
-def copy_file(path: Path, mime_type: str | None = None):
-    """
-    Copies a file to the clipboard.
-    On Desktop OSs, this allows 'Pasting' the file into folders.
-    """
-    ClipboardManager.copy_file(path, mime_type)
-
-
-def clear_clipboard():
-    """Wipes the clipboard content."""
-    ClipboardManager.clear()

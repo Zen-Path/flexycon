@@ -15,7 +15,7 @@ from common.helpers import get_version
 from common.logger import log, setup_logging
 from common.media import flip_image
 from common.notification_utilities import Notification
-from common.packages.clipboard_utilities import copy_file, copy_text
+from common.packages.clipboard_utilities import ClipboardManager
 from common.prompt_utilities import prompt_options
 
 ActionFunc = Callable[[list[Path]], None]
@@ -114,12 +114,12 @@ def action_update_wallpaper(paths: list[Path]):
 
 
 def action_copy_image(paths: list[Path]):
-    copy_file(paths[0])
+    ClipboardManager.copy_file(paths[0])
     Notification("Image copied", f"Image {paths[0]} copied to clipboard").send()
 
 
 def action_copy_path(paths: list[Path]):
-    copy_text(str(paths[0]))
+    ClipboardManager.copy_text(str(paths[0]))
     Notification("Path copied", f"Path {paths[0]} copied to clipboard").send()
 
 
