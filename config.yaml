@@ -411,11 +411,6 @@
             "dst": "{{@@ d_bin_dst @@}}/sdir",
             "chmod": "755"
         },
-        "f_setbg": {
-            "src": "bin/setbg.sh",
-            "dst": "{{@@ d_bin_dst @@}}/setbg",
-            "chmod": "755"
-        },
         "f_tag": {
             "src": "bin/tag.sh",
             "dst": "{{@@ d_bin_dst @@}}/tag",
@@ -492,6 +487,11 @@
         "f_user_shortcuts": {
             "src": "{{@@ d_src @@}}/scripts/user_shortcuts/main.py",
             "dst": "{{@@ d_bin_dst @@}}/user_shortcuts",
+            "chmod": "755"
+        },
+        "f_wallpaper_setter": {
+            "src": "{{@@ d_src @@}}/scripts/wallpaper_setter/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/wallpaper_setter",
             "chmod": "755"
         },
 
@@ -621,6 +621,7 @@
                 "f_tag",
                 "f_unicode_selector",
                 "f_user_shortcuts",
+                "f_wallpaper_setter",
 
                 # Config
                 "d_bottom",
@@ -672,7 +673,6 @@
                 "f_unmounter",
                 "f_remapd",
                 "f_remaps",
-                "f_setbg",
 
                 # Statusbar
                 "f_sb_date",

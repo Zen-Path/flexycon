@@ -20,7 +20,7 @@ for program in $autostart; do
     pidof -sx "$program" || "$program" &
 done > /dev/null 2>&1
 
-setbg &
+wallpaper_setter &
 dwmblocks &
 blugon -S 6000 & # Bluelight filter
 unclutter --timeout 2 &

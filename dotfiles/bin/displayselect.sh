@@ -62,7 +62,7 @@ one_screen() {
 
 # Stuff to run to clean up.
 post_run() {
-    setbg # Fix background if screen size/arrangement has changed.
+    wallpaper_setter # Fix background if screen size/arrangement has changed.
     {
         killall dunst
         setsid -f dunst

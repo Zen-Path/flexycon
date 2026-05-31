@@ -112,7 +112,7 @@ def action_rotate(paths: list[Path], degrees: int = 90):
 
 
 def action_update_wallpaper(paths: list[Path]):
-    run_cmd(["setbg", paths[0]])
+    run_cmd(["wallpaper_setter", paths[0]])
 
 
 def action_copy_image(paths: list[Path]):
