@@ -1,10 +1,10 @@
 import argparse
 import sys
 
+from common.clipboard_utilities import ClipboardManager
 from common.cmd_utilities import run_cmd
 from common.logger import log
 from common.notification_utilities import Notification
-from common.packages.clipboard_utilities import ClipboardManager
 from common.prompt_utilities import prompt_options
 from scripts.unicode_selector.data.characters import ASCII_BRAILLE, CHARACTERS
 

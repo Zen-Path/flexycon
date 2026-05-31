@@ -2,11 +2,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Literal
 
+from common.clipboard_utilities import ClipboardManager
 from common.cmd_utilities import run_cmd
 from common.helpers import Color, Window
 from common.logger import log
 from common.notification_utilities import Notification
-from common.packages.clipboard_utilities import ClipboardManager
 from common.variables import XDG_PICTURES_DIR
 
 

@@ -10,12 +10,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable, TypedDict
 
+from common.clipboard_utilities import ClipboardManager
 from common.cmd_utilities import run_cmd, run_cmd_background
 from common.helpers import get_version
 from common.logger import log, setup_logging
 from common.media import flip_image
 from common.notification_utilities import Notification
-from common.packages.clipboard_utilities import ClipboardManager
 from common.prompt_utilities import prompt_options
 
 ActionFunc = Callable[[list[Path]], None]
