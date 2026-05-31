@@ -8,8 +8,9 @@ from typing import Callable, Generator, Literal
 
 import psutil
 
-from common.cmd_utilities import run_cmd
+from common.cmd_utilities import run_cmd, run_cmd_background
 from common.logger import log
+from common.system_utilities import get_display_server
 
 
 def get_version() -> str:
@@ -257,3 +258,32 @@ class SoundUtility:
     @classmethod
     def toggle_mute(cls):
         run_cmd(["wpctl", "set-mute", "@DEFAULT_SINK@", "toggle"])
+
+
+def set_wallpaper(image_path: Path) -> bool:
+    """Sets the wallpaper based on the current environment."""
+    image_path = image_path.resolve()
+
+    match get_display_server():
+        case "X11":
+            run_cmd(["xwallpaper", "--clear", "--zoom", image_path])
+
+        case "Wayland":
+            if shutil.which("swaybg"):
+                # Note: swaybg typically runs as a daemon; this kills previous instances
+                run_cmd(["pkill", "swaybg"])
+                run_cmd_background(["swaybg", "-i", image_path, "-m", "fill"])
+
+            elif shutil.which("hyprpaper"):
+                run_cmd(["hyprpaper", "preload", image_path])
+                run_cmd(["hyprpaper", "wallpaper", f", {image_path}"])
+
+        case "macOS":
+            script = f'tell application "System Events" to set picture of every desktop to "{image_path}"'
+            run_cmd(["osascript", "-e", script])
+
+        case _:
+            log.error("Could not find program to set the wallpaper.")
+            return False
+
+    return True
