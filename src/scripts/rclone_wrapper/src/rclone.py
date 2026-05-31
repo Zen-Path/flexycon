@@ -61,4 +61,7 @@ def parse_rclone_output(
                 log.error(f"Problem validating operation: {e}.")
                 sys.exit(1)
 
+        if log_obj["level"] == "error":
+            log.error(log_obj["msg"])
+
     return operations, stats
