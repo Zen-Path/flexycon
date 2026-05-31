@@ -93,7 +93,9 @@ class NotificationSystem:
                 "You cannot provide both a 'callback' and 'open_image_onclick'."
             )
 
-        cmd: list[str | Path] = ["notify-send", title.strip(), "--urgency", urgency]
+        title_fmt = title.strip().replace("\n", " ")
+
+        cmd: list[str | Path] = ["notify-send", title_fmt, "--urgency", urgency]
 
         if message is not None:
             cmd.append(message.rstrip())
