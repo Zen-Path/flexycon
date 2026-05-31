@@ -254,6 +254,11 @@ packages = [
         description="Display images in the terminal (drop-in replacement for ueberzug written in C++)",
     ),
     Package(
+        identifier="unclutter",
+        managers=[Yay],
+        description="A small program for hiding the mouse cursor after a small timeout",
+    ),
+    Package(
         identifier="unzip",
         managers=[Yay],
         description="Extraction utility for .zip compressed archives",
