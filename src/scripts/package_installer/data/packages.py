@@ -234,6 +234,11 @@ packages = [
         description="Messaging app with a focus on speed and security",
     ),
     Package(
+        identifier="terminal-notifier",
+        managers=[Brew],
+        description="Send macOS User Notifications from the command-line",
+    ),
+    Package(
         identifier="trash-cli",
         managers=[Yay],
         description="a cli system trash manager, alternative to rm and trash-cli",
