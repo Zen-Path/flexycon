@@ -1,6 +1,6 @@
 import os
 
-from common.packages.package_managers import Brew, Git, Package, Yay
+from common.package_utilities import Brew, Git, Package, Yay
 from common.system_utilities import get_display_server
 from common.variables import FLEXYCON_PRIVATE, XDG_SRC_HOME
 

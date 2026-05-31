@@ -6,6 +6,7 @@ import sys
 from common.cmd_utilities import run_cmd
 from common.io_utilities import remove_empty_dirs, remove_files_by_pattern
 from common.logger import log
+from common.package_utilities import process_packages
 from scripts.flexy.src.helpers import (
     DOTDROP_CONFIG,
     PIP_BIN,
@@ -25,7 +26,6 @@ from scripts.flexy.src.helpers import (
     yazi_upgrade_packages,
 )
 from scripts.package_installer.data.packages import packages
-from scripts.package_installer.src.core import process_packages
 from scripts.user_shortcuts.main import AVAILABLE_RENDERERS, get_active_shortcuts
 
 

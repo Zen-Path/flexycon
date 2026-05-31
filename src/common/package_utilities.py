@@ -1,11 +1,62 @@
 import re
 import shutil
+import sys
+from abc import ABC, abstractmethod
+from collections import defaultdict
+from dataclasses import dataclass
+from pathlib import Path
 
 from git import Repo
 
 from common.cmd_utilities import run_cmd
 from common.logger import log
-from common.packages.models import Package, PackageManager
+
+
+class PackageManager(ABC):
+    COMMAND: str
+    # When platform is None, it means it's available on all platforms
+    PLATFORM: str | None
+
+    @classmethod
+    def check_availability(cls) -> bool:
+        """Check if the package manager is available on the system."""
+        is_platform_same = cls.PLATFORM is None or sys.platform == cls.PLATFORM
+        return is_platform_same and shutil.which(cls.COMMAND) is not None
+
+    @classmethod
+    @abstractmethod
+    def install(cls, packages: list[Package]) -> None:
+        """Install packages using manager."""
+        pass
+
+    @classmethod
+    @abstractmethod
+    def uninstall(cls, package: Package) -> None:
+        """Uninstall package using manager."""
+        pass
+
+    @classmethod
+    @abstractmethod
+    def update_all(cls) -> None:
+        """Update all packages."""
+        pass
+
+
+@dataclass
+class Package:
+    """Represents a software package with metadata."""
+
+    identifier: str
+    managers: list[type[PackageManager]]
+    name: str | None = None
+    description: str | None = None
+    is_gui: bool | None = False
+    destination: Path | None = None  # Can be None since only Git is using it
+    condition: bool = True
+
+    def __post_init__(self):
+        if self.name is None:
+            self.name = self.identifier
 
 
 class Brew(PackageManager):
@@ -166,3 +217,38 @@ class Git(PackageManager):
     @classmethod
     def update_all(cls) -> None:
         pass
+
+
+def process_packages(packages: list[Package], dry_run: bool = False):
+    managers_cache: dict[str, bool] = {}
+    batch_queue: dict[type[PackageManager], list[Package]] = defaultdict(list)
+
+    for package in packages:
+        if not package.condition:
+            log.warning(f"Skipping {package.name!r}: unmet condition.")
+            continue
+
+        # Find the first available manager
+        available_manager = None
+        for manager_cls in package.managers:
+            manager_name = manager_cls.__name__
+
+            # Cache manager availability checks
+            if manager_name not in managers_cache:
+                managers_cache[manager_name] = manager_cls.check_availability()
+
+            if managers_cache[manager_name]:
+                available_manager = manager_cls
+                break
+
+        if not available_manager:
+            log.warning(f"Skipping {package.name!r}: no available manager found.")
+            continue
+
+        batch_queue[available_manager].append(package)
+
+    for manager_cls, pkgs in batch_queue.items():
+        log.info(f"[{manager_cls.__name__}] Installing {len(pkgs)} packages...")
+
+        if not dry_run:
+            manager_cls.install(pkgs)

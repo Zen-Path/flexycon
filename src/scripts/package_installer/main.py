@@ -7,8 +7,8 @@ import logging
 
 from common.helpers import get_version
 from common.logger import log, setup_logging
+from common.package_utilities import process_packages
 from scripts.package_installer.data.packages import packages
-from scripts.package_installer.src.core import process_packages
 
 
 def build_parser() -> argparse.ArgumentParser:
