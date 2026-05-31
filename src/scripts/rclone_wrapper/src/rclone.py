@@ -49,7 +49,7 @@ def parse_rclone_output(
 
         if "stats" in log_obj:
             try:
-                log.debug(f"Rclone stats:\n{log_obj['stats']}")
+                log.debug(f"Rclone stats:\n{json.dumps(log_obj['stats'], indent=4)}")
                 stats = RcloneStats.model_validate(log_obj["stats"])
             except ValidationError as e:
                 log.error(f"Problem validating stats: {e}.")
