@@ -5,12 +5,12 @@
 import argparse
 import logging
 
-from common.apps.window_manager import get_active_window_manager
 from common.cmd_utilities import run_cmd
 from common.helpers import get_version
 from common.logger import log, setup_logging
 from common.prompt_utilities import PromptOption
 from common.system_utilities import System
+from common.window_manager_utilities import get_active_window_manager
 from scripts.system_actions.src.core import execute_special_action, prompt_user
 
 
