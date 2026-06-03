@@ -28,7 +28,6 @@ function Status:name()
     return ui.Line(" " .. h.name .. linked)
 end
 
--- {%@@- if os != "linux" +@@%}
 -- Enable the starship integration
 require("starship"):setup({
     -- Hide flags (such as filter, find and search). This is recommended for starship themes which
@@ -39,4 +38,3 @@ require("starship"):setup({
     -- Custom starship configuration file to use
     config_file = "~/.config/starship/yazi_cfg.toml", -- Default: nil
 })
--- {%@@- endif +@@%}
