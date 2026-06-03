@@ -63,9 +63,15 @@ unset_alt  = { fg = "red", bg = "gray" }
 unset_main = { bg = "red", bold = true }
 
 [status]
-overall   = { fg = "white", bg = "reset" }
+overall = { fg = "white", bg = "reset" }
+# {%@@- if env['TERMINAL'] == "alacritty" +@@%}
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+# {%@@- else +@@%}
 sep_left  = { open = "", close = "" }
 sep_right = { open = "", close = "" }
+# {%@@- endif +@@%}
+
 
 # Progress
 progress_error  = { fg = "red", bg = "black" }
