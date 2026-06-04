@@ -175,13 +175,16 @@ def trash_files_interactive(paths: list[Path]) -> bool:
             prompt=f"Mark for trash {str(path)!r}?", options=["Yes", "No", "Cancel"]
         )
 
-        match choice:
-            case "cancel" | None:
-                return False  # Abort entirely
-            case "yes":
-                marked_files.append(path)
-            case _:
-                continue
+        if not choice:
+            continue
+
+        choice = choice.lower()
+
+        if choice == "cancel":
+            return False
+
+        if choice == "yes":
+            marked_files.append(path)
 
     if not marked_files:
         return True
