@@ -18,12 +18,12 @@ from scripts.nsxiv_key_handler.src.core import (
     action_flip,
     action_get_info,
     action_group,
-    action_interactive_trash,
     action_open_editor,
     action_open_in_new_windows,
     action_rotate,
     action_show_help,
     action_trash,
+    action_trash_interactive,
     action_update_wallpaper,
     get_help_text,
 )
@@ -31,7 +31,7 @@ from scripts.nsxiv_key_handler.src.core import (
 ACTIONS: ActionsMap = {
     "d": Action(
         description="interactive trash",
-        fn=action_interactive_trash,
+        fn=action_trash_interactive,
     ),
     "D": Action(
         description="non-interactive trash",

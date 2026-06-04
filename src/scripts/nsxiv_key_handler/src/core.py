@@ -107,10 +107,6 @@ def action_group(paths: list[Path]) -> bool:
     return True
 
 
-def action_interactive_trash(paths: list[Path]) -> bool:
-    return trash_files_interactive(paths)
-
-
 def action_open_editor(paths: list[Path]) -> bool:
     if shutil.which("gimp"):
         run_cmd_background(["gimp", *paths])
@@ -137,6 +133,10 @@ def action_show_help(paths: list[Path], actions_map: ActionsMap) -> bool:
 
 def action_trash(paths: list[Path]) -> bool:
     return trash_files(paths)
+
+
+def action_trash_interactive(paths: list[Path]) -> bool:
+    return trash_files_interactive(paths)
 
 
 def action_update_wallpaper(paths: list[Path]) -> bool:
