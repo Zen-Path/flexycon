@@ -31,37 +31,59 @@ def get_help_text(actions_map: ActionsMap) -> str:
 # ACTIONS
 
 
-def action_copy_image(paths: list[Path]) -> bool:
+def a_copy_file(paths: list[Path]) -> bool:
+    if len(paths) > 1:
+        Notification("⚠️ Copy Notice", "Only one file can be copied at a time.").send()
+
     result = ClipboardManager.copy_file(paths[0])
-    Notification("Image copied", f"Image {paths[0]} copied to clipboard").send()
+
+    if result:
+        Notification(
+            "✅ File Copied", f"Copied file {str(paths[0])!r} to clipboard"
+        ).send(icon_path=paths[0], open_image_onclick=True)
+    else:
+        Notification(
+            "❌ Copy Failed", f"Unable to copy file {str(paths[0])!r} to clipboard."
+        ).send()
 
     return result
 
 
-def action_copy_paths(paths: list[Path]) -> bool:
+def a_copy_file_paths(paths: list[Path]) -> bool:
     paths_str = "\n".join([str(path) for path in paths])
     result = ClipboardManager.copy_text(paths_str)
 
-    if len(paths) == 1:
+    if not result:
         Notification(
-            "Path copied", f"Copied path {str(paths[0])!r} to clipboard"
+            "❌ Copy Failed", f"Unable to copy {len(paths)} paths to clipboard."
         ).send()
+        return False
+
+    notification = Notification("✅ Paths Copied")
+    if len(paths) == 1:
+        notification.message = f"Copied path {str(paths[0])!r} to clipboard."
     else:
-        Notification("Paths copied", f"Copied {len(paths)} paths to clipboard").send()
+        notification.message = f"Copied {len(paths)} paths to clipboard."
 
-    return result
+    notification.send()
+
+    return True
 
 
-def action_flip(paths: list[Path]) -> bool:
+def a_flip_images(paths: list[Path]) -> bool:
     for path in paths:
         flip_image(path)
     return True
 
 
-def action_get_info(paths: list[Path]) -> bool:
+def a_get_file_info(paths: list[Path]) -> bool:
     cmd_result = run_cmd(["mediainfo", paths[0]])
 
     if not cmd_result.success:
+        Notification(
+            "❌ File Information",
+            f"Unable to fetch information for file {str(paths[0])!r}",
+        ).send()
         return False
 
     formatted: list[str] = []
@@ -69,18 +91,18 @@ def action_get_info(paths: list[Path]) -> bool:
         line = line.replace(":", ": <b>", 1) + "</b>"
         formatted.append(line)
 
-    Notification("File information", "\n".join(formatted)).send()
+    Notification("ℹ️ File Information", "\n".join(formatted)).send()
 
     return True
 
 
-def action_group(paths: list[Path]) -> bool:
+def a_group_files(paths: list[Path]) -> bool:
     current_dirs = [str(p.name) for p in Path(".").iterdir() if p.is_dir()]
     temp_dir = f"temp_{datetime.now().strftime('%F_%T')}"
     options = [temp_dir] + current_dirs + ["Cancel"]
 
     choice = prompt_options(
-        prompt="Group file(s) where?", options=options, default=temp_dir
+        prompt="Group files where?", options=options, default=temp_dir
     )
 
     if not choice or choice.lower() == "cancel":
@@ -91,12 +113,12 @@ def action_group(paths: list[Path]) -> bool:
     destdir = Path.cwd() / choice
     if not destdir.exists():
         destdir.mkdir(parents=True, exist_ok=True)
-        Notification("File Grouping", f"Created directory {str(destdir)}").send()
+        Notification("✅ File Grouping", f"Created directory {str(destdir)}").send()
 
     for path in paths:
         shutil.move(path, destdir)
 
-    notification = Notification("File Grouping")
+    notification = Notification("✅ File Grouping")
     if len(paths) == 1:
         notification.message = f"File {paths[0].name!r} moved to {str(destdir)!r}."
     else:
@@ -107,37 +129,38 @@ def action_group(paths: list[Path]) -> bool:
     return True
 
 
-def action_open_editor(paths: list[Path]) -> bool:
+def a_open_images_in_editor(paths: list[Path]) -> bool:
     if shutil.which("gimp"):
         run_cmd_background(["gimp", *paths])
         return True
 
+    Notification("❌ Open Images in Editor", "Unable to find an image editor.").send()
     return False
 
 
-def action_open_in_new_windows(paths: list[Path]) -> bool:
+def a_open_in_new_windows(paths: list[Path]) -> bool:
     opener = "xdg-open" if sys.platform == "linux" else "open"
     return all([run_cmd([opener, path]).success for path in paths])
 
 
-def action_rotate(paths: list[Path], degrees: int = 90) -> bool:
+def a_rotate_images(paths: list[Path], degrees: int = 90) -> bool:
     return all(
         [run_cmd(["magick", path, "-rotate", degrees, path]).success for path in paths]
     )
 
 
-def action_show_help(paths: list[Path], actions_map: ActionsMap) -> bool:
-    Notification("nsxiv actions", get_help_text(actions_map)).send()
+def a_show_help(paths: list[Path], actions_map: ActionsMap) -> bool:
+    Notification("ℹ️ nsxiv Actions", get_help_text(actions_map)).send()
     return True
 
 
-def action_trash(paths: list[Path]) -> bool:
+def a_trash_files(paths: list[Path]) -> bool:
     return trash_files(paths)
 
 
-def action_trash_interactive(paths: list[Path]) -> bool:
+def a_trash_files_interactive(paths: list[Path]) -> bool:
     return trash_files_interactive(paths)
 
 
-def action_update_wallpaper(paths: list[Path]) -> bool:
-    return run_cmd(["wallpaper_setter", paths[0]]).success
+def a_set_images_as_wallpaper(paths: list[Path]) -> bool:
+    return run_cmd(["wallpaper_setter", *paths]).success

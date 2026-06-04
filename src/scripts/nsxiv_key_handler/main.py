@@ -13,75 +13,75 @@ from common.logger import log, setup_logging
 from scripts.nsxiv_key_handler.src.core import (
     Action,
     ActionsMap,
-    action_copy_image,
-    action_copy_paths,
-    action_flip,
-    action_get_info,
-    action_group,
-    action_open_editor,
-    action_open_in_new_windows,
-    action_rotate,
-    action_show_help,
-    action_trash,
-    action_trash_interactive,
-    action_update_wallpaper,
+    a_copy_file,
+    a_copy_file_paths,
+    a_flip_images,
+    a_get_file_info,
+    a_group_files,
+    a_open_images_in_editor,
+    a_open_in_new_windows,
+    a_rotate_images,
+    a_set_images_as_wallpaper,
+    a_show_help,
+    a_trash_files,
+    a_trash_files_interactive,
     get_help_text,
 )
 
 ACTIONS: ActionsMap = {
     "d": Action(
-        description="interactive trash",
-        fn=action_trash_interactive,
+        description="trash files (interactive)",
+        fn=a_trash_files_interactive,
     ),
     "D": Action(
-        description="non-interactive trash",
-        fn=action_trash,
+        description="trash files (non-interactive)",
+        fn=a_trash_files,
     ),
     "e": Action(
-        description="open image editor",
-        fn=action_open_editor,
+        description="open images in editor",
+        fn=a_open_images_in_editor,
     ),
     "f": Action(
         description="flip image",
-        fn=action_flip,
+        fn=a_flip_images,
     ),
     "g": Action(
-        description="group photos",
-        fn=action_group,
+        description="group files",
+        fn=a_group_files,
     ),
     "i": Action(
-        description="get media info",
-        fn=action_get_info,
+        description="get file info",
+        fn=a_get_file_info,
     ),
     "o": Action(
         description="open in new windows",
-        fn=action_open_in_new_windows,
+        fn=a_open_in_new_windows,
     ),
     "r": Action(
-        description="rotate by 90 deg clockwise",
-        fn=partial(action_rotate, degrees=90),
+        description="rotate images by 90 deg clockwise",
+        fn=partial(a_rotate_images, degrees=90),
     ),
     "R": Action(
-        description="rotate by 90 deg counterclockwise",
-        fn=partial(action_rotate, degrees=-90),
+        description="rotate images by 90 deg counterclockwise",
+        fn=partial(a_rotate_images, degrees=-90),
     ),
     "w": Action(
-        description="set the image as the wallpaper",
-        fn=action_update_wallpaper,
+        description="set images as the wallpaper",
+        fn=a_set_images_as_wallpaper,
     ),
     "y": Action(
-        description="copy image to clipboard",
-        fn=action_copy_image,
+        description="copy file to clipboard",
+        fn=a_copy_file,
     ),
     "Y": Action(
-        description="copy paths to clipboard",
-        fn=action_copy_paths,
+        description="copy file paths to clipboard",
+        fn=a_copy_file_paths,
     ),
 }
 
 ACTIONS["h"] = Action(
     description="show help text",
-    fn=partial(action_show_help, actions_map=ACTIONS),
+    fn=partial(a_show_help, actions_map=ACTIONS),
 )
 
 
