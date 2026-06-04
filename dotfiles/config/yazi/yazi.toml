@@ -117,30 +117,30 @@ rules = [
         "open",
         "open_in_visual_editor",
         "reveal",
+        "open_in_browser",
     ] },
 
     # Text
-    { mime = "text/html", use = [
+    { mime = "text/*", use = [
         "edit_text",
         "edit_new_win",
         "open_in_browser",
     ] },
-    { mime = "text/*", use = [
-        "edit_text",
-        "edit_new_win",
-    ] },
     { mime = "application/octet-stream", use = [
         "edit_text",
         "edit_new_win",
+        "open_in_browser",
     ] },
     # JSON
     { mime = "application/{json,ndjson}", use = [
         "edit_text",
         "edit_new_win",
+        "open_in_browser",
     ] },
     { mime = "*/javascript", use = [
         "edit_text",
         "edit_new_win",
+        "open_in_browser",
     ] },
     # Empty file
     { mime = "inode/empty", use = [
@@ -154,23 +154,27 @@ rules = [
         "open_new_win",
         "edit_text",
         "edit_image",
+        "open_in_browser",
     ] },
     { mime = "image/*", use = [
         "open",
         "open_new_win",
         "edit_image",
         "set_wallpaper",
+        "open_in_browser",
     ] },
     # Media
     { mime = "{audio,video}/*", use = [
         "play",
         "play_new_win",
+        "open_in_browser",
     ] },
 
     # PDF
     { mime = "application/pdf", use = [
         "open",
         "open_new_win",
+        "open_in_browser",
     ] },
     # Archive
     { mime = "application/{,g}zip", use = [
