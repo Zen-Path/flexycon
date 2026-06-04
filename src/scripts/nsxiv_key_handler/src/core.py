@@ -8,7 +8,7 @@ from common.clipboard_utilities import ClipboardManager
 from common.cmd_utilities import run_cmd, run_cmd_background
 from common.io_utilities import trash_files, trash_files_interactive
 from common.logger import log
-from common.media import flip_image
+from common.media import flip_image, rotate_image
 from common.notification_utilities import Notification
 from common.prompt_utilities import prompt_options
 
@@ -144,9 +144,9 @@ def a_open_in_new_windows(paths: list[Path]) -> bool:
 
 
 def a_rotate_images(paths: list[Path], degrees: int = 90) -> bool:
-    return all(
-        [run_cmd(["magick", path, "-rotate", degrees, path]).success for path in paths]
-    )
+    for path in paths:
+        rotate_image(path, degrees)
+    return True
 
 
 def a_show_help(paths: list[Path], actions_map: ActionsMap) -> bool:
