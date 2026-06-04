@@ -27,8 +27,8 @@ class Action(TypedDict):
 
 
 def get_help_text():
-    return ";\n".join(
-        f"{k}: {v['desc']}"
+    return "\n".join(
+        f"{k} - {v['desc']}"
         for k, v in sorted(ACTIONS.items(), key=lambda item: item[0].lower())
     )
 
@@ -125,51 +125,51 @@ def action_copy_path(paths: list[Path]):
 
 ACTIONS: dict[str, Action] = {
     "d": {
-        "desc": "Interactive trash",
+        "desc": "interactive trash",
         "func": action_interactive_trash,
     },
     "D": {
-        "desc": "Non-interactive trash",
+        "desc": "non-interactive trash",
         "func": action_trash,
     },
     "e": {
-        "desc": "Open image editor",
+        "desc": "open image editor",
         "func": action_open_editor,
     },
     "f": {
-        "desc": "Flip",
+        "desc": "flip image",
         "func": action_flip,
     },
     "g": {
-        "desc": "Group photos",
+        "desc": "group photos",
         "func": action_group,
     },
     "h": {
-        "desc": "Show help text",
+        "desc": "show help text",
         "func": action_show_help,
     },
     "i": {
-        "desc": "Get media info",
+        "desc": "get media info",
         "func": action_get_info,
     },
     "r": {
-        "desc": "Rotate by 90 deg clockwise",
+        "desc": "rotate by 90 deg clockwise",
         "func": lambda paths: action_rotate(paths, degrees=90),
     },
     "R": {
-        "desc": "Rotate by 90 deg counterclockwise",
+        "desc": "rotate by 90 deg counterclockwise",
         "func": lambda paths: action_rotate(paths, degrees=-90),
     },
     "w": {
-        "desc": "Set the image as the wallpaper",
+        "desc": "set the image as the wallpaper",
         "func": action_update_wallpaper,
     },
     "y": {
-        "desc": "Copy image to clipboard",
+        "desc": "copy image to clipboard",
         "func": action_copy_image,
     },
     "Y": {
-        "desc": "Copy path to clipboard",
+        "desc": "copy path to clipboard",
         "func": action_copy_path,
     },
 }
@@ -181,12 +181,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="nsxiv_key_handler",
         description="Key handler for nsixv.",
+        formatter_class=argparse.RawTextHelpFormatter,
     )
 
     parser.add_argument(
         "action",
         choices=sorted(ACTIONS.keys(), key=str.lower),
-        help="action to perform. " + get_help_text(),
+        help="action to perform:\n" + get_help_text(),
     )
 
     parser.add_argument(
