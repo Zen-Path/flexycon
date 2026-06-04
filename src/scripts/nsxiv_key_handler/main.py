@@ -67,28 +67,34 @@ def action_flip(paths: list[Path]):
 
 
 def action_group(paths: list[Path]):
-    default_name = datetime.now().strftime("%F_%T")
-    choice = prompt_options(prompt="Group file(s) where?", options=[default_name])
+    current_dirs = [str(p.name) for p in Path(".").iterdir() if p.is_dir()]
+    temp_dir = f"temp_{datetime.now().strftime('%F_%T')}"
+    options = [temp_dir] + current_dirs + ["Cancel"]
 
-    if choice is None:
+    choice = prompt_options(
+        prompt="Group file(s) where?", options=options, default=temp_dir
+    )
+
+    if not choice or choice.lower() == "cancel":
         log.error("Could not group files due to empty selection.")
-        return
-
-    if not choice:
-        Notification("No directory entered, cancelled.").send()  # TODO
+        Notification("❌ File Grouping", "Operation cancelled.").send()
         return
 
     destdir = Path.cwd() / choice
-    destdir.mkdir(parents=True, exist_ok=True)
-    Notification("Directory created", f"Located at {str(destdir)}").send()
+    if not destdir.exists():
+        destdir.mkdir(parents=True, exist_ok=True)
+        Notification("File Grouping", f"Created directory {str(destdir)}").send()
 
     for path in paths:
         shutil.move(path, destdir)
 
+    notification = Notification("File Grouping")
     if len(paths) == 1:
-        Notification(
-            "Move complete", f"{paths[0].name} moved to {destdir.parent}."
-        ).send(icon_path=destdir / paths[0].name, open_image_onclick=True)
+        notification.message = f"File {paths[0].name!r} moved to {str(destdir)!r}."
+    else:
+        notification.message = f"Moved {len(paths)} files to {str(destdir)!r}."
+
+    notification.send(icon_path=destdir / paths[0].name, open_image_onclick=True)
 
 
 def action_show_help(paths: list[Path]):
