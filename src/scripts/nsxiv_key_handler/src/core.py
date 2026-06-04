@@ -14,7 +14,7 @@ from common.prompt_utilities import prompt_options
 
 class Action(NamedTuple):
     description: str
-    fn: Callable[[list[Path]], None]
+    fn: Callable[[list[Path]], bool]
 
 
 ActionsMap = dict[str, Action]
@@ -30,31 +30,41 @@ def get_help_text(actions_map: ActionsMap) -> str:
 # ACTIONS
 
 
-def action_copy_image(paths: list[Path]):
+def action_copy_image(paths: list[Path]) -> bool:
     ClipboardManager.copy_file(paths[0])
     Notification("Image copied", f"Image {paths[0]} copied to clipboard").send()
+    return True
 
 
-def action_copy_path(paths: list[Path]):
+def action_copy_path(paths: list[Path]) -> bool:
     ClipboardManager.copy_text(str(paths[0]))
     Notification("Path copied", f"Path {paths[0]} copied to clipboard").send()
+    return True
 
 
-def action_flip(paths: list[Path]):
+def action_flip(paths: list[Path]) -> bool:
     for path in paths:
         flip_image(path)
+    return True
 
 
-def action_get_info(paths: list[Path]):
-    mediainfo = run_cmd(["mediainfo", paths[0]]).output
+def action_get_info(paths: list[Path]) -> bool:
+    cmd_result = run_cmd(["mediainfo", paths[0]])
+
+    if not cmd_result.success:
+        return False
+
     formatted: list[str] = []
-    for line in mediainfo.splitlines():
+    for line in cmd_result.output.splitlines():
         line = line.replace(":", ": <b>", 1) + "</b>"
         formatted.append(line)
+
     Notification("File information", "\n".join(formatted)).send()
 
+    return True
 
-def action_group(paths: list[Path]):
+
+def action_group(paths: list[Path]) -> bool:
     current_dirs = [str(p.name) for p in Path(".").iterdir() if p.is_dir()]
     temp_dir = f"temp_{datetime.now().strftime('%F_%T')}"
     options = [temp_dir] + current_dirs + ["Cancel"]
@@ -66,7 +76,7 @@ def action_group(paths: list[Path]):
     if not choice or choice.lower() == "cancel":
         log.error("Could not group files due to empty selection.")
         Notification("❌ File Grouping", "Operation cancelled.").send()
-        return
+        return False
 
     destdir = Path.cwd() / choice
     if not destdir.exists():
@@ -84,8 +94,12 @@ def action_group(paths: list[Path]):
 
     notification.send(icon_path=destdir / paths[0].name, open_image_onclick=True)
 
+    return True
 
-def action_interactive_trash(paths: list[Path]):
+
+def action_interactive_trash(paths: list[Path]) -> bool:
+    results: list[bool] = []
+
     for path in paths:
         choice = prompt_options(
             prompt=f"Confirm trash {str(path)!r}?", options=["Yes", "No", "Cancel"]
@@ -100,33 +114,39 @@ def action_interactive_trash(paths: list[Path]):
             break
 
         if choice == "yes":
-            run_cmd(["trash-put", path])
+            results.append(run_cmd(["trash-put", path]).success)
             Notification("File trashed", f"Trashed {str(path)!r}.").send()
 
+    return all(results)
 
-def action_open_editor(paths: list[Path]):
+
+def action_open_editor(paths: list[Path]) -> bool:
     if shutil.which("gimp"):
         run_cmd_background(["gimp", *paths])
+        return True
+
+    return False
 
 
-def action_open_in_new_windows(paths: list[Path]):
+def action_open_in_new_windows(paths: list[Path]) -> bool:
     opener = "xdg-open" if sys.platform == "linux" else "open"
-    for path in paths:
-        run_cmd([opener, path])
+    return all([run_cmd([opener, path]).success for path in paths])
 
 
-def action_rotate(paths: list[Path], degrees: int = 90):
-    for path in paths:
-        run_cmd(["magick", path, "-rotate", degrees, path])
+def action_rotate(paths: list[Path], degrees: int = 90) -> bool:
+    return all(
+        [run_cmd(["magick", path, "-rotate", degrees, path]).success for path in paths]
+    )
 
 
-def action_show_help(paths: list[Path], actions_map: ActionsMap):
+def action_show_help(paths: list[Path], actions_map: ActionsMap) -> bool:
     Notification("nsxiv actions", get_help_text(actions_map)).send()
+    return True
 
 
-def action_trash(paths: list[Path]):
-    run_cmd(["trash-put", *paths])
+def action_trash(paths: list[Path]) -> bool:
+    return run_cmd(["trash-put", *paths]).success
 
 
-def action_update_wallpaper(paths: list[Path]):
-    run_cmd(["wallpaper_setter", paths[0]])
+def action_update_wallpaper(paths: list[Path]) -> bool:
+    return run_cmd(["wallpaper_setter", paths[0]]).success
