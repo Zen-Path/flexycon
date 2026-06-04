@@ -37,9 +37,16 @@ def action_copy_image(paths: list[Path]) -> bool:
     return result
 
 
-def action_copy_path(paths: list[Path]) -> bool:
-    result = ClipboardManager.copy_text(str(paths[0]))
-    Notification("Path copied", f"Path {paths[0]} copied to clipboard").send()
+def action_copy_paths(paths: list[Path]) -> bool:
+    paths_str = "\n".join([str(path) for path in paths])
+    result = ClipboardManager.copy_text(paths_str)
+
+    if len(paths) == 1:
+        Notification(
+            "Path copied", f"Copied path {str(paths[0])!r} to clipboard"
+        ).send()
+    else:
+        Notification("Paths copied", f"Copied {len(paths)} paths to clipboard").send()
 
     return result
 

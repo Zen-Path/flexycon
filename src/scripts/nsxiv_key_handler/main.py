@@ -14,7 +14,7 @@ from scripts.nsxiv_key_handler.src.core import (
     Action,
     ActionsMap,
     action_copy_image,
-    action_copy_path,
+    action_copy_paths,
     action_flip,
     action_get_info,
     action_group,
@@ -74,8 +74,8 @@ ACTIONS: ActionsMap = {
         fn=action_copy_image,
     ),
     "Y": Action(
-        description="copy path to clipboard",
-        fn=action_copy_path,
+        description="copy paths to clipboard",
+        fn=action_copy_paths,
     ),
 }
 
