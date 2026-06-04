@@ -104,6 +104,12 @@ def action_get_info(paths: list[Path]):
     Notification("File information", "\n".join(formatted)).send()
 
 
+def action_open_in_new_windows(paths: list[Path]):
+    opener = "xdg-open" if sys.platform == "linux" else "open"
+    for path in paths:
+        run_cmd([opener, path])
+
+
 def action_rotate(paths: list[Path], degrees: int = 90):
     for path in paths:
         run_cmd(["magick", path, "-rotate", degrees, path])
@@ -151,6 +157,10 @@ ACTIONS: dict[str, Action] = {
     "i": {
         "desc": "get media info",
         "func": action_get_info,
+    },
+    "o": {
+        "desc": "open in new windows",
+        "func": action_open_in_new_windows,
     },
     "r": {
         "desc": "rotate by 90 deg clockwise",
