@@ -11,11 +11,10 @@ from common.helpers import get_version
 from common.logger import log, setup_logging
 from common.notification_utilities import Notification
 from common.statusbar import (
-    EDITOR,
-    TERMINAL,
     MouseButton,
     handle_block_button,
 )
+from common.variables import EDITOR, TERMINAL
 from statusbar.date.src.core import open_calcurse, show_info
 
 ACTIONS = {

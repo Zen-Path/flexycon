@@ -4,10 +4,6 @@ from typing import Any, Callable
 
 from common.logger import log
 
-TERMINAL = os.getenv("TERMINAL", "alacritty")
-EDITOR = os.getenv("EDITOR", "nvim")
-STATUSBAR = os.getenv("STATUSBAR", "dwmblocks")
-
 
 # TODO: Add more buttons
 class MouseButton(Enum):

@@ -100,3 +100,9 @@ class GB(StrEnum):
 
 COLOR_WHITE = "#FFFFFF"
 COLOR_BLACK = "#000000"
+
+# ENVIRONMENT VARIABLES
+
+EDITOR = os.getenv("EDITOR", "nvim")
+TERMINAL = os.getenv("TERMINAL", "alacritty")
+STATUSBAR = os.getenv("STATUSBAR", "dwmblocks")

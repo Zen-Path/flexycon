@@ -5,7 +5,7 @@ from datetime import datetime
 from common.cmd_utilities import run_cmd, run_cmd_background
 from common.logger import log
 from common.notification_utilities import Notification
-from common.statusbar import TERMINAL
+from common.variables import TERMINAL
 
 
 def get_calendar() -> str | None:

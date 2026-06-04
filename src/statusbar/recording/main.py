@@ -10,11 +10,10 @@ from common.helpers import get_version
 from common.logger import log, setup_logging
 from common.notification_utilities import Notification, NotificationSystem
 from common.statusbar import (
-    EDITOR,
-    TERMINAL,
     MouseButton,
     handle_block_button,
 )
+from common.variables import EDITOR, TERMINAL
 from statusbar.recording.src.core import RECORDING_ICON_PATH, stop_recording
 
 # TODO: Implement pause recording feature

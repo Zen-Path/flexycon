@@ -9,7 +9,8 @@ from common.cmd_utilities import run_cmd_background
 from common.helpers import get_version
 from common.logger import log, setup_logging
 from common.notification_utilities import Notification
-from common.statusbar import EDITOR, TERMINAL, MouseButton, handle_block_button
+from common.statusbar import MouseButton, handle_block_button
+from common.variables import EDITOR, TERMINAL
 from statusbar.rss.src.core import (
     NEWSRAFT_DB,
     get_item_count_db,

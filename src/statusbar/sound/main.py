@@ -11,12 +11,10 @@ from common.helpers import SoundUtility, get_version
 from common.logger import log, setup_logging
 from common.notification_utilities import Notification
 from common.statusbar import (
-    EDITOR,
-    STATUSBAR,
-    TERMINAL,
     MouseButton,
     handle_block_button,
 )
+from common.variables import EDITOR, STATUSBAR, TERMINAL
 from statusbar.sound.src.core import resolve_icon
 
 ACTIONS = {
