@@ -7,6 +7,7 @@ from scripts.user_shortcuts.src.models import Shortcut, ShortcutRenderer
 
 
 class ZshShortcutRenderer(ShortcutRenderer):
+    # TODO: replace with variables.OPENER
     OPEN_COMMANDS = {
         "darwin": "open",
         "linux": "xdg-open",

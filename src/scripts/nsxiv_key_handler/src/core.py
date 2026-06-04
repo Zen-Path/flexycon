@@ -1,5 +1,4 @@
 import shutil
-import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Callable, NamedTuple
@@ -11,6 +10,7 @@ from common.logger import log
 from common.media import flip_image, rotate_image
 from common.notification_utilities import Notification
 from common.prompt_utilities import prompt_options
+from common.variables import OPENER
 
 
 class Action(NamedTuple):
@@ -139,8 +139,7 @@ def a_open_images_in_editor(paths: list[Path]) -> bool:
 
 
 def a_open_in_new_windows(paths: list[Path]) -> bool:
-    opener = "xdg-open" if sys.platform == "linux" else "open"
-    return all([run_cmd([opener, path]).success for path in paths])
+    return all([run_cmd([OPENER, path]).success for path in paths])
 
 
 def a_rotate_images(paths: list[Path], degrees: int = 90) -> bool:

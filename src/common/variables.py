@@ -106,3 +106,11 @@ COLOR_BLACK = "#000000"
 EDITOR = os.getenv("EDITOR", "nvim")
 TERMINAL = os.getenv("TERMINAL", "alacritty")
 STATUSBAR = os.getenv("STATUSBAR", "dwmblocks")
+
+match sys.platform:
+    case "darwin":
+        OPENER = "open"
+    case "linux":
+        OPENER = "xdg-open"  # pyright: ignore[reportConstantRedefinition]
+    case _:
+        OPENER = EDITOR  # pyright: ignore[reportConstantRedefinition]
