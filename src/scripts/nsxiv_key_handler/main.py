@@ -7,8 +7,9 @@ import logging
 import shutil
 import sys
 from datetime import datetime
+from functools import partial
 from pathlib import Path
-from typing import Callable, TypedDict
+from typing import Callable, NamedTuple
 
 from common.clipboard_utilities import ClipboardManager
 from common.cmd_utilities import run_cmd, run_cmd_background
@@ -18,17 +19,15 @@ from common.media import flip_image
 from common.notification_utilities import Notification
 from common.prompt_utilities import prompt_options
 
-ActionFunc = Callable[[list[Path]], None]
 
-
-class Action(TypedDict):
-    desc: str
-    func: ActionFunc
+class Action(NamedTuple):
+    description: str
+    fn: Callable[[list[Path]], None]
 
 
 def get_help_text():
     return "\n".join(
-        f"{k} - {v['desc']}"
+        f"{k} - {v.description}"
         for k, v in sorted(ACTIONS.items(), key=lambda item: item[0].lower())
     )
 
@@ -136,58 +135,58 @@ def action_copy_path(paths: list[Path]):
 
 
 ACTIONS: dict[str, Action] = {
-    "d": {
-        "desc": "interactive trash",
-        "func": action_interactive_trash,
-    },
-    "D": {
-        "desc": "non-interactive trash",
-        "func": action_trash,
-    },
-    "e": {
-        "desc": "open image editor",
-        "func": action_open_editor,
-    },
-    "f": {
-        "desc": "flip image",
-        "func": action_flip,
-    },
-    "g": {
-        "desc": "group photos",
-        "func": action_group,
-    },
-    "h": {
-        "desc": "show help text",
-        "func": action_show_help,
-    },
-    "i": {
-        "desc": "get media info",
-        "func": action_get_info,
-    },
-    "o": {
-        "desc": "open in new windows",
-        "func": action_open_in_new_windows,
-    },
-    "r": {
-        "desc": "rotate by 90 deg clockwise",
-        "func": lambda paths: action_rotate(paths, degrees=90),
-    },
-    "R": {
-        "desc": "rotate by 90 deg counterclockwise",
-        "func": lambda paths: action_rotate(paths, degrees=-90),
-    },
-    "w": {
-        "desc": "set the image as the wallpaper",
-        "func": action_update_wallpaper,
-    },
-    "y": {
-        "desc": "copy image to clipboard",
-        "func": action_copy_image,
-    },
-    "Y": {
-        "desc": "copy path to clipboard",
-        "func": action_copy_path,
-    },
+    "d": Action(
+        description="interactive trash",
+        fn=action_interactive_trash,
+    ),
+    "D": Action(
+        description="non-interactive trash",
+        fn=action_trash,
+    ),
+    "e": Action(
+        description="open image editor",
+        fn=action_open_editor,
+    ),
+    "f": Action(
+        description="flip image",
+        fn=action_flip,
+    ),
+    "g": Action(
+        description="group photos",
+        fn=action_group,
+    ),
+    "h": Action(
+        description="show help text",
+        fn=action_show_help,
+    ),
+    "i": Action(
+        description="get media info",
+        fn=action_get_info,
+    ),
+    "o": Action(
+        description="open in new windows",
+        fn=action_open_in_new_windows,
+    ),
+    "r": Action(
+        description="rotate by 90 deg clockwise",
+        fn=partial(action_rotate, degrees=90),
+    ),
+    "R": Action(
+        description="rotate by 90 deg counterclockwise",
+        fn=partial(action_rotate, degrees=-90),
+    ),
+    "w": Action(
+        description="set the image as the wallpaper",
+        fn=action_update_wallpaper,
+    ),
+    "y": Action(
+        description="copy image to clipboard",
+        fn=action_copy_image,
+    ),
+    "Y": Action(
+        description="copy path to clipboard",
+        fn=action_copy_path,
+    ),
 }
 
 
@@ -230,7 +229,8 @@ def main() -> None:
 
     action = ACTIONS[args.action]
     log.info(f"Action: {action}")
-    action["func"](files)
+
+    action.fn(files)
 
 
 if __name__ == "__main__":
