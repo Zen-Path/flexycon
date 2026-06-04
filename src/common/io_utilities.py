@@ -159,10 +159,10 @@ def trash_files(paths: list[Path]) -> bool:
         return True
 
     if sys.platform == "darwin":
-        return all([run_cmd(["trash-put", path]).success] for path in paths)
+        return run_cmd(["trash", *paths]).success
 
     elif sys.platform == "linux":
-        return run_cmd(["trash", *paths]).success
+        return all([run_cmd(["trash-put", path]).success] for path in paths)
 
     return False
 
