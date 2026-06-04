@@ -1,10 +1,13 @@
 import json
 import os
 import shutil
+import sys
 from pathlib import Path
 
+from common.cmd_utilities import run_cmd
 from common.logger import log
-from common.prompt_utilities import prompt_bool
+from common.notification_utilities import Notification
+from common.prompt_utilities import prompt_bool, prompt_options
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"}
 
@@ -149,6 +152,51 @@ def remove_empty_dirs(
                     log.debug(f"Removed empty directory {str(dir_path)!r}")
             except OSError as e:
                 log.warning(f"Could not remove {str(dir_path)!r}: {e}")
+
+
+def trash_files(paths: list[Path]) -> bool:
+    if not paths:
+        return True
+
+    if sys.platform == "darwin":
+        return all([run_cmd(["trash-put", path]).success] for path in paths)
+
+    elif sys.platform == "linux":
+        return run_cmd(["trash", *paths]).success
+
+    return False
+
+
+def trash_files_interactive(paths: list[Path]) -> bool:
+    marked_files: list[Path] = []
+
+    for path in paths:
+        choice = prompt_options(
+            prompt=f"Mark for trash {str(path)!r}?", options=["Yes", "No", "Cancel"]
+        )
+
+        match choice:
+            case "cancel" | None:
+                return False  # Abort entirely
+            case "yes":
+                marked_files.append(path)
+            case _:
+                continue
+
+    if not marked_files:
+        return True
+
+    if trash_files(marked_files):
+        count = len(marked_files)
+        message = (
+            f"Trashed {str(marked_files[0])!r}."
+            if count == 1
+            else f"Trashed {count} files."
+        )
+        Notification("🗑️ Trash Operation", message).send()
+        return True
+
+    return False
 
 
 def get_images_from_path(path: Path) -> list[Path]:

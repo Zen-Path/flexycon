@@ -6,6 +6,7 @@ from typing import Callable, NamedTuple
 
 from common.clipboard_utilities import ClipboardManager
 from common.cmd_utilities import run_cmd, run_cmd_background
+from common.io_utilities import trash_files, trash_files_interactive
 from common.logger import log
 from common.media import flip_image
 from common.notification_utilities import Notification
@@ -107,26 +108,7 @@ def action_group(paths: list[Path]) -> bool:
 
 
 def action_interactive_trash(paths: list[Path]) -> bool:
-    results: list[bool] = []
-
-    for path in paths:
-        choice = prompt_options(
-            prompt=f"Confirm trash {str(path)!r}?", options=["Yes", "No", "Cancel"]
-        )
-
-        if choice is None:
-            continue
-
-        choice = choice.lower()
-
-        if choice == "cancel":
-            break
-
-        if choice == "yes":
-            results.append(run_cmd(["trash-put", path]).success)
-            Notification("File trashed", f"Trashed {str(path)!r}.").send()
-
-    return all(results)
+    return trash_files_interactive(paths)
 
 
 def action_open_editor(paths: list[Path]) -> bool:
@@ -154,7 +136,7 @@ def action_show_help(paths: list[Path], actions_map: ActionsMap) -> bool:
 
 
 def action_trash(paths: list[Path]) -> bool:
-    return run_cmd(["trash-put", *paths]).success
+    return trash_files(paths)
 
 
 def action_update_wallpaper(paths: list[Path]) -> bool:
