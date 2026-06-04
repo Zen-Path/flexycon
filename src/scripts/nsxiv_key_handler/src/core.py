@@ -31,15 +31,17 @@ def get_help_text(actions_map: ActionsMap) -> str:
 
 
 def action_copy_image(paths: list[Path]) -> bool:
-    ClipboardManager.copy_file(paths[0])
+    result = ClipboardManager.copy_file(paths[0])
     Notification("Image copied", f"Image {paths[0]} copied to clipboard").send()
-    return True
+
+    return result
 
 
 def action_copy_path(paths: list[Path]) -> bool:
-    ClipboardManager.copy_text(str(paths[0]))
+    result = ClipboardManager.copy_text(str(paths[0]))
     Notification("Path copied", f"Path {paths[0]} copied to clipboard").send()
-    return True
+
+    return result
 
 
 def action_flip(paths: list[Path]) -> bool:
