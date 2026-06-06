@@ -1,6 +1,7 @@
 from colorama import Fore, Style, init
 
 from common.string_utilities import truncate
+from common.variables import HOME
 from scripts.user_shortcuts.src.models import Shortcut
 
 init(autoreset=True)
@@ -44,7 +45,7 @@ def format_shortcuts(shortcuts: list[Shortcut]) -> str:
 
         for shortcut in sorted_shortcuts:
             aliases = format_aliases(shortcut.alias_map)
-            target = str(shortcut.path)
+            target = str(shortcut.path).replace(str(HOME), "~")
             target_display = truncate(target, TARGET_WIDTH)
             lines.append(
                 f"{aliases:{ALIASES_WIDTH}} {target_display:{TARGET_WIDTH}} {shortcut.description}"
