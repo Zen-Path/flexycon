@@ -126,11 +126,6 @@ rules = [
         "edit_new_win",
         "open_in_browser",
     ] },
-    { mime = "application/octet-stream", use = [
-        "edit_text",
-        "edit_new_win",
-        "open_in_browser",
-    ] },
     # JSON
     { mime = "application/{json,ndjson}", use = [
         "edit_text",
@@ -149,6 +144,12 @@ rules = [
     ] },
 
     # Image
+    { url = "*.heic", use = [
+        "open",
+        "open_new_win",
+        "edit_image",
+        "open_in_browser",
+    ] },
     { mime = "image/svg+xml", use = [
         "open",
         "open_new_win",
@@ -182,6 +183,14 @@ rules = [
     ] },
     { mime = "application/{tar,bzip*,7z*,xz,rar}", use = [
         "extract",
+    ] },
+
+    # Unknown
+    { mime = "application/octet-stream", use = [
+        "edit_text",
+        "edit_new_win",
+        "open",
+        "open_in_browser",
     ] },
 
     # Fallback
