@@ -23,11 +23,6 @@ def format_aliases(aliases: dict[str, list[str]]) -> str:
     return "; ".join(parts)
 
 
-def get_default_alias(shortcut: Shortcut) -> str:
-    """Return the first default alias (for sorting)."""
-    return shortcut.alias_map.get("default", [""])[0]
-
-
 def format_shortcuts(shortcuts: list[Shortcut]) -> str:
     groups = {"d": "Directories", "f": "Files"}
     by_type: dict[str, list[Shortcut]] = {t: [] for t in groups}
@@ -39,7 +34,7 @@ def format_shortcuts(shortcuts: list[Shortcut]) -> str:
         if not by_type[t]:
             continue
 
-        sorted_shortcuts = sorted(by_type[t], key=get_default_alias)
+        sorted_shortcuts = sorted(by_type[t], key=lambda s: str(s.path))
 
         lines.append(f"{Fore.BLUE}{heading}{Style.RESET_ALL}")
         lines.append(
