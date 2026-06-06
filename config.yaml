@@ -198,24 +198,14 @@
 
         # Browser
 
-        ## Chrome dir
-        "d_firefox_chrome_personal": {
-            "src": "{{@@ d_firefox_chrome_src @@}}",
-            "dst": "{{@@ d_firefox_profiles @@}}/Personal/chrome"
+        ## Firefox
+        "d_firefox_chrome": {
+            "src": "{{@@ d_firefox_src @@}}/chrome",
+            "dst": "{{@@ d_firefox_dst @@}}/chrome"
         },
-        "d_firefox_chrome_work": {
-            "src": "{{@@ d_firefox_chrome_src @@}}",
-            "dst": "{{@@ d_firefox_profiles @@}}/Work/chrome"
-        },
-
-        ## User profiles
-        "f_firefox_user_personal": {
-            "src": "{{@@ f_firefox_user_src @@}}",
-            "dst": "{{@@ d_firefox_profiles @@}}/Personal/user.js"
-        },
-        "f_firefox_user_work": {
-            "src": "{{@@ f_firefox_user_src @@}}",
-            "dst": "{{@@ d_firefox_profiles @@}}/Work/user.js"
+        "f_firefox_user": {
+            "src": "{{@@ d_firefox_src @@}}/user.js",
+            "dst": "{{@@ d_firefox_dst @@}}/user.js"
         },
 
         # Media
@@ -561,11 +551,13 @@
             },
         },
         "meta_firefox": {
+            "dotfiles": [
+                "d_firefox_chrome",
+                "f_firefox_user",
+            ],
             "variables": {
-                "d_firefox_chrome_src": "config/firefox/chrome",
-                "d_firefox_chrome_dst": "~/.config/firefox/chrome",
-                "f_firefox_user_src": "config/firefox/user.js",
-                "d_firefox_profiles": "~/.config/firefox"
+                "d_firefox_src": "config/firefox",
+                "d_firefox_dst": "~/.config/firefox"
             },
         },
         "meta_mpv": {
@@ -727,16 +719,11 @@
 
         "meta_personal": {
             "dotfiles": [
-                "d_firefox_chrome_personal",
-                "f_firefox_user_personal",
                 "f_journal_entry"
             ]
         },
         "meta_work": {
-            "dotfiles": [
-                "d_firefox_chrome_work",
-                "f_firefox_user_work"
-            ]
+            "dotfiles": []
         },
 
         # Actual Profiles
