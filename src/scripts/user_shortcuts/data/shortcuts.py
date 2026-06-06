@@ -4,6 +4,7 @@ from pathlib import Path
 
 from common.variables import (
     FLEXYCON_CONFIG,
+    FLEXYCON_DEPS,
     FLEXYCON_HOME,
     FLEXYCON_SCRIPTS,
     HOME,
@@ -357,6 +358,24 @@ shortcuts: list[Shortcut] = [
         alias_map={"default": ["s", "h", "r", "t"], YAZI.name: ["s", "c"]},
         activate_python_env=True,
         description="user shortcuts data",
+    ),
+    Shortcut(
+        type="d",
+        path=FLEXYCON_DEPS,
+        alias_map={"default": ["f", "l", "x", "D"], YAZI.name: ["f", "D", "f"]},
+        description="flexycon deps",
+    ),
+    Shortcut(
+        type="d",
+        path=FLEXYCON_DEPS / "dwm-flexipatch",
+        alias_map={"default": ["s", "r", "c", "d"], YAZI.name: ["f", "D", "d"]},
+        description="dwm-flexypatch source",
+    ),
+    Shortcut(
+        type="d",
+        path=FLEXYCON_DEPS / "dwmblocks-async",
+        alias_map={"default": ["s", "r", "c", "D"], YAZI.name: ["f", "D", "D"]},
+        description="dwmblocks-async source",
     ),
     # Misc
     Shortcut(
