@@ -35,6 +35,10 @@ FLEXYCON_DATA    = XDG_DATA_HOME / "flexycon"
 
 JOURNAL_HOME    = XDG_DOCUMENTS_DIR / "Journal"
 UNIVERSITY_HOME = HOME / "University"
+
+# Mac
+LIBRARY         = HOME / "Library"
+LIB_APP_SUPPORT = LIBRARY / "Application Support"
 # fmt: on
 
 # When installing flexycon for the first time, env vars aren't set

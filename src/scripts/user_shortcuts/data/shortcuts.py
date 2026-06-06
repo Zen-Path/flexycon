@@ -9,6 +9,7 @@ from common.variables import (
     FLEXYCON_SCRIPTS,
     HOME,
     JOURNAL_HOME,
+    LIB_APP_SUPPORT,
     ROOT,
     UNIVERSITY_HOME,
     XDG_BIN_HOME,
@@ -131,23 +132,23 @@ shortcuts: list[Shortcut] = [
     ),
     Shortcut(
         type="d",
-        path=HOME / "Library" / "Application Support",
-        alias_map={"default": ["l", "i", "b", "s"], YAZI.name: ["l", "s"]},
+        path=LIB_APP_SUPPORT,
+        alias_map={"default": ["l", "i", "b", "s"], YAZI.name: ["l", "S"]},
         description="library application support",
         condition=system == "darwin",
     ),
     Shortcut(
         type="d",
-        path=HOME / "Library" / "Application Support" / "Code",
-        alias_map={"default": ["l", "i", "b", "v"], YAZI.name: ["l", "v"]},
-        description="library vscode",
+        path=LIB_APP_SUPPORT / "Code",
+        alias_map={"default": ["l", "i", "b", "s", "c"], YAZI.name: ["l", "s", "c"]},
+        description="library VS Code",
         condition=system == "darwin",
     ),
     Shortcut(
         type="d",
-        path=HOME / "Library" / "Application Support" / "Firefox",
-        alias_map={"default": ["l", "i", "b", "f"], YAZI.name: ["l", "f"]},
-        description="library firefox",
+        path=LIB_APP_SUPPORT / "Firefox",
+        alias_map={"default": ["l", "i", "b", "s", "f"], YAZI.name: ["l", "s", "f"]},
+        description="library Firefox",
         condition=system == "darwin",
     ),
     # User Config
@@ -161,62 +162,68 @@ shortcuts: list[Shortcut] = [
     Shortcut(
         type="d",
         path=XDG_CONFIG_HOME / "flexycon",
-        alias_map={"default": ["u", "c", "f"]},
+        alias_map={"default": ["u", "c", "f", "c"], YAZI.name: ["c", "f", "c"]},
         description="user config flexycon",
     ),
     Shortcut(
         type="d",
         path=XDG_CONFIG_HOME / "flexycon" / "userscripts",
-        alias_map={"default": ["u", "c", "f", "u"]},
-        description="user config flexycon processed userscripts",
+        alias_map={
+            "default": ["u", "c", "f", "c", "u"],
+            YAZI.name: ["c", "f", "C", "u"],
+        },
+        description="user config flexycon userscripts",
     ),
     ## Firefox
     Shortcut(
         type="d",
         path=XDG_CONFIG_HOME / "firefox",
-        alias_map={"default": ["u", "c", "F"]},
-        description="user config firefox",
+        alias_map={"default": ["u", "c", "f", "f"], YAZI.name: ["c", "f", "f"]},
+        description="user config Firefox",
     ),
     ## Git
     Shortcut(
         type="d",
         path=XDG_CONFIG_HOME / "git",
-        alias_map={"default": ["u", "c", "g"]},
-        description="user config git",
+        alias_map={"default": ["u", "c", "g"], YAZI.name: ["c", "g"]},
+        description="user config Git",
     ),
     ## NeoVim
     Shortcut(
         type="d",
         path=XDG_CONFIG_HOME / "nvim",
-        alias_map={"default": ["u", "c", "n"]},
-        description="user config nvim",
+        alias_map={"default": ["u", "c", "n", "v"], YAZI.name: ["c", "n", "v"]},
+        description="user config NeoVim",
     ),
     ## Newsraft
     Shortcut(
         type="d",
         path=XDG_CONFIG_HOME / "newsraft",
-        alias_map={"default": ["u", "c", "N"]},
+        alias_map={"default": ["u", "c", "n", "r"], YAZI.name: ["c", "n", "r"]},
         description="user config newsraft",
     ),
     Shortcut(
         type="f",
         path=XDG_CONFIG_HOME / "newsraft" / "feeds",
-        alias_map={"default": ["u", "c", "N", "f"]},
+        alias_map={
+            "default": ["u", "c", "n", "r", "f"],
+            YAZI.name: ["c", "n", "R", "f"],
+        },
         description="user config newsraft feeds",
     ),
     ## Shell
     Shortcut(
         type="d",
         path=XDG_CONFIG_HOME / "shell",
-        alias_map={"default": ["u", "c", "s"]},
+        alias_map={"default": ["u", "c", "s"], YAZI.name: ["c", "s"]},
         description="user config shell",
     ),
     ## Yazi
     Shortcut(
         type="d",
         path=XDG_CONFIG_HOME / "yazi",
-        alias_map={"default": ["u", "c", "y"]},
-        description="user config yazi",
+        alias_map={"default": ["u", "c", "y"], YAZI.name: ["c", "y"]},
+        description="user config Yazi",
     ),
     # Local
     Shortcut(
@@ -289,7 +296,7 @@ shortcuts: list[Shortcut] = [
         path=FLEXYCON_CONFIG / "git",
         alias_map={"default": ["f", "c", "g"]},
         activate_python_env=True,
-        description="flexycon git",
+        description="flexycon Git",
     ),
     ### NeoVim
     Shortcut(
@@ -297,7 +304,7 @@ shortcuts: list[Shortcut] = [
         path=FLEXYCON_CONFIG / "nvim",
         alias_map={"default": ["f", "c", "n"]},
         activate_python_env=True,
-        description="flexycon nvim",
+        description="flexycon NeoVim",
     ),
     Shortcut(
         type="f",
@@ -328,21 +335,21 @@ shortcuts: list[Shortcut] = [
         path=FLEXYCON_CONFIG / "yazi",
         alias_map={"default": ["f", "c", "y"]},
         activate_python_env=True,
-        description="flexycon yazi",
+        description="flexycon Yazi",
     ),
     Shortcut(
         type="d",
         path=FLEXYCON_CONFIG / "yazi" / "plugins",
         alias_map={"default": ["f", "c", "y", "p"]},
         activate_python_env=True,
-        description="flexycon yazi plugins",
+        description="flexycon Yazi plugins",
     ),
     Shortcut(
         type="f",
         path=FLEXYCON_CONFIG / "yazi" / "keymap.toml",
         alias_map={"default": ["f", "c", "y", "k"]},
         activate_python_env=True,
-        description="flexycon yazi keymap.toml",
+        description="flexycon Yazi keymap.toml",
     ),
     ## Scripts
     Shortcut(
