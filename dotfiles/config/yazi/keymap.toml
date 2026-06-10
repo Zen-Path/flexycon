@@ -233,8 +233,22 @@ keymap = [
     { on = "A", run = "create --dir", desc = "Create a directory" },
     { on = "<C-a>", run = "toggle_all --state=on", desc = "Select all files" },
 
-    { on = "s", run = "search --via=fd", desc = "Search files by name via fd" },
-    { on = "S", run = "search --via=rg", desc = "Search files by content via ripgrep" },
+    { on = [
+        "s",
+        "f",
+    ], run = "search --via=fd", desc = "Search files by name via fd" },
+    { on = [
+        "s",
+        "r",
+    ], run = "search --via=rg", desc = "Search files by content via ripgrep" },
+    { on = [
+        "S",
+        "o",
+    ], run = 'shell -- for f in %s; do sort -o "$f" "$f"; done', desc = "Sort selected files and overwrite them" },
+    { on = [
+        "S",
+        "n",
+    ], run = 'shell -- for f in %s; do sort "$f" > "${f}_sorted"; done', desc = "Sort selected files and create '_sorted' ones" },
     { on = "<C-s>", run = "escape --search", desc = "Cancel the ongoing search" },
 
     # { on = "d",     run = "noop", desc = "" },
