@@ -353,14 +353,26 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
         "c",
         "d",
     ], run = "copy dirname", desc = "Copy the directory path" },
+    # {%@@- if os == "darwin" +@@%}
     { on = [
         "C",
         "f",
-    ], run = 'shell -- cb copy "$@"', desc = "Copy files to clipboard" },
+    ], run = 'shell -- cb copy "%s"', desc = "Copy files to clipboard" },
     { on = [
         "C",
         "c",
-    ], run = 'shell -- pbcopy < "$1"', desc = "Copy the file contents to clipboard" },
+    ], run = 'shell -- pbcopy < "%s1"', desc = "Copy the file contents to clipboard" },
+    # {%@@- elif os == "linux" +@@%}
+    { on = [
+        "C",
+        "f",
+        # TODO: fix the shell command
+    ], run = 'shell -- xclip -sel clip -t text/uri-list "%s"', desc = "Copy files to clipboard" },
+    { on = [
+        "C",
+        "c",
+    ], run = 'shell -- xclip -sel clip < "%s1"', desc = "Copy the file contents to clipboard" },
+    # {%@@- endif +@@%}
 
     # Visual mode
     { on = "v", run = "visual_mode", desc = "Enter visual mode (selection mode)" },
