@@ -90,11 +90,19 @@ keymap = [
     { on = [
         "e",
         "s",
-    ], run = 'shell -- for f in %s; do sort "$f" > "${f}_sorted"; done', desc = "Edit - sort (non-destructive, appends '_sorted')" },
+    ], run = 'shell -- for f in %s; do sort "$f" > "${f}_sort"; done', desc = "Edit - sort (appends '_sort')" },
     { on = [
         "e",
-        "S",
-    ], run = 'shell -- for f in %s; do sort -o "$f" "$f"; done', desc = "Edit - sort (destructive)" },
+        "r",
+    ], run = 'shell -- for f in %s; do tail -r "$f" > "${f}_rev"; done', desc = "Edit - reverse (appends '_rev')" },
+    { on = [
+        "e",
+        "d",
+    ], run = 'shell -- for f in %s; do sort "$f" | uniq --repeated > "${f}_dups"; done', desc = "Edit - only duplicate lines (appends '_rev')" },
+    { on = [
+        "e",
+        "u",
+    ], run = """shell -- for f in %s; do awk '!seen[$0]++' "$f" > "${f}_uniq"; done""", desc = "Edit - only unique lines (appends '_uniq')" },
 
     { on = "E", run = """shell 'ya emit reveal "$(journal_entry --get-journal-entry-path)"'
     """, desc = "Reveal current journal entry" },
