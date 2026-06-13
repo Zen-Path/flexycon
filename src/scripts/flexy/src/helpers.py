@@ -19,6 +19,7 @@ PYTHON_BIN = shutil.which("python3") or "python"
 
 USER_VARIABLES_PATH = FLEXYCON_HOME / "uservariables.yaml"
 DOTDROP_CONFIG = FLEXYCON_HOME / "config.yaml"
+VSCODE_EXTENSIONS_FILE = FLEXYCON_CONFIG / "vscode" / "extensions.txt"
 
 
 class Action(NamedTuple):
@@ -211,6 +212,80 @@ def yazi_upgrade_packages() -> bool:
     yazi_format_packages_file()
 
     return result.success
+
+
+def vscode_get_installed_extensions() -> list[str] | None:
+    try:
+        result = run_cmd(["code", "--list-extensions"])
+        if not result.success:
+            log.error("Failed to list VS Code extension.")
+            return None
+
+        stripped_lines = [line.strip() for line in result.output.splitlines()]
+        return [
+            line for line in stripped_lines if line and not line.startswith("Warning")
+        ]
+
+    except Exception as e:
+        log.error(f"Error getting installed VS Code extension: {e}")
+
+    return None
+
+
+def vscode_get_listed_extensions(extensions_file: Path) -> list[str]:
+    try:
+        if extensions_file.exists():
+            stripped_lines = [
+                line.strip() for line in extensions_file.read_text().splitlines()
+            ]
+            return [
+                line
+                for line in stripped_lines
+                if line and not line.startswith("Warning")
+            ]
+
+    except Exception as e:
+        log.error(f"Error reading {str(extensions_file)!r}: {e}")
+
+    return []
+
+
+def vscode_save_extensions(extensions_file: Path) -> bool:
+    try:
+        installed = vscode_get_installed_extensions()
+        if installed is None:
+            return False
+
+        listed = vscode_get_listed_extensions(extensions_file)
+        all_extensions = sorted(set(installed + listed))
+
+        extensions_file.write_text("\n".join(all_extensions) + "\n")
+
+        return True
+
+    except Exception as e:
+        log.error(f"Error saving VS Code extensions: {e}")
+
+    return False
+
+
+def vscode_install_extensions(extensions_file: Path) -> bool:
+    try:
+        installed = vscode_get_installed_extensions()
+        if installed is None:
+            return False
+
+        listed = vscode_get_listed_extensions(extensions_file)
+        missing = [ext for ext in listed if ext not in set(installed)]
+
+        if not missing:
+            return True
+
+        return run_cmd(["code", "--install-extension", *missing]).success
+
+    except Exception as e:
+        log.error(f"Error installing VS Code extensions: {e}")
+        return False
 
 
 def get_sip_status() -> bool | None:

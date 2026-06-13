@@ -9,6 +9,7 @@ from common.logger import log, setup_logging
 from scripts.flexy.src.helpers import Action
 from scripts.flexy.src.targets import (
     clean,
+    handle_vscode_extensions,
     install,
     install_pre_commit_hooks,
     install_system_packages,
@@ -52,6 +53,11 @@ ACTIONS: list[Action] = [
         name="setup_venv",
         description="create and setup a virtual environment",
         fn=setup_virtual_env,
+    ),
+    Action(
+        name="handle_vscode_extensions",
+        description="handle vscode extensions",
+        fn=handle_vscode_extensions,
     ),
 ]
 

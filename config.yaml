@@ -25,8 +25,6 @@
     },
 
     "actions": {
-        "vscode_extensions_save": "code --list-extensions | sort > \"{{@@ f_vscode_extensions @@}}\"",
-        "vscode_extensions_install": "cat \"{{@@ f_vscode_extensions @@}}\" | xargs -n 1 code --install-extension",
         "yabai_restart": "yabai --restart-service",
         "skhd_restart": "skhd --restart-service",
         "dunst_restart": "killall dunst 2>/dev/null; dunst >/dev/null 2>&1 &!"

@@ -13,6 +13,7 @@ from scripts.flexy.src.helpers import (
     PYTHON_BIN,
     VENV_BIN,
     VENV_DIR,
+    VSCODE_EXTENSIONS_FILE,
     clean_precommit,
     copy_dotfiles_from_temp,
     get_actual_dotdrop_profiles,
@@ -23,6 +24,8 @@ from scripts.flexy.src.helpers import (
     npm_install_packages,
     playwright_install,
     remove_flexycon_data,
+    vscode_install_extensions,
+    vscode_save_extensions,
     yazi_upgrade_packages,
 )
 from scripts.package_installer.data.packages import packages
@@ -88,6 +91,19 @@ def install_pre_commit_hooks():
         log.error("'pre-commit' not found. Skipping installation.")
 
 
+def handle_vscode_extensions():
+    if not shutil.which("code"):
+        return
+
+    log.info("📦 Saving and installing VS Code extensions...")
+
+    if not vscode_save_extensions(VSCODE_EXTENSIONS_FILE):
+        log.warning("[vscode] Failed to save extensions.")
+
+    if not vscode_install_extensions(VSCODE_EXTENSIONS_FILE):
+        log.warning("[vscode] Failed to install extensions.")
+
+
 def setup():
     if sys.platform == "darwin":
         if get_sip_status():
@@ -109,6 +125,8 @@ def setup():
     install_pre_commit_hooks()
 
     yazi_upgrade_packages()
+
+    handle_vscode_extensions()
 
     log.info("📋 Running tests and getting the coverage...")
     try:
