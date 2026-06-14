@@ -98,7 +98,7 @@ export BAT_THEME='gruvbox-dark'
 # export PASTEL_COLOR_MODE='24bit'
 
 ## Less
-export LESS='--RAW-CONTROL-CHARS'
+export LESS='--RAW-CONTROL-CHARS --ignore-case'
 export LESSOPEN='| /usr/bin/highlight -O ansi %s 2>/dev/null'
 
 # {%@@- if os == "windows" +@@%}
