@@ -335,8 +335,18 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
 
     # = 'z' to '?'
 
-    { on = "z", run = "plugin zoxide", desc = "Jump to a directory via zoxide" },
-    { on = "Z", run = "noop", desc = "" },
+    { on = [
+        "z",
+        "x",
+    ], run = "plugin zoxide", desc = "Jump to a directory via zoxide" },
+    { on = [
+        "z",
+        "a",
+    ], run = "shell -- zip -r %s1.zip %s", desc = "Create a zip archive (absolute paths)" },
+    { on = [
+        "z",
+        "r",
+    ], run = 'shell -- zip -r "$(basename %s1).zip" $(for f in %s; do echo "$f" | sed "s|^$PWD/||"; done)', desc = "Create a zip archive (relative paths)" },
     { on = "<C-z>", run = "suspend", desc = "Suspend the process" },
 
     { on = "x", run = "yank --cut", desc = "Yank selected files (cut)" },
