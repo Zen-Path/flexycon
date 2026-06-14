@@ -326,8 +326,49 @@ shell 'ya emit cd "$(git rev-parse --show-toplevel)"'
     { on = ";", run = "shell --interactive", desc = "Run a shell command" },
     { on = ":", run = "shell --block --interactive", desc = "Run a shell command (block)" },
 
-    { on = "'", run = "search_do --via=fd --args='--no-ignore'", desc = "Display flat directory contents" },
-    { on = '"', run = "search_do --via=fd --args='--type file --no-ignore'", desc = "Display flat directory files" },
+    { on = [
+        "'",
+        "a",
+    ], run = "search_do --via=fd --args='--no-ignore'", desc = "Flat view - all" },
+    # Files
+    { on = [
+        "'",
+        "f",
+        "a",
+    ], run = "search_do --via=fd --args='--no-ignore --type file'", desc = "Flat view - regular files" },
+    { on = [
+        "'",
+        "f",
+        "s",
+    ], run = '''search_do --via=fd --args="--no-ignore --type symlink -x sh -c '[ -f \"\$1\" ] && echo \"\$1\"' _ {}"''', desc = "Flat view - symlink files" },
+    { on = [
+        "'",
+        "f",
+        "e",
+    ], run = "search_do --via=fd --args='--no-ignore --type empty --type file'", desc = "Flat view - empty files" },
+    # Directories
+    { on = [
+        "'",
+        "d",
+        "a",
+    ], run = "search_do --via=fd --args='--no-ignore --type directory'", desc = "Flat view - regular directories" },
+    { on = [
+        "'",
+        "d",
+        "s",
+    ], run = '''search_do --via=fd --args="--no-ignore --type symlink -x sh -c '[ -d \"\$1\" ] && echo \"\$1\"' _ {}"''', desc = "Flat view - symlink directories" },
+    { on = [
+        "'",
+        "d",
+        "e",
+    ], run = "search_do --via=fd --args='--no-ignore --type empty --type directory'", desc = "Flat view - empty directories" },
+    # Misc
+    { on = [
+        "'",
+        "x",
+    ], run = "search_do --via=fd --args='--no-ignore --type executable'", desc = "Flat view - executables" },
+
+    { on = '"', run = "noop", desc = "" },
 
     { on = "<Enter>", run = "open", desc = "Open selected files" },
     { on = "<C-Enter>", run = "open --hovered --interactive", desc = "Open selected files interactively" },
