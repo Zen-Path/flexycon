@@ -54,9 +54,7 @@ def main():
     with open(output_file, "w") as f:
         f.write(final_str)
 
-    log.info(
-        f"✅ Successfully compiled and wrote configuration to: {str(output_file)!r}"
-    )
+    log.debug("Compilation successful.")
 
 
 if __name__ == "__main__":
