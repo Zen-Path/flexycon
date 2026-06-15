@@ -7,7 +7,8 @@
     },
 
     "trans_install": {
-        "jsonc_to_json": "jsonc_to_json \"{0}\" \"{1}\""
+        "jsonc_to_json": "jsonc_to_json \"{0}\" \"{1}\"",
+        "compile_dunst_config": "python src/scripts/dunst_config_compiler/main.py --output-file \"{1}\"",
     },
 
     "config": {
@@ -25,9 +26,6 @@
     },
 
     "actions": {
-        "pre": {
-            "compile_dunst_config": "python src/scripts/config_compiler/main.py",
-        },
         "post": {
             "yabai_restart": "yabai --restart-service",
             "skhd_restart": "skhd --restart-service",
@@ -293,8 +291,8 @@
             "src": "config/dunst/dunst.conf",
             "dst": "{{@@ d_config_dst @@}}/dunst/dunstrc",
             "link": "nolink",
+            "trans_install": "compile_dunst_config",
             "actions": [
-                "compile_dunst_config",
                 "dunst_restart",
             ]
         },
