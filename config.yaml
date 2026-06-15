@@ -25,9 +25,14 @@
     },
 
     "actions": {
-        "yabai_restart": "yabai --restart-service",
-        "skhd_restart": "skhd --restart-service",
-        "dunst_restart": "killall dunst 2>/dev/null; dunst >/dev/null 2>&1 &!"
+        "pre": {
+            "compile_dunst_config": "python src/scripts/config_compiler/main.py",
+        },
+        "post": {
+            "yabai_restart": "yabai --restart-service",
+            "skhd_restart": "skhd --restart-service",
+            "dunst_restart": "killall dunst 2>/dev/null; dunst >/dev/null 2>&1 &!",
+        },
     },
 
     "dotfiles": {
@@ -289,7 +294,8 @@
             "dst": "{{@@ d_config_dst @@}}/dunst/dunstrc",
             "link": "nolink",
             "actions": [
-                "dunst_restart"
+                "compile_dunst_config",
+                "dunst_restart",
             ]
         },
         "d_gtk_3": {
