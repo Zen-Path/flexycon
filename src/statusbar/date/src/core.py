@@ -5,7 +5,7 @@ from datetime import datetime
 from common.cmd_utilities import run_cmd, run_cmd_background
 from common.logger import log
 from common.notification_utilities import Notification
-from common.variables import TERMINAL
+from common.variables import GB, TERMINAL
 
 
 def get_calendar() -> str | None:
@@ -18,7 +18,7 @@ def get_calendar() -> str | None:
 
         highlighted = re.sub(
             rf"\b({current_day})\b",
-            r"<span color='#1D2021'><b>\1</b></span>",
+            rf"<span color='{GB.DARK_0_HARD}'><b>\1</b></span>",
             result.raw_output.replace("\n\n", "\n"),
         )
         return highlighted
