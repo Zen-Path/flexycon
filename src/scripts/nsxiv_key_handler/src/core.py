@@ -139,7 +139,7 @@ def a_open_images_in_editor(paths: list[Path]) -> bool:
 
 
 def a_open_in_new_windows(paths: list[Path]) -> bool:
-    return all([run_cmd([OPENER, path]).success for path in paths])
+    return all([run_cmd_background([OPENER, path]).success for path in paths])
 
 
 def a_rotate_images(paths: list[Path], degrees: int = 90) -> bool:
