@@ -1,12 +1,15 @@
 asvetliakov.vscode-neovim
 charliermarsh.ruff
-cstrap.python-snippets
 dotjoshjohnson.xml
 eamodio.gitlens
+ericsia.pythonsnippets3
 esbenp.prettier-vscode
+garrit.p5canvas
 hoovercj.vscode-settings-cycler
 jdinhlife.gruvbox
 mechatroner.rainbow-csv
+mhutchie.git-graph
+motivesoft.vscode-man-page-syntax
 ms-python.debugpy
 ms-python.python
 ms-python.vscode-pylance
@@ -19,6 +22,7 @@ streetsidesoftware.code-spell-checker
 takumii.markdowntable
 tamasfe.even-better-toml
 timonwong.shellcheck
+wholroyd.jinja
 yandeu.five-server
 yoavbls.pretty-ts-errors
 yzhang.markdown-all-in-one
