@@ -7,6 +7,7 @@
     "aururl": "https://aur.archlinux.org",
     "batchinstall": false,
     "bottomup": true,
+    "buildDir": "{{@@ env['XDG_CACHE_HOME'] @@}}/yay",
     "cleanAfter": false,
     "cleanmenu": true,
     "combinedupgrade": true,
@@ -39,11 +40,10 @@
     "searchby": "name-desc",
     "separatesources": true,
     "singlelineresults": false,
-    "sortby": "votes",
+    "sortby": "",
     "sudobin": "sudo",
     "sudoflags": "",
     "sudoloop": false,
-    "timeupdate": false,
     "useask": false,
-    "version": "12.4.2"
+    "version": "12.6.0"
 }
