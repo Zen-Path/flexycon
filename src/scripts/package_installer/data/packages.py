@@ -55,6 +55,18 @@ packages = [
         description="Simple, fast and user-friendly alternative to find",
     ),
     Package(
+        name="fend (Linux)",
+        identifier="fend-bin",
+        managers=[Yay],
+        description="Arbitrary-precision unit-aware calculator",
+    ),
+    Package(
+        name="fend (Mac)",
+        identifier="fend",
+        managers=[Brew],
+        description="Arbitrary-precision unit-aware calculator",
+    ),
+    Package(
         identifier="ffmpeg",
         managers=[Brew, Yay],
         description="Play, record, convert, and stream audio and video",
