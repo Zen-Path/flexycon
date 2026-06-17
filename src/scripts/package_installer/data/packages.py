@@ -13,6 +13,11 @@ packages = [
         description="A cross-platform, GPU-accelerated terminal emulator",
     ),
     Package(
+        identifier="arandr",
+        managers=[Yay],
+        description="Visual front end for XRandR 1.2",
+    ),
+    Package(
         identifier="bat",
         managers=[Brew, Yay],
         description="cat(1) clone with syntax highlighting and Git integration",
