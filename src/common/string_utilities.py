@@ -227,3 +227,27 @@ def to_upper_case(words: list[str], ext: str = "") -> str:
     'Simple file name' -> 'SIMPLE FILE NAME'
     """
     return f"{' '.join(words)}{ext}".upper()
+
+
+def to_alternate_case(words: list[str], ext: str = "", upper_first: bool = True) -> str:
+    """
+    'Simple file name' -> 'SiMpLe FiLe NaMe'
+    """
+    regular_str = " ".join(words)
+
+    result: list[str] = []
+    upper_next = upper_first
+
+    for char in regular_str:
+        # Check if the character is case-sensitive
+        if char.upper() != char.lower():
+            if upper_next:
+                result.append(char.upper())
+            else:
+                result.append(char.lower())
+            upper_next = not upper_next
+        else:
+            # Keep as-is if alternate case not found
+            result.append(char)
+
+    return "".join(result) + ext.lower()

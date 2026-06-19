@@ -9,6 +9,7 @@ from pathlib import Path
 from common.helpers import get_version
 from common.logger import log, setup_logging
 from common.string_utilities import (
+    to_alternate_case,
     to_camel_case,
     to_camel_snake_case,
     to_flat_case,
@@ -98,6 +99,12 @@ CONVERTERS: list[ConverterRow] = [
         description="FLATCASE",
         is_destructive=True,
         transform_func=to_flat_upper_case,
+    ),
+    ConverterRow(
+        short="-a",
+        long="--alternate-case",
+        description="AlTeRnAtE cAsE",
+        transform_func=to_alternate_case,
     ),
 ]
 

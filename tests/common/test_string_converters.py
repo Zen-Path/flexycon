@@ -6,6 +6,7 @@ import pytest
 
 from common.string_utilities import (
     split_into_words,
+    to_alternate_case,
     to_camel_case,
     to_camel_snake_case,
     to_flat_case,
@@ -174,3 +175,15 @@ def test_train_case(path: str, expected: str):
 )
 def test_upper_case(path: str, expected: str):
     assert to_upper_case(**process_path(path)) == expected
+
+
+@pytest.mark.parametrize(
+    "path,expected",
+    [
+        ("hello world", "HeLlO wOrLd"),
+        ("hello world.EXT", "HeLlO wOrLd.ext"),
+        ("Hello World.ext", "HeLlO wOrLd.ext"),
+    ],
+)
+def test_alternate_case(path: str, expected: str):
+    assert to_alternate_case(**process_path(path)) == expected
