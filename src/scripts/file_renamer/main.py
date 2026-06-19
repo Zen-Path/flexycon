@@ -22,7 +22,7 @@ from common.string_utilities import (
     to_train_case,
     to_upper_case,
 )
-from scripts.file_renamer.src.core import ConverterRow, map_converters, rename_path
+from scripts.file_renamer.src.core import ConverterRow, map_converters, process_renames
 
 CONVERTERS: list[ConverterRow] = [
     ConverterRow(
@@ -144,21 +144,7 @@ def main() -> None:
     setup_logging(log, logging.DEBUG if args.verbose else logging.INFO)
     log.debug(args)
 
-    for dest, converter in converters_map.items():
-        # Get list of paths for a specific converter (e.g. args.kebab_case)
-        paths = getattr(args, dest)
-
-        if not paths:
-            continue
-
-        log.debug(f"Using converter {dest!r}.")
-
-        for target in paths:
-            if not target.exists():
-                log.warning(f"Skipping non-existent path {str(target)!r}.")
-                continue
-
-            rename_path(target, converter.transform_func)
+    process_renames(args, converters_map)
 
 
 if __name__ == "__main__":

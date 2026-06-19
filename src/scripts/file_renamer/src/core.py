@@ -1,3 +1,4 @@
+import argparse
 import os
 from pathlib import Path
 from typing import Callable, NamedTuple
@@ -45,3 +46,27 @@ def map_converters(converters: list[ConverterRow]) -> dict[str, ConverterRow]:
         result[dest_name] = converter
 
     return result
+
+
+def process_renames(
+    args: argparse.Namespace, converters_map: dict[str, ConverterRow]
+) -> None:
+    """Applies renaming transformations based on parsed arguments."""
+    for dest, converter in converters_map.items():
+        # Get list of paths for a specific converter (e.g. args.kebab_case)
+        paths = getattr(args, dest)
+
+        if not paths:
+            continue
+
+        log.debug(f"Using converter {dest!r}.")
+
+        # Sort paths by depth in descending order (deepest paths first)
+        sorted_paths = sorted(paths, key=lambda p: len(p.parts), reverse=True)
+
+        for target in sorted_paths:
+            if not target.exists():
+                log.warning(f"Skipping non-existent path {str(target)!r}.")
+                continue
+
+            rename_path(target, converter.transform_func)
