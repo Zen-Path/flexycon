@@ -139,7 +139,15 @@ def a_open_images_in_editor(paths: list[Path]) -> bool:
 
 
 def a_open_in_new_windows(paths: list[Path]) -> bool:
-    return all([run_cmd_background([OPENER, path]).success for path in paths])
+    all_success = True
+    for path in paths:
+        try:
+            run_cmd_background([OPENER, path])
+        except Exception as e:
+            log.error(f"Unable to open {str(path)!r}: {e}")
+            all_success = False
+
+    return all_success
 
 
 def a_rotate_images(paths: list[Path], degrees: int = 90) -> bool:
