@@ -136,11 +136,17 @@ def remove_diacritics(text: str) -> str:
 
 
 def to_pascal_case(words: list[str], ext: str = "", delimiter: str = "") -> str:
+    """
+    'Simple file name' -> 'SimpleFileName'
+    """
     capitalized_words = [w[:1].upper() + w[1:] if w else "" for w in words]
     return delimiter.join(capitalized_words) + ext.lower()
 
 
 def to_camel_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'simpleFileName'
+    """
     if not words:
         return ext.lower()
 
@@ -154,40 +160,70 @@ def to_camel_case(words: list[str], ext: str = "") -> str:
 
 
 def to_camel_snake_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'Simple_File_Name'
+    """
     return to_pascal_case(words, ext, "_")
 
 
 def to_flat_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'simplefilename'
+    """
     return ("".join(words) + ext).lower()
 
 
 def to_flat_upper_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'SIMPLEFILENAME'
+    """
     return to_flat_case(words, ext).upper()
 
 
 def to_kebab_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'simple-file-name'
+    """
     return f"{'-'.join(words)}{ext}".lower()
 
 
 def to_kebab_upper_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'SIMPLE-FILE-NAME'
+    """
     return to_kebab_case(words, ext).upper()
 
 
 def to_lower_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'simple file name'
+    """
     return f"{' '.join(words)}{ext}".lower()
 
 
 def to_snake_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'simple_file_name'
+    """
     return f"{'_'.join(words)}{ext}".lower()
 
 
 def to_snake_upper_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'SIMPLE_FILE_NAME'
+    """
     return to_snake_case(words, ext).upper()
 
 
 def to_train_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'Simple-File-Name'
+    """
     return to_pascal_case(words, ext, "-")
 
 
 def to_upper_case(words: list[str], ext: str = "") -> str:
+    """
+    'Simple file name' -> 'SIMPLE FILE NAME'
+    """
     return f"{' '.join(words)}{ext}".upper()
