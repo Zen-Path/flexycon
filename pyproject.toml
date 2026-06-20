@@ -28,7 +28,6 @@ dependencies = [
 
     # dev
     "pre_commit==4.2.0",      # for pre-commit git hooks
-    "black==25.1.0",          # for formatting
     "mypy==1.16.1",           # for type checking
     "ruff==0.14.13",          # linter and formatter
     "bump-my-version==1.3.0", # for bumping the project version
@@ -49,7 +48,7 @@ description = " Flexible programmatic configuration."
 name = "flexycon"
 readme = "README.md"
 requires-python = ">=3.12"
-version = "1.42.0"
+version = "1.42.1"
 
     [project.scripts]
     flexy = "scripts.flexy.main:main"
