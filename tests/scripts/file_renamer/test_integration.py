@@ -2,9 +2,9 @@ import argparse
 from pathlib import Path
 
 from common.string_utilities import (
-    to_flat_case,
-    to_kebab_case,
-    to_snake_case,
+    to_lower_case,
+    to_pascal_case,
+    to_upper_case,
 )
 from scripts.file_renamer.src.core import ConverterRow, process_renames
 
@@ -16,20 +16,20 @@ def test_rename_single_file_to_snake_case(tmp_path: Path) -> None:
     target_file.touch()
 
     converters_map = {
-        "snake_case": ConverterRow(
-            short="-s",
-            long="--snake-case",
-            description="snake_case",
-            transform_func=to_snake_case,
+        "lower_case": ConverterRow(
+            short="-l",
+            long="--lower-case",
+            description="",
+            transform_func=to_lower_case,
         )
     }
-    args = argparse.Namespace(snake_case=[target_file])
+    args = argparse.Namespace(lower_case=[target_file])
 
     # Execute
     process_renames(args, converters_map)
 
     # Verify
-    expected_file = tmp_path / "my_awesome_file"
+    expected_file = tmp_path / "my awesome file"
 
     assert not target_file.exists(), "The original file should no longer exist."
     assert expected_file.exists(), "The renamed file should exist."
@@ -39,31 +39,33 @@ def test_rename_single_file_to_snake_case(tmp_path: Path) -> None:
 def test_rename_nested_paths_bottom_up(tmp_path: Path) -> None:
     """Proves the bottom-up sorting works."""
     # Setup
-    parent_dir = tmp_path / "camelCaseDir"
+    parent_dir = tmp_path / "pascal-Case-Dir"
     parent_dir.mkdir()
 
-    child_file = parent_dir / "camelCaseFile"
+    child_file = parent_dir / "pascalCase file"
     child_file.touch()
 
     converters_map = {
-        "kebab_case": ConverterRow(
-            short="-k",
-            long="--kebab-case",
-            description="kebab-case",
-            transform_func=to_kebab_case,
+        "pascal_case": ConverterRow(
+            short="-p",
+            long="--pascal-case",
+            description="",
+            transform_func=to_pascal_case,
         )
     }
 
-    args = argparse.Namespace(kebab_case=[parent_dir, child_file])
+    args = argparse.Namespace(pascal_case=[parent_dir, child_file])
 
     # Execute
     process_renames(args, converters_map)
 
     # Verify
-    expected_parent = tmp_path / "camel-case-dir"
-    expected_child = expected_parent / "camel-case-file"
+    expected_parent = tmp_path / "PascalCaseDir"
+    expected_child = expected_parent / "PascalCaseFile"
 
     # Old paths should be completely gone
+    # Note: on case-insensitive systems, like macOS, a case-only change wouldn't register
+    # as the old file not existing
     assert not child_file.exists()
     assert not parent_dir.exists()
 
@@ -77,32 +79,32 @@ def test_rename_nested_paths_bottom_up(tmp_path: Path) -> None:
 def test_rename_multiple_converters_simultaneously(tmp_path: Path) -> None:
     """Test that the script handles multiple flags passed in the same command."""
     # Setup
-    file_one = tmp_path / "PascalCase"
+    file_one = tmp_path / "pascal-case"
     file_one.touch()
 
     file_two = tmp_path / "snake_case"
     file_two.touch()
 
     converters_map = {
-        "kebab_case": ConverterRow(
-            short="-k",
-            long="--kebab-case",
-            description="kebab-case",
-            transform_func=to_kebab_case,
+        "pascal_case": ConverterRow(
+            short="-p",
+            long="--pascal-case",
+            description="",
+            transform_func=to_pascal_case,
         ),
-        "flat_case": ConverterRow(
-            short="-f",
-            long="--flat-case",
-            description="flatcase",
-            transform_func=to_flat_case,
+        "upper_case": ConverterRow(
+            short="-u",
+            long="--upper-case",
+            description="",
+            transform_func=to_upper_case,
         ),
     }
 
-    args = argparse.Namespace(kebab_case=[file_one], flat_case=[file_two])
+    args = argparse.Namespace(pascal_case=[file_one], upper_case=[file_two])
 
     # Execute
     process_renames(args, converters_map)
 
     # Verify
-    assert (tmp_path / "pascal-case").exists()
-    assert (tmp_path / "snakecase").exists()
+    assert (tmp_path / "PascalCase").exists()
+    assert (tmp_path / "SNAKE CASE").exists()

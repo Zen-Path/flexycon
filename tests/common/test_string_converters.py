@@ -1,189 +1,86 @@
-import os
-from pathlib import Path
-from typing import TypedDict
-
 import pytest
 
 from common.string_utilities import (
-    split_into_words,
     to_alternate_case,
     to_camel_case,
-    to_camel_snake_case,
-    to_flat_case,
-    to_flat_upper_case,
-    to_kebab_case,
-    to_kebab_upper_case,
     to_lower_case,
     to_pascal_case,
-    to_snake_case,
-    to_snake_upper_case,
-    to_train_case,
     to_upper_case,
 )
 
 
-class PathData(TypedDict):
-    words: list[str]
-    ext: str
-
-
-def process_path(path_str: str) -> PathData:
-    root, ext = os.path.splitext(Path(path_str).name)
-    words = split_into_words(root)
-    return {"words": words, "ext": ext}
+@pytest.mark.parametrize(
+    "text, delimiter, upper_first, expected",
+    [
+        ("one", " ", True, "OnE"),
+        ("one", "", False, "oNe"),
+        ("Upper CASE", " ", True, "UpPeR cAsE"),
+        ("one two three", " ", True, "OnE tWo ThReE"),
+        ("one two three1", "-", True, "OnE-tWo-ThReE-1"),
+        ("a1#合$23b", "", True, "A1#合$23b"),
+        ("  one  two ", " ", True, "OnE tWo"),
+        (" ", " ", True, ""),
+    ],
+)
+def test_alternate_case(text: str, delimiter: str, upper_first: bool, expected: str):
+    assert to_alternate_case(text, delimiter, upper_first) == expected
 
 
 @pytest.mark.parametrize(
-    "path,expected",
+    "text, delimiter, expected",
     [
-        ("hello world", "helloWorld"),
-        ("hello world.EXT", "helloWorld.ext"),
-        ("Hello World.ext", "helloWorld.ext"),
+        ("one", "", "one"),
+        ("Upper CASE", "", "upperCase"),
+        ("one two three", "", "oneTwoThree"),
+        ("one two three1", "-", "one-Two-Three-1"),
+        ("  one  two ", "", "oneTwo"),
+        (" ", "", ""),
     ],
 )
-def test_camel_case(path: str, expected: str):
-    assert to_camel_case(**process_path(path)) == expected
+def test_camel_case(text: str, delimiter: str, expected: str):
+    assert to_camel_case(text, delimiter) == expected
 
 
 @pytest.mark.parametrize(
-    "path,expected",
+    "text, delimiter, expected",
     [
-        ("hello world", "Hello_World"),
-        ("hello world.EXT", "Hello_World.ext"),
-        ("Hello World.ext", "Hello_World.ext"),
+        ("one", " ", "one"),
+        ("Upper CASE", " ", "upper case"),
+        ("one two three", " ", "one two three"),
+        ("one two three1", "-", "one-two-three-1"),
+        ("  one  two ", " ", "one two"),
+        (" ", " ", ""),
     ],
 )
-def test_camel_snake_case(path: str, expected: str):
-    assert to_camel_snake_case(**process_path(path)) == expected
+def test_lower_case(text: str, delimiter: str, expected: str):
+    assert to_lower_case(text, delimiter) == expected
 
 
 @pytest.mark.parametrize(
-    "path,expected",
+    "text, delimiter, expected",
     [
-        ("hello world", "helloworld"),
-        ("hello world.EXT", "helloworld.ext"),
-        ("Hello World.ext", "helloworld.ext"),
+        ("one", " ", "ONE"),
+        ("Upper CASE", " ", "UPPER CASE"),
+        ("one two three", " ", "ONE TWO THREE"),
+        ("one two three1", "-", "ONE-TWO-THREE-1"),
+        ("  one  two ", " ", "ONE TWO"),
+        (" ", " ", ""),
     ],
 )
-def test_flat_case(path: str, expected: str):
-    assert to_flat_case(**process_path(path)) == expected
+def test_upper_case(text: str, delimiter: str, expected: str):
+    assert to_upper_case(text, delimiter) == expected
 
 
 @pytest.mark.parametrize(
-    "path,expected",
+    "text, delimiter, expected",
     [
-        ("hello world", "HELLOWORLD"),
-        ("hello world.EXT", "HELLOWORLD.EXT"),
-        ("Hello World.ext", "HELLOWORLD.EXT"),
+        ("one", "", "One"),
+        ("Upper CASE", "", "UpperCase"),
+        ("one two three", "", "OneTwoThree"),
+        ("one two three1", "-", "One-Two-Three-1"),
+        ("  one  two ", "", "OneTwo"),
+        (" ", "", ""),
     ],
 )
-def test_flat_upper_case(path: str, expected: str):
-    assert to_flat_upper_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "hello-world"),
-        ("hello world.EXT", "hello-world.ext"),
-        ("Hello World.ext", "hello-world.ext"),
-    ],
-)
-def test_kebab_case(path: str, expected: str):
-    assert to_kebab_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "HELLO-WORLD"),
-        ("hello world.EXT", "HELLO-WORLD.EXT"),
-        ("Hello World.ext", "HELLO-WORLD.EXT"),
-    ],
-)
-def test_kebab_upper_case(path: str, expected: str):
-    assert to_kebab_upper_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "hello world"),
-        ("hello world.EXT", "hello world.ext"),
-        ("Hello World.ext", "hello world.ext"),
-    ],
-)
-def test_lower_case(path: str, expected: str):
-    assert to_lower_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "HelloWorld"),
-        ("hello world.EXT", "HelloWorld.ext"),
-        ("Hello World.ext", "HelloWorld.ext"),
-    ],
-)
-def test_pascal_case(path: str, expected: str):
-    assert to_pascal_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "hello_world"),
-        ("hello world.EXT", "hello_world.ext"),
-        ("Hello World.ext", "hello_world.ext"),
-    ],
-)
-def test_snake_case(path: str, expected: str):
-    assert to_snake_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "HELLO_WORLD"),
-        ("hello world.EXT", "HELLO_WORLD.EXT"),
-        ("Hello World.ext", "HELLO_WORLD.EXT"),
-    ],
-)
-def test_snake_upper_case(path: str, expected: str):
-    assert to_snake_upper_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "Hello-World"),
-        ("hello world.EXT", "Hello-World.ext"),
-        ("Hello World.ext", "Hello-World.ext"),
-    ],
-)
-def test_train_case(path: str, expected: str):
-    assert to_train_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "HELLO WORLD"),
-        ("hello world.EXT", "HELLO WORLD.EXT"),
-        ("Hello World.ext", "HELLO WORLD.EXT"),
-    ],
-)
-def test_upper_case(path: str, expected: str):
-    assert to_upper_case(**process_path(path)) == expected
-
-
-@pytest.mark.parametrize(
-    "path,expected",
-    [
-        ("hello world", "HeLlO wOrLd"),
-        ("hello world.EXT", "HeLlO wOrLd.ext"),
-        ("Hello World.ext", "HeLlO wOrLd.ext"),
-    ],
-)
-def test_alternate_case(path: str, expected: str):
-    assert to_alternate_case(**process_path(path)) == expected
+def test_pascal_case(text: str, delimiter: str, expected: str):
+    assert to_pascal_case(text, delimiter) == expected

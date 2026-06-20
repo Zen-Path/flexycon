@@ -4,9 +4,8 @@ from pathlib import Path
 from typing import Callable, NamedTuple
 
 from common.logger import log
-from common.string_utilities import split_into_words
 
-type TransformFunc = Callable[[list[str], str], str]
+type TransformFunc = Callable[[str], str]
 
 
 class ConverterRow(NamedTuple):
@@ -17,25 +16,18 @@ class ConverterRow(NamedTuple):
     is_destructive: bool = False
 
 
-def rename_path(path: Path, transform_func: TransformFunc) -> None:
-    """Attempt to rename a file or directory, catching and logging errors."""
-    try:
-        root, ext = os.path.splitext(path.name)
-        words = split_into_words(root)
+def compose_new_path(path: Path, transform_func: TransformFunc) -> Path:
+    """
+    Transform the file root using transform_func and format the extension.
 
-        new_name = transform_func(words, ext)
-        log.debug(f"Words={words}, ext={ext!r}")
+    Returns the new path.
+    """
 
-        # Skip if name didn't change
-        if path.name == new_name:
-            return
+    root, ext = os.path.splitext(path.name)
+    new_root = transform_func(root)
+    new_ext = "." + ext.replace(" ", "").strip(".").lower() if ext else ""
 
-        new_path = path.with_name(new_name)
-        path.rename(new_path)
-        log.info(f"Renamed {str(path.absolute())!r} -> {str(new_path)!r}")
-
-    except Exception as e:
-        log.error(f"Error renaming {str(path)!r}: {e}")
+    return path.with_name(f"{new_root}{new_ext}")
 
 
 def map_converters(converters: list[ConverterRow]) -> dict[str, ConverterRow]:
@@ -63,10 +55,19 @@ def process_renames(
 
         # Sort paths by depth in descending order (deepest paths first)
         sorted_paths = sorted(paths, key=lambda p: len(p.parts), reverse=True)
-
         for target in sorted_paths:
+            log.debug(f"Processing {str(target)!r}")
+
             if not target.exists():
-                log.warning(f"Skipping non-existent path {str(target)!r}.")
+                log.warning(f"Skipping non-existent path {str(target)!r}")
                 continue
 
-            rename_path(target, converter.transform_func)
+            new_path = compose_new_path(target, converter.transform_func)
+            if target == new_path:
+                continue
+
+            try:
+                target.rename(new_path)
+                log.info(f"Renamed {str(target.absolute())!r} -> {str(new_path)!r}")
+            except Exception as e:
+                log.error(f"Error renaming {str(target)!r}: {e}")

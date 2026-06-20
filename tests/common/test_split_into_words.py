@@ -9,6 +9,7 @@ from common.string_utilities import split_into_words
         ("lower", ["lower"]),
         ("Title", ["Title"]),
         ("UPPER", ["UPPER"]),
+        ("UPPER CASE", ["UPPER", "CASE"]),
         ("hello world", ["hello", "world"]),
         ("one two three", ["one", "two", "three"]),
         ("hello_world", ["hello", "world"]),
@@ -24,7 +25,7 @@ def test_simple(input_str: str, expected: list[str]):
     "input_str,expected",
     [
         (
-            "here are-mixed_word boundaries",
+            "here are-mixed_word.boundaries",
             ["here", "are", "mixed", "word", "boundaries"],
         ),
         ("hello---world", ["hello", "world"]),

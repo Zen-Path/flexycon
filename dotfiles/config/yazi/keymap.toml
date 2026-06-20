@@ -157,21 +157,6 @@ keymap = [
     { on = [
         "r",
         "f",
-        "C",
-    ], run = 'shell -- file_renamer --camel-snake-case %s', desc = "Rename - format Camel_Snake_Case" },
-    { on = [
-        "r",
-        "f",
-        "f",
-    ], run = 'shell -- file_renamer --flat-case %s', desc = "Rename - format flatcase (destructive)" },
-    { on = [
-        "r",
-        "f",
-        "F",
-    ], run = 'shell -- file_renamer --flat-upper-case %s', desc = "Rename - format FLATCASE (destructive)" },
-    { on = [
-        "r",
-        "f",
         "k",
     ], run = 'shell -- file_renamer --kebab-case %s', desc = "Rename - format kebab-case" },
     { on = [
@@ -179,16 +164,6 @@ keymap = [
         "f",
         "K",
     ], run = 'shell -- file_renamer --kebab-upper-case %s', desc = "Rename - format KEBAB-CASE" },
-    { on = [
-        "r",
-        "f",
-        "l",
-    ], run = 'shell -- file_renamer --lower-case %s', desc = "Rename - format lower case" },
-    { on = [
-        "r",
-        "f",
-        "p",
-    ], run = 'shell -- file_renamer --pascal-case %s', desc = "Rename - format PascalCase" },
     { on = [
         "r",
         "f",
@@ -202,13 +177,43 @@ keymap = [
     { on = [
         "r",
         "f",
+        "p",
+    ], run = 'shell -- file_renamer --pascal-case %s', desc = "Rename - format PascalCase" },
+    { on = [
+        "r",
+        "f",
+        "C",
+    ], run = 'shell -- file_renamer --pascal-snake-case %s', desc = "Rename - format Pascal_Snake_Case" },
+    { on = [
+        "r",
+        "f",
         "t",
     ], run = 'shell -- file_renamer --train-case %s', desc = "Rename - format Train-Case" },
     { on = [
         "r",
         "f",
+        "l",
+    ], run = 'shell -- file_renamer --lower-case %s', desc = "Rename - format lower case" },
+    { on = [
+        "r",
+        "f",
         "u",
     ], run = 'shell -- file_renamer --upper-case %s', desc = "Rename - format UPPER CASE" },
+    { on = [
+        "r",
+        "f",
+        "f",
+    ], run = 'shell -- file_renamer --flat-case %s', desc = "Rename - format flatcase (destructive)" },
+    { on = [
+        "r",
+        "f",
+        "F",
+    ], run = 'shell -- file_renamer --flat-upper-case %s', desc = "Rename - format FLATCASE (destructive)" },
+    { on = [
+        "r",
+        "f",
+        "a",
+    ], run = 'shell -- file_renamer --alternate-case %s', desc = "Rename - format AlTeRnAtE cAsE (destructive)" },
 
     { on = "t", run = "tab_create --current", desc = "Create a new tab with CWD" },
     { on = "T", run = "plugin toggle-pane max-preview", desc = "Maximize or restore preview" },

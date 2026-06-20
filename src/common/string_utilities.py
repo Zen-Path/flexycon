@@ -101,19 +101,21 @@ def split_camel_case(token: str) -> list[str]:
     return re.split(r"(?<=[a-z])(?=[A-Z])", token)
 
 
-def split_into_words(name: str, boundaries: list[str] = [" ", "-", "_"]) -> list[str]:
+def split_into_words(
+    text: str, boundaries: list[str] = [" ", "-", "_", "."]
+) -> list[str]:
     """
     Split a string into words in multiple stages.
     """
-    if not name:
+    if not text:
         return []
 
     tokens: list[str]
     if boundaries:
         pattern = "|".join(map(re.escape, boundaries))
-        tokens = [t for t in re.split(pattern, name) if t]
+        tokens = [t for t in re.split(pattern, text) if t]
     else:
-        tokens = [name]
+        tokens = [text]
 
     tokens = split_tokens(tokens, split_numbers)
     tokens = split_tokens(tokens, split_camel_case)
@@ -135,119 +137,69 @@ def remove_diacritics(text: str) -> str:
 # Converters
 
 
-def to_pascal_case(words: list[str], ext: str = "", delimiter: str = "") -> str:
+def to_alternate_case(text: str, delimiter: str = " ", upper_first: bool = True) -> str:
     """
-    'Simple file name' -> 'SimpleFileName'
+    Alternates between upper and lower case chars, if available.
+    'Simple file name1' -> 'SiMpLe FiLe NaMe 1'
     """
-    capitalized_words = [w[:1].upper() + w[1:] if w else "" for w in words]
-    return delimiter.join(capitalized_words) + ext.lower()
-
-
-def to_camel_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'simpleFileName'
-    """
-    if not words:
-        return ext.lower()
-
-    # Make first word lowercase
-    first = words[0][:1].lower() + words[0][1:]
-
-    # Capitalize each following word
-    rest = [w[:1].upper() + w[1:] if w else "" for w in words[1:]]
-
-    return f"{''.join([first] + rest)}{ext.lower()}"
-
-
-def to_camel_snake_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'Simple_File_Name'
-    """
-    return to_pascal_case(words, ext, "_")
-
-
-def to_flat_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'simplefilename'
-    """
-    return ("".join(words) + ext).lower()
-
-
-def to_flat_upper_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'SIMPLEFILENAME'
-    """
-    return to_flat_case(words, ext).upper()
-
-
-def to_kebab_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'simple-file-name'
-    """
-    return f"{'-'.join(words)}{ext}".lower()
-
-
-def to_kebab_upper_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'SIMPLE-FILE-NAME'
-    """
-    return to_kebab_case(words, ext).upper()
-
-
-def to_lower_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'simple file name'
-    """
-    return f"{' '.join(words)}{ext}".lower()
-
-
-def to_snake_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'simple_file_name'
-    """
-    return f"{'_'.join(words)}{ext}".lower()
-
-
-def to_snake_upper_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'SIMPLE_FILE_NAME'
-    """
-    return to_snake_case(words, ext).upper()
-
-
-def to_train_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'Simple-File-Name'
-    """
-    return to_pascal_case(words, ext, "-")
-
-
-def to_upper_case(words: list[str], ext: str = "") -> str:
-    """
-    'Simple file name' -> 'SIMPLE FILE NAME'
-    """
-    return f"{' '.join(words)}{ext}".upper()
-
-
-def to_alternate_case(words: list[str], ext: str = "", upper_first: bool = True) -> str:
-    """
-    'Simple file name' -> 'SiMpLe FiLe NaMe'
-    """
-    regular_str = " ".join(words)
+    words = split_into_words(text)
 
     result: list[str] = []
     upper_next = upper_first
 
-    for char in regular_str:
-        # Check if the character is case-sensitive
-        if char.upper() != char.lower():
-            if upper_next:
-                result.append(char.upper())
-            else:
-                result.append(char.lower())
-            upper_next = not upper_next
-        else:
-            # Keep as-is if alternate case not found
-            result.append(char)
+    for word in words:
+        new_word = ""
 
-    return "".join(result) + ext.lower()
+        for char in word:
+            # Check if the character is case-sensitive
+            if char.upper() != char.lower():
+                new_word += char.upper() if upper_next else char.lower()
+                upper_next = not upper_next
+            else:
+                # Keep as-is if alternate case not found
+                new_word += char
+
+        result.append(new_word)
+
+    return delimiter.join(result)
+
+
+def to_camel_case(text: str, delimiter: str = "") -> str:
+    """
+    First word is lowercase. All other words are in pascal case.
+    'Simple file name1' -> 'simpleFileName1'
+    """
+    words = split_into_words(text)
+    if not words:
+        return ""
+
+    first = words[0].lower()
+    rest = [w[:1].upper() + w[1:].lower() if w else "" for w in words[1:]]
+
+    return delimiter.join([first] + rest)
+
+
+def to_pascal_case(text: str, delimiter: str = "") -> str:
+    """
+    Capitalize the first char of each word. All other chars are lowercase.
+    'Simple file name1' -> 'SimpleFileName1'
+    """
+    words = split_into_words(text)
+    capitalized_words = [w[:1].upper() + w[1:].lower() if w else "" for w in words]
+    return delimiter.join(capitalized_words)
+
+
+def to_lower_case(text: str, delimiter: str = " ") -> str:
+    """
+    'Simple file name1' -> 'simple file name 1'
+    """
+    words = split_into_words(text)
+    return delimiter.join(words).lower()
+
+
+def to_upper_case(text: str, delimiter: str = " ") -> str:
+    """
+    'Simple file name1' -> 'SIMPLE FILE NAME 1'
+    """
+    words = split_into_words(text)
+    return delimiter.join(words).upper()
