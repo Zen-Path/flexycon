@@ -125,6 +125,7 @@ rules = [
         "edit_text",
         "edit_new_win",
         "open_in_browser",
+        "open",
     ] },
     # JSON
     { mime = "application/{json,ndjson}", use = [
