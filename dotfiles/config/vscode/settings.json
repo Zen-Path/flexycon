@@ -13,6 +13,7 @@
     },
     "cSpell.enabledFileTypes": {},
     "chat.agentsControl.enabled": "hidden",
+    "chat.disableAIFeatures": true,
     "diffEditor.hideUnchangedRegions.enabled": true,
     "diffEditor.ignoreTrimWhitespace": false,
     "diffEditor.maxComputationTime": 3000,
