@@ -61,11 +61,3 @@ def setup_logging(
     logger.handlers.clear()  # Remove existing handlers to avoid duplicates
     logger.propagate = False  # Prevent bubbling to ancestor loggers
     logger.addHandler(handler)
-
-
-def test_logging_fmt(logger: logging.Logger):
-    logger.debug("Debugging info")
-    logger.info("General info")
-    logger.warning("Something may be wrong")
-    logger.error("An error occurred")
-    logger.critical("Critical failure!")

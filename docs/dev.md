@@ -1,8 +1,21 @@
 # Development
 
 - [Development](#development)
+    - [scripts](#scripts)
     - [dotdrop](#dotdrop)
     - [Installing scripts](#installing-scripts)
+
+## scripts
+
+To check how a log level looks, drop this in a script where the logger has been setup:
+
+```py
+  log.debug("Debugging info")
+  log.info("General info")
+  log.warning("Something may be wrong")
+  log.error("An error occurred")
+  log.critical("Critical failure!")
+```
 
 ## dotdrop
 
