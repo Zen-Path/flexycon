@@ -1,16 +1,13 @@
 import logging
 import sys
 
-from colorama import Fore, Style, init
+import colorama
+from colorama import Fore, Style
 
 log = logging.getLogger(__name__)
 
+colorama.init(autoreset=True)
 
-# Initialize colorama
-init(autoreset=True)
-
-# Optional: You can replace these colors with others or use colorama for
-# cross-platform support
 LOG_COLORS = {
     logging.DEBUG: Fore.BLUE,
     logging.INFO: Fore.GREEN,
