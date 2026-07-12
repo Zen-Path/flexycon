@@ -176,6 +176,11 @@ packages = [
         description="Pulseaudio command-line mixer like amixer",
     ),
     Package(
+        identifier="poppler",
+        managers=[Brew],
+        description="PDF rendering library",
+    ),
+    Package(
         identifier="prettier",
         managers=[Brew, Yay],
         description="Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML",
