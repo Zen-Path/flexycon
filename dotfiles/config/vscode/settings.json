@@ -13,7 +13,6 @@
     },
     "cSpell.enabledFileTypes": {},
     "chat.agentsControl.enabled": "hidden",
-    "chat.disableAIFeatures": true,
     "diffEditor.hideUnchangedRegions.enabled": true,
     "diffEditor.ignoreTrimWhitespace": false,
     "diffEditor.maxComputationTime": 3000,
@@ -51,6 +50,9 @@
     "git.confirmSync": false,
     "git.enableSmartCommit": true,
     "git.openRepositoryInParentFolders": "always",
+    "github.copilot.enable": {
+        "*": true
+    },
     "gitlens.currentLine.enabled": false,
     "gitlens.hovers.currentLine.over": "line",
     "glassit.alpha": 235,
