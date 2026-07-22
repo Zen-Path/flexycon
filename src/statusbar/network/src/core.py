@@ -1,7 +1,9 @@
 from pathlib import Path
+from shutil import which
 
-from common.cmd_utilities import run_cmd
+from common.cmd_utilities import run_cmd, run_cmd_background
 from common.logger import log
+from common.variables import TERMINAL
 
 
 def get_net_state(prefix: str) -> str:
@@ -50,10 +52,22 @@ def get_ethernet_info() -> str:
 
 
 def get_vpn_info() -> str:
-    """Returns VPN icon if a tun interface is active."""
-    # Check if any tun device exists and is not empty
-    tun_exists = any(Path("/sys/class/net/").glob("tun*"))
-    return " 🔒" if tun_exists else ""
+    """Returns VPN icon if Mullvad is active, falling back to interface check."""
+    if which("mullvad"):
+        try:
+            res = run_cmd(
+                ["mullvad", "status"],
+            )
+            return " 🔒" if res.output.startswith("Connected") else ""
+        except Exception:
+            pass
+
+    # Check if any tun or wg device exists and is not empty
+    vpn_exists = any(Path("/sys/class/net/").glob("tun*")) or any(
+        Path("/sys/class/net/").glob("wg*")
+    )
+
+    return " 🔒" if vpn_exists else ""
 
 
 def toggle_wifi() -> None:
@@ -70,3 +84,8 @@ def toggle_wifi() -> None:
         log.error(f"Could not toggle wifi: {e}")
 
     return None
+
+
+def open_network_handlers() -> None:
+    run_cmd_background([TERMINAL, "-e", "nmtui"])
+    run_cmd_background(["mullvad-vpn"])

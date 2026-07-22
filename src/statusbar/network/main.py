@@ -18,11 +18,12 @@ from statusbar.network.src.core import (
     get_ethernet_info,
     get_vpn_info,
     get_wifi_info,
+    open_network_handlers,
     toggle_wifi,
 )
 
 ACTIONS = {
-    MouseButton.LEFT: lambda: run_cmd_background([TERMINAL, "-e", "nmtui"]),
+    MouseButton.LEFT: open_network_handlers,
     MouseButton.MIDDLE: toggle_wifi,
     MouseButton.RIGHT: lambda: Notification(
         "🌐 Network",
