@@ -16,7 +16,6 @@ unset command
 alias e='$EDITOR'
 alias E='$VISUAL' # visual Editor
 alias g='git'
-alias t='task'
 alias ka='killall'
 alias sql='sqlite3'
 

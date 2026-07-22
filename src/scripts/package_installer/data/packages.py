@@ -243,11 +243,6 @@ packages = [
         description="TOML toolkit written in Rust",
     ),
     Package(
-        identifier="taskwarrior-tui",
-        managers=[Yay],
-        description="a terminal user interface for taskwarrior",
-    ),
-    Package(
         identifier="telegram",
         # TODO: Installing telegram through the website results in Telegram Desktop,
         # which has more features than Telegram for Mac
