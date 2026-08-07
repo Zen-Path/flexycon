@@ -45,5 +45,11 @@ for addon in data['addons']:
 I found this mask pretty useful:
 
 ```
-*y*-*m*-*d*-*hh*-*mm*-*ss*_*flathost*_*flatname*.*ext*
+*flathost*_*flatname*_*y*-*m*-*d*-*hh*-*mm*-*ss*.*ext*
 ```
+
+We put the date at the end rather than the start so we can quickly find duplicates of
+the same image. Also, this tends to group images that are similar in content together.
+
+You can use yazi's sort by creation time if you'd like to get a chronological view of
+your downloads.
