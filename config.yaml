@@ -683,7 +683,7 @@
                 "f_font_config",
                 "d_gtk_3",
                 "f_mimeapps.list",
-                "d_pipewire",
+                # "d_pipewire",
                 "f_pulse_daemon",
                 "f_x11_profile",
                 "d_x11",

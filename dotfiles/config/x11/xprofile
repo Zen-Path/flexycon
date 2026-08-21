@@ -17,7 +17,7 @@ xrdbpid=$!
 
 # 'dunst' is run by systemd
 
-autostart='xcompmgr pipewire remapd'
+autostart='xcompmgr remapd'
 
 for program in $autostart; do
     pidof -sx "$program" || "$program" &
