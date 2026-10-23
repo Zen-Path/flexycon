@@ -1,5 +1,6 @@
 asvetliakov.vscode-neovim
 charliermarsh.ruff
+cstrap.python-snippets
 dotjoshjohnson.xml
 eamodio.gitlens
 ericsia.pythonsnippets3
@@ -16,12 +17,14 @@ ms-python.vscode-pylance
 ms-python.vscode-python-envs
 pkief.material-icon-theme
 remisa.shellman
+robinreiche.csv-grid-editor
 rpinski.shebang-snippets
 ryu1kn.partial-diff
 streetsidesoftware.code-spell-checker
 takumii.markdowntable
 tamasfe.even-better-toml
 timonwong.shellcheck
+tomoki1207.pdf
 wholroyd.jinja
 yandeu.five-server
 yoavbls.pretty-ts-errors
