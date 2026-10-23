@@ -5,6 +5,7 @@ dotfiles/config/zsh/shortcuts.sh
 dotfiles/config/nvim/shortcuts.lua
 
 dotfiles/scripts/git_logs/src/repos.py
+src/scripts/movies_db/output/
 
 # MacOS files
 .DS_Store
