@@ -51,8 +51,9 @@
     "git.enableSmartCommit": true,
     "git.openRepositoryInParentFolders": "always",
     "github.copilot.enable": {
-        "*": true
+        "*": false
     },
+    "github.copilot.nextEditSuggestions.enabled": false,
     "gitlens.currentLine.enabled": false,
     "gitlens.hovers.currentLine.over": "line",
     "glassit.alpha": 235,
