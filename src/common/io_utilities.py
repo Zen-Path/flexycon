@@ -1,8 +1,10 @@
+import csv
 import json
 import os
 import shutil
 import sys
 from pathlib import Path
+from typing import Any
 
 from common.cmd_utilities import run_cmd
 from common.logger import log
@@ -214,3 +216,57 @@ def get_images_from_path(path: Path) -> list[Path]:
         return [p for p in path.rglob("*") if p.suffix.lower() in IMAGE_EXTENSIONS]
 
     return []
+
+
+def write_dict_to_csv(
+    data: dict[str, Any] | list[dict[str, Any]],
+    filename: str | Path,
+    csv_columns: list[tuple[str, str]],
+) -> None:
+    """
+    Write dictionaries to a tab-separated file.
+
+    The csv_columns configuration controls both:
+    - column order
+    - human-friendly column names
+    """
+
+    if isinstance(data, dict):
+        data = [data]
+
+    if not data:
+        log.warning("No data to write.")
+        return
+
+    file_path = Path(filename)
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Human-friendly output names.
+    output_columns = [name for _, name in csv_columns]
+
+    rows: list[dict[str, Any]] = []
+
+    for row in data:
+        output_row = {
+            output_name: row.get(internal_key, "")
+            for internal_key, output_name in csv_columns
+        }
+
+        rows.append(output_row)
+
+    with file_path.open(
+        mode="w",
+        newline="",
+        encoding="utf-8",
+    ) as csv_file:
+        writer = csv.DictWriter(
+            csv_file,
+            fieldnames=output_columns,
+            delimiter="\t",
+            extrasaction="ignore",
+        )
+
+        writer.writeheader()
+        writer.writerows(rows)
+
+    log.info(f"Data written to {str(file_path)!r}")
