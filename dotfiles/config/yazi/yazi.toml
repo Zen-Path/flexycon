@@ -127,6 +127,13 @@ rules = [
         "open_in_browser",
         "open",
     ] },
+    # XML
+    { mime = "application/xml", use = [
+        "edit_text",
+        "edit_new_win",
+        "open_in_browser",
+        "open",
+    ] },
     # JSON
     { mime = "application/{json,ndjson}", use = [
         "edit_text",
