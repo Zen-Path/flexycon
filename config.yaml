@@ -240,6 +240,10 @@
             "src": "config/mpv/plugins/cursor_blur.lua",
             "dst": "{{@@ d_config_dst @@}}/mpv/scripts/cursor_blur.lua"
         },
+        "f_mpv_plugin_pixelate": {
+            "src": "config/mpv/plugins/pixelate.lua",
+            "dst": "{{@@ d_config_dst @@}}/mpv/scripts/pixelate.lua"
+        },
 
         ## nsxiv
         "f_nsxiv_exec_key_handler": {
@@ -571,6 +575,7 @@
                 "f_mpv_plugin_gallery_view_scripts_gallery_thumbgen",
                 "f_mpv_plugin_gallery_view_scripts_playlist_view",
                 "f_mpv_plugin_cursor_blur",
+                "f_mpv_plugin_pixelate",
             ],
         },
         "meta_nsxiv": {

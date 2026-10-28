@@ -82,4 +82,4 @@ function toggle_cursor_blur()
     end
 end
 
-mp.add_key_binding("ctrl+b", "toggle_cursor_blur", toggle_cursor_blur)
+mp.add_key_binding("alt+b", "toggle_cursor_blur", toggle_cursor_blur)
