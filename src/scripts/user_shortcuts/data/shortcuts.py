@@ -264,7 +264,7 @@ shortcuts: list[Shortcut] = [
         path=XDG_SRC_HOME / "media-server",
         alias_map={"default": ["m", "s", "r", "v"]},
         activate_python_env=True,
-        description="flexycon dotfile scripts",
+        description="media server source",
     ),
     # Flexycon
     Shortcut(
