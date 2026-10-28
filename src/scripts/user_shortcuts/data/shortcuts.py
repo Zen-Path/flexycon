@@ -266,6 +266,13 @@ shortcuts: list[Shortcut] = [
         activate_python_env=True,
         description="media server source",
     ),
+    Shortcut(
+        type="d",
+        path=XDG_SRC_HOME / "work-docs",
+        alias_map={"default": ["w", "o", "r", "k"]},
+        activate_python_env=True,
+        description="work scripts",
+    ),
     # Flexycon
     Shortcut(
         type="d",
