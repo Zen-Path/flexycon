@@ -101,7 +101,8 @@ alias rcw='rclone_wrapper'
 alias yt='yt-dlp'
 
 ## Download just the thumbnail
-alias yt_thumb='yt --skip-download --write-thumbnail'
+alias yt_thumb='yt --embed-thumbnail --convert-thumbnails png --embed-metadata'
+alias yt_only_thumb='yt --skip-download --write-thumbnail'
 
 ## Stream directly in MPV with English subtitles forced
 alias yt_sub='mpv --slang=en --fs --ytdl-raw-options=ignore-config=,sub-lang=en,write-auto-sub='
