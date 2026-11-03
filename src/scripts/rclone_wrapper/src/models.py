@@ -49,6 +49,7 @@ class RcloneOperation(BaseModel):
         "*drive.Object",
         "*drive.Directory",
         "*drive.documentObject",
+        "*local.Fs",
     ] = Field(alias="objectType")
     raw_type: str = Field(alias="skipped")
     raw_file: str = Field(alias="object")
