@@ -80,6 +80,11 @@ def handle_genres(genres: list[dict[str, Any]]) -> str:
             if cleaned:
                 unique_genres.add(cleaned)
 
+    for genre in unique_genres:
+        if genre == "science fiction":
+            unique_genres.remove(genre)
+            unique_genres.add("sci-fi")
+
     return ", ".join(unique_genres)
 
 
