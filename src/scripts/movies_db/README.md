@@ -33,11 +33,26 @@ movie dupe index:
 ```
 =MAP(
     Movies[Title],
+    Movies[IMDb ID],
     SEQUENCE(ROWS(Movies[Title])),
-    LAMBDA(val, idx,
+    LAMBDA(
+        title,
+        id,
+        idx,
         IF(
-            val="", "",
-            COUNTIF(INDEX(Movies[Title], 1):INDEX(Movies[Title], idx), val)
+            AND(title = "", id = ""),
+            "",
+            LET(
+                title_count, IF(
+                    title = "", 0,
+                    COUNTIF(INDEX(Movies[Title], 1):INDEX(Movies[Title], idx), title)
+                ),
+                id_count, IF(
+                    id = "", 0,
+                    COUNTIF(INDEX(Movies[IMDb ID], 1):INDEX(Movies[IMDb ID], idx), id)
+                    ),
+                MAX(title_count, id_count)
+            )
         )
     )
 )
@@ -53,16 +68,49 @@ release year:
 )
 ```
 
+watch count:
+
+```
+=MAP(
+    TV_Series[Title],
+    LAMBDA(
+        title,
+        IF(
+            title="", "",
+            COUNTIFS(
+                TV_History[Title], title,
+                TV_History[Status], "Finished"
+            )
+        )
+    )
+)
+```
+
 series dupe index:
 
 ```
 =MAP(
     TV_Series[Title],
+    TV_Series[IMDb ID],
     SEQUENCE(ROWS(TV_Series[Title])),
-    LAMBDA(val, idx,
+    LAMBDA(
+        title,
+        id,
+        idx,
         IF(
-            val="", "",
-            COUNTIF(INDEX(TV_Series[Title], 1):INDEX(TV_Series[Title], idx), val)
+            AND(title = "", id = ""),
+            "",
+            LET(
+                title_count, IF(
+                    title = "", 0,
+                    COUNTIF(INDEX(TV_Series[Title], 1):INDEX(TV_Series[Title], idx), title)
+                ),
+                id_count, IF(
+                    id = "", 0,
+                    COUNTIF(INDEX(TV_Series[IMDb ID], 1):INDEX(TV_Series[IMDb ID], idx), id)
+                    ),
+                MAX(title_count, id_count)
+            )
         )
     )
 )
