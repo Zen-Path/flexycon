@@ -172,7 +172,7 @@ def process_movie_metadata(
     # Extract directors
     crew = details.get("credits", {}).get("crew", [])
     directors = [p["name"] for p in crew if p.get("job") == "Director"]
-    result["directors"] = ", ".join(directors) if directors else "N/A"
+    result["directors"] = ", ".join(directors) if directors else ""
 
     cast = details.get("credits", {}).get("cast", [])
     result["main_cast"] = ", ".join([actor["name"] for actor in cast[:5]])
@@ -196,7 +196,7 @@ def process_movie_metadata(
     production_companies = details.get("production_companies", {})
     companies_names = [p["name"] for p in production_companies]
     result["production_companies"] = (
-        ", ".join(companies_names) if companies_names else "N/A"
+        ", ".join(companies_names) if companies_names else ""
     )
 
     return result
@@ -238,7 +238,7 @@ def process_tv_metadata(
 
     # Extract creators
     creators = [c["name"] for c in details.get("created_by", [])]
-    result["creators"] = ", ".join(creators) if creators else "N/A"
+    result["creators"] = ", ".join(creators) if creators else ""
 
     cast = details.get("credits", {}).get("cast", [])
     result["main_cast"] = ", ".join([actor["name"] for actor in cast[:5]])
@@ -262,7 +262,7 @@ def process_tv_metadata(
     # Extract production companies
     networks = details.get("networks", {})
     networks_names = [p["name"] for p in networks]
-    result["networks"] = ", ".join(networks_names) if networks_names else "N/A"
+    result["networks"] = ", ".join(networks_names) if networks_names else ""
 
     return result
 
