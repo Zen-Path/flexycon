@@ -203,3 +203,11 @@ def to_upper_case(text: str, delimiter: str = " ") -> str:
     """
     words = split_into_words(text)
     return delimiter.join(words).upper()
+
+
+def to_kebab_case(text: str) -> str:
+    """
+    'Simple file_name1' -> 'simple file_name 1'. Preserves underscores.
+    """
+    words = split_into_words(text, [" ", "-", "."])
+    return "-".join(words).lower()

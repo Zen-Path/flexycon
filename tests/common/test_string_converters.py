@@ -3,6 +3,7 @@ import pytest
 from common.string_utilities import (
     to_alternate_case,
     to_camel_case,
+    to_kebab_case,
     to_lower_case,
     to_pascal_case,
     to_upper_case,
@@ -84,3 +85,20 @@ def test_upper_case(text: str, delimiter: str, expected: str):
 )
 def test_pascal_case(text: str, delimiter: str, expected: str):
     assert to_pascal_case(text, delimiter) == expected
+
+
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        ("one", "one"),
+        ("Upper CASE", "upper-case"),
+        ("one two three", "one-two-three"),
+        ("one two three1", "one-two-three-1"),
+        ("one two_three", "one-two_three"),
+        ("one two_three_four five", "one-two_three_four-five"),
+        ("  one  two ", "one-two"),
+        (" ", ""),
+    ],
+)
+def test_kebab_case(text: str, expected: str):
+    assert to_kebab_case(text) == expected

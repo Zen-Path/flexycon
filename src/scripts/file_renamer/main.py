@@ -11,6 +11,7 @@ from common.logger import log, setup_logging
 from common.string_utilities import (
     to_alternate_case,
     to_camel_case,
+    to_kebab_case,
     to_lower_case,
     to_pascal_case,
     to_upper_case,
@@ -28,13 +29,13 @@ CONVERTERS: list[ConverterRow] = [
         short="-k",
         long="--kebab-case",
         description="kebab-case",
-        transform_func=lambda text: to_lower_case(text, "-"),
+        transform_func=lambda text: to_kebab_case(text),
     ),
     ConverterRow(
         short="-K",
         long="--kebab-upper-case",
         description="KEBAB-CASE",
-        transform_func=lambda text: to_upper_case(text, "-"),
+        transform_func=lambda text: to_kebab_case(text).upper(),
     ),
     ConverterRow(
         short="-s",
