@@ -144,6 +144,7 @@ fi
 
 fd . --hidden --no-ignore --max-depth 10 "${EXCLUDES[@]}"
 '
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--multi --extended'
 
 # Java
