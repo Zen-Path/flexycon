@@ -99,25 +99,7 @@ alias rcw='rclone_wrapper'
 
 # YouTube
 alias yt='yt-dlp'
-
-## Download just the thumbnail
-alias yt_thumb='yt --embed-thumbnail --convert-thumbnails png --embed-metadata'
-alias yt_only_thumb='yt --skip-download --write-thumbnail'
-
-## Stream directly in MPV with English subtitles forced
-alias yt_sub='mpv --slang=en --fs --ytdl-raw-options=ignore-config=,sub-lang=en,write-auto-sub='
-
-## Audio options
-alias yt_aud='yt --extract-audio --format bestaudio/best'
-alias yt_aud_thumb='yt_aud --embed-thumbnail'
-alias yt_aud_pl='yt_aud --yes-playlist -o "%(playlist_index)02d - %(title)s [%(id)s].%(ext)s"'
-
-## Download audio in a specific format
-alias yt_aud_mp3='yt --extract-audio --audio-format mp3 --audio-quality 0'
-alias yt_aud_m4a='yt --extract-audio --format "ba[ext=m4a]"'
-
-## Download songs for Apple Music
-alias yt_aud_amusic="yt_aud_m4a --embed-thumbnail --postprocessor-args \"-metadata album='YouTube Downloads' -metadata album_artist='Various Artists'\""
+alias ytm='yt_manager'
 
 # General
 

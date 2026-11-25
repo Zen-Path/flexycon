@@ -490,6 +490,11 @@
             "dst": "{{@@ d_bin_dst @@}}/wallpaper_setter",
             "chmod": "755"
         },
+        "f_yt_manager": {
+            "src": "{{@@ d_src @@}}/scripts/yt_manager/main.py",
+            "dst": "{{@@ d_bin_dst @@}}/yt_manager",
+            "chmod": "755"
+        },
 
         # Statusbar
         "f_sb_battery": {
@@ -621,6 +626,7 @@
                 "f_unicode_selector",
                 "f_user_shortcuts",
                 "f_wallpaper_setter",
+                "f_yt_manager",
 
                 # Config
                 "d_bottom",
