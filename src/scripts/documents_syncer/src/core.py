@@ -2,6 +2,7 @@ import csv
 import hashlib
 import io
 import json
+import re
 import sys
 import tempfile
 from collections.abc import Callable
@@ -199,14 +200,46 @@ def convert_excel(source_file: Path, dest_file: Path) -> tuple[bool, str | None]
 
 def convert_pdf(source_file: Path, dest_file: Path) -> tuple[bool, str | None]:
     """
-    Convert PDF file to plain text.
+    Convert PDF file to clean, page-delimited plain text.
 
     Returns:
         tuple of (success, error_msg)
     """
-    result = run_cmd(["pdftotext", source_file, dest_file])
+    # Output to stdout ('-') so we can normalize text in memory before writing
+    result = run_cmd(["pdftotext", source_file, "-"])
     if not result.success:
         return False, f"Conversion with 'pdftotext' failed.\n{result.output}"
+
+    # Normalize line endings
+    normalized = result.output.replace("\r\n", "\n").replace("\r", "\n")
+
+    # pdftotext separates pages with a form-feed character (\x0c); drop trailing empty split
+    raw_pages = normalized.split("\x0c")
+    if raw_pages and not raw_pages[-1].strip():
+        raw_pages.pop()
+
+    if not raw_pages:
+        return False, "PDF contains no extractable text."
+
+    formatted_pages: list[str] = []
+    for page_num, page_text in enumerate(raw_pages, start=1):
+        # Strip trailing spaces/tabs on every line
+        cleaned_lines = [line.rstrip() for line in page_text.split("\n")]
+        cleaned_text = "\n".join(cleaned_lines).strip()
+
+        # Collapse 3+ consecutive newlines into a single blank line
+        cleaned_text = re.sub(r"\n{3,}", "\n\n", cleaned_text)
+
+        marker = f"--- Page {page_num} ---"
+        if cleaned_text:
+            formatted_pages.append(f"{marker}\n\n{cleaned_text}")
+        else:
+            formatted_pages.append(f"[Empty page]\n\n{marker}")
+
+    final_text = "\n\n".join(formatted_pages) + "\n"
+
+    with open(dest_file, "w", encoding="utf-8", newline="\n") as f:
+        f.write(final_text)
 
     return True, None
 
