@@ -3,6 +3,8 @@ import hashlib
 import io
 import json
 import sys
+import tempfile
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any, NotRequired, TypedDict
 
@@ -16,8 +18,12 @@ from common.logger import log
 DEFAULT_STORE_FILE = Path("documents_store.json")
 
 SUPPORTED_EXTENSIONS = {
+    ".doc": ".html",
     ".docx": ".html",
     ".pdf": ".txt",
+    ".ppt": ".txt",
+    ".pptx": ".txt",
+    ".xls": ".csv",
     ".xlsx": ".csv",
 }
 
@@ -205,16 +211,66 @@ def convert_pdf(source_file: Path, dest_file: Path) -> tuple[bool, str | None]:
     return True, None
 
 
+def _convert_via_libreoffice(
+    source_file: Path,
+    dest_file: Path,
+    intermediate_ext: str,
+    downstream_converter: Callable[[Path, Path], tuple[bool, str | None]],
+) -> tuple[bool, str | None]:
+    """Convert a file via LibreOffice to an intermediate format, then run a downstream converter."""
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        lo_result = run_cmd(
+            [
+                "soffice",
+                "--headless",
+                "--convert-to",
+                intermediate_ext,
+                "--outdir",
+                tmp_dir,
+                source_file,
+            ]
+        )
+        if not lo_result.success:
+            return False, f"Conversion with 'soffice' failed.\n{lo_result.output}"
+
+        temp_file = Path(tmp_dir) / f"{source_file.stem}.{intermediate_ext}"
+        if not temp_file.exists():
+            return False, f"LibreOffice did not produce expected file: {temp_file.name}"
+
+        return downstream_converter(temp_file, dest_file)
+
+
+def convert_doc(source_file: Path, dest_file: Path) -> tuple[bool, str | None]:
+    """Convert a legacy Word (.doc) file to HTML via LibreOffice + pandoc."""
+    return _convert_via_libreoffice(source_file, dest_file, "docx", convert_docx)
+
+
+def convert_xls(source_file: Path, dest_file: Path) -> tuple[bool, str | None]:
+    """Convert a legacy Excel (.xls) file to CSV via LibreOffice + openpyxl."""
+    return _convert_via_libreoffice(source_file, dest_file, "xlsx", convert_excel)
+
+
+def convert_presentation(source_file: Path, dest_file: Path) -> tuple[bool, str | None]:
+    """Convert a PowerPoint (.ppt/.pptx) file to text via LibreOffice + pdftotext."""
+    return _convert_via_libreoffice(source_file, dest_file, "pdf", convert_pdf)
+
+
 def run_conversion(source_file: Path, dest_file: Path) -> bool:
     """Convert source file to destination based on the source's extension."""
     log.info(f"Processing: {normalize_path(source_file)!r} -> {dest_file.name!r}")
 
     extension = source_file.suffix.lower()
     match extension:
+        case ".doc":
+            conversion_fn = convert_doc
         case ".docx":
             conversion_fn = convert_docx
         case ".pdf":
             conversion_fn = convert_pdf
+        case ".ppt" | ".pptx":
+            conversion_fn = convert_presentation
+        case ".xls":
+            conversion_fn = convert_xls
         case ".xlsx":
             conversion_fn = convert_excel
         case _:
